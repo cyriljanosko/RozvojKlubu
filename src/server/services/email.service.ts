@@ -1,6 +1,7 @@
 import type { TransactionalMessage } from "@/server/integrations/ecomail/client";
 
 export interface EmailDeps {
+  copy: MagicLinkCopy;
   apiKey?: string;
   fromEmail?: string;
   fromName: string;
@@ -11,28 +12,29 @@ export interface EmailDeps {
 
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
-export function buildMagicLinkEmail(url: string) {
-  const subject = "Prihlásenie do aplikácie Rozvoj klubu";
-  const text = [
-    "Dobrý deň,",
-    "",
-    "na prihlásenie do aplikácie Rozvoj klubu otvorte tento odkaz:",
-    url,
-    "",
-    "Odkaz platí 15 minút a dá sa použiť iba raz.",
-    "Ak ste o prihlásenie nežiadali, tento e-mail môžete ignorovať.",
-    "",
-    "Slovenský futbalový zväz",
-  ].join("\n");
+export interface MagicLinkCopy {
+  subject: string;
+  greeting: string;
+  intro: string;
+  button: string;
+  validity: string;
+  signature: string;
+}
+
+/** Builds the magic-link e-mail from translated copy (messages: email.magicLink). */
+export function buildMagicLinkEmail(url: string, copy: MagicLinkCopy) {
+  const text = [copy.greeting, "", copy.intro, url, "", copy.validity, "", copy.signature].join(
+    "\n",
+  );
   const safeUrl = escapeHtml(url);
   const html = `<!doctype html><html lang="sk"><body style="font-family:Arial,sans-serif;line-height:1.5;color:#171717">
-<p>Dobrý deň,</p>
-<p>na prihlásenie do aplikácie <strong>Rozvoj klubu</strong> kliknite na tlačidlo:</p>
-<p><a href="${safeUrl}" style="display:inline-block;padding:12px 20px;background:#171717;color:#fff;border-radius:8px;text-decoration:none">Prihlásiť sa</a></p>
-<p style="font-size:13px;color:#555">Odkaz platí 15 minút a dá sa použiť iba raz. Ak ste o prihlásenie nežiadali, tento e-mail môžete ignorovať.</p>
-<p style="font-size:13px;color:#555">Slovenský futbalový zväz</p>
+<p>${escapeHtml(copy.greeting)}</p>
+<p>${escapeHtml(copy.intro)}</p>
+<p><a href="${safeUrl}" style="display:inline-block;padding:12px 20px;background:#171717;color:#fff;border-radius:8px;text-decoration:none">${escapeHtml(copy.button)}</a></p>
+<p style="font-size:13px;color:#555">${escapeHtml(copy.validity)}</p>
+<p style="font-size:13px;color:#555">${escapeHtml(copy.signature)}</p>
 </body></html>`;
-  return { subject, text, html };
+  return { subject: copy.subject, text, html };
 }
 
 /** Masks an e-mail for logs: jan.novak@sfz.sk → j***@sfz.sk */
@@ -53,7 +55,7 @@ export async function sendMagicLinkEmail(deps: EmailDeps, to: string, url: strin
     deps.log(`[email:dev] magic link for ${maskEmail(to)}: ${url}`);
     return;
   }
-  const { subject, text, html } = buildMagicLinkEmail(url);
+  const { subject, text, html } = buildMagicLinkEmail(url, deps.copy);
   await deps.send(deps.apiKey, {
     subject,
     text,

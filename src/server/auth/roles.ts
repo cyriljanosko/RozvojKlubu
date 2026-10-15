@@ -15,15 +15,6 @@ export type Role = (typeof ROLES)[number];
 
 export const DEFAULT_ROLE: Role = "public";
 
-export const ROLE_LABELS: Record<Role, string> = {
-  admin_sfz: "Administrátor SFZ",
-  obfz: "ObFZ / RFZ",
-  club_manager: "Manažér klubu",
-  mentor: "Mentor klubu",
-  volunteer: "Dobrovoľník",
-  public: "Verejnosť",
-};
-
 export function isRole(value: unknown): value is Role {
   return typeof value === "string" && (ROLES as readonly string[]).includes(value);
 }

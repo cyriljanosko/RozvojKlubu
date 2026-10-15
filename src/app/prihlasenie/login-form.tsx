@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { Loader2, Mail } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +12,7 @@ import { authClient } from "@/lib/auth-client";
 type Status = "idle" | "sending" | "sent" | "error";
 
 export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
+  const t = useTranslations("login");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [redirecting, setRedirecting] = useState(false);
@@ -37,13 +39,15 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
   if (status === "sent") {
     return (
       <div role="status" className="flex flex-col gap-2 rounded-lg border p-4">
-        <p className="font-medium">Skontrolujte si e-mail</p>
+        <p className="font-medium">{t("sentTitle")}</p>
         <p className="text-muted-foreground text-sm">
-          Na adresu <strong className="break-all">{email}</strong> sme poslali prihlasovací odkaz.
-          Platí 15 minút.
+          {t.rich("sentBody", {
+            email,
+            strong: (chunks) => <strong className="break-all">{chunks}</strong>,
+          })}
         </p>
         <Button variant="link" className="self-start px-0" onClick={() => setStatus("idle")}>
-          Použiť inú adresu
+          {t("useAnotherEmail")}
         </Button>
       </div>
     );
@@ -55,25 +59,25 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
         <>
           <Button size="lg" className="w-full" onClick={signInWithSportnet} disabled={redirecting}>
             {redirecting && <Loader2 className="animate-spin" aria-hidden />}
-            Prihlásiť sa cez Sportnet
+            {t("sportnetButton")}
           </Button>
           <div className="text-muted-foreground flex items-center gap-3 text-xs">
             <span className="bg-border h-px flex-1" />
-            alebo
+            {t("or")}
             <span className="bg-border h-px flex-1" />
           </div>
         </>
       )}
 
       <form onSubmit={sendLink} className="flex flex-col gap-3">
-        <Label htmlFor="email">E-mail</Label>
+        <Label htmlFor="email">{t("emailLabel")}</Label>
         <Input
           id="email"
           type="email"
           inputMode="email"
           autoComplete="email"
           required
-          placeholder="meno@klub.sk"
+          placeholder={t("emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -89,13 +93,13 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
           ) : (
             <Mail aria-hidden />
           )}
-          Poslať prihlasovací odkaz
+          {t("sendLink")}
         </Button>
       </form>
 
       {status === "error" && (
         <p role="alert" className="text-destructive text-sm">
-          Prihlásenie sa nepodarilo. Skúste to prosím znova.
+          {t("error")}
         </p>
       )}
     </div>

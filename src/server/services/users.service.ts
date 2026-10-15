@@ -30,14 +30,14 @@ export function toPublicUser(user: {
 }
 
 export function requireUser(user: CurrentUser | null): CurrentUser {
-  if (!user) throw new ApiError("UNAUTHORIZED", "Prihlásenie je potrebné");
+  if (!user) throw new ApiError("UNAUTHORIZED", "Authentication required");
   return user;
 }
 
 export function requireRole(user: CurrentUser | null, allowed: readonly Role[]): CurrentUser {
   const current = requireUser(user);
   if (!hasAnyRole(current.role, allowed)) {
-    throw new ApiError("FORBIDDEN", "Na túto akciu nemáte oprávnenie");
+    throw new ApiError("FORBIDDEN", "Insufficient role");
   }
   return current;
 }
@@ -56,12 +56,12 @@ export async function changeUserRole(
 ): Promise<CurrentUser> {
   const admin = requireRole(actor, ["admin_sfz"]);
   if (!isRole(newRole)) {
-    throw new ApiError("BAD_REQUEST", "Neplatná rola");
+    throw new ApiError("BAD_REQUEST", "Unknown role");
   }
   if (admin.id === targetId && newRole !== "admin_sfz") {
-    throw new ApiError("CONFLICT", "Nemôžete odobrať rolu administrátora sami sebe");
+    throw new ApiError("CONFLICT", "Admins cannot remove their own admin role");
   }
   const target = await store.findById(targetId);
-  if (!target) throw new ApiError("NOT_FOUND", "Používateľ neexistuje");
+  if (!target) throw new ApiError("NOT_FOUND", "User not found");
   return store.updateRole(targetId, newRole);
 }

@@ -1,19 +1,22 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ROLE_LABELS } from "@/server/auth/roles";
+import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 
 import { SignOutButton } from "./sign-out-button";
 
-export const metadata: Metadata = { title: "Môj účet" };
+export const metadata: Metadata = { title: defaultMessages.account.title };
 
 async function Account() {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
+  const t = await getTranslations("account");
+  const tRoles = await getTranslations("roles");
 
   return (
     <Card>
@@ -24,18 +27,18 @@ async function Account() {
       <CardContent className="flex flex-col gap-4">
         <dl className="grid gap-3 text-sm">
           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-muted-foreground">Rola</dt>
-            <dd className="font-medium">{ROLE_LABELS[user.role]}</dd>
+            <dt className="text-muted-foreground">{t("role")}</dt>
+            <dd className="font-medium">{tRoles(user.role)}</dd>
           </div>
           <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-muted-foreground">Účet Sportnet</dt>
-            <dd className="font-medium">{user.sportnetId ? "Prepojený" : "Neprepojený"}</dd>
+            <dt className="text-muted-foreground">{t("sportnetAccount")}</dt>
+            <dd className="font-medium">
+              {user.sportnetId ? t("sportnetLinked") : t("sportnetNotLinked")}
+            </dd>
           </div>
         </dl>
         {user.role === "public" && (
-          <p className="text-muted-foreground rounded-md border p-3 text-sm">
-            Rolu a klub vám pridelí administrátor SFZ alebo ObFZ.
-          </p>
+          <p className="text-muted-foreground rounded-md border p-3 text-sm">{t("roleHint")}</p>
         )}
         <SignOutButton />
       </CardContent>

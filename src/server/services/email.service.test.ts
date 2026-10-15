@@ -6,8 +6,12 @@ import {
   sendMagicLinkEmail,
   type EmailDeps,
 } from "./email.service";
+import { defaultMessages } from "@/i18n/config";
+
+const copy = defaultMessages.email.magicLink;
 
 const baseDeps = (over: Partial<EmailDeps> = {}): EmailDeps => ({
+  copy,
   fromName: "Rozvoj klubu SFZ",
   isProduction: false,
   send: vi.fn(async () => {}),
@@ -17,7 +21,7 @@ const baseDeps = (over: Partial<EmailDeps> = {}): EmailDeps => ({
 
 describe("buildMagicLinkEmail", () => {
   it("contains the link in text and escaped in html", () => {
-    const mail = buildMagicLinkEmail('https://x.sk/a?b=1&c="2"');
+    const mail = buildMagicLinkEmail('https://x.sk/a?b=1&c="2"', copy);
     expect(mail.text).toContain('https://x.sk/a?b=1&c="2"');
     expect(mail.html).toContain("&#38;c=&#34;2&#34;");
     expect(mail.subject).toMatch(/Prihlásenie/);

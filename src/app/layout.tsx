@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import { NextIntlClientProvider } from "next-intl";
+
 import { SiteHeader } from "@/components/site-header";
+import { DEFAULT_LOCALE, defaultMessages } from "@/i18n/config";
 
 import "./globals.css";
 
@@ -11,19 +14,23 @@ const geistMono = GeistMono;
 
 export const metadata: Metadata = {
   title: {
-    default: "Rozvoj klubu – Akadémia vzdelávania",
-    template: "%s | Rozvoj klubu",
+    default: defaultMessages.meta.siteTitle,
+    template: defaultMessages.meta.titleTemplate,
   },
-  description:
-    "Vzdelávanie a rozvoj futbalových klubov: vizitka klubu, mapa klubov, akadémia, 10 oblastí rozvoja a licencie.",
+  description: defaultMessages.meta.description,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="sk" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang={DEFAULT_LOCALE}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
       <body className="flex min-h-full flex-col font-sans">
-        <SiteHeader />
-        {children}
+        <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={defaultMessages}>
+          <SiteHeader />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

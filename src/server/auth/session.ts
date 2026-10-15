@@ -9,7 +9,7 @@ import { toPublicUser, type CurrentUser, type UserStore } from "@/server/service
 /** Resolves the signed-in user from request headers (cookie or bearer), or null. */
 export async function getCurrentUser(headers: Headers): Promise<CurrentUser | null> {
   if (!isDatabaseConfigured()) {
-    throw new ApiError("SERVICE_UNAVAILABLE", "Databáza nie je nakonfigurovaná");
+    throw new ApiError("SERVICE_UNAVAILABLE", "Database is not configured");
   }
   const session = await getAuth().api.getSession({ headers });
   return session ? toPublicUser(session.user) : null;

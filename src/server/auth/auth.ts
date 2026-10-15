@@ -5,6 +5,7 @@ import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { nextCookies } from "better-auth/next-js";
 import { genericOAuth, magicLink } from "better-auth/plugins";
 
+import { defaultMessages } from "@/i18n/config";
 import { DEFAULT_ROLE, parseAdminEmails } from "@/server/auth/roles";
 import { sportnetProvider } from "@/server/auth/sportnet";
 import { getDbSync, getMongoClient } from "@/server/db/mongo";
@@ -56,6 +57,7 @@ function createAuth() {
         sendMagicLink: async ({ email, url }) => {
           await sendMagicLinkEmail(
             {
+              copy: defaultMessages.email.magicLink,
               apiKey: env.ECOMAIL_API_KEY,
               fromEmail: env.EMAIL_FROM,
               fromName: env.EMAIL_FROM_NAME,
