@@ -6,7 +6,16 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Prihlasovanie cez Better Auth: e-mailový odkaz (Ecomail, v dev režime do logu), príprava na Sportnet OIDC (zapne sa po doplnení client_id/secret).
+- Roly (admin SFZ, ObFZ/RFZ, manažér klubu, mentor, dobrovoľník, verejnosť); prví admini cez `INITIAL_ADMIN_EMAILS`.
+- API `GET /api/v1/me` a `PATCH /api/v1/users/:id/role` (len admin SFZ, ochrana proti odobratiu vlastnej roly admina).
+- Stránky `/prihlasenie` a `/ucet` (mobile-first), hlavička so stavom prihlásenia.
 - Projektové súbory: `CLAUDE.md`, `NEXT.md`, `CHANGELOG.md`, devlog a rozhodnutia (ADR 0001 Better Auth, ADR 0002 Sportnet OIDC).
+
+### Opravené
+
+- Prázdne hodnoty v `.env` (`KEY=`) sa berú ako nenastavené (predtým zlyhala validácia).
+- MongoDB klient si nepamätá neúspešný prvý pokus o pripojenie; health endpoint loguje dôvod chyby DB.
 
 ## [0.1.0] – 2026-10-12
 

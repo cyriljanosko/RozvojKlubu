@@ -4,7 +4,12 @@ Aktualizované: 15. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
-- [ ] F1 / Krok 1 – základ prihlasovania (Better Auth): Sportnet OIDC ako hlavný spôsob, e-mailový odkaz (Ecomail) ako doplnok, 6 rolí, API `/api/v1/me` a zmena roly, UI `/prihlasenie` a `/ucet`.
+- [ ] F1 / Krok 1 – základ prihlasovania (vetva `feat/auth-base`): kód hotový, čaká na review/PR a na nasadenie.
+  - [ ] Súhlas s novými kolekciami Better Auth v DB (`user`, `session`, `account`, `verification`).
+  - [ ] Doplniť premenné vo Verceli a `.env.local`: `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `INITIAL_ADMIN_EMAILS`, neskôr Ecomail a Sportnet.
+  - [ ] Overiť end-to-end prihlásenie e-mailovým odkazom (lokálne alebo na preview).
+  - [ ] Overiť názov hlavičky Ecomail API (`key`) pri prvom reálnom odoslaní – nepodarilo sa potvrdiť z dokumentácie.
+  - [ ] Overiť názvy claimov v Sportnet ID tokene (meno, e-mail) po registrácii klienta.
 
 ## Čaká na niekoho iného
 
