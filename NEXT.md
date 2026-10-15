@@ -11,6 +11,13 @@ Aktualizované: 15. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Overiť názov hlavičky Ecomail API (`key`) pri prvom reálnom odoslaní – nepodarilo sa potvrdiť z dokumentácie.
   - [ ] Overiť názvy claimov v Sportnet ID tokene (meno, e-mail) po registrácii klienta.
 
+- [ ] Zapracovanie šablóny konvencií (vetva `chore/template-conventions`, stojí na `feat/auth-base`): čaká na review/PR.
+
+## Pred prvými ostrými dátami
+
+- [ ] Samostatná databáza pre Preview (vlastný DB používateľ, iné `MONGODB_URI`/`MONGODB_DB` pre Preview vo Verceli).
+- [ ] Atlas: upgrade z M0 a obmedzenie DB používateľa len na svoju databázu.
+
 ## Čaká na niekoho iného
 
 - [ ] Registrácia OAuth klienta v Sportnete (auth.sportnet.online) – client_id, client_secret, redirect URI.
@@ -22,6 +29,7 @@ Aktualizované: 15. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 - [ ] F1 / Krok 3 – Microsoft Entra ID (tenant SFZ) – registrácia aplikácie v Azure.
 - [ ] Dependabot PR s veľkými verziami (ESLint 10, TypeScript 7, @types/node 26, actions v7) – prejsť riadene.
-- [ ] Obmedziť DB používateľa `rozvojklubu-app-dev` len na databázu `rozvojklubu_dev`.
 - [ ] Zrušiť nepoužívaný cluster v Atlas „Project 0“ (rozhodne Cyril).
 - [ ] F2 – integrácia Sportnet API.
+- [ ] CS a EN preklady (`messages/cs.json`, `messages/en.json`).
+- [ ] Tenant filter `clubId` v service vrstve s prvými klubovými dátami (ADR 0003).

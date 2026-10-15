@@ -1,0 +1,41 @@
+# RUNBOOK
+
+## Prostredia
+
+| Prostredie | Zdroj         | URL                                        | Databáza                               |
+| ---------- | ------------- | ------------------------------------------ | -------------------------------------- |
+| Production | vetva `main`  | https://rozvojklubu.ltk.solutions          | `rozvojklubu_dev`                      |
+| Preview    | každý PR      | `rozvojklubu-git-<vetva>-cyro5.vercel.app` | `rozvojklubu_dev` (zdieľaná – dočasne) |
+| Lokálne    | `npm run dev` | http://localhost:3000                      | podľa `.env.local`                     |
+
+Preview a vercel.app adresy chráni Vercel Authentication (prihlásenie do Vercelu).
+
+## Nasadenie
+
+1. PR do `main` → Vercel vytvorí Preview a GitHub Actions spustí CI (format, lint, typecheck, test, build).
+2. Po review squash merge → Vercel nasadí produkciu automaticky.
+3. Kontrola: `https://rozvojklubu.ltk.solutions/api/v1/health` → `status: ok`, `database: ok`, `version` = prvých 7 znakov commitu.
+
+Nastavenia projektu Vercel: Framework **Next.js**, Node 24.x, región funkcií **fra1**. Premenné prostredia: viď `.env.example`.
+
+## Rollback
+
+- Vercel → Deployments → posledné funkčné produkčné nasadenie → **Promote to Production** (okamžité).
+- Potom revert commitu v `main` cez PR, aby sa chyba nevrátila pri ďalšom nasadení.
+
+## Keď to spadne
+
+| Príznak                                                        | Pravdepodobná príčina                                                     | Riešenie                                                                                                                                                                                        |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build: `No Output Directory named "public"`                    | Projekt nemá nastavený framework                                          | Settings → Build → Framework Preset = Next.js, redeploy (stalo sa 15. 10. 2026)                                                                                                                 |
+| Health: `database: down`                                       | Zlý `MONGODB_URI` (iný cluster/projekt), chýba používateľ, Network Access | Overiť host clustra (`rozvojklubu-dev.bwcixej…`), používateľa `rozvojklubu-app-dev`, Network Access `0.0.0.0/0`; po zmene env redeploy. Dôvod je v runtime logu `[health] database ping failed` |
+| Health: `database: not_configured`                             | Chýba `MONGODB_URI` pre dané prostredie                                   | Doplniť vo Verceli, redeploy                                                                                                                                                                    |
+| Prihlásenie nefunguje, v logu `BETTER_AUTH_SECRET must be set` | Chýba tajomstvo v produkcii                                               | Doplniť `BETTER_AUTH_SECRET` (min. 32 znakov), redeploy. Web beží ďalej, len bez prihlásenia                                                                                                    |
+| E-mail s odkazom nepríde                                       | Chýba `ECOMAIL_API_KEY`/`EMAIL_FROM` alebo neoverená doména v Ecomaile    | V produkcii vráti chybu; skontrolovať Ecomail účet a DNS (SPF/DKIM)                                                                                                                             |
+| Tlačidlo „Prihlásiť sa cez Sportnet“ chýba                     | Nie je nastavený `SPORTNET_OAUTH_CLIENT_ID/SECRET`                        | Doplniť po registrácii klienta v Sportnete                                                                                                                                                      |
+| Vlastná doména presmeruje na vercel.app                        | Doména nastavená ako redirect                                             | Settings → Domains → Edit → No Redirect (stalo sa 15. 10. 2026)                                                                                                                                 |
+
+## Limity a cron
+
+- Cron joby: žiadne.
+- Atlas M0: zdieľaný cluster, max. 500 spojení, 512 MB – pred ostrou prevádzkou upgrade.
