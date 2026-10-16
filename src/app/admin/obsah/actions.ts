@@ -5,10 +5,15 @@ import { headers } from "next/headers";
 
 import { ApiError, type ApiErrorCode } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { loadMethodologyFiles, loadPracticeFiles } from "@/server/content/methodology-loader";
+import {
+  loadMethodologyFiles,
+  loadPracticeFiles,
+  loadRoleCatalogFile,
+} from "@/server/content/methodology-loader";
 import {
   mongoContentStore,
   mongoPracticeStore,
+  mongoRoleCatalogStore,
   mongoSectionStore,
 } from "@/server/db/content.store";
 import { revertQuestion, seedContent, updateQuestion } from "@/server/services/content.service";
@@ -18,6 +23,11 @@ import {
   updateSection,
 } from "@/server/services/methodology.service";
 import { revertPractice, seedPractice, updatePractice } from "@/server/services/practice.service";
+import {
+  revertRoleCatalog,
+  seedRoleCatalog,
+  updateRoleCatalog,
+} from "@/server/services/role-catalog.service";
 
 /** Thin Server Action layer over the content service (validation and permissions live there). */
 export type ContentActionState =
@@ -29,6 +39,7 @@ export type ContentActionState =
       questions?: number;
       sections?: number;
       practice?: number;
+      roles?: number;
     }
   | { status: "error"; code: ApiErrorCode };
 
@@ -47,8 +58,9 @@ export async function seedContentAction(): Promise<ContentActionState> {
     const result = await seedContent(mongoContentStore, actor);
     const sections = await seedMethodology(mongoSectionStore, actor, await loadMethodologyFiles());
     const practice = await seedPractice(mongoPracticeStore, actor, await loadPracticeFiles());
+    const roles = await seedRoleCatalog(mongoRoleCatalogStore, actor, await loadRoleCatalogFile());
     refresh();
-    return { status: "ok", ...result, sections, practice };
+    return { status: "ok", ...result, sections, practice, roles };
   } catch (error) {
     return failure(error);
   }
@@ -150,5 +162,34 @@ export async function updatePracticeAction(
 
 export async function revertPracticeAction(revisionId: string): Promise<void> {
   await revertPractice(practiceStore, await getCurrentUser(await headers()), revisionId);
+  refresh();
+}
+
+const roleStore = { ...mongoRoleCatalogStore, ...mongoContentStore };
+
+export async function updateRoleCatalogAction(
+  _prev: ContentActionState,
+  formData: FormData,
+): Promise<ContentActionState> {
+  try {
+    let content: unknown;
+    try {
+      content = JSON.parse(String(formData.get("content") ?? ""));
+    } catch {
+      return { status: "error", code: "BAD_REQUEST" };
+    }
+    const updated = await updateRoleCatalog(roleStore, await getCurrentUser(await headers()), {
+      content,
+      expectedVersion: Number(formData.get("expectedVersion")),
+    });
+    refresh();
+    return { status: "ok", version: updated.version };
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+export async function revertRoleCatalogAction(revisionId: string): Promise<void> {
+  await revertRoleCatalog(roleStore, await getCurrentUser(await headers()), revisionId);
   refresh();
 }

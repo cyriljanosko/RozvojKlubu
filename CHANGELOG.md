@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Roly v oblastiach ako spravovaný obsah (F6a, ADR 0010): katalóg 6 základných rolí a 60 rolí v 11 oblastiach podľa návrhu „Roly v 11 oblastiach“ (v1, 11. 10. 2026), stav schválené / návrh, väzba na roly v Praxi oblastí 3 a 4; editor admina s históriou a vrátením (`/admin/obsah/roly`), `GET|PUT /api/v1/roles`, `GET /api/v1/roles/revisions`.
 - Zrušenie odoslania Kompasu adminom SFZ (ADR 0009): odoslanie zostáva v histórii ako „zrušené“, Vizitka, prehľad mentora a riadok SFZ-KOMPAS-1 berú posledné platné; `POST /api/v1/clubs/:clubId/kompas/submissions/:submissionId/withdraw`, tlačidlo s potvrdením.
 - Znovuotvorenie uzavretej sezóny licenčného hodnotenia adminom SFZ (ADR 0008): uzavretá kópia zostáva v histórii ako „znovu otvorená“, sezóna sa dá upraviť a znovu uzavrieť; `POST /api/v1/clubs/:clubId/licensing/reopen`, tlačidlo s potvrdením.
 - Vizitka klubu (F5c, ADR 0007): verejná `/vizitka/[clubId]` bez prihlásenia (profil klubu a hodnotenie oblastí odoslaného Kompasu a uzavretého licenčného hodnotenia) a `/klub/[clubId]/vizitka` pre roly (navyše dátumy, koeficient, stav rozpracovaného hodnotenia, odkazy na detail); prepínanie sezón, odkaz z karty klubu.
@@ -30,6 +31,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Roly v klube v texte: „Vedenie klubu“ → „Manažér a výbor“, „Tréner“ → „Tréner a trénerka“, „Mentor“ → „Mentor zväzu“ (kľúče v dátach bez zmeny).
 - Globálne roly zúžené na `admin_sfz` a `public`; ostatné roly sú roly v klube (ADR 0004).
 
 ### Opravené
