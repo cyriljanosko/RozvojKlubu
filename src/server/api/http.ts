@@ -33,6 +33,13 @@ export function errorResponse(error: unknown): Response {
       { status: 400 },
     );
   }
+  if (error instanceof SyntaxError) {
+    // request.json() on a malformed body
+    return Response.json(
+      { error: { code: "BAD_REQUEST", message: "Malformed JSON body" } },
+      { status: 400 },
+    );
+  }
   console.error("[api] unhandled error", error);
   return Response.json(
     { error: { code: "INTERNAL", message: "Internal server error" } },
