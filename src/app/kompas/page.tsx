@@ -24,14 +24,14 @@ export const metadata: Metadata = { title: defaultMessages.trialKompas.title };
 
 type Props = PageProps<"/kompas">;
 
-/** Public trial Kompas (ADR 0011): club → categories from Sportnet, answers only in the browser. */
+/** Public trial Kompas (ADR 0011): ?club= → categories from Sportnet, answers only in the browser. */
 async function TrialKompas({ searchParams }: Props) {
   await connection();
   const t = await getTranslations("trialKompas");
   const tKompas = await getTranslations("kompas");
   const tTags = await getTranslations("questionTags");
-  const { klub } = await searchParams;
-  const clubId = typeof klub === "string" ? klub : null;
+  const { club } = await searchParams;
+  const clubId = typeof club === "string" ? club : null;
 
   if (!clubId) {
     const clubs = await listPublicClubs(kompasDeps);
@@ -46,7 +46,7 @@ async function TrialKompas({ searchParams }: Props) {
           {clubs.map((c) => (
             <li key={c.clubId}>
               <Link
-                href={`/kompas?klub=${encodeURIComponent(c.clubId)}`}
+                href={`/kompas?club=${encodeURIComponent(c.clubId)}`}
                 className="hover:bg-muted/50 flex flex-col rounded-md border px-3 py-2.5 text-sm"
               >
                 <span className="font-medium break-words">{c.name}</span>

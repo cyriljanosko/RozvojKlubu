@@ -8,6 +8,7 @@ import { mongoAssessmentStore, mongoSubmissionStore } from "@/server/db/kompas.s
 import { mongoEvaluationStore, mongoLicensingSubmissionStore } from "@/server/db/licensing.store";
 import type { AcademyDeps } from "@/server/services/academy.service";
 import type { ClubDeps } from "@/server/services/clubs.service";
+import type { HubDeps } from "@/server/services/hub.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
 import type { VizitkaDeps } from "@/server/services/vizitka.service";
@@ -50,4 +51,10 @@ export const academyDeps: AcademyDeps = {
   licensingSubmissions: mongoLicensingSubmissionStore,
   roleCatalog: mongoRoleCatalogStore,
   choices: mongoAreaRoleChoiceStore,
+};
+
+export const hubDeps: HubDeps = {
+  ...clubDeps,
+  content: mongoContentStore,
+  roleCatalog: mongoRoleCatalogStore,
 };
