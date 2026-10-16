@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Verejný obsah a Kompas na vyskúšanie (H1, ADR 0011): oblasti s Metodikou a Praxou a čítacie API bez prihlásenia; `/kompas` – výber pilotného klubu, kategórie zo Sportnetu, priebežné skóre, odpovede len v prehliadači, výzva prihlásiť sa.
 - Moja Akadémia (F6b, ADR 0010): `/moja-akademia` pre manažéra a výbor, trénera a mentora zväzu – kde klub stojí (Kompas, licenčné hodnotenie, Vizitka), „Čo mám urobiť ja“ s úlohami odvodenými z dát (nevyplnený / neodoslaný Kompas, neuzavreté licenčné hodnotenie, družstvá bez trénera, najslabšie oblasti → Prax), vlastné roly v oblastiach z katalógu (predvolia rolu v Praxi), kohorta mentora so súhrnnými úlohami; odkaz v hlavičke, po prihlásení sa otvorí Moja Akadémia, `/mentor` presmeruje mentorov sem.
 - Roly v oblastiach ako spravovaný obsah (F6a, ADR 0010): katalóg 6 základných rolí a 60 rolí v 11 oblastiach podľa návrhu „Roly v 11 oblastiach“ (v1, 11. 10. 2026), stav schválené / návrh, väzba na roly v Praxi oblastí 3 a 4; editor admina s históriou a vrátením (`/admin/obsah/roly`), `GET|PUT /api/v1/roles`, `GET /api/v1/roles/revisions`.
 - Zrušenie odoslania Kompasu adminom SFZ (ADR 0009): odoslanie zostáva v histórii ako „zrušené“, Vizitka, prehľad mentora a riadok SFZ-KOMPAS-1 berú posledné platné; `POST /api/v1/clubs/:clubId/kompas/submissions/:submissionId/withdraw`, tlačidlo s potvrdením.
@@ -32,6 +33,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Čítanie oblastí, otázok Kompasu, Metodiky, Praxe a katalógu rolí už nevyžaduje prihlásenie (úpravy zostávajú adminovi SFZ).
 - Roly v klube v texte: „Vedenie klubu“ → „Manažér a výbor“, „Tréner“ → „Tréner a trénerka“, „Mentor“ → „Mentor zväzu“ (kľúče v dátach bez zmeny).
 - Globálne roly zúžené na `admin_sfz` a `public`; ostatné roly sú roly v klube (ADR 0004).
 
