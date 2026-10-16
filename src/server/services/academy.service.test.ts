@@ -11,6 +11,7 @@ import {
   practiceRoleFor,
   roleOptions,
   saveAreaRoleChoice,
+  splitTasks,
   type AcademyDeps,
 } from "./academy.service";
 import { A, admin, alice, bob, memoryDeps } from "./clubs.fixture";
@@ -172,5 +173,30 @@ describe("getMyAcademy", () => {
     expect((await getMyAcademy(deps, bob)).clubs[0].chosenRoles).toEqual(["3.new_coach"]);
     expect(await practiceRoleFor(deps, bob, 3)).toBe("n");
     expect(await practiceRoleFor(deps, bob, 4)).toBeNull();
+  });
+});
+
+describe("splitTasks", () => {
+  it("keeps up to three tasks to do and the weak areas apart", () => {
+    const tasks = clubTasks({
+      clubId: A,
+      roles: ["management"],
+      kompasVersion: 2,
+      kompasResult: {
+        filledAreas: 11,
+        areas: [],
+        next: [
+          { area: 8, points: 6 },
+          { area: 4, points: 8 },
+        ] as never,
+      },
+      kompasUnsent: true,
+      licensingClosed: false,
+      teamsWithoutCoach: 1,
+    });
+    const split = splitTasks(tasks, 2);
+    expect(split.todo.map((t) => t.key)).toEqual(["kompas_unsent", "licensing_open"]);
+    expect(split.more).toBe(1);
+    expect(split.weak.map((t) => t.area)).toEqual([8, 4]);
   });
 });

@@ -21,9 +21,13 @@ import { practiceRoleFor } from "@/server/services/academy.service";
 import {
   baseRoleForParam,
   lensForClubRoles,
+  mentorPracticeRoles,
   orderSections,
   practiceRoleForHubRole,
+  seesMentor,
+  withoutMentor,
 } from "@/server/services/hub.service";
+import { currentSeason } from "@/server/services/season";
 import { getRoleCatalog } from "@/server/services/role-catalog.service";
 import { isAdmin } from "@/server/services/club-access";
 import { listAreas } from "@/server/services/content.service";
@@ -59,20 +63,34 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
     );
   }
   const query = await searchParams;
-  const practice = await getPractice(mongoPracticeStore, user, number);
+  const catalog = (await getRoleCatalog(mongoRoleCatalogStore, user))?.content ?? null;
+  // the union mentor works behind the scenes: mentor lens and Prax only for mentors and admins
+  const mentorOk = user
+    ? seesMentor(user, await clubDeps.memberships.listByUser(user.id), currentSeason(new Date()))
+    : false;
+  const hiddenPractice = catalog && !mentorOk ? mentorPracticeRoles(catalog, number) : [];
+  const stored = await getPractice(mongoPracticeStore, user, number);
+  const practice = stored && {
+    ...stored,
+    content: {
+      ...stored.content,
+      roles: stored.content.roles.filter((r) => !hiddenPractice.includes(r.id)),
+    },
+  };
   const tab = practice && query.tab === "prax" ? "prax" : "metodika";
   const sections = tab === "metodika" ? await listMethodology(mongoSectionStore, user, number) : [];
   const roleParam = typeof query.role === "string" ? query.role : null;
   let roleId = roleParam ?? undefined;
-  const catalog = (await getRoleCatalog(mongoRoleCatalogStore, user))?.content ?? null;
   // a Hub role key (e.g. "coach") is translated to this area's Prax role (ADR 0011)
   if (practice && roleId && !practice.content.roles.some((x) => x.id === roleId)) {
     roleId = (catalog && practiceRoleForHubRole(catalog, number, roleId)) || undefined;
   }
+  if (roleId && hiddenPractice.includes(roleId)) roleId = undefined;
   // Metodika for a role: from the address, else from the user's club role (ADR 0011)
   const clubTrack = catalog?.tracks?.find((tr) => tr.status === "approved") ?? null;
-  const lenses = clubTrack?.hubRoles.filter((h) => h.baseRole) ?? [];
+  const lenses = withoutMentor(clubTrack?.hubRoles.filter((h) => h.baseRole) ?? [], mentorOk);
   let methodologyRole = catalog ? baseRoleForParam(catalog, number, roleParam) : null;
+  if (methodologyRole === "mentor" && !mentorOk) methodologyRole = null;
   if (!methodologyRole && !roleParam && user && clubTrack && tab === "metodika") {
     const mine = (await listMyClubs(clubDeps, user)).find((c) => c.roles.length > 0);
     methodologyRole = mine ? (lensForClubRoles(clubTrack, mine.roles)?.baseRole ?? null) : null;

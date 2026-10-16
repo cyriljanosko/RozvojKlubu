@@ -13,7 +13,11 @@ import {
   lensForClubRoles,
   orderAreas,
   orderSections,
+  mentorPracticeRoles,
   practiceRoleForHubRole,
+  seesMentor,
+  splitAreas,
+  withoutMentor,
   type HubDeps,
 } from "./hub.service";
 import { roleCatalogSchema } from "./role-catalog.schema";
@@ -33,6 +37,30 @@ describe("orderAreas", () => {
       [4, false],
     ]);
     expect(orderAreas(areas, []).map((a) => a.number)).toEqual([1, 2, 3, 4, 5]);
+  });
+});
+
+describe("splitAreas", () => {
+  it("takes three priority areas, the rest of the role as next steps, then the others", () => {
+    const areas = orderAreas(
+      [1, 2, 3, 4, 5, 6].map((number) => ({ number })),
+      [3, 5, 1, 4],
+    );
+    const split = splitAreas(areas);
+    expect(split.priority.map((a) => a.number)).toEqual([3, 5, 1]);
+    expect(split.next.map((a) => a.number)).toEqual([4]);
+    expect(split.others.map((a) => a.number)).toEqual([2, 6]);
+  });
+
+  it("has no priority areas without a role (whole club)", () => {
+    const split = splitAreas(
+      orderAreas(
+        [1, 2].map((number) => ({ number })),
+        [],
+      ),
+    );
+    expect(split.priority).toEqual([]);
+    expect(split.others).toHaveLength(2);
   });
 });
 
@@ -95,6 +123,22 @@ describe("Metodika for a role", () => {
   });
 });
 
+describe("mentor behind the scenes", () => {
+  it("shows the mentor lens and Prax only to mentors and admin_sfz", () => {
+    const season = "2026/2027";
+    expect(seesMentor(null, [], season)).toBe(false);
+    expect(seesMentor(alice, [{ role: "management", season }], season)).toBe(false);
+    expect(seesMentor(alice, [{ role: "mentor", season: "2025/2026" }], season)).toBe(false);
+    expect(seesMentor(alice, [{ role: "mentor", season }], season)).toBe(true);
+    expect(seesMentor(admin, [], season)).toBe(true);
+    const lenses = catalog.tracks![0].hubRoles;
+    expect(withoutMentor(lenses, false).some((h) => h.baseRole === "mentor")).toBe(false);
+    expect(withoutMentor(lenses, true)).toHaveLength(lenses.length);
+    expect(mentorPracticeRoles(catalog, 3)).toEqual(["m"]);
+    expect(mentorPracticeRoles(catalog, 1)).toEqual([]);
+  });
+});
+
 describe("getHub", () => {
   let deps: HubDeps;
   beforeAll(async () => {
@@ -117,6 +161,9 @@ describe("getHub", () => {
     });
     expect(whole!.areas.map((a) => a.number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
     expect(whole!.areas[3].name).toBe("Dobrovoľníci");
+    expect(whole!.roles.map((r) => r.key)).not.toContain("mentor");
+    // a mentor lens in the address falls back to the whole club for the public
+    expect((await getHub(deps, null, { role: "mentor" }))!.role.key).toBe("whole");
 
     const coach = await getHub(deps, null, { role: "coach", club: A });
     expect(coach!.areas.slice(0, 2).map((a) => [a.number, a.forRole, Boolean(a.line)])).toEqual([
