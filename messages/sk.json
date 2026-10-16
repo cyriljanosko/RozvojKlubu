@@ -262,5 +262,51 @@
       "S": "Dospelí",
       "zd": "Ženy a dievčatá"
     }
+  },
+  "kompas": {
+    "title": "Kompas klubu",
+    "intro": "Zaškrtnite, čo v klube naozaj platí. Skóre sa počíta samo; otázky, ktoré sa klubu netýkajú, sú sivé a do skóre sa nerátajú.",
+    "readOnly": "Kompas vypĺňa vedenie klubu. Vy vidíte výsledok len na čítanie.",
+    "season": "Sezóna {season}",
+    "categories": "Kategórie klubu zo Sportnetu",
+    "categoriesFrom": "podľa sezóny {season}",
+    "noCategories": "Sportnet neuvádza žiadne družstvá – platia všetky otázky.",
+    "total": "{total} z 220 bodov",
+    "filled": "Vyplnené oblasti: {filled} z 11",
+    "average": "Priemer oblasti {average} · {band}",
+    "save": "Uložiť odpovede",
+    "saved": "Uložené (verzia {version}).",
+    "unsaved": "Máte neuložené zmeny.",
+    "conflict": "Kompas medzitým uložil niekto iný. Obnovte stránku – vaše zmeny sa neuložili.",
+    "error": "Nepodarilo sa uložiť. Skúste to znova.",
+    "columns": {
+      "i": "Implementácia",
+      "s": "Sociálna zodpovednosť"
+    },
+    "notApplicable": "Netýka sa – klub nemá: {tags}",
+    "areaScore": "{points} / 20",
+    "areaEmpty": "nevyplnené",
+    "areaFew": "primálo otázok pre váš klub",
+    "bands": {
+      "start": "Začiatok",
+      "rising": "Rozbieha sa",
+      "average": "Priemer",
+      "good": "Dobré",
+      "model": "Vzor"
+    },
+    "next": {
+      "title": "Čo urobiť najbližšie",
+      "intro": "Tri oblasti, kde klub získa najviac. Úlohy sú otázky, ktoré ste nezaškrtli.",
+      "empty": "Najprv vyplňte aspoň jednu oblasť.",
+      "order": ["Začnite tu", "Potom", "A ďalej"],
+      "methodology": "Metodika oblasti",
+      "practice": "Prax oblasti"
+    },
+    "open": "Kompas klubu",
+    "practiceBlock": {
+      "title": "Kde stojí váš klub v tejto oblasti",
+      "none": "V Kompase klubu zatiaľ nie je táto oblasť vyplnená.",
+      "fill": "Otvoriť Kompas klubu"
+    }
   }
 }

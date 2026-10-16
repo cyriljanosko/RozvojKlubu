@@ -9,7 +9,7 @@ import { MarkdownContent } from "@/components/content/markdown";
 import { PracticeView } from "@/components/content/practice-view";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
-import { clubDeps } from "@/server/clubs/deps";
+import { clubDeps, kompasDeps } from "@/server/clubs/deps";
 import {
   mongoContentStore,
   mongoPracticeStore,
@@ -20,6 +20,7 @@ import { isAdmin } from "@/server/services/club-access";
 import { listAreas } from "@/server/services/content.service";
 import { listMyClubs } from "@/server/services/clubs.service";
 import { listMethodology } from "@/server/services/methodology.service";
+import { getKompas } from "@/server/services/kompas.service";
 import { getPractice } from "@/server/services/practice.service";
 
 export const metadata: Metadata = { title: defaultMessages.areas.title };
@@ -31,6 +32,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
   const t = await getTranslations("areas");
+  const tKompas = await getTranslations("kompas");
   const format = await getFormatter();
   const number = Number((await params).area);
   const area = Number.isInteger(number)
@@ -51,8 +53,21 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   const tab = practice && query.tab === "prax" ? "prax" : "metodika";
   const sections = tab === "metodika" ? await listMethodology(mongoSectionStore, user, number) : [];
   let roleId = typeof query.role === "string" ? query.role : undefined;
+  const myClubs = practice && tab === "prax" ? await listMyClubs(clubDeps, user) : [];
+  // "Kde klub stojí": this area's Kompas result for clubs where the user is management or coach
+  const standing =
+    practice && tab === "prax"
+      ? await Promise.all(
+          myClubs
+            .filter((c) => c.roles.some((r) => r !== "mentor"))
+            .map(async (c) => {
+              const view = await getKompas(kompasDeps, user, c.clubId);
+              return { club: c, area: view.result.areas.find((a) => a.area === number) };
+            }),
+        )
+      : [];
   if (practice && tab === "prax" && !roleId) {
-    const myRoles = (await listMyClubs(clubDeps, user)).flatMap((c) => c.roles);
+    const myRoles = myClubs.flatMap((c) => c.roles);
     roleId = myRoles
       .map((r) => PRACTICE_ROLE[r])
       .find((id) => practice.content.roles.some((x) => x.id === id));
@@ -99,6 +114,30 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
             </Link>
           ))}
         </nav>
+      )}
+
+      {tab === "prax" && standing.length > 0 && (
+        <section className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
+          <h2 className="font-semibold">{tKompas("practiceBlock.title")}</h2>
+          <ul className="flex flex-col gap-1.5">
+            {standing.map(({ club, area: r }) => (
+              <li key={club.clubId} className="flex flex-wrap items-center gap-x-2">
+                <span className="font-medium">{club.name}:</span>
+                <span>
+                  {r?.points != null
+                    ? `${tKompas("areaScore", { points: r.points })} · ${tKompas(`bands.${r.band!}`)}`
+                    : tKompas("practiceBlock.none")}
+                </span>
+                <Link
+                  href={`/klub/${encodeURIComponent(club.clubId)}/kompas`}
+                  className="underline underline-offset-4"
+                >
+                  {tKompas("practiceBlock.fill")}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       {tab === "prax" && practice ? (

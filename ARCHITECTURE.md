@@ -72,6 +72,7 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Kategórie klubu len zo Sportnetu (snapshot): U06–U11 → D, U12–U15 → Z, U16–U19 → DO, U21/dospelí → S, ženské družstvo → zd (aktuálna sezóna, inak posledná s dátami)
 3. Výpočet `src/server/services/kompas-scoring.ts` (čisté funkcie): stĺpec = round(zaškrtnuté platné / platné × 10), menej než 3 platné → oblasť sa nepočíta, oblasť 0–20, pásma 0–4 / 5–8 / 9–12 / 13–16 / 17–20, „čo urobiť najbližšie“ = 3 najslabšie oblasti a ich nezaškrtnuté platné otázky
 4. `PUT` uloží odpovede s verziou (súbežná úprava → 409); jedno hodnotenie na klub a sezónu
+5. UI `/klub/[clubId]/kompas`: priebežný výpočet v prehliadači (rovnaké čisté funkcie), uloženie cez Server Action; v Praxi oblastí 3 a 4 blok „Kde stojí váš klub“ pre kluby, kde je používateľ vedenie alebo tréner
 
 ### Dáta klubov (snapshot, ADR 0005)
 
