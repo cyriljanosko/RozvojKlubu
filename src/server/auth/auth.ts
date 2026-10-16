@@ -6,6 +6,7 @@ import { nextCookies } from "better-auth/next-js";
 import { genericOAuth, magicLink } from "better-auth/plugins";
 
 import { defaultMessages } from "@/i18n/config";
+import { resolveAuthBaseURL } from "@/server/auth/base-url";
 import { DEFAULT_ROLE, parseAdminEmails } from "@/server/auth/roles";
 import { sportnetProvider } from "@/server/auth/sportnet";
 import { getDbSync, getMongoClient } from "@/server/db/mongo";
@@ -25,7 +26,7 @@ function createAuth() {
 
   return betterAuth({
     appName: "Rozvoj klubu",
-    baseURL: env.BETTER_AUTH_URL ?? env.APP_URL,
+    baseURL: resolveAuthBaseURL(env),
     // Dev-only fallback secret; production requires BETTER_AUTH_SECRET (checked above).
     secret: env.BETTER_AUTH_SECRET ?? "dev-only-insecure-secret-change-me-0123456789",
     database: mongodbAdapter(getDbSync(), { client: getMongoClient() }),

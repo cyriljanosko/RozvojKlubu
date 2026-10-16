@@ -24,6 +24,11 @@ const envSchema = z.object({
   /** Comma-separated e-mails that receive the admin_sfz role on first sign-in. */
   INITIAL_ADMIN_EMAILS: optional(z.string()),
 
+  // Set by Vercel at runtime (hostnames without protocol)
+  VERCEL_ENV: optional(z.enum(["development", "preview", "production"])),
+  VERCEL_URL: optional(z.string().min(1)),
+  VERCEL_BRANCH_URL: optional(z.string().min(1)),
+
   // Sportnet OIDC (auth.sportnet.online)
   SPORTNET_AUTH_URL: z.url().default("https://auth.sportnet.online"),
   SPORTNET_OAUTH_CLIENT_ID: optional(z.string().min(1)),
