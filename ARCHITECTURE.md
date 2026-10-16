@@ -124,4 +124,5 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `kompas_assessments`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/kompas.store.ts`)
 - `kompas_submissions`: `{ clubId: 1, season: 1, submittedAt: -1 }` (zakladá `src/server/db/kompas.store.ts`, súhlas 16. 10. 2026)
 - `licensing_evaluations`: `{ clubId: 1, season: 1 }` unikátny; `licensing_submissions`: `{ clubId: 1, season: 1 }` unikátny
-  – jedno uzavretie na sezónu (zakladá `src/server/db/licensing.store.ts`, súhlas 16. 10. 2026)
+  len pre platné uzavretia (`club_season_closed`, `partialFilterExpression: { status: "closed" }`, ADR 0008)
+  – jedno platné uzavretie na sezónu, znovu otvorené zostávajú v histórii (zakladá `src/server/db/licensing.store.ts`, súhlas 16. 10. 2026)

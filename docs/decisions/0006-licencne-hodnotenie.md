@@ -3,6 +3,7 @@
 - Stav: prijaté
 - Dátum: 2026-10-16
 - Rozhodol: Cyril Janoško
+- Nahradené: 0008 (bod 3, čiastočne – znovuotvorenie sezóny adminom)
 
 ## Kontext
 
