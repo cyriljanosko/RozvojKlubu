@@ -1,5 +1,5 @@
 {
-  "source": "Roly v 11 oblastiach – návrh na spoločné hodnotenie, verzia 1, 11. 10. 2026; roly Hubu z návrhu „Akadémia rozvoja klubov · dve dráhy“; zmeny rolí 16. 10. 2026 (ADR 0011)",
+  "source": "Roly v 11 oblastiach – návrh na spoločné hodnotenie, verzia 1, 11. 10. 2026; roly Hubu z návrhu „Akadémia rozvoja klubov · dve dráhy“; zmeny rolí 16. 10. 2026 (ADR 0011); označenie sekcií Metodiky rolami – návrh Claude 16. 10. 2026 (skontroluje pracovná skupina)",
   "baseRoles": [
     {
       "key": "management",
@@ -641,7 +641,16 @@
           "does": "tri čísla na začiatku a po 14 dňoch, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "mentor"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 2,
@@ -683,7 +692,16 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "coach", "mentor"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 3,
@@ -730,7 +748,17 @@
           "baseRoles": ["mentor"],
           "practiceRole": "m"
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "coach", "mentor"],
+        "kategorie": ["coach", "management"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 4,
@@ -785,7 +813,18 @@
           "baseRoles": ["mentor"],
           "practiceRole": "m"
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "coach", "volunteer", "parent"],
+        "rebricek": ["volunteer", "management", "parent"],
+        "typy": ["volunteer", "management", "coach"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 5,
@@ -827,7 +866,18 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["coach", "management", "parent", "player"],
+        "dievcata": ["coach", "parent", "player", "management"],
+        "migracia": ["coach", "management", "player", "parent"],
+        "zodpovednost": ["management", "coach", "parent"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 6,
@@ -876,7 +926,21 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "coach", "volunteer", "player"],
+        "kalendar": ["coach", "management"],
+        "telesna": ["coach"],
+        "bezskoly": ["management", "coach"],
+        "premena": ["coach", "management", "volunteer"],
+        "rodiny": ["parent", "volunteer", "player"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 7,
@@ -911,7 +975,21 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "player", "coach"],
+        "bezsieti": ["management", "player"],
+        "odkial": ["management", "coach"],
+        "fanusikovia": ["fan", "management", "player", "volunteer"],
+        "fotky": ["coach", "parent", "player", "management"],
+        "krizy": ["management"],
+        "zodpovednost": ["management", "player"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 8,
@@ -960,7 +1038,23 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "mentor"],
+        "zdroje": ["management"],
+        "cyklus": ["management"],
+        "dane": ["management", "parent", "volunteer", "fan"],
+        "dotacie": ["management"],
+        "clenske": ["management", "parent"],
+        "kontrola": ["management"],
+        "uctovnictvo": ["management"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 9,
@@ -1002,7 +1096,23 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "coach"],
+        "temy": ["management"],
+        "udalosti": ["management", "coach"],
+        "bezuhonnost": ["management", "coach", "volunteer"],
+        "registre": ["management"],
+        "uraz": ["coach", "management", "parent"],
+        "odmeny": ["management", "coach"],
+        "novela": ["management"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 10,
@@ -1044,7 +1154,22 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "coach", "player"],
+        "nastroje": ["management", "coach", "player"],
+        "roly": ["management", "coach", "player"],
+        "sportnet": ["management"],
+        "odchody": ["coach", "management"],
+        "bezpecnost": ["management", "player"],
+        "ai": ["management", "coach", "player"],
+        "zodpovednost": ["management", "volunteer"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     },
     {
       "area": 11,
@@ -1100,7 +1225,21 @@
           "does": "tri čísla, kohorta, overenie",
           "baseRoles": ["mentor"]
         }
-      ]
+      ],
+      "sections": {
+        "popis": ["all"],
+        "dolezitost": ["management", "mentor"],
+        "implementacia": ["management", "coach", "volunteer"],
+        "vrstvy": ["management"],
+        "okamihy": ["coach", "volunteer", "parent"],
+        "ochrana": ["coach", "management", "parent", "volunteer"],
+        "sikana": ["coach", "parent", "player"],
+        "obnova": ["management", "volunteer"],
+        "zodpovednost": ["management", "coach", "parent"],
+        "bloky": ["management", "mentor"],
+        "kniznica": ["management", "coach"]
+      },
+      "sectionsDraft": true
     }
   ]
 }

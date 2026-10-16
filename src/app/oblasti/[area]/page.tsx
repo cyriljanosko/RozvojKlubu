@@ -18,7 +18,12 @@ import {
 } from "@/server/db/content.store";
 import type { ClubRole } from "@/server/db/types";
 import { practiceRoleFor } from "@/server/services/academy.service";
-import { practiceRoleForHubRole } from "@/server/services/hub.service";
+import {
+  baseRoleForParam,
+  lensForClubRoles,
+  orderSections,
+  practiceRoleForHubRole,
+} from "@/server/services/hub.service";
 import { getRoleCatalog } from "@/server/services/role-catalog.service";
 import { isAdmin } from "@/server/services/club-access";
 import { listAreas } from "@/server/services/content.service";
@@ -57,12 +62,24 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   const practice = await getPractice(mongoPracticeStore, user, number);
   const tab = practice && query.tab === "prax" ? "prax" : "metodika";
   const sections = tab === "metodika" ? await listMethodology(mongoSectionStore, user, number) : [];
-  let roleId = typeof query.role === "string" ? query.role : undefined;
+  const roleParam = typeof query.role === "string" ? query.role : null;
+  let roleId = roleParam ?? undefined;
+  const catalog = (await getRoleCatalog(mongoRoleCatalogStore, user))?.content ?? null;
   // a Hub role key (e.g. "coach") is translated to this area's Prax role (ADR 0011)
   if (practice && roleId && !practice.content.roles.some((x) => x.id === roleId)) {
-    const catalog = (await getRoleCatalog(mongoRoleCatalogStore, user))?.content;
     roleId = (catalog && practiceRoleForHubRole(catalog, number, roleId)) || undefined;
   }
+  // Metodika for a role: from the address, else from the user's club role (ADR 0011)
+  const clubTrack = catalog?.tracks?.find((tr) => tr.status === "approved") ?? null;
+  const lenses = clubTrack?.hubRoles.filter((h) => h.baseRole) ?? [];
+  let methodologyRole = catalog ? baseRoleForParam(catalog, number, roleParam) : null;
+  if (!methodologyRole && !roleParam && user && clubTrack && tab === "metodika") {
+    const mine = (await listMyClubs(clubDeps, user)).find((c) => c.roles.length > 0);
+    methodologyRole = mine ? (lensForClubRoles(clubTrack, mine.roles)?.baseRole ?? null) : null;
+  }
+  const areaTags = catalog?.areas.find((a) => a.area === number);
+  const ordered = orderSections(sections, areaTags?.sections, methodologyRole);
+  const lensKey = lenses.find((h) => h.baseRole === methodologyRole)?.key ?? null;
   const myClubs = user && practice && tab === "prax" ? await listMyClubs(clubDeps, user) : [];
   // "Kde klub stojí": this area's Kompas result for clubs where the user is management or coach
   const standing =
@@ -121,7 +138,11 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
           {(["metodika", "prax"] as const).map((key) => (
             <Link
               key={key}
-              href={key === "prax" ? `${base}?tab=prax` : base}
+              href={
+                key === "prax"
+                  ? `${base}?tab=prax${roleParam ? `&role=${encodeURIComponent(roleParam)}` : ""}`
+                  : `${base}${roleParam ? `?role=${encodeURIComponent(roleParam)}` : ""}`
+              }
               aria-current={tab === key ? "page" : undefined}
               className="aria-[current=page]:border-primary -mb-px border-b-2 border-transparent px-3 py-2 text-sm font-medium"
             >
@@ -167,35 +188,76 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
         <p className="text-muted-foreground text-sm">{t("empty")}</p>
       ) : (
         <>
+          {lenses.length > 0 && (
+            <nav aria-label={t("roleFor")} className="flex flex-col gap-2">
+              <p className="text-sm font-medium">{t("roleFor")}</p>
+              <div className="flex gap-1 overflow-x-auto pb-1 text-sm">
+                <Link
+                  href={base}
+                  aria-current={!methodologyRole ? "page" : undefined}
+                  className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground shrink-0 rounded-md border px-3 py-1.5 whitespace-nowrap"
+                >
+                  {t("allRoles")}
+                </Link>
+                {lenses.map((h) => (
+                  <Link
+                    key={h.key}
+                    href={`${base}?role=${encodeURIComponent(h.key)}`}
+                    aria-current={h.key === lensKey ? "page" : undefined}
+                    className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground shrink-0 rounded-md border px-3 py-1.5 whitespace-nowrap"
+                  >
+                    {h.name}
+                  </Link>
+                ))}
+              </div>
+              {methodologyRole && areaTags?.sectionsDraft && (
+                <p className="text-muted-foreground text-xs">{t("tagsDraft")}</p>
+              )}
+            </nav>
+          )}
           <nav aria-label={t("contents")} className="rounded-xl border p-4">
             <h2 className="text-sm font-semibold">
               {t("methodology")} · {t("contents")}
             </h2>
             <ol className="mt-2 grid gap-1 text-sm sm:grid-cols-2">
-              {sections.map((s) => (
+              {ordered.map((s) => (
                 <li key={s.key}>
                   <a href={`#${s.key}`} className="underline-offset-4 hover:underline">
                     {s.title}
                   </a>
+                  {s.forRole && <span className="text-primary text-xs"> · {t("forYourRole")}</span>}
                 </li>
               ))}
             </ol>
           </nav>
-          {sections.map((s) => (
-            <section key={s.key} id={s.key} className="scroll-mt-6 rounded-xl border p-4 sm:p-6">
-              <h2 className="text-lg font-semibold break-words">{s.title}</h2>
-              {(s.validAsOf || s.reviewedAt) && (
-                <p className="text-muted-foreground mt-1 text-xs">
-                  {[
-                    s.validAsOf && t("validAsOf", { date: date(s.validAsOf) }),
-                    s.reviewedAt && t("reviewedAt", { date: date(s.reviewedAt) }),
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </p>
-              )}
-              <MarkdownContent>{s.body}</MarkdownContent>
-            </section>
+          {ordered.map((s) => (
+            <details
+              key={s.key}
+              id={s.key}
+              className={`group scroll-mt-6 rounded-xl border sm:p-0 ${s.forRole ? "border-primary bg-primary/5" : ""}`}
+            >
+              <summary className="flex cursor-pointer flex-wrap items-center gap-x-2 gap-y-1 p-4 sm:px-6">
+                <span className="text-lg font-semibold break-words">{s.title}</span>
+                {s.forRole && (
+                  <span className="bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
+                    {t("forYourRole")}
+                  </span>
+                )}
+              </summary>
+              <div className="px-4 pb-4 sm:px-6 sm:pb-6">
+                {(s.validAsOf || s.reviewedAt) && (
+                  <p className="text-muted-foreground mb-2 text-xs">
+                    {[
+                      s.validAsOf && t("validAsOf", { date: date(s.validAsOf) }),
+                      s.reviewedAt && t("reviewedAt", { date: date(s.reviewedAt) }),
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                )}
+                <MarkdownContent>{s.body}</MarkdownContent>
+              </div>
+            </details>
           ))}
         </>
       )}
