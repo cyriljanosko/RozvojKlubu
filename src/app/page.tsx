@@ -145,6 +145,61 @@ async function Hub({ searchParams }: Props) {
         </header>
       )}
 
+      {!user && (
+        <section aria-labelledby="hub-how" className="flex flex-col gap-3">
+          <h2 id="hub-how" className="text-xl font-semibold">
+            {t("how.title")}
+          </h2>
+          <ul className="grid gap-3 sm:grid-cols-3">
+            <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
+              <p className="font-semibold">{t("how.vizitka.title")}</p>
+              <p className="text-muted-foreground">{t("how.vizitka.text")}</p>
+              {approved && hub.clubs.length > 0 && (
+                <details className="mt-auto">
+                  <summary className="cursor-pointer font-medium underline underline-offset-4">
+                    {t("how.vizitka.find")}
+                  </summary>
+                  <ul className="mt-2 flex flex-col gap-1">
+                    {hub.clubs.map((c) => (
+                      <li key={c.clubId}>
+                        <Link
+                          href={`/vizitka/${encodeURIComponent(c.clubId)}`}
+                          className="hover:bg-muted/50 flex flex-col rounded-md px-2 py-1"
+                        >
+                          <span className="font-medium break-words">{c.name}</span>
+                          <span className="text-muted-foreground text-xs">{c.union}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </li>
+            <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
+              <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+                {t("how.level1.badge")}
+              </p>
+              <p className="font-semibold">{t("how.level1.title")}</p>
+              <p className="text-muted-foreground">{t("how.level1.text")}</p>
+            </li>
+            <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
+              <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+                {t("how.level2.badge")}
+              </p>
+              <p className="font-semibold">{t("how.level2.title")}</p>
+              <p className="text-muted-foreground">{t("how.level2.text")}</p>
+              <p className="text-muted-foreground">
+                {t("how.level2.communication")}{" "}
+                <span className="rounded-full border px-2 py-0.5 text-xs">{t("preparing")}</span>
+              </p>
+              <Button asChild size="sm" className="mt-auto self-start">
+                <Link href="/prihlasenie">{t("about.signIn")}</Link>
+              </Button>
+            </li>
+          </ul>
+        </section>
+      )}
+
       {user && (
         <Suspense fallback={<div className="h-40" aria-hidden />}>
           <MyAcademyHome user={user} />
