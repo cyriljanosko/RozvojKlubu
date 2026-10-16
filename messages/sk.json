@@ -736,6 +736,25 @@
       "points": "{points} z 20",
       "academy": "Otvoriť Moja Akadémia",
       "mentorSummary": "{count, plural, one {# klub} few {# kluby} other {# klubov}}, Kompas odoslaný {sent}"
+    },
+    "how": {
+      "title": "Ako Akadémia funguje",
+      "vizitka": {
+        "title": "Vizitka klubu",
+        "text": "Každý klub tu má svoju Vizitku: profil zo Sportnetu (družstvá, hráči, tréneri), výsledok Kompasu v 11 oblastiach a licenčné hodnotenie za sezónu. Vizitku si môže pozrieť ktokoľvek.",
+        "find": "Nájsť Vizitku klubu"
+      },
+      "level1": {
+        "badge": "1. úroveň · bez prihlásenia",
+        "title": "Samoštúdium",
+        "text": "Jedenásť oblastí, ktoré klub robia klubom: od vedenia a trénerov cez hráčov a dobrovoľníkov až po financie a zázemie. Každá oblasť je podrobne opísaná: čo to je, prečo na tom záleží, ako to kluby reálne robia, vzory a prvé kroky. K tomu Kompas klubu na vyskúšanie, ktorý ukáže, kde klub stojí."
+      },
+      "level2": {
+        "badge": "2. úroveň · po prihlásení",
+        "title": "Klub v Akadémii",
+        "text": "Vedenie, tréneri a ďalší ľudia klubu pracujú spolu: Kompas a licenčné hodnotenie sa ukladajú za sezónu a klub ich odošle mentorovi zväzu. Každý vidí svoje úlohy a klub sa vzdeláva s mentorom zväzu, ktorý ho sprevádza.",
+        "communication": "Klub komunikuje so svojimi ľuďmi – rodičmi, dobrovoľníkmi a hráčmi."
+      }
     }
   }
 }
