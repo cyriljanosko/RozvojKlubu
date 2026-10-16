@@ -1,5 +1,5 @@
 {
-  "source": "Roly v 11 oblastiach – návrh na spoločné hodnotenie, verzia 1, 11. 10. 2026",
+  "source": "Roly v 11 oblastiach – návrh na spoločné hodnotenie, verzia 1, 11. 10. 2026; roly Hubu z návrhu „Akadémia rozvoja klubov · dve dráhy“; zmeny rolí 16. 10. 2026 (ADR 0011)",
   "baseRoles": [
     {
       "key": "management",
@@ -19,15 +19,16 @@
       "status": "approved"
     },
     {
-      "key": "team_player",
-      "name": "Tímový hráč klubu",
-      "status": "approved"
+      "key": "volunteer",
+      "name": "Dobrovoľník",
+      "status": "approved",
+      "note": "Doteraz „Tímový hráč klubu“ (rozhodnutie 16. 10. 2026)."
     },
     {
-      "key": "youth",
-      "name": "Mladí v klube (15–25)",
-      "status": "proposal",
-      "note": "Otvorená otázka: siedma základná rola, alebo pod Tímového hráča klubu? Veková hranica 15–25?",
+      "key": "player",
+      "name": "Hráč / hráčka",
+      "status": "approved",
+      "note": "Nahrádza rolu „Mladí v klube (15–25)“: možnosti uplatnenia v klube, neskôr hodnotenie klubu očami hráča (rozhodnutie 16. 10. 2026).",
       "rules": [
         "Mladí do 18 rokov potrebujú súhlas zákonného zástupcu a pri deťoch sú vždy s dospelým, nikdy sami.",
         "Fotky a videá detí len so súhlasom rodičov; heslá k účtom klubu má klub, nie jeden človek.",
@@ -41,6 +42,555 @@
       "name": "Mentor zväzu",
       "status": "approved",
       "clubRole": "mentor"
+    },
+    {
+      "key": "fan",
+      "name": "Fanúšik",
+      "status": "approved",
+      "publicOnly": true
+    }
+  ],
+  "tracks": [
+    {
+      "key": "club",
+      "name": "Klub v obci",
+      "status": "approved",
+      "intro": "Vyberte rolu a povedzte nám niečo o klube. Oblasti sa preusporiadajú, obsah zostane rovnaký.",
+      "teasers": {
+        "1": "Prezident, výbor, ISSF manažér a ekonóm. Kto rozhoduje a kto má prístupy.",
+        "2": "Človek, ktorý drží chod klubu pokope od súpisky po dotáciu.",
+        "3": "Nábor, licencie a udržanie trénerov v každej kategórii.",
+        "4": "Rodičia a ďalší ľudia, ktorí klubu pomáhajú mimo ihriska, a ako im poďakovať.",
+        "5": "Prvý tréning, komunikácia s rodinou a udržanie hráča v hre.",
+        "6": "Spolupráca s obcou a školou, nábor a podujatia.",
+        "7": "Pravidelné správy o klube, fanúšikovia, diváci, sponzori a obec.",
+        "8": "Rozpočet, evidencia a odkiaľ môžu prísť peniaze.",
+        "9": "Zmluvy, poistenie, GDPR a bezpečnosť práce.",
+        "10": "Evidencia v Sportnete a práca s vlastnými dátami.",
+        "11": "Zázemie, kultúra klubu, prvá pomoc a bezpečné prostredie."
+      },
+      "hubRoles": [
+        {
+          "key": "whole",
+          "name": "Celý klub",
+          "order": [],
+          "lines": {},
+          "info": {
+            "who": "Ktokoľvek, kto chce vidieť klub ako celok. Hodí sa pri prvej návšteve alebo na spoločné stretnutie výboru a trénerov.",
+            "see": "Všetkých 11 oblastí rovnako, v poradí 1 až 11, a odporúčanie začať Kompasom.",
+            "why": "Kým neviete, kde klub stojí, nie je dôvod niektorú oblasť uprednostniť."
+          }
+        },
+        {
+          "key": "coach",
+          "name": "Tréner a trénerka",
+          "order": [3, 5, 11, 4, 6],
+          "lines": {
+            "3": "Vaša licencia, dokedy platí a kam sa dá posunúť ďalej.",
+            "4": "Rodičia vašej kategórie sú najbližší dobrovoľníci, ktorých klub má.",
+            "5": "Uvítací rozhovor, spätná väzba rodičovi, hrací čas — vaša každodenná práca.",
+            "6": "Hodina telesnej a festival pre školu — odtiaľ prídu deti do vášho družstva.",
+            "11": "Prvá pomoc, prevencia zranení a to, ako sa u vás na ihrisku k sebe správame."
+          },
+          "info": {
+            "who": "Hlavný tréner, asistent, tréner brankárov a vedúci mužstva pri kategórii.",
+            "see": "Hore trénerov, hráča, prostredie klubu, dobrovoľníkov a aktivity.",
+            "why": "S deťmi a rodičmi ste v kontakte najčastejšie. Od vás najviac závisí, či dieťa v klube zostane."
+          },
+          "baseRole": "coach",
+          "start": {
+            "title": "Vaše dve oblasti sú 3 a 5",
+            "text": "Kompas klubu vypĺňa výbor za celý klub. Vy máte na stole dve oblasti — svoju licenciu a prácu s hráčmi. Tam sa dá začať hneď a bez toho, aby ste čakali na kohokoľvek.",
+            "steps": [
+              {
+                "title": "Prejdite si Detail oblasti 3",
+                "text": "Licencia, jej platnosť, kontinuálne vzdelávanie a vaša prax ako tréner."
+              },
+              {
+                "title": "Zaveďte uvítací rozhovor",
+                "text": "Oblasť 5: jeden rozhovor s rodičom pri nástupe dieťaťa a jedna spätná väzba za sezónu."
+              },
+              {
+                "title": "Až potom Kompas s výborom",
+                "text": "Sebahodnotenie je vec celého klubu — vaše dve oblasti sú jeho súčasťou."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť Detail oblasti 3 — Tréneri",
+              "area": 3
+            }
+          }
+        },
+        {
+          "key": "management",
+          "name": "Manažér a výbor",
+          "order": [1, 2, 8, 9, 10],
+          "lines": {
+            "1": "Kto rozhoduje, kto podpisuje, kto má prístupy — a čo sa stane, keď ten človek odíde.",
+            "2": "Ročný cyklus klubu, rozpočet, evidencia a kontakty na ObFZ a zväz.",
+            "8": "Z čoho klub žije a či nestojí na jedinom zdroji peňazí.",
+            "9": "Zmluvy, poistenie a súhlasy — rieši sa pred problémom, nie po ňom.",
+            "10": "Poriadok v evidencii a v Sportnete, aby dáta nikto nehľadal po zošitoch."
+          },
+          "info": {
+            "who": "Prezident, členovia výboru, manažér klubu, ISSF manažér a matrikár, ekonóm klubu.",
+            "see": "Hore oblasti vedenia, chodu klubu, peňazí, formálnych vecí a evidencie.",
+            "why": "Rozhodujete o ľuďoch, peniazoch a prístupoch. Ak tu niečo chýba, ostatné oblasti sa nemajú o čo oprieť."
+          },
+          "baseRole": "management",
+          "start": {
+            "title": "Najprv Kompas, potom jedna oblasť na sezónu",
+            "text": "Výbor vidí klub celý, preto začína sebahodnotením. Kompas za jedno posedenie ukáže, kde klub stojí, a vyberie tri oblasti, kde sa oplatí začať.",
+            "steps": [
+              {
+                "title": "Vyplňte Kompas klubu",
+                "text": "Spolu s manažérom a jedným trénerom, za jedno posedenie výboru."
+              },
+              {
+                "title": "Pozrite tri najslabšie oblasti",
+                "text": "Kompas ich vypíše sám aj s prvými krokmi."
+              },
+              {
+                "title": "Vyberte jednu oblasť na sezónu",
+                "text": "S menom a termínom – ostatné počká."
+              }
+            ],
+            "cta": {
+              "label": "Spustiť Kompas klubu",
+              "area": 0
+            }
+          },
+          "draft": true
+        },
+        {
+          "key": "mentor",
+          "name": "Mentor zväzu",
+          "order": [2, 1, 4, 10, 6],
+          "lines": {
+            "1": "Prvé, čo v klube preveríte — bez funkčného výboru sa nedá stavať nič ďalšie.",
+            "2": "Váš hlavný partner v klube. Ak rolu nikto nemá, začnite tu.",
+            "4": "Najčastejšia príčina toho, prečo klub nevládze — traja ľudia na všetko.",
+            "6": "Téma, kde malý klub najrýchlejšie uvidí výsledok.",
+            "10": "Bez poriadku v evidencii sa nedá zmerať, či sa klub pohol."
+          },
+          "info": {
+            "who": "Mentor ObFZ alebo krajského zväzu a grassroots koordinátor, ktorý klub sprevádza.",
+            "see": "Hore manažéra, vedenie, dobrovoľníkov, dáta a aktivity.",
+            "why": "Keď sa zaseknú tieto oblasti, klub sa nepohne ani v ostatných. Podľa nich viete, kde začať rozhovor."
+          },
+          "baseRole": "mentor",
+          "start": {
+            "title": "Najprv sebahodnotenie, potom jedna oblasť na sezónu",
+            "text": "Klub, ktorý dostane jedenásť oblastí naraz, neurobí ani jednu. Nechajte ho najprv zmerať, kde stojí, a potom spolu vyberte jednu oblasť, ktorú tento rok naozaj dotiahne.",
+            "steps": [
+              {
+                "title": "Nechajte klub vyplniť Kompas",
+                "text": "Výbor to zvládne za jedno posedenie. Riadok s výsledkom vám klub pošle mailom."
+              },
+              {
+                "title": "Pozrite tri najslabšie oblasti",
+                "text": "Kompas ich vypíše sám, aj s vetou, čo v nich urobiť."
+              },
+              {
+                "title": "Vyberte jednu oblasť na sezónu",
+                "text": "S menom a termínom. Zvyšok počká — a to je v poriadku."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť Kompas klubu",
+              "area": 0
+            }
+          }
+        },
+        {
+          "key": "parent",
+          "name": "Rodič",
+          "order": [5, 4, 11, 6],
+          "lines": {
+            "4": "Ako sa dá pomôcť bez toho, aby vás to pohltilo.",
+            "5": "Čo má klub robiť pre vaše dieťa — uvítanie, spätná väzba, hrací čas.",
+            "6": "Podujatia, na ktoré môžete prísť aj s mladším súrodencom.",
+            "11": "Prvá pomoc, bezpečné prostredie a to, ako sa v klube k deťom správame."
+          },
+          "info": {
+            "who": "Rodič alebo zákonný zástupca hráča či hráčky.",
+            "see": "Hore hráča, dobrovoľníkov, bezpečné prostredie a podujatia pre rodiny.",
+            "why": "Chcete vedieť, čo dieťa v klube čaká, na koho sa obrátiť a ako môžete pomôcť bez toho, aby to zabralo celý víkend."
+          },
+          "baseRole": "parent",
+          "start": {
+            "title": "Oblasť 5 hovorí o vašom dieťati",
+            "text": "Nemusíte čítať jedenásť oblastí. Jedna z nich je napísaná presne o tom, čo má klub robiť pre deti — a je to zároveň zoznam vecí, na ktoré sa môžete trénera pokojne opýtať.",
+            "steps": [
+              {
+                "title": "Prečítajte si oblasť 5",
+                "text": "Uvítací rozhovor, spätná väzba počas sezóny, hrací čas, prechod do vyššej kategórie."
+              },
+              {
+                "title": "Opýtajte sa trénera",
+                "text": "Uvítací rozhovor s rodičom má klub ponúkať sám. Ak neprebehol, je to dobrá otázka."
+              },
+              {
+                "title": "Ak chcete pomôcť, oblasť 4",
+                "text": "V detaile je prax pre rodiča — dá sa začať jednou úlohou na dve hodiny."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť oblasť 5 — Hráč, hráčka",
+              "area": 5
+            }
+          }
+        },
+        {
+          "key": "volunteer",
+          "name": "Dobrovoľník",
+          "order": [4, 6, 7, 11],
+          "lines": {
+            "4": "Čo klub potrebuje, čo za to ponúka a ako sa dá pomôcť na dve hodiny.",
+            "6": "Podujatia — tu je najviac konkrétnej práce, ktorá sa dá rozdeliť.",
+            "7": "Fotka po zápase a výsledok na Facebook: dvadsať minút týždenne, veľký rozdiel.",
+            "11": "Zázemie klubu a to, ako sa v ňom k sebe správame."
+          },
+          "info": {
+            "who": "Každý, kto klubu pomáha mimo ihriska bez funkcie: usporiadateľ, hospodár pri výstroji a areáli, fotograf, bufet, dôchodca, ktorý kosí ihrisko.",
+            "see": "Hore dobrovoľníkov, podujatia, marketing a zázemie klubu.",
+            "why": "Toto sú miesta, kde klub pomoc potrebuje najčastejšie a kde je jasne vidieť, čo ste urobili."
+          },
+          "baseRole": "volunteer",
+          "start": {
+            "title": "Jedna úloha, ktorá má koniec",
+            "text": "Pomoc v klube stroskotáva vtedy, keď sa z „pomôž nám“ stane nekonečno. Oblasť 4 je o opaku — o úlohách, ktoré majú rozsah, termín a koniec.",
+            "steps": [
+              {
+                "title": "Pozrite si rebríček zapojenia",
+                "text": "Päť stupňov od jednorazovej hodiny po člena výboru. Posúva sa vždy len o jeden."
+              },
+              {
+                "title": "Vyberte jednu úlohu s koncom",
+                "text": "Usporiadateľ na jeden zápas, fotky z turnaja, doprava na jeden zájazd."
+              },
+              {
+                "title": "Povedzte klubu, čo viete",
+                "text": "Remeslo, účtovníctvo, sociálne siete, kontakty v obci — klub to často netuší."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť Detail oblasti 4 — Dobrovoľníci",
+              "area": 4
+            }
+          }
+        },
+        {
+          "key": "player",
+          "name": "Hráč / hráčka",
+          "baseRole": "player",
+          "order": [5, 4, 6, 7, 10],
+          "lines": {
+            "5": "Tvoj hlas v klube, duálna kariéra a prechod z dorastu do dospelých.",
+            "4": "Prvá úloha s jasným koncom na podujatí – fotky, video alebo pomoc pri prípravke.",
+            "6": "Pomocník na festivale a turnaji prípraviek: stanovište, fotky, krátke video.",
+            "7": "Sociálne siete klubu: dva príspevky týždenne, fotka a veta po zápase.",
+            "10": "Dochádzka v aplikácii, zdieľané kalendáre a pomoc trénerom s aplikáciami."
+          },
+          "start": {
+            "title": "Čo môžeš v klube robiť popri hraní",
+            "text": "Druhá rola v klube nie je práca navyše. Je to cesta, ako v klube zostať, naučiť sa niečo nové a mať čo napísať do životopisu – aj keď raz prestaneš hrať.",
+            "steps": [
+              {
+                "title": "Pozri si oblasť 5",
+                "text": "Čo má klub robiť pre hráčov a ako sa dá povedať, čo by si zlepšil."
+              },
+              {
+                "title": "Vyber si jednu úlohu s koncom",
+                "text": "Fotky z turnaja, pomoc na stanovišti prípravky alebo príspevok na sociálne siete."
+              },
+              {
+                "title": "Dohodni sa s trénerom alebo manažérom",
+                "text": "Do 18 rokov so súhlasom rodiča – vlastný futbal a škola majú vždy prednosť."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť oblasť 5 — Hráč, hráčka",
+              "area": 5
+            }
+          },
+          "info": {
+            "who": "Hráč alebo hráčka klubu, najmä dorastenci, dorastenky a mladí hráči do 25 rokov.",
+            "see": "Hore hráča, dobrovoľníkov, podujatia, marketing a digitalizáciu – miesta, kde môžeš v klube pomôcť.",
+            "why": "Klub ťa potrebuje aj mimo ihriska a ty z toho máš skúsenosť, kamarátov a dôvod v klube zostať."
+          },
+          "draft": true
+        },
+        {
+          "key": "fan",
+          "name": "Fanúšik",
+          "order": [7, 4, 6, 11],
+          "lines": {
+            "4": "Ak chcete pomôcť: jedna úloha s koncom podľa toho, čo vás baví.",
+            "6": "Zápasový deň a podujatia: turnaj prípravky v polčase, rodinný zápas.",
+            "7": "Ako vás klub pozýva, informuje a čo dostanete ako podporovateľ.",
+            "11": "Kde sedieť, bufet a ako sa na tribúne k sebe správame."
+          },
+          "info": {
+            "who": "Divák alebo fanúšik, ktorý chodí na zápasy alebo sleduje klub na sociálnych sieťach.",
+            "see": "Hore marketing a fanúšikovia, dobrovoľníci, podujatia a zázemie.",
+            "why": "Ste najbližší okruh klubu. Ak chcete, môžete pomôcť tým, čo vás baví, a klub vám za to poďakuje."
+          },
+          "baseRole": "fan",
+          "start": {
+            "title": "Pomôžte klubu tým, čo vás baví",
+            "text": "Nemusíte byť vo výbore ani trénovať. Vyberte si, čo vás baví, a klub vám ponúkne jednu úlohu, ktorá má koniec.",
+            "steps": [
+              {
+                "title": "Fotíte alebo píšete?",
+                "text": "Fotka a veta zo zápasu pre sociálne siete klubu (oblasť 7)."
+              },
+              {
+                "title": "Radi pomôžete na akcii?",
+                "text": "Pokladňa, bufet alebo usporiadateľ na jeden zápas (oblasť 6)."
+              },
+              {
+                "title": "Máte šikovné ruky?",
+                "text": "Brigáda v areáli alebo drobná oprava (oblasť 11)."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť oblasť 4 — ako sa zapojiť",
+              "area": 4
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "pro_academy",
+      "name": "Akadémia profesionálneho klubu",
+      "status": "preparing",
+      "intro": "Dráha pre akadémie profesionálnych klubov (1. a 2. liga). Vyberte rolu v akadémii, oblasti sa preusporiadajú. Obsah oblastí pripravujeme.",
+      "areas": [
+        {
+          "area": 1,
+          "name": "Riadenie akadémie",
+          "band": 1,
+          "description": "Vízia akadémie, štruktúra, rozpočet a väzba na prvé mužstvo."
+        },
+        {
+          "area": 2,
+          "name": "Metodika a model hry",
+          "band": 1,
+          "description": "Jednotné kurikulum U8–U19 a herná filozofia klubu."
+        },
+        {
+          "area": 3,
+          "name": "Tréneri a personál",
+          "band": 1,
+          "description": "Licencie UEFA A a PRO, vzdelávanie a mentoring trénerov akadémie."
+        },
+        {
+          "area": 4,
+          "name": "Rozvoj hráča",
+          "band": 1,
+          "description": "Individuálny plán, hodnotenie, talent a relatívny vek."
+        },
+        {
+          "area": 5,
+          "name": "Športová veda a zdravie",
+          "band": 2,
+          "description": "Kondícia, prevencia zranení, výživa, fyzioterapia a psychológia."
+        },
+        {
+          "area": 6,
+          "name": "Škola a duálna kariéra",
+          "band": 2,
+          "description": "Partnerská škola, internát, štúdium popri futbale a život po futbale."
+        },
+        {
+          "area": 7,
+          "name": "Ochrana a welfare hráča",
+          "band": 2,
+          "description": "Bezpečné prostredie, welfare a komunikácia s rodinou."
+        },
+        {
+          "area": 8,
+          "name": "Skauting a nábor",
+          "band": 3,
+          "description": "Regionálny skauting, partnerské kluby a férový prechod talentu."
+        },
+        {
+          "area": 9,
+          "name": "Prechod do dospelého futbalu",
+          "band": 3,
+          "description": "B-tím, hosťovania a minúty pre mladých v prvom mužstve."
+        },
+        {
+          "area": 10,
+          "name": "Dáta a analýza",
+          "band": 3,
+          "description": "Video, GPS, databáza hráčov a dáta zo Sportnetu."
+        },
+        {
+          "area": 11,
+          "name": "Akadémia v regióne",
+          "band": 3,
+          "description": "Mentor pre kluby v obci: kohorty, metodika a tréneri v regióne."
+        }
+      ],
+      "hubRoles": [
+        {
+          "key": "whole",
+          "name": "Celá akadémia",
+          "order": [],
+          "lines": {},
+          "info": {
+            "who": "Ktokoľvek z akadémie, kto ju chce vidieť ako celok, napríklad na porade vedenia a šéftrénerov.",
+            "see": "Všetkých 11 oblastí akadémie v poradí 1 až 11.",
+            "why": "Kým neviete, kde akadémia stojí, nie je dôvod niektorú oblasť uprednostniť."
+          }
+        },
+        {
+          "key": "academy_management",
+          "name": "Vedenie akadémie",
+          "order": [1, 9, 11, 3, 10],
+          "lines": {
+            "1": "Kam akadémia smeruje, kto o čom rozhoduje a koľko stojí jeden odchovanec.",
+            "3": "Kvalita akadémie stojí na trénerch, nie na ihriskách.",
+            "9": "Koľko hráčov z akadémie hrá dospelý futbal a kde sa cesta láme.",
+            "10": "Rozhodnutia o hráčoch podľa dát, nie podľa dojmu.",
+            "11": "Akadémia ako mentor regiónu: kluby v obci sú jej najbližší partneri."
+          },
+          "info": {
+            "who": "Riaditeľ akadémie, športový riaditeľ, manažér mládeže, vedenie klubu.",
+            "see": "Hore riadenie, prechod do dospelých, región, tréneri a dáta.",
+            "why": "Rozhodujete o ľuďoch, peniazoch a smerovaní. Od vás závisí, či akadémia dáva prvému mužstvu hráčov."
+          },
+          "start": {
+            "title": "Najprv výsledok, potom systém",
+            "text": "Akadémia sa meria tým, koľko hráčov sa dostane do dospelého futbalu a ako sa k nim cestou správa. Začnite číslami prechodu a väzbou na región.",
+            "steps": [
+              {
+                "title": "Spočítajte prechod",
+                "text": "Koľko hráčov U19 za posledné tri roky hrá dospelý futbal a kde."
+              },
+              {
+                "title": "Pozrite oblasť 9",
+                "text": "B-tím, hosťovania a minúty pre mladých v prvom mužstve."
+              },
+              {
+                "title": "Spojte sa s regiónom",
+                "text": "Oblasť 11: ktoré kluby v obci sú vaši partneri a čo im dávate."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť oblasť 9 — Prechod do dospelého futbalu",
+              "area": 9
+            }
+          }
+        },
+        {
+          "key": "head_coach",
+          "name": "Šéftréner a metodik",
+          "order": [2, 3, 4, 9, 10],
+          "lines": {
+            "2": "Jeden model hry od U8 po U19, aby hráč nezačínal pri každom trénerovi odznova.",
+            "3": "Vzdelávanie a mentoring trénerov akadémie, nie len licencie.",
+            "4": "Individuálny plán každého hráča a pravidelné hodnotenie.",
+            "9": "Kedy a ako hráč prechádza vyššie, aj do dospelých.",
+            "10": "Video a dáta ako podklad pre rozhovor s hráčom."
+          },
+          "info": {
+            "who": "Šéftréner mládeže, metodik, koordinátor kategórií.",
+            "see": "Hore metodika, tréneri, rozvoj hráča, prechod a dáta.",
+            "why": "Držíte jednotný model hry a kvalitu tréningu naprieč kategóriami."
+          }
+        },
+        {
+          "key": "category_coach",
+          "name": "Tréner kategórie",
+          "order": [4, 2, 7, 5, 6],
+          "lines": {
+            "2": "Ako vaša kategória zapadá do modelu hry akadémie.",
+            "4": "Plán rozvoja pre každého hráča vašej kategórie.",
+            "5": "Záťaž, zranenia a regenerácia vo vašej kategórii.",
+            "6": "Škola a futbal tak, aby jedno neničilo druhé.",
+            "7": "Hráč akadémie je stále dieťa: bezpečie a welfare."
+          },
+          "info": {
+            "who": "Hlavný tréner alebo asistent kategórie v akadémii, tréner brankárov.",
+            "see": "Hore rozvoj hráča, metodika, welfare, zdravie a škola.",
+            "why": "S hráčmi ste každý deň. Ich rozvoj aj pocit bezpečia stojí na vás."
+          }
+        },
+        {
+          "key": "sport_science",
+          "name": "Športová veda a zdravie",
+          "order": [5, 4, 7, 10],
+          "lines": {
+            "4": "Biologický vek a rozvoj hráča, nie len výkon dnes.",
+            "5": "Kondícia, prevencia zranení, výživa a psychológia v jednom systéme.",
+            "7": "Duševné zdravie a welfare hráča.",
+            "10": "Merania, ktoré tréner naozaj použije."
+          },
+          "info": {
+            "who": "Kondičný tréner, fyzioterapeut, lekár, psychológ, výživový poradca.",
+            "see": "Hore zdravie, rozvoj hráča, welfare a dáta.",
+            "why": "Hráč sa rozvíja len vtedy, keď je zdravý a záťaž sedí jeho veku."
+          }
+        },
+        {
+          "key": "parent_player",
+          "name": "Rodič a hráč akadémie",
+          "order": [6, 7, 4, 9],
+          "lines": {
+            "4": "Ako akadémia hodnotí rozvoj a ako sa to dozviete.",
+            "6": "Škola, internát a čo po futbale — plán B je súčasť plánu A.",
+            "7": "Na koho sa obrátiť, keď sa niečo deje.",
+            "9": "Ako vyzerá cesta do dospelého futbalu a koľkým sa podarí."
+          },
+          "info": {
+            "who": "Rodič alebo zákonný zástupca hráča akadémie a hráč či hráčka od 15 rokov.",
+            "see": "Hore škola a duálna kariéra, welfare, rozvoj hráča a prechod do dospelých.",
+            "why": "Chcete vedieť, čo akadémia dieťaťu dáva, na koho sa obrátiť a čo ak to s profesionálnym futbalom nevyjde."
+          }
+        },
+        {
+          "key": "partner_club",
+          "name": "Partnerský klub v regióne",
+          "order": [11, 8, 2, 3],
+          "lines": {
+            "2": "Metodika akadémie pre trénerov prípraviek v regióne.",
+            "3": "Mentoring trénerov klubu od trénerov akadémie.",
+            "8": "Ako sa talent dostane do akadémie férovo a čo z toho má materský klub.",
+            "11": "Čo akadémia dáva klubom v obci: kohorty, metodiku a vzdelávanie trénerov."
+          },
+          "info": {
+            "who": "Vedenie alebo tréner klubu v obci, ktorý s akadémiou spolupracuje alebo chce spolupracovať.",
+            "see": "Hore región, skauting a nábor, metodika a tréneri.",
+            "why": "Tu sa spájajú obe dráhy: čo klub v obci dáva akadémii a čo od nej dostáva späť."
+          },
+          "start": {
+            "title": "Akadémia ako mentor regiónu",
+            "text": "Klub v obci a akadémia potrebujú jeden druhého: klub dáva talent, akadémia vracia vzdelávanie, metodiku a podporu. Toto je miesto, kde sa obe dráhy spájajú.",
+            "steps": [
+              {
+                "title": "Pozrite oblasť 11",
+                "text": "Čo akadémia ponúka klubom v regióne a ako sa zapojiť."
+              },
+              {
+                "title": "Dohodnite pravidlá prechodu talentu",
+                "text": "Oblasť 8: kedy, ako a čo z toho má materský klub."
+              },
+              {
+                "title": "Pre vlastný klub späť do dráhy Klub v obci",
+                "text": "Tam je prax pre vaše vedenie, trénerov aj rodičov."
+              }
+            ],
+            "cta": {
+              "label": "Otvoriť oblasť 11 — Akadémia v regióne",
+              "area": 11
+            }
+          }
+        }
+      ]
     }
   ],
   "areas": [
@@ -185,7 +735,7 @@
     {
       "area": 4,
       "status": "approved",
-      "note": "Schválené 8. 10. 2026, prax je hotová. Navrhujeme doplniť rolu Mladí v klube.",
+      "note": "Schválené 8. 10. 2026, prax je hotová. Navrhujeme doplniť rolu Hráč / hráčka.",
       "roles": [
         {
           "key": "management",
@@ -212,19 +762,19 @@
           "practiceRole": "r"
         },
         {
-          "key": "team_player",
-          "name": "Tímový hráč klubu",
+          "key": "volunteer",
+          "name": "Dobrovoľník",
           "who": "každý, kto už klubu pomáha mimo ihriska",
           "does": "karta úlohy, zaučenie nováčika, ďalší krok len ak chce",
-          "baseRoles": ["team_player"],
+          "baseRoles": ["volunteer"],
           "practiceRole": "h"
         },
         {
-          "key": "youth",
-          "name": "Mladí v klube (15–25)",
+          "key": "player",
+          "name": "Hráč / hráčka",
           "who": "dorastenci, dorastenky, mladí hráči, študenti",
           "does": "prvá úloha s koncom na podujatí, foto a video z akcie, pomoc pri prípravke",
-          "baseRoles": ["youth"],
+          "baseRoles": ["player"],
           "status": "proposal"
         },
         {
@@ -264,11 +814,11 @@
           "baseRoles": ["parent"]
         },
         {
-          "key": "youth",
-          "name": "Mladí v klube (15–25)",
+          "key": "player",
+          "name": "Hráč / hráčka",
           "who": "dorastenci, dorastenky, mladí hráči a hráčky",
           "does": "vlastný hlas v klube, duálna kariéra, prechod z dorastu do dospelých",
-          "baseRoles": ["youth"]
+          "baseRoles": ["player"]
         },
         {
           "key": "federation_mentor",
@@ -306,18 +856,18 @@
           "baseRoles": ["coach"]
         },
         {
-          "key": "parent_team_player",
-          "name": "Rodič a tímový hráč klubu",
+          "key": "parent_volunteer",
+          "name": "Rodič a dobrovoľník",
           "who": "rodičia a ľudia okolo klubu",
           "does": "úlohy na podujatí, nábor v obci",
-          "baseRoles": ["parent", "team_player"]
+          "baseRoles": ["parent", "volunteer"]
         },
         {
-          "key": "youth",
-          "name": "Mladí v klube (15–25)",
+          "key": "player",
+          "name": "Hráč / hráčka",
           "who": "dorastenci, dorastenky, študenti",
           "does": "pomocníci na festivale a turnaji prípraviek, stanovištia, fotky a video",
-          "baseRoles": ["youth"]
+          "baseRoles": ["player"]
         },
         {
           "key": "federation_mentor",
@@ -334,11 +884,11 @@
       "note": "Prioritou sú mladí: sociálne siete robia oni, tréner dodáva surovinu, manažér zodpovedá.",
       "roles": [
         {
-          "key": "youth_social",
-          "name": "Mladí v klube (15–25) · správca sociálnych sietí",
+          "key": "player_social",
+          "name": "Hráč / hráčka · správca sociálnych sietí",
           "who": "dorastenci, dorastenky, mladí hráči, študenti; prioritná rola oblasti",
           "does": "dva príspevky týždenne, fotka a veta po zápase, krátke video, kalendár príspevkov",
-          "baseRoles": ["youth"]
+          "baseRoles": ["player"]
         },
         {
           "key": "club_manager",
@@ -481,11 +1031,11 @@
           "baseRoles": ["management"]
         },
         {
-          "key": "youth",
-          "name": "Mladí v klube (15–25)",
+          "key": "player",
+          "name": "Hráč / hráčka",
           "who": "dorastenci, dorastenky, študenti",
           "does": "dochádzka v aplikácii, zdieľané kalendáre, video z tréningu, pomoc trénerom s aplikáciami",
-          "baseRoles": ["youth"]
+          "baseRoles": ["player"]
         },
         {
           "key": "federation_mentor",
@@ -530,11 +1080,11 @@
           "baseRoles": ["management"]
         },
         {
-          "key": "team_player_coordinator",
-          "name": "Koordinátor tímových hráčov klubu",
+          "key": "volunteer_coordinator",
+          "name": "Koordinátor dobrovoľníkov",
           "who": "koordinátor ľudí okolo klubu",
           "does": "privítanie a poďakovanie, jeden spoločný moment za sezónu",
-          "baseRoles": ["team_player"]
+          "baseRoles": ["volunteer"]
         },
         {
           "key": "parent",

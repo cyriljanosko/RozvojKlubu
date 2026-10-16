@@ -18,16 +18,41 @@ const file = JSON.parse(readFileSync(join(process.cwd(), "content/roly.json"), "
 const at = new Date("2026-10-16T12:00:00Z");
 
 describe("role catalog file", () => {
-  it("contains the proposal: 6 base roles and 60 roles in 11 areas", () => {
+  it("contains 7 base roles (ADR 0011), 60 roles in 11 areas and two Hub tracks", () => {
     const c = roleCatalogSchema.parse(file);
     expect(c.baseRoles.map((b) => b.key)).toEqual([
       "management",
       "coach",
       "parent",
-      "team_player",
-      "youth",
+      "volunteer",
+      "player",
       "mentor",
+      "fan",
     ]);
+    expect(c.baseRoles.find((b) => b.key === "volunteer")?.name).toBe("Dobrovoľník");
+    expect(c.baseRoles.find((b) => b.key === "fan")).toMatchObject({ publicOnly: true });
+    expect(c.tracks?.map((t) => [t.key, t.status, t.hubRoles.length])).toEqual([
+      ["club", "approved", 8],
+      ["pro_academy", "preparing", 7],
+    ]);
+    const club = c.tracks![0];
+    expect(club.hubRoles.map((h) => h.key)).toEqual([
+      "whole",
+      "coach",
+      "management",
+      "mentor",
+      "parent",
+      "volunteer",
+      "player",
+      "fan",
+    ]);
+    // the player lens and the management start box are proposals by Claude
+    expect(club.hubRoles.filter((h) => h.draft).map((h) => h.key)).toEqual([
+      "management",
+      "player",
+    ]);
+    expect(Object.keys(club.teasers ?? {})).toHaveLength(11);
+    expect(c.tracks![1].areas).toHaveLength(11);
     expect(c.baseRoles.find((b) => b.key === "management")).toMatchObject({
       name: "Manažér a výbor",
       clubRole: "management",
@@ -54,6 +79,12 @@ describe("role catalog file", () => {
       const keys = c.areas.find((a) => a.area === n)!.roles.flatMap((r) => r.practiceRole ?? []);
       expect(keys.every((k) => prax.roles.some((r) => r.id === k))).toBe(true);
     }
+  });
+
+  it("accepts a catalog without tracks (before v2)", () => {
+    const v1 = structuredClone(file) as RoleCatalog;
+    delete v1.tracks;
+    expect(roleCatalogSchema.safeParse(v1).success).toBe(true);
   });
 
   it("rejects unknown base roles and duplicates", () => {
