@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { Save } from "lucide-react";
+import { Save, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import {
   type ScoringQuestion,
 } from "@/server/services/kompas-scoring";
 
-import { saveKompasAction } from "./actions";
+import { saveKompasAction, submitKompasAction } from "./actions";
 
 export interface KompasFormProps {
   clubId: string;
@@ -42,6 +42,9 @@ export function KompasForm(props: KompasFormProps) {
   const [saved, setSaved] = useState(() => new Set(checked));
   const [version, setVersion] = useState(props.version);
   const [message, setMessage] = useState<"saved" | "conflict" | "error" | null>(null);
+  const [submitMessage, setSubmitMessage] = useState<
+    "done" | "saveFirst" | "empty" | "error" | null
+  >(null);
   const [pending, startTransition] = useTransition();
 
   const result = useMemo(
@@ -68,6 +71,16 @@ export function KompasForm(props: KompasFormProps) {
       } else {
         setMessage(res.code === "CONFLICT" ? "conflict" : "error");
       }
+    });
+
+  const submit = () =>
+    startTransition(async () => {
+      const res = await submitKompasAction(props.clubId, version);
+      if (res.status === "ok") setSubmitMessage("done");
+      else
+        setSubmitMessage(
+          res.code === "CONFLICT" ? "saveFirst" : res.code === "BAD_REQUEST" ? "empty" : "error",
+        );
     });
 
   const missingTags = (tags: readonly QuestionTag[]) =>
@@ -105,6 +118,19 @@ export function KompasForm(props: KompasFormProps) {
               {!dirty && message === "saved" && t("saved", { version })}
               {message === "conflict" && t("conflict")}
               {message === "error" && t("error")}
+            </span>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              onClick={submit}
+              disabled={pending || dirty || version === 0 || result.filledAreas === 0}
+            >
+              <Send aria-hidden />
+              {t("submit.button")}
+            </Button>
+            <span role="status" className="text-xs">
+              {!dirty && submitMessage && t(`submit.${submitMessage}`)}
             </span>
           </div>
         )}

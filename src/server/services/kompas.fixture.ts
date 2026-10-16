@@ -1,5 +1,7 @@
 import type { KompasAssessmentDoc } from "@/server/db/types";
 
+import type { StoredSubmission, SubmissionStore } from "./kompas-submission.service";
+
 import type { AssessmentStore } from "./kompas.service";
 
 /** In-memory AssessmentStore with the same version semantics as the Mongo store. */
@@ -22,6 +24,28 @@ export function memoryAssessmentStore(): AssessmentStore & { docs: KompasAssessm
       if (!d || d.version !== expectedVersion) return null;
       Object.assign(d, changes, { version: d.version + 1 });
       return structuredClone(d);
+    },
+  };
+}
+
+/** In-memory SubmissionStore (clubId-scoped like the Mongo store). */
+export function memorySubmissionStore(): SubmissionStore & { docs: StoredSubmission[] } {
+  const docs: StoredSubmission[] = [];
+  let seq = 0;
+  return {
+    docs,
+    async addSubmission(doc) {
+      const s = { ...structuredClone(doc), id: `s${++seq}` };
+      docs.push(s);
+      return structuredClone(s);
+    },
+    listSubmissions: async (clubId, season) =>
+      docs
+        .filter((d) => d.clubId === clubId && (!season || d.season === season))
+        .map((d) => structuredClone(d)),
+    findSubmission: async (clubId, id) => {
+      const d = docs.find((x) => x.id === id && x.clubId === clubId);
+      return d ? structuredClone(d) : null;
     },
   };
 }

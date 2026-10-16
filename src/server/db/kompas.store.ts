@@ -1,9 +1,13 @@
 import "server-only";
 
-import { MongoServerError, type Db } from "mongodb";
+import { MongoServerError, ObjectId, type Db } from "mongodb";
 
 import { getDb } from "@/server/db/mongo";
-import type { KompasAssessmentDoc } from "@/server/db/types";
+import type { KompasAssessmentDoc, KompasSubmissionDoc } from "@/server/db/types";
+import type {
+  StoredSubmission,
+  SubmissionStore,
+} from "@/server/services/kompas-submission.service";
 import type { AssessmentStore } from "@/server/services/kompas.service";
 
 /** Kompas assessments; every query filters by clubId (ADR 0003). Indexes in ARCHITECTURE.md. */
@@ -49,5 +53,42 @@ export const mongoAssessmentStore: AssessmentStore = {
       { $set: changes, $inc: { version: 1 } },
       { returnDocument: "after", projection: { _id: 0 } },
     );
+  },
+};
+
+const submissions = (db: Db) => db.collection<KompasSubmissionDoc>("kompas_submissions");
+let submissionIndexes: Promise<unknown> | undefined;
+function ensureSubmissionIndexes(db: Db): Promise<unknown> {
+  submissionIndexes ??= submissions(db)
+    .createIndex({ clubId: 1, season: 1, submittedAt: -1 })
+    .catch((error) => {
+      submissionIndexes = undefined;
+      throw error;
+    });
+  return submissionIndexes;
+}
+
+const toStored = ({ _id, ...rest }: KompasSubmissionDoc): StoredSubmission => ({
+  ...rest,
+  id: String(_id),
+});
+
+export const mongoSubmissionStore: SubmissionStore = {
+  async addSubmission(doc) {
+    const db = await getDb();
+    await ensureSubmissionIndexes(db);
+    const { insertedId } = await submissions(db).insertOne({ ...doc });
+    return { ...doc, id: String(insertedId) };
+  },
+  async listSubmissions(clubId, season) {
+    const db = await getDb();
+    const filter = season ? { clubId, season } : { clubId };
+    return (await submissions(db).find(filter).sort({ submittedAt: -1 }).toArray()).map(toStored);
+  },
+  async findSubmission(clubId, submissionId) {
+    if (!ObjectId.isValid(submissionId)) return null;
+    const db = await getDb();
+    const doc = await submissions(db).findOne({ _id: new ObjectId(submissionId), clubId });
+    return doc ? toStored(doc) : null;
   },
 };

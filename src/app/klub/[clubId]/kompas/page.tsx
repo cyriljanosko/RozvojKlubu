@@ -8,11 +8,13 @@ import { Suspense } from "react";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { kompasDeps } from "@/server/clubs/deps";
+import { CopyLine } from "@/components/content/copy-line";
+import { kompasDeps, submissionDeps } from "@/server/clubs/deps";
 import { mongoContentStore } from "@/server/db/content.store";
 import type { QuestionTag } from "@/server/db/types";
 import { getClubOverview } from "@/server/services/clubs.service";
 import { listAreas } from "@/server/services/content.service";
+import { listClubSubmissions } from "@/server/services/kompas-submission.service";
 import { getKompas } from "@/server/services/kompas.service";
 
 import { KompasForm } from "./kompas-form";
@@ -40,10 +42,18 @@ async function Kompas({ params }: PageProps<"/klub/[clubId]/kompas">) {
     }
     throw error;
   }
-  const [club, areas] = await Promise.all([
+  const [club, areas, submissions] = await Promise.all([
     getClubOverview(kompasDeps, user, clubId),
     listAreas(mongoContentStore, user),
+    listClubSubmissions(submissionDeps, user, clubId),
   ]);
+  const tSubmit = await getTranslations("kompas.submit");
+  const date = (d: Date) =>
+    d.toLocaleString("sk", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      timeZone: "Europe/Bratislava",
+    });
 
   return (
     <div className="flex flex-col gap-4">
@@ -74,6 +84,37 @@ async function Kompas({ params }: PageProps<"/klub/[clubId]/kompas">) {
         areas={areas.map((a) => ({ number: a.number, name: a.name }))}
         questions={view.questions.map((q) => ({ ...q, tags: q.tags as QuestionTag[] }))}
       />
+      <section className="flex flex-col gap-3" aria-labelledby="submissions">
+        <h2 id="submissions" className="text-lg font-semibold">
+          {tSubmit("history")}
+        </h2>
+        {view.access === "edit" && (
+          <p className="text-muted-foreground text-sm">{tSubmit("hint")}</p>
+        )}
+        {submissions.length > 0 ? (
+          <>
+            <ul className="divide-y rounded-md border">
+              {submissions.map((s) => (
+                <li key={s.id}>
+                  <Link
+                    href={`/klub/${encodeURIComponent(clubId)}/kompas/odoslane/${s.id}`}
+                    className="hover:bg-muted/50 block px-3 py-2.5 text-sm"
+                  >
+                    {tSubmit("row", {
+                      date: date(s.submittedAt),
+                      total: s.total,
+                      filled: s.filledAreas,
+                    })}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <CopyLine line={submissions[0].line} />
+          </>
+        ) : (
+          <p className="text-muted-foreground rounded-md border p-3 text-sm">{tSubmit("none")}</p>
+        )}
+      </section>
     </div>
   );
 }

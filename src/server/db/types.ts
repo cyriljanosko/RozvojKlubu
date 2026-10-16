@@ -185,3 +185,22 @@ export interface KompasAssessmentDoc {
   updatedAt: Date;
   updatedBy: string;
 }
+
+/** Collection `kompas_submissions` – frozen copy sent to the mentor (decision 16. 10. 2026). */
+export interface KompasSubmissionDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  /** assessment version that was submitted */
+  assessmentVersion: number;
+  answers: string[];
+  categories: string[];
+  /** question texts and tags as they were at submission time */
+  questions: { questionId: string; text: string; tags: string[] }[];
+  /** scored result at submission time (KompasResult) */
+  result: Record<string, unknown>;
+  /** SFZ-KOMPAS-1 transfer line */
+  line: string;
+  submittedAt: Date;
+  submittedBy: string;
+}

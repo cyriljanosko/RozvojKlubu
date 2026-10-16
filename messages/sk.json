@@ -307,6 +307,36 @@
       "title": "Kde stojí váš klub v tejto oblasti",
       "none": "V Kompase klubu zatiaľ nie je táto oblasť vyplnená.",
       "fill": "Otvoriť Kompas klubu"
+    },
+    "submit": {
+      "button": "Odoslať mentorovi",
+      "hint": "Mentor uvidí zmrazenú kópiu. Odpovede môžete ďalej upravovať a odoslať znova.",
+      "saveFirst": "Pred odoslaním uložte odpovede.",
+      "done": "Odoslané mentorovi.",
+      "empty": "Najprv vyplňte aspoň jednu oblasť.",
+      "error": "Odoslanie sa nepodarilo. Skúste to znova.",
+      "history": "Odoslané verzie",
+      "none": "Zatiaľ nič neodoslané.",
+      "row": "{date} · {total} z 220 · vyplnené {filled} z 11",
+      "line": "Riadok pre zbernú tabuľku (SFZ-KOMPAS-1)",
+      "copy": "Skopírovať riadok",
+      "copied": "Skopírované."
+    },
+    "submission": {
+      "title": "Odoslaný Kompas",
+      "meta": "Odoslané {date} · sezóna {season}",
+      "frozen": "Toto je zmrazená kópia z času odoslania.",
+      "checked": "Platí v klube",
+      "back": "Späť na Kompas klubu"
     }
+  },
+  "mentor": {
+    "title": "Moje kluby v kohorte",
+    "intro": "Kluby, pri ktorých ste mentor. Vidíte len odoslané hodnotenia, nie rozpracované.",
+    "none": "Zatiaľ neodoslané",
+    "latest": "{date} · {total} z 220 · vyplnené {filled} z 11",
+    "open": "Otvoriť",
+    "forbidden": "Nie ste mentor žiadneho klubu.",
+    "link": "Moje kluby v kohorte"
   }
 }

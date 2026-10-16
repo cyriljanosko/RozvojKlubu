@@ -5,7 +5,8 @@ import { headers } from "next/headers";
 
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { kompasDeps } from "@/server/clubs/deps";
+import { kompasDeps, submissionDeps } from "@/server/clubs/deps";
+import { submitKompas } from "@/server/services/kompas-submission.service";
 import { saveKompasAnswers } from "@/server/services/kompas.service";
 
 /** Thin Server Action over the Kompas service (permissions and validation live there). */
@@ -40,6 +41,32 @@ export async function saveKompasAction(
     if ((error as { name?: string })?.name === "ZodError")
       return { status: "error", code: "BAD_REQUEST" };
     console.error("[kompas] save failed", error);
+    return { status: "error", code: "INTERNAL" };
+  }
+}
+
+export type SubmitKompasResult =
+  | { status: "ok"; line: string }
+  | { status: "error"; code: "CONFLICT" | "BAD_REQUEST" | "FORBIDDEN" | "INTERNAL" };
+
+export async function submitKompasAction(
+  clubId: string,
+  expectedVersion: number,
+): Promise<SubmitKompasResult> {
+  try {
+    const sub = await submitKompas(submissionDeps, await getCurrentUser(await headers()), clubId, {
+      expectedVersion,
+    });
+    refresh();
+    return { status: "ok", line: sub.line };
+  } catch (error) {
+    if (
+      error instanceof ApiError &&
+      ["CONFLICT", "FORBIDDEN", "BAD_REQUEST"].includes(error.code)
+    ) {
+      return { status: "error", code: error.code as "CONFLICT" | "FORBIDDEN" | "BAD_REQUEST" };
+    }
+    console.error("[kompas] submit failed", error);
     return { status: "error", code: "INTERNAL" };
   }
 }
