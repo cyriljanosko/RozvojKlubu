@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
@@ -29,6 +30,7 @@ export const metadata: Metadata = { title: defaultMessages.areas.title };
 const PRACTICE_ROLE: Record<ClubRole, string> = { management: "v", coach: "t", mentor: "m" };
 
 async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">) {
+  await connection(); // public page: render per request (session optional, ADR 0011)
   const user = await getCurrentUser(await headers());
   // public page (ADR 0011); club blocks and the role default only for signed-in users
   const t = await getTranslations("areas");
