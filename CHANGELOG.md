@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Kompas klubu – základ (F4a): výpočet skóre podľa Kompasu v2 (platnosť otázok podľa kategórií klubu zo Sportnetu, minimum 3 platných otázok, pásma, čo urobiť najbližšie), uloženie odpovedí vedením klubu s verziou, `GET|PUT /api/v1/clubs/:clubId/kompas`.
 - Prax oblastí 3 a 4 (F3c): obsah z návrhov prevedený do `content/prax`, zobrazenie podľa roly na stránke oblasti (karty Metodika / Prax), úprava ako JSON s kontrolou štruktúry, históriou a vrátením.
 - Metodika 11 oblastí (F3b): obsah detailov prevedený do Markdownu (`content/metodika`), stránky `/oblasti` a `/oblasti/[číslo]` pre prihlásených, úprava sekcií adminom s „platné k“, „revidované“, históriou a vrátením. Nové závislosti `react-markdown`, `remark-gfm`.
 - Spravovaný obsah (F3a): 11 oblastí a 220 otázok Kompasu v2 v databáze, úprava otázok adminom SFZ s verziou, históriou zmien a vrátením (`/admin/obsah`, `/api/v1/areas`, `/api/v1/kompas/questions`).
