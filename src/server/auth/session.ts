@@ -4,6 +4,7 @@ import { ApiError } from "@/server/api/errors";
 import { getAuth } from "@/server/auth/auth";
 import { isDatabaseConfigured } from "@/server/db/mongo";
 import type { Role } from "@/server/auth/roles";
+import type { UserDirectory } from "@/server/services/clubs.service";
 import { toPublicUser, type CurrentUser, type UserStore } from "@/server/services/users.service";
 
 /** Resolves the signed-in user from request headers (cookie or bearer), or null. */
@@ -14,6 +15,20 @@ export async function getCurrentUser(headers: Headers): Promise<CurrentUser | nu
   const session = await getAuth().api.getSession({ headers });
   return session ? toPublicUser(session.user) : null;
 }
+
+/** User lookups for club membership management (via Better Auth, no direct schema access). */
+export const betterAuthUserDirectory: UserDirectory = {
+  async findById(id) {
+    const ctx = await getAuth().$context;
+    const user = await ctx.internalAdapter.findUserById(id);
+    return user ? toPublicUser(user) : null;
+  },
+  async findByEmail(email) {
+    const ctx = await getAuth().$context;
+    const result = await ctx.internalAdapter.findUserByEmail(email);
+    return result ? toPublicUser(result.user) : null;
+  },
+};
 
 /** UserStore backed by Better Auth's internal adapter (no direct schema access). */
 export const betterAuthUserStore: UserStore = {

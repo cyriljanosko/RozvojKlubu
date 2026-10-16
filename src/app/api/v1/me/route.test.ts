@@ -20,10 +20,10 @@ describe("GET /api/v1/me", () => {
   });
 
   it("returns the signed-in user", async () => {
-    getCurrentUser.mockResolvedValue({ id: "u1", email: "a@sfz.sk", name: "A", role: "mentor" });
+    getCurrentUser.mockResolvedValue({ id: "u1", email: "a@sfz.sk", name: "A", role: "admin_sfz" });
     const res = await call();
     expect(res.status).toBe(200);
     expect(res.headers.get("Cache-Control")).toBe("no-store");
-    expect((await res.json()).data).toMatchObject({ id: "u1", role: "mentor" });
+    expect((await res.json()).data).toMatchObject({ id: "u1", role: "admin_sfz" });
   });
 });

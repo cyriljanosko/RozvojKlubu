@@ -7,7 +7,7 @@ import { genericOAuth, magicLink } from "better-auth/plugins";
 
 import { defaultMessages } from "@/i18n/config";
 import { resolveAuthBaseURL } from "@/server/auth/base-url";
-import { DEFAULT_ROLE, parseAdminEmails } from "@/server/auth/roles";
+import { bootstrapRole, DEFAULT_ROLE, parseAdminEmails } from "@/server/auth/roles";
 import { sportnetProvider } from "@/server/auth/sportnet";
 import { getDbSync, getMongoClient } from "@/server/db/mongo";
 import { getEnv } from "@/server/env";
@@ -49,6 +49,19 @@ function createAuth() {
               role: adminEmails.has(user.email.toLowerCase()) ? "admin_sfz" : DEFAULT_ROLE,
             },
           }),
+        },
+      },
+      session: {
+        create: {
+          // Accounts created before their e-mail was listed get admin_sfz on the next sign-in.
+          after: async (session, ctx) => {
+            if (adminEmails.size === 0 || !ctx) return;
+            const adapter = ctx.context.internalAdapter;
+            const user = await adapter.findUserById(session.userId);
+            const role =
+              user && bootstrapRole(user.email, (user as { role?: unknown }).role, adminEmails);
+            if (role) await adapter.updateUser(session.userId, { role });
+          },
         },
       },
     },
