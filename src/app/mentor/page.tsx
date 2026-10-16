@@ -9,6 +9,7 @@ import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
 import { submissionDeps } from "@/server/clubs/deps";
+import { isAdmin } from "@/server/services/club-access";
 import { listMentorClubs } from "@/server/services/kompas-submission.service";
 
 export const metadata: Metadata = { title: defaultMessages.mentor.title };
@@ -16,6 +17,8 @@ export const metadata: Metadata = { title: defaultMessages.mentor.title };
 async function Mentor() {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
+  // mentors have their cohort in Moja Akadémia (F6b); admin keeps the overview of all clubs
+  if (!isAdmin(user)) redirect("/moja-akademia#mentor");
   const t = await getTranslations("mentor");
 
   let rows;
