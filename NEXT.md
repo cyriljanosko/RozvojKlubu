@@ -38,6 +38,7 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] H5 – nová úvodná obrazovka (rozhodnuté 16. 10.):
       - [x] H5a – verejná – PR #36 (zlúčený 16. 10.): úvod Akadémie s obrázkom → „Kto ste v klube?“ (karty rolí) → Kompas ako informácia s odkazom → oblasti (pri role 3 prioritné, ďalšie oblasti roly ako ďalšie kroky, ostatné stručne; bez roly všetkých 11) → na záver Kompas s výberom klubu. Profesionálna akadémia do päty („pripravujeme“).
       - [ ] H5b – po prihlásení (vetva `feat/hub-signed-in`, hotové a overené lokálne na 375 px, PR na review): Vizitka klubu (hodnotenie) → úlohy z Moja Akadémia → slabé oblasti podľa Kompasu; mentor vidí svoje kluby so stavom Kompasu.
+      - [ ] H5c – „Ako Akadémia funguje“ pre neprihlásených (vetva `feat/hub-levels`, rozhodnuté 16. 10.): Vizitka klubu (zoznam pilotných klubov), 1. úroveň samoštúdium, 2. úroveň po prihlásení (komunikácia s ľuďmi klubu „pripravujeme“, mentor zväzu).
       - [ ] Obrázok v úvode je zatiaľ ilustrácia; nahradiť fotkou SFZ (dodá Cyril).
     - [ ] Neskôr: pri návrate na holé `/` sa zapamätaný výber obnoví až v prehliadači (krátko sa ukáže predvolená rola) – zvážiť cookie namiesto `localStorage`.
     - [ ] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.), overené lokálne, PR #34 na review.
