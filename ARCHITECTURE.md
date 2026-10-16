@@ -61,10 +61,10 @@ MCP server (F5, plánovaný)        ─┘        │
 1. Zdroj v gite: `content/kompas-areas.json` – 11 oblastí a 220 otázok Kompasu v2 (verejné, bez osobných údajov)
 2. Admin SFZ na `/admin/obsah` (alebo `POST /api/v1/admin/content-seed`) doplní chýbajúce dokumenty – upravený obsah sa nikdy neprepíše
 3. Úpravy len admin SFZ; každá zvýši `version` (súbežná úprava → 409) a uloží `content_revisions` (pred/po, kto, kedy); vrátenie = nová zmena
-4. Čítanie (`/api/v1/areas`, `/api/v1/kompas/questions`) pre každého prihláseného – v pilote nie verejne
+4. Čítanie obsahu je **verejné bez prihlásenia** (ADR 0011): `/api/v1/areas`, `/api/v1/kompas/questions`, Metodika, Prax, katalóg rolí, stránky `/oblasti` a `/oblasti/[číslo]`. Kompas na vyskúšanie `/kompas?klub=…` berie kategórie z vybraného klubu, odpovede drží len v prehliadači (`localStorage`), nič neukladá. Bloky klubu a predvolená rola v Praxi len pre prihlásených
 5. **Metodika** oblastí: `content/metodika/NN.md` (front matter + sekcie `## Nadpis {#kľúč}`, Markdown/GFM) – strojovo prevedené z detailov oblastí, bez zmeny textu. Naplnenie ich číta zo súborov (`outputFileTracingIncludes` v `next.config.ts`) do `area_sections`
 6. Zobrazenie `/oblasti`, `/oblasti/[číslo]` cez `react-markdown` + `remark-gfm` (bez HTML v obsahu); úprava sekcií `/admin/obsah/[číslo]/metodika` s „platné k“ a „revidované“, históriou a vrátením
-7. **Prax** oblastí 3 a 4: `content/prax/NN.json` (roly, prvý krok, cesta s 3 variantmi a cestou B, zásobník, vzory, mentorské moduly) – overuje Zod schéma `practice.schema.ts` vrátane odkazov na vzory; jeden dokument na oblasť v `area_practice`. Zobrazenie na `/oblasti/[číslo]?tab=prax&role=…` len na čítanie (predvolená rola podľa roly v klube), úprava ako JSON v `/admin/obsah/[číslo]/prax`. Postup klubu v Praxi príde s Mojou Akadémiou (F6)
+7. **Prax** oblastí 3 a 4: `content/prax/NN.json` (roly, prvý krok, cesta s 3 variantmi a cestou B, zásobník, vzory, mentorské moduly) – overuje Zod schéma `practice.schema.ts` vrátane odkazov na vzory; jeden dokument na oblasť v `area_practice`. Zobrazenie na `/oblasti/[číslo]?tab=prax&role=…` len na čítanie (predvolená rola: vlastná rola z Moja Akadémia, inak podľa roly v klube), úprava ako JSON v `/admin/obsah/[číslo]/prax`. Postup klubu v Praxi príde s Mojou Akadémiou (F6)
 
 ### Kompas klubu (F4)
 

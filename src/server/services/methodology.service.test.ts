@@ -43,7 +43,8 @@ describe("methodology service", () => {
     expect(sections.map((s) => s.key)).toEqual(["popis", "dane"]);
     expect(sections[0]).toMatchObject({ validAsOf: "2026-10-01", reviewedAt: null, version: 1 });
     expect(sections[0]).not.toHaveProperty("updatedBy");
-    await expect(listMethodology(store, null, 8)).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+    // public read (ADR 0011)
+    expect((await listMethodology(store, null, 8)).length).toBeGreaterThan(0);
     await expect(listMethodology(store, alice, 0)).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 

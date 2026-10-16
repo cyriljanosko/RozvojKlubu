@@ -78,13 +78,14 @@ describe("role catalog service", () => {
     await seedRoleCatalog(store, admin, file, at);
   });
 
-  it("seeds once, admin only; signed-in users read", async () => {
+  it("seeds once, admin only; everyone reads", async () => {
     await expect(seedRoleCatalog(store, admin, file, at)).resolves.toBe(0);
     await expect(seedRoleCatalog(store, alice, file, at)).rejects.toMatchObject({
       code: "FORBIDDEN",
     });
     expect((await getRoleCatalog(store, alice))?.version).toBe(1);
-    await expect(getRoleCatalog(store, null)).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+    // public read (ADR 0011)
+    expect((await getRoleCatalog(store, null))?.version).toBe(1);
   });
 
   it("edits with version check, keeps history and reverts", async () => {

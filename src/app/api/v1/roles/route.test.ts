@@ -32,13 +32,14 @@ describe("roles API", () => {
     getCurrentUser.mockReset();
   });
 
-  it("returns the catalog to signed-in users, 401 to anonymous", async () => {
+  it("returns the catalog to everyone, also anonymous", async () => {
     getCurrentUser.mockResolvedValue(alice);
     const res = await roles.GET(req(), {} as never);
     expect(res.status).toBe(200);
     expect((await res.json()).data.content.areas).toHaveLength(11);
     getCurrentUser.mockResolvedValue(null);
-    expect((await roles.GET(req(), {} as never)).status).toBe(401);
+    // public read (ADR 0011)
+    expect((await roles.GET(req(), {} as never)).status).toBe(200);
   });
 
   it("lets only admin edit (403 otherwise), validates content (400)", async () => {

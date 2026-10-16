@@ -36,7 +36,7 @@ describe("practice API", () => {
     getCurrentUser.mockReset();
   });
 
-  it("signed-in users read practice; 404 for areas without it; 401 anonymous", async () => {
+  it("everyone reads practice (also anonymous); 404 for areas without it", async () => {
     getCurrentUser.mockResolvedValue(alice);
     const res = await route.GET(req("/api/v1/areas/4/practice"), params({ area: "4" }));
     expect((await res.json()).data.content.roles.map((r: { id: string }) => r.id)).toEqual([
@@ -49,9 +49,10 @@ describe("practice API", () => {
     expect((await route.GET(req("/api/v1/areas/5/practice"), params({ area: "5" }))).status).toBe(
       404,
     );
+    // public read (ADR 0011)
     getCurrentUser.mockResolvedValue(null);
     expect((await route.GET(req("/api/v1/areas/4/practice"), params({ area: "4" }))).status).toBe(
-      401,
+      200,
     );
   });
 

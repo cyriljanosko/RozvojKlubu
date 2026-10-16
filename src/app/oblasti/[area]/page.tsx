@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { connection } from "next/server";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
@@ -30,8 +30,9 @@ export const metadata: Metadata = { title: defaultMessages.areas.title };
 const PRACTICE_ROLE: Record<ClubRole, string> = { management: "v", coach: "t", mentor: "m" };
 
 async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">) {
+  await connection(); // public page: render per request (session optional, ADR 0011)
   const user = await getCurrentUser(await headers());
-  if (!user) redirect("/prihlasenie");
+  // public page (ADR 0011); club blocks and the role default only for signed-in users
   const t = await getTranslations("areas");
   const tKompas = await getTranslations("kompas");
   const format = await getFormatter();
@@ -54,7 +55,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   const tab = practice && query.tab === "prax" ? "prax" : "metodika";
   const sections = tab === "metodika" ? await listMethodology(mongoSectionStore, user, number) : [];
   let roleId = typeof query.role === "string" ? query.role : undefined;
-  const myClubs = practice && tab === "prax" ? await listMyClubs(clubDeps, user) : [];
+  const myClubs = user && practice && tab === "prax" ? await listMyClubs(clubDeps, user) : [];
   // "Kde klub stojí": this area's Kompas result for clubs where the user is management or coach
   const standing =
     practice && tab === "prax"
@@ -69,7 +70,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
       : [];
   if (practice && tab === "prax" && !roleId) {
     // own role chosen in Moja Akadémia wins (F6b), then the club role
-    const chosen = await practiceRoleFor(academyDeps, user, number);
+    const chosen = user ? await practiceRoleFor(academyDeps, user, number) : null;
     if (chosen && practice.content.roles.some((x) => x.id === chosen)) roleId = chosen;
   }
   if (practice && tab === "prax" && !roleId) {
@@ -97,7 +98,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
           {area.name}
         </h1>
         <p className="text-muted-foreground max-w-2xl">{area.description}</p>
-        {isAdmin(user) && (
+        {user && isAdmin(user) && (
           <Link
             href={`/admin/obsah/${area.number}/${tab === "prax" ? "prax" : "metodika"}`}
             className="text-sm font-medium underline underline-offset-4"

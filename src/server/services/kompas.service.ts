@@ -157,3 +157,41 @@ export async function saveKompasAnswers(
   if (!saved) throw new ApiError("CONFLICT", "Kompas was changed by someone else");
   return getKompas(deps, user, clubId);
 }
+
+export interface KompasTemplate {
+  club: { clubId: string; name: string; union: string };
+  season: string;
+  categories: ClubCategory[];
+  categoriesFromSeason: string | null;
+  questions: KompasQuestionView[];
+}
+
+/** Public trial Kompas (ADR 0011): questions with validity for the club's Sportnet categories.
+ *  Nothing is read from or written to the club's assessment; answers stay in the browser. */
+export async function getKompasTemplate(deps: KompasDeps, clubId: string): Promise<KompasTemplate> {
+  const club = await deps.clubs.findClub(clubId);
+  if (!club) throw new ApiError("NOT_FOUND", "Club not found");
+  const season = currentSeason(deps.now?.() ?? new Date());
+  const [{ categories, from }, questions] = await Promise.all([
+    categoriesFor(deps, clubId, season),
+    deps.content.listQuestions(),
+  ]);
+  return {
+    club: { clubId: club.clubId, name: club.name, union: club.union },
+    season,
+    categories,
+    categoriesFromSeason: from,
+    questions: [...questions]
+      .sort((a, b) => a.area - b.area || a.column.localeCompare(b.column) || a.order - b.order)
+      .map((q) => ({
+        questionId: q.questionId,
+        area: q.area,
+        column: q.column,
+        order: q.order,
+        text: q.text,
+        tags: q.tags,
+        valid: isQuestionValid(q.tags, categories),
+        checked: false,
+      })),
+  };
+}
