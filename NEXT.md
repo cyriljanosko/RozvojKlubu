@@ -19,7 +19,7 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 - [ ] F4 – Kompas klubu v aplikácii (rozhodnuté 16. 10.: vypĺňa vedenie, tréner číta, mentor vidí len odoslané; kategórie len zo Sportnetu; bez ručného režimu; pri odoslaní zmrazená kópia; Vizitka pre obec neskôr).
   - [ ] F4a – výpočet, model, API – PR #18.
   - [ ] F4b – vyplnenie a výsledok v UI (vetva `feat/kompas-ui`): hotové a overené lokálne, PR po #18.
-  - [ ] F4c – odoslanie mentorovi (zmrazená kópia), pohľad mentora, export `SFZ-KOMPAS-1`.
+  - [ ] F4c – odoslanie mentorovi (zmrazená kópia), pohľad mentora, export `SFZ-KOMPAS-1` (vetva `feat/kompas-submit`): hotové a overené lokálne, PR po #19.
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
 - [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.
 

@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Odoslanie Kompasu mentorovi (F4c): zmrazená kópia (odpovede, znenie otázok, výsledok) pri každom odoslaní, história odoslaných verzií s detailom, riadok `SFZ-KOMPAS-1` na skopírovanie do zbernej tabuľky, prehľad mentora `/mentor` (len odoslané hodnotenia); API `GET|POST /api/v1/clubs/:clubId/kompas/submissions`, `GET .../submissions/:id`, `GET /api/v1/mentor/clubs`.
 - Kompas klubu v aplikácii (F4b): `/klub/[clubId]/kompas` – zaškrtávanie s priebežným skóre, pásma oblastí, „Čo urobiť najbližšie“ s odkazmi na Metodiku a Prax, uloženie (vedenie), čítanie (tréner); odkaz z karty klubu; blok „Kde stojí váš klub“ v Praxi oblastí 3 a 4.
 - Kompas klubu – základ (F4a): výpočet skóre podľa Kompasu v2 (platnosť otázok podľa kategórií klubu zo Sportnetu, minimum 3 platných otázok, pásma, čo urobiť najbližšie), uloženie odpovedí vedením klubu s verziou, `GET|PUT /api/v1/clubs/:clubId/kompas`.
 - Prax oblastí 3 a 4 (F3c): obsah z návrhov prevedený do `content/prax`, zobrazenie podľa roly na stránke oblasti (karty Metodika / Prax), úprava ako JSON s kontrolou štruktúry, históriou a vrátením.
