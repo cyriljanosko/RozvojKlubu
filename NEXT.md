@@ -36,7 +36,8 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] H2 – katalóg rolí v2 (roly Hubu, dráhy, texty rolí); premenovať rolu aj oblasť 4 na „Dobrovoľníci“ (rozhodnuté 16. 10.) (vetva `feat/roles-v2`): katalóg v2 a premenovanie (58 zmien, schválené) zapísané do DB s históriou – PR #32 (zlúčený 16. 10.).
     - [ ] H3 – Hub na `/` (dráhy, roly, výber klubu, oblasti podľa roly, „Začnite tu“, Kompas, O Akadémii; druhá dráha „pripravujeme“) (vetva `feat/hub`): hotové a overené lokálne, PR #33 na review.
     - [ ] Neskôr: pri návrate na holé `/` sa zapamätaný výber obnoví až v prehliadači (krátko sa ukáže predvolená rola) – zvážiť cookie namiesto `localStorage`.
-    - [ ] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): kód a návrh označenia hotové, zápis katalógu v5 do DB čaká na súhlas.
+    - [ ] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.), overené lokálne, PR po #33.
+    - [ ] Pracovná skupina: skontrolovať označenie sekcií rolami (napr. Manažér a výbor má v oblasti 8 zvýraznených 12 z 13 sekcií; fanúšik v oblasti 3 žiadnu).
     - [ ] Neskôr: knižnica vzorov s dokumentmi (PDF, Word, Excel, obrázky) – úložisko súborov rozhodnúť.
     - [ ] Neskôr: vyhľadávanie v oblastiach a otázkach Kompasu; hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
