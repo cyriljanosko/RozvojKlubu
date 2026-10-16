@@ -28,12 +28,17 @@ async function AccountLink() {
     );
   }
   return (
-    <Button asChild size="sm" variant="ghost" className="max-w-[60vw]">
-      <Link href="/ucet" aria-label={t("myAccount")}>
-        <UserRound aria-hidden />
-        <span className="truncate">{user.name}</span>
-      </Link>
-    </Button>
+    <div className="flex min-w-0 items-center gap-1">
+      <Button asChild size="sm" variant="ghost">
+        <Link href="/moja-akademia">{t("academy")}</Link>
+      </Button>
+      <Button asChild size="sm" variant="ghost" className="max-w-[40vw]">
+        <Link href="/ucet" aria-label={t("myAccount")}>
+          <UserRound aria-hidden />
+          <span className="truncate">{user.name}</span>
+        </Link>
+      </Button>
+    </div>
   );
 }
 

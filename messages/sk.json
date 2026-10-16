@@ -9,7 +9,8 @@
     "signIn": "Prihlásiť sa",
     "myAccount": "Môj účet",
     "admin": "Kluby a roly",
-    "content": "Obsah Akadémie"
+    "content": "Obsah Akadémie",
+    "academy": "Moja Akadémia"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -584,5 +585,57 @@
       "link": "Otvoriť licenčné hodnotenie"
     },
     "notFound": "Klub sa nenašiel."
+  },
+  "academy": {
+    "title": "Moja Akadémia",
+    "intro": "Čo sa týka vás a vášho klubu: kde klub stojí, čo urobiť najbližšie a vaše roly v oblastiach.",
+    "season": "Sezóna {season}",
+    "noRoles": "Zatiaľ nemáte v žiadnom klube pridelenú rolu. Rolu prideľuje admin SFZ.",
+    "myRoles": "Moje roly v klube",
+    "standing": {
+      "title": "Kde klub stojí",
+      "kompas": "Kompas: {total} z 220 · vyplnené {filled} z 11",
+      "kompasEmpty": "Kompas zatiaľ nevyplnený",
+      "kompasSent": "odoslané mentorovi {date}",
+      "kompasNotSent": "zatiaľ neodoslané mentorovi",
+      "licensingClosed": "Licenčné hodnotenie uzavreté {date}",
+      "licensingOpen": "Licenčné hodnotenie zatiaľ neuzavreté",
+      "vizitka": "Vizitka klubu"
+    },
+    "tasks": {
+      "title": "Čo mám urobiť ja",
+      "none": "Teraz nič nehorí.",
+      "kompas_empty": "Vyplniť Kompas klubu",
+      "kompas_unsent": "Odoslať Kompas mentorovi – posledné zmeny ešte nie sú odoslané",
+      "licensing_open": "Doplniť a uzavrieť licenčné hodnotenie sezóny",
+      "teams_without_coach": "{count, plural, one {# družstvo nemá} few {# družstvá nemajú} other {# družstiev nemá}} v Sportnete trénera",
+      "weak_area": "Oblasť {area} má {points} z 20 – pozrieť Prax a prvý krok",
+      "club_kompas_missing": "Kompas neodoslalo {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
+      "club_licensing_open": "Licenčné hodnotenie neuzavrelo {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
+      "open": "Otvoriť"
+    },
+    "roles": {
+      "title": "Moje roly v oblastiach",
+      "hint": "Označte, čo v klube naozaj robíte. Podľa toho vám v detaile oblasti predvolíme Prax pre vašu rolu. Nepovinné.",
+      "proposal": "návrh",
+      "save": "Uložiť moje roly",
+      "saved": "Uložené.",
+      "error": "Uloženie sa nepodarilo.",
+      "area": "Oblasť {area}"
+    },
+    "mentor": {
+      "title": "Moje kluby v kohorte",
+      "intro": "Kluby, pri ktorých ste mentor zväzu. Vidíte len odoslané hodnotenia.",
+      "latest": "{date} · {total} z 220 · vyplnené {filled} z 11",
+      "none": "Kompas zatiaľ neodoslaný",
+      "licensingClosed": "licenčné uzavreté",
+      "licensingOpen": "licenčné neuzavreté"
+    },
+    "sees": {
+      "title": "Čo táto rola vidí",
+      "management": "Manažér a výbor vidí o klube všetko: Kompas aj s rozpracovanou verziou, licenčné hodnotenie a Vizitku. Upravuje Kompas a licenčné hodnotenie.",
+      "coach": "Tréner a trénerka vidí výsledky klubu (Kompas, licenčné hodnotenie, Vizitku) len na čítanie a pracuje hlavne s oblasťami 3 a 5.",
+      "mentor": "Mentor zväzu vidí kluby svojej kohorty: odoslaný Kompas a licenčné hodnotenie, ktoré môže pri návšteve doplniť. Rozpracovaný Kompas nevidí."
+    }
   }
 }

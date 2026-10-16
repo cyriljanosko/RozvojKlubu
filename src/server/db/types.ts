@@ -262,3 +262,14 @@ export interface LicensingSubmissionDoc {
   reopenedAt?: Date;
   reopenedBy?: string;
 }
+
+/** Collection `area_role_choices` – the user's own roles in the areas for a club and season,
+ *  unique `{ userId, clubId, season }` (F6b, ADR 0010). Roles as "area.key", e.g. "8.economist". */
+export interface AreaRoleChoiceDoc {
+  _id?: ObjectId;
+  userId: string;
+  clubId: string;
+  season: string;
+  roles: string[];
+  updatedAt: Date;
+}

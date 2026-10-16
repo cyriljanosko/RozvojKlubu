@@ -2,9 +2,11 @@ import "server-only";
 
 import { betterAuthUserDirectory } from "@/server/auth/session";
 import { mongoClubStore, mongoMembershipStore } from "@/server/db/clubs.store";
-import { mongoContentStore } from "@/server/db/content.store";
+import { mongoAreaRoleChoiceStore } from "@/server/db/academy.store";
+import { mongoContentStore, mongoRoleCatalogStore } from "@/server/db/content.store";
 import { mongoAssessmentStore, mongoSubmissionStore } from "@/server/db/kompas.store";
 import { mongoEvaluationStore, mongoLicensingSubmissionStore } from "@/server/db/licensing.store";
+import type { AcademyDeps } from "@/server/services/academy.service";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
@@ -39,4 +41,13 @@ export const vizitkaDeps: VizitkaDeps = {
   submissions: mongoSubmissionStore,
   evaluations: mongoEvaluationStore,
   licensingSubmissions: mongoLicensingSubmissionStore,
+};
+
+export const academyDeps: AcademyDeps = {
+  ...submissionDeps,
+  content: mongoContentStore,
+  evaluations: mongoEvaluationStore,
+  licensingSubmissions: mongoLicensingSubmissionStore,
+  roleCatalog: mongoRoleCatalogStore,
+  choices: mongoAreaRoleChoiceStore,
 };

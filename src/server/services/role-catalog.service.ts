@@ -53,7 +53,7 @@ export async function seedRoleCatalog(
 
 /** null before the catalog is seeded. */
 export async function getRoleCatalog(
-  store: RoleCatalogStore,
+  store: Pick<RoleCatalogStore, "findCatalog">,
   actor: CurrentUser | null,
 ): Promise<RoleCatalogDto | null> {
   requireUser(actor);

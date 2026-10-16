@@ -9,13 +9,14 @@ import { MarkdownContent } from "@/components/content/markdown";
 import { PracticeView } from "@/components/content/practice-view";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
-import { clubDeps, kompasDeps } from "@/server/clubs/deps";
+import { academyDeps, clubDeps, kompasDeps } from "@/server/clubs/deps";
 import {
   mongoContentStore,
   mongoPracticeStore,
   mongoSectionStore,
 } from "@/server/db/content.store";
 import type { ClubRole } from "@/server/db/types";
+import { practiceRoleFor } from "@/server/services/academy.service";
 import { isAdmin } from "@/server/services/club-access";
 import { listAreas } from "@/server/services/content.service";
 import { listMyClubs } from "@/server/services/clubs.service";
@@ -66,6 +67,11 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
             }),
         )
       : [];
+  if (practice && tab === "prax" && !roleId) {
+    // own role chosen in Moja Akadémia wins (F6b), then the club role
+    const chosen = await practiceRoleFor(academyDeps, user, number);
+    if (chosen && practice.content.roles.some((x) => x.id === chosen)) roleId = chosen;
+  }
   if (practice && tab === "prax" && !roleId) {
     const myRoles = myClubs.flatMap((c) => c.roles);
     roleId = myRoles
