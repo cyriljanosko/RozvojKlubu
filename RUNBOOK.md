@@ -10,6 +10,10 @@
 
 Preview a vercel.app adresy chráni Vercel Authentication (prihlásenie do Vercelu).
 
+Adresa pre prihlasovanie (odkazy v e-mailoch, callbacky): Production berie `BETTER_AUTH_URL`.
+Preview nemá mať `BETTER_AUTH_URL` ani `APP_URL` nastavené – adresu odvodí z `VERCEL_BRANCH_URL`
+a `VERCEL_URL`, ktoré nastavuje Vercel sám (`src/server/auth/base-url.ts`). Preview potrebuje vlastný `BETTER_AUTH_SECRET`.
+
 ## Nasadenie
 
 1. PR do `main` → Vercel vytvorí Preview a GitHub Actions spustí CI (format, lint, typecheck, test, build).

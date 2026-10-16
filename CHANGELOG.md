@@ -17,6 +17,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Opravené
 
+- Prihlásenie na Vercel Preview: odkazy v e-mailoch a callbacky smerovali na `http://localhost:3000`; adresa sa teraz odvodí z adresy nasadenia (len vlastné hostiteľské mená, bez zástupných znakov).
 - Prázdne hodnoty v `.env` (`KEY=`) sa berú ako nenastavené (predtým zlyhala validácia).
 - MongoDB klient si nepamätá neúspešný prvý pokus o pripojenie; health endpoint loguje dôvod chyby DB.
 

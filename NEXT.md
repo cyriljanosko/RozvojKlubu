@@ -12,7 +12,7 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] Súhlas s novými kolekciami Better Auth v DB (`user`, `session`, `account`, `verification`) – 16. 10.
   - [ ] Doplniť premenné vo Verceli (Production aj Preview): `BETTER_AUTH_SECRET` povinne pred zlúčením do `main`; Production `BETTER_AUTH_URL`, `APP_URL`, `INITIAL_ADMIN_EMAILS`; neskôr Ecomail a Sportnet.
   - [x] Overiť end-to-end prihlásenie e-mailovým odkazom lokálne s DB `rozvojklubu_dev` – 16. 10. (`/ucet`, `/api/v1/me`, 375 px).
-  - [ ] Preview: odkazy a callbacky berú `BETTER_AUTH_URL`/`APP_URL`, nie adresu nasadenia → prihlásenie na preview nefunguje (malý PR, napr. `VERCEL_URL`).
+  - [ ] Preview: adresa prihlásenia z `VERCEL_BRANCH_URL`/`VERCEL_URL` (vetva `fix/preview-auth-url`) – overiť prihlásenie na preview po zlúčení.
   - [ ] Overiť názov hlavičky Ecomail API (`key`) pri prvom reálnom odoslaní – nepodarilo sa potvrdiť z dokumentácie.
   - [ ] Overiť názvy claimov v Sportnet ID tokene (meno, e-mail) po registrácii klienta.
 
