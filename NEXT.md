@@ -6,16 +6,16 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 - [x] Mapa produktu z návrhov v artifactoch (`docs/produkt/mapa-produktu.md`) – schválená 16. 10., roly v klube v ADR 0004.
 - [ ] Pilot Stupňa II podľa mapy, časť 11 (F1 → F7). Rozsah: Vizitka, Kompas v aplikácii s odoslaním mentorovi, Moja Akadémia (vedenie, tréner, mentor), Naši tréneri; 10 pilotných klubov z Vizitky.
-- [ ] F2 – roly v klube a dáta pilotných klubov (vetva `feat/club-memberships`): hotové a overené lokálne 16. 10., čaká na PR.
+- [x] F2 – roly v klube a dáta pilotných klubov – PR #14 (zlúčený 16. 10.).
   - Snapshot (10 klubov, 19 sezón) nahratý do `rozvojklubu_dev`, Cyril: admin SFZ, vedenie FK v Nižnom Žipove, mentor 10 klubov.
   - Snapshot leží len v `data/private/` na Macu – pri inom počítači treba súbor preniesť mimo gitu.
-- [ ] F3 – spravovaný obsah (rozhodnuté 16. 10.: Markdown + `react-markdown`, len pre prihlásených, obsah môže byť vo verejnom gite, história zmien, „platné k“ a dátum revízie).
+- [x] F3 – spravovaný obsah (rozhodnuté 16. 10.: Markdown + `react-markdown`, len pre prihlásených, obsah môže byť vo verejnom gite, história zmien, „platné k“ a dátum revízie).
   - [x] F3a – oblasti a 220 otázok Kompasu v2 (vetva `feat/content-catalog`), naplnené v `rozvojklubu_dev`.
   - [x] F3a – PR #15.
-  - [ ] F3b – Metodika 11 oblastí (vetva `feat/content-methodology`): hotové a overené lokálne, 106 sekcií v `rozvojklubu_dev`, čaká na PR (po #15).
-  - [ ] F3c – Prax oblastí 3 a 4 (vetva `feat/content-practice`): hotové a overené lokálne, `area_practice` naplnené, čaká na PR (po #16).
+  - [x] F3b – Metodika 11 oblastí (106 sekcií v `rozvojklubu_dev`) – PR #16.
+  - [x] F3c – Prax oblastí 3 a 4 (`area_practice` naplnené) – PR #17.
   - [ ] Prax pre ďalšie oblasti – keď vznikne obsah (model je spoločný).
-  - [ ] Ukladanie postupu klubu v Praxi (odškrtnuté kroky, zvolený variant, ukazovatele) – F6 Moja Akadémia.
+  - [ ] Ukladanie postupu klubu v Praxi (odškrtnuté kroky, zvolený variant, ukazovatele) – F6d.
 - [x] F4 – Kompas klubu v aplikácii (rozhodnuté 16. 10.: vypĺňa vedenie, tréner číta, mentor vidí len odoslané; kategórie len zo Sportnetu; bez ručného režimu; pri odoslaní zmrazená kópia; Vizitka pre obec neskôr).
   - [x] F4a – výpočet, model, API – PR #18 (zlúčený 16. 10.).
   - [x] F4b – vyplnenie a výsledok v UI – PR #19 (zlúčený 16. 10.).
@@ -31,17 +31,18 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 - [ ] F6 – Moja Akadémia (rozhodnuté 16. 10., ADR 0010).
   - [x] F6a – roly ako spravovaný obsah: 6 základných rolí a roly v 11 oblastiach podľa návrhu z 11. 10., editor admina, „vedenie“ → „Manažér a výbor“ – PR #29 (zlúčený 16. 10.).
   - [x] F6b – nástenka `/moja-akademia` pre manažéra a výbor, trénera a mentora; vlastné roly v oblastiach; prehľad mentora presunúť sem – PR #30 (zlúčený 16. 10.).
-  - [ ] Hub (ADR 0011, po F6b): verejný Hub s výberom roly (Celý klub, Manažér a výbor, Tréner a trénerka, Rodič, Dobrovoľník, Hráč / hráčka, Mentor zväzu, Fanúšik), preusporiadanie oblastí, vety pre rolu, „Začnite tu“, výber klubu, dve dráhy (Akadémia profesionálneho klubu „pripravujeme“); Metodika a Prax verejne; Metodika podľa roly (sekcie zbalené, pre rolu hore); Kompas na vyskúšanie bez uloženia.
+  - [x] Hub (ADR 0011) – v produkcii 16. 10. (`4501576`): verejný Hub s výberom roly (Celý klub, Manažér a výbor, Tréner a trénerka, Rodič, Dobrovoľník, Hráč / hráčka, Mentor zväzu, Fanúšik), preusporiadanie oblastí, vety pre rolu, „Začnite tu“, výber klubu, dve dráhy (Akadémia profesionálneho klubu „pripravujeme“); Metodika a Prax verejne; Metodika podľa roly (sekcie zbalené, pre rolu hore); Kompas na vyskúšanie bez uloženia.
     - [x] H1 – verejné čítanie oblastí (Metodika, Prax) a Kompas na vyskúšanie bez uloženia; kategórie len z vybraného klubu – PR #31 (zlúčený 16. 10.).
     - [x] H2 – katalóg rolí v2 (roly Hubu, dráhy, texty rolí); premenovať rolu aj oblasť 4 na „Dobrovoľníci“ (rozhodnuté 16. 10.) (vetva `feat/roles-v2`): katalóg v2 a premenovanie (58 zmien, schválené) zapísané do DB s históriou – PR #32 (zlúčený 16. 10.).
     - [x] H3 – Hub na `/` (dráhy, roly, výber klubu, oblasti podľa roly, „Začnite tu“, Kompas, O Akadémii; druhá dráha „pripravujeme“) – PR #33 (zlúčený 16. 10.).
-    - [ ] H5 – nová úvodná obrazovka (rozhodnuté 16. 10.):
+    - [x] H5 – nová úvodná obrazovka (rozhodnuté 16. 10.):
       - [x] H5a – verejná – PR #36 (zlúčený 16. 10.): úvod Akadémie s obrázkom → „Kto ste v klube?“ (karty rolí) → Kompas ako informácia s odkazom → oblasti (pri role 3 prioritné, ďalšie oblasti roly ako ďalšie kroky, ostatné stručne; bez roly všetkých 11) → na záver Kompas s výberom klubu. Profesionálna akadémia do päty („pripravujeme“).
-      - [ ] H5b – po prihlásení (vetva `feat/hub-signed-in`, hotové a overené lokálne na 375 px, PR na review): Vizitka klubu (hodnotenie) → úlohy z Moja Akadémia → slabé oblasti podľa Kompasu; mentor vidí svoje kluby so stavom Kompasu.
-      - [ ] H5c – „Ako Akadémia funguje“ pre neprihlásených (vetva `feat/hub-levels`, rozhodnuté 16. 10.): Vizitka klubu (zoznam pilotných klubov), 1. úroveň samoštúdium, 2. úroveň po prihlásení (komunikácia s ľuďmi klubu „pripravujeme“, mentor zväzu).
+      - [x] H5b – po prihlásení – PR #37 (zlúčený 16. 10., v produkcii `5d9f0ba`; prihlásený pohľad overený lokálne, na produkcii nie – prehliadač nie je prihlásený): Vizitka klubu (hodnotenie) → úlohy z Moja Akadémia → slabé oblasti podľa Kompasu; mentor vidí svoje kluby so stavom Kompasu.
+      - [x] Mentor zväzu na pozadí: rolu na úvode, v Metodike a v Praxi vidí len prihlásený mentor a admin SFZ (PR #37).
+      - [x] H5c – „Ako Akadémia funguje“ pre neprihlásených: Vizitka klubu (zoznam pilotných klubov), 1. úroveň samoštúdium, 2. úroveň po prihlásení (komunikácia „pripravujeme“, mentor zväzu) – PR #38 (zlúčený 16. 10., v produkcii `16c2e65`, overené na 375 px).
       - [ ] Obrázok v úvode je zatiaľ ilustrácia; nahradiť fotkou SFZ (dodá Cyril).
     - [ ] Neskôr: pri návrate na holé `/` sa zapamätaný výber obnoví až v prehliadači (krátko sa ukáže predvolená rola) – zvážiť cookie namiesto `localStorage`.
-    - [ ] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.), overené lokálne, PR #34 na review.
+    - [x] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.) – PR #34 (zlúčený 16. 10.).
     - [ ] Pracovná skupina: skontrolovať označenie sekcií rolami (napr. Manažér a výbor má v oblasti 8 zvýraznených 12 z 13 sekcií; fanúšik v oblasti 3 žiadnu).
     - [ ] Neskôr: knižnica vzorov s dokumentmi (PDF, Word, Excel, obrázky) – úložisko súborov rozhodnúť.
     - [ ] Neskôr: vyhľadávanie v oblastiach a otázkach Kompasu; hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
