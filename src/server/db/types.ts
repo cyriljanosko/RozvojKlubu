@@ -204,3 +204,41 @@ export interface KompasSubmissionDoc {
   submittedAt: Date;
   submittedBy: string;
 }
+
+/** Club inputs of the licensing evaluation (areas 5–7, population, coach gender corrections). */
+export interface LicensingInputs {
+  population: number | null;
+  infrastructure: Record<string, number>;
+  activities: Record<string, number | boolean>;
+  cooperation: Record<string, number | boolean>;
+  /** corrections of the guessed coach gender, keyed by coach name */
+  coachGender: Record<string, Gender>;
+}
+
+/** Collection `licensing_evaluations` – working version per club and season, unique `{ clubId, season }` (ADR 0006). */
+export interface LicensingEvaluationDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  inputs: LicensingInputs;
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+/** Collection `licensing_submissions` – closed (frozen) evaluation of a season, unique `{ clubId, season }`. */
+export interface LicensingSubmissionDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  ruleSet: string;
+  evaluationVersion: number;
+  inputs: LicensingInputs;
+  /** scored result at closing time (LicensingResult) */
+  result: Record<string, unknown>;
+  /** date of the Sportnet data the result was computed from */
+  dataAsOf: string | null;
+  closedAt: Date;
+  closedBy: string;
+}
