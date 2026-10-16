@@ -656,12 +656,12 @@
     "notFound": "Klub sa nenašiel."
   },
   "hub": {
-    "eyebrow": "SFZ · Akadémia rozvoja klubov",
-    "title": "Čo dnes vo vašom klube riešite?",
-    "lead": "Jedenásť oblastí pre amatérsky klub – so vzormi, krokmi a sebahodnotením Kompas. Vyberte svoju rolu a Akadémia vám ukáže, čo sa vás týka ako prvé.",
+    "eyebrow": "Slovenský futbalový zväz",
+    "title": "Akadémia rozvoja klubov",
+    "lead": "Program SFZ pre amatérske futbalové kluby: jedenásť oblastí so vzormi, krokmi a sebahodnotením Kompas. Pre vedenie, trénerov, rodičov, dobrovoľníkov aj hráčov – každý v klube tu nájde, čím môže pomôcť.",
     "track": "Dráha",
     "preparing": "pripravujeme",
-    "roleTitle": "Pozrite sa na Akadémiu svojimi očami",
+    "roleTitle": "Kto ste v klube?",
     "roleHint": "Rola nemení obsah Akadémie, mení poradie: čo sa vás týka, uvidíte hore.",
     "whoTitle": "Ktorá rola som ja?",
     "who": "Kto to je",
@@ -693,8 +693,7 @@
     },
     "areas": "Jedenásť oblastí",
     "areasAk": "Jedenásť oblastí akadémie",
-    "forRole": "Pre vašu rolu",
-    "others": "Ďalšie oblasti",
+    "others": "Ostatné oblasti",
     "open": "Otvoriť oblasť",
     "bands": {
       "1": "Ľudia a riadenie",
@@ -707,6 +706,18 @@
       "academy": "Moja Akadémia",
       "academyText": "Ste vo vedení klubu, tréner alebo mentor? Po prihlásení vidíte úlohy, Kompas a licenčné hodnotenie svojho klubu.",
       "signIn": "Prihlásiť sa"
-    }
+    },
+    "roleLead": "Vyberte svoju rolu a ukážeme vám, čím začať. Obsah zostane rovnaký, zmení sa poradie.",
+    "noRole": "Bez roly – zobraziť všetkých 11 oblastí",
+    "preparingTrack": "pripravujeme. Oblasti a roly ukazujeme ako náhľad.",
+    "backTo": "Späť na {track}",
+    "kompasInfo": {
+      "title": "Čo je Kompas klubu",
+      "text": "Sebahodnotenie klubu v 11 oblastiach. Zaškrtnete, čo v klube naozaj platí, a uvidíte, kde klub stojí a kde začať. Vyskúšať ho môže ktokoľvek, uložiť a odoslať mentorovi ho môže vedenie klubu po prihlásení.",
+      "link": "Pozrieť Kompas klubu →"
+    },
+    "priorityTitle": "{role}: začnite týmito tromi oblasťami",
+    "nextTitle": "Ďalšie kroky",
+    "nextText": "Keď zvládnete prvé tri, pokračujte týmito oblasťami."
   }
 }

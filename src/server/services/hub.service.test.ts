@@ -14,6 +14,7 @@ import {
   orderAreas,
   orderSections,
   practiceRoleForHubRole,
+  splitAreas,
   type HubDeps,
 } from "./hub.service";
 import { roleCatalogSchema } from "./role-catalog.schema";
@@ -33,6 +34,30 @@ describe("orderAreas", () => {
       [4, false],
     ]);
     expect(orderAreas(areas, []).map((a) => a.number)).toEqual([1, 2, 3, 4, 5]);
+  });
+});
+
+describe("splitAreas", () => {
+  it("takes three priority areas, the rest of the role as next steps, then the others", () => {
+    const areas = orderAreas(
+      [1, 2, 3, 4, 5, 6].map((number) => ({ number })),
+      [3, 5, 1, 4],
+    );
+    const split = splitAreas(areas);
+    expect(split.priority.map((a) => a.number)).toEqual([3, 5, 1]);
+    expect(split.next.map((a) => a.number)).toEqual([4]);
+    expect(split.others.map((a) => a.number)).toEqual([2, 6]);
+  });
+
+  it("has no priority areas without a role (whole club)", () => {
+    const split = splitAreas(
+      orderAreas(
+        [1, 2].map((number) => ({ number })),
+        [],
+      ),
+    );
+    expect(split.priority).toEqual([]);
+    expect(split.others).toHaveLength(2);
   });
 });
 
