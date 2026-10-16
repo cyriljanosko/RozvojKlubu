@@ -5,18 +5,21 @@ import { ObjectId, type Db } from "mongodb";
 import { getDb } from "@/server/db/mongo";
 import type {
   AreaDoc,
+  AreaPracticeDoc,
   AreaSectionDoc,
   ContentRevisionDoc,
   KompasQuestionDoc,
 } from "@/server/db/types";
 import type { ContentStore, StoredRevision } from "@/server/services/content.service";
 import type { SectionStore } from "@/server/services/methodology.service";
+import type { PracticeStore } from "@/server/services/practice.service";
 
 /** MongoDB implementation of the managed-content store. Indexes are documented in ARCHITECTURE.md. */
 const areas = (db: Db) => db.collection<AreaDoc>("areas");
 const questions = (db: Db) => db.collection<KompasQuestionDoc>("kompas_questions");
 const revisions = (db: Db) => db.collection<ContentRevisionDoc>("content_revisions");
 const sections = (db: Db) => db.collection<AreaSectionDoc>("area_sections");
+const practice = (db: Db) => db.collection<AreaPracticeDoc>("area_practice");
 
 let indexes: Promise<unknown> | undefined;
 
@@ -27,6 +30,7 @@ function ensureIndexes(db: Db): Promise<unknown> {
     questions(db).createIndex({ area: 1, column: 1, order: 1 }),
     revisions(db).createIndex({ entity: 1, entityId: 1, version: -1 }),
     sections(db).createIndex({ area: 1, kind: 1, key: 1 }, { unique: true }),
+    practice(db).createIndex({ area: 1 }, { unique: true }),
   ]).catch((error) => {
     indexes = undefined;
     throw error;
@@ -133,6 +137,39 @@ export const mongoSectionStore: SectionStore = {
     const db = await getDb();
     return sections(db).findOneAndUpdate(
       { area, kind, key, version: expectedVersion },
+      { $set: changes },
+      { returnDocument: "after", projection: { _id: 0 } },
+    );
+  },
+};
+
+export const mongoPracticeStore: PracticeStore = {
+  async insertMissingPractice(docs) {
+    if (docs.length === 0) return 0;
+    const db = await getDb();
+    await ensureIndexes(db);
+    const result = await practice(db).bulkWrite(
+      docs.map((doc) => ({
+        updateOne: { filter: { area: doc.area }, update: { $setOnInsert: doc }, upsert: true },
+      })),
+    );
+    return result.upsertedCount;
+  },
+  async findPractice(area) {
+    const db = await getDb();
+    return practice(db).findOne({ area }, { projection: { _id: 0 } });
+  },
+  async listPracticeAreas() {
+    const db = await getDb();
+    const docs = await practice(db)
+      .find({}, { projection: { _id: 0, area: 1 } })
+      .toArray();
+    return docs.map((d) => d.area);
+  },
+  async updatePractice(area, expectedVersion, changes) {
+    const db = await getDb();
+    return practice(db).findOneAndUpdate(
+      { area, version: expectedVersion },
       { $set: changes },
       { returnDocument: "after", projection: { _id: 0 } },
     );

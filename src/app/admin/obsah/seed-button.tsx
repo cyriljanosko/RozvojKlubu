@@ -26,6 +26,7 @@ export function SeedButton() {
             areas: state.areas ?? 0,
             questions: state.questions ?? 0,
             sections: state.sections ?? 0,
+            practice: state.practice ?? 0,
           })}
         {state.status === "error" && <span className="text-destructive">{t("error")}</span>}
       </p>

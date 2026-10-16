@@ -13,7 +13,9 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] F3a – oblasti a 220 otázok Kompasu v2 (vetva `feat/content-catalog`), naplnené v `rozvojklubu_dev`.
   - [x] F3a – PR #15.
   - [ ] F3b – Metodika 11 oblastí (vetva `feat/content-methodology`): hotové a overené lokálne, 106 sekcií v `rozvojklubu_dev`, čaká na PR (po #15).
-  - [ ] F3c – Prax oblastí 3 a 4 (štruktúrovaný model pre všetky oblasti).
+  - [ ] F3c – Prax oblastí 3 a 4 (vetva `feat/content-practice`): hotové a overené lokálne, `area_practice` naplnené, čaká na PR (po #16).
+  - [ ] Prax pre ďalšie oblasti – keď vznikne obsah (model je spoločný).
+  - [ ] Ukladanie postupu klubu v Praxi (odškrtnuté kroky, zvolený variant, ukazovatele) – F6 Moja Akadémia.
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
 - [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.
 

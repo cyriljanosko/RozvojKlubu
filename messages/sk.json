@@ -145,7 +145,7 @@
       "seed": {
         "submit": "Naplniť chýbajúci obsah",
         "hint": "Doplní len to, čo v databáze chýba. Upravený obsah sa neprepíše.",
-        "done": "Doplnené: {areas} oblastí, {questions} otázok, {sections} sekcií metodiky.",
+        "done": "Doplnené: {areas} oblastí, {questions} otázok, {sections} sekcií metodiky, {practice} praxí.",
         "error": "Obsah sa nepodarilo naplniť."
       },
       "questionsCount": "{count, plural, one {# otázka} few {# otázky} other {# otázok}}",
@@ -185,6 +185,17 @@
           "BAD_REQUEST": "Skontrolujte nadpis, text a dátumy.",
           "default": "Nepodarilo sa uložiť. Skúste to znova."
         }
+      },
+      "practice": {
+        "title": "Prax",
+        "open": "Upraviť prax",
+        "json": "Obsah praxe (JSON)",
+        "hint": "Štruktúra sa pri uložení kontroluje (roly, kroky, varianty, odkazy na vzory). Pri chybe sa nič neuloží.",
+        "errors": {
+          "BAD_REQUEST": "JSON nie je platný alebo nezodpovedá štruktúre praxe.",
+          "CONFLICT": "Prax medzitým niekto zmenil. Obnovte stránku.",
+          "default": "Nepodarilo sa uložiť. Skúste to znova."
+        }
       }
     }
   },
@@ -211,6 +222,45 @@
     "reviewedAt": "Revidované {date}",
     "edit": "Upraviť v administrácii",
     "back": "Všetky oblasti",
-    "notFound": "Oblasť sa nenašla."
+    "notFound": "Oblasť sa nenašla.",
+    "practice": "Prax"
+  },
+  "practice": {
+    "chooseRole": "Kto ste v tejto oblasti?",
+    "who": "Kto sem patrí",
+    "does": "Čo budete robiť",
+    "gain": "Čo z toho máte",
+    "responsibilities": "Za čo zodpovedáte",
+    "notThis": "Čo táto rola nerobí",
+    "time": "Čas",
+    "withWhom": "S kým",
+    "firstStep": "Prvý krok tento týždeň",
+    "byWhom": "Kto",
+    "result": "Čo vznikne",
+    "template": "Vzor",
+    "path": "Cesta",
+    "why": "Prečo",
+    "branchB": "Ak ste na ceste B",
+    "mentor": "Stupeň II · s mentorom",
+    "backlog": "Zásobník ďalších krokov",
+    "indicators": "Ako poznáte, že to funguje",
+    "mentorNumbers": "Čísla, ktoré sledujete",
+    "lowerIsBetter": "menej je lepšie",
+    "next": "Kam ďalej",
+    "library": "Knižnica vzorov",
+    "textToCopy": "Text na skopírovanie",
+    "inMethodology": "Vzor je v metodike oblasti (knižnica).",
+    "progressLater": "Postup si budete môcť ukladať v Mojej Akadémii – pripravujeme.",
+    "tags": {
+      "all": "pre každý klub",
+      "maly": "malý klub",
+      "stredny+": "stredný a veľký klub",
+      "velky": "veľký klub",
+      "D": "Deti do 11",
+      "Z": "Žiaci",
+      "DO": "Dorast",
+      "S": "Dospelí",
+      "zd": "Ženy a dievčatá"
+    }
   }
 }
