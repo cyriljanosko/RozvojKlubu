@@ -650,5 +650,59 @@
     "member": "V tomto klube máte rolu – Kompas klubu si môžete uložiť a odoslať.",
     "memberButton": "Otvoriť Kompas klubu",
     "notFound": "Klub sa nenašiel."
+  },
+  "hub": {
+    "eyebrow": "SFZ · Akadémia rozvoja klubov",
+    "title": "Čo dnes vo vašom klube riešite?",
+    "lead": "Jedenásť oblastí pre amatérsky klub – so vzormi, krokmi a sebahodnotením Kompas. Vyberte svoju rolu a Akadémia vám ukáže, čo sa vás týka ako prvé.",
+    "track": "Dráha",
+    "preparing": "pripravujeme",
+    "roleTitle": "Pozrite sa na Akadémiu svojimi očami",
+    "roleHint": "Rola nemení obsah Akadémie, mení poradie: čo sa vás týka, uvidíte hore.",
+    "whoTitle": "Ktorá rola som ja?",
+    "who": "Kto to je",
+    "see": "Čo uvidíte",
+    "why": "Prečo",
+    "draft": "Text tejto roly je návrh a ešte ho skontroluje pracovná skupina.",
+    "fromMembership": "Rolu a klub sme predvolili podľa vašej roly v klube. Môžete ich zmeniť.",
+    "club": {
+      "pick": "Vybrať klub",
+      "change": "Zmeniť klub",
+      "none": "Bez klubu",
+      "hint": "Pilot: kluby zapojené do Akadémie. Čísla sú zo Sportnetu a prenesú sa do Kompasu.",
+      "size": {
+        "small": "malý klub",
+        "medium": "stredný klub",
+        "large": "veľký klub"
+      },
+      "profile": "{teams, plural, one {# družstvo} few {# družstvá} other {# družstiev}} · {players, plural, one {# hráč} few {# hráči} other {# hráčov}} · {coaches, plural, one {# tréner} few {# tréneri} other {# trénerov}}",
+      "categories": "Kategórie",
+      "vizitka": "Vizitka klubu",
+      "season": "sezóna {season}"
+    },
+    "start": "Začnite tu",
+    "kompas": {
+      "title": "Ohodnoťte svoj klub",
+      "text": "Kompas klubu je sebahodnotenie v 11 oblastiach. Zaškrtnete, čo v klube naozaj platí, a dozviete sa, kde klub stojí a kde začať.",
+      "button": "Spustiť Kompas klubu",
+      "preparing": "Kompas akadémie pripravujeme: rovnaký princíp, otázky podľa oblastí akadémie."
+    },
+    "areas": "Jedenásť oblastí",
+    "areasAk": "Jedenásť oblastí akadémie",
+    "forRole": "Pre vašu rolu",
+    "others": "Ďalšie oblasti",
+    "open": "Otvoriť oblasť",
+    "bands": {
+      "1": "Ľudia a riadenie",
+      "2": "Hráči a rast",
+      "3": "Chod klubu"
+    },
+    "about": {
+      "title": "O Akadémii",
+      "text": "Akadémia rozvoja klubov je program SFZ pre amatérske futbalové kluby. Má jedenásť oblastí a každá má rovnakú stavbu: čo to je, prečo na tom záleží, čo klub reálne robí, sebahodnotenie, čo robiť ďalej a kto to má na starosti. Začnite Kompasom klubu – za pár minút uvidíte, kde klub stojí.",
+      "academy": "Moja Akadémia",
+      "academyText": "Ste vo vedení klubu, tréner alebo mentor? Po prihlásení vidíte úlohy, Kompas a licenčné hodnotenie svojho klubu.",
+      "signIn": "Prihlásiť sa"
+    }
   }
 }

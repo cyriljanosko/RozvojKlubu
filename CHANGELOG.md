@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Hub na úvodnej stránke (H3, ADR 0011): dráhy Klub v obci a Akadémia profesionálneho klubu („pripravujeme“), výber roly z katalógu („Ktorá rola som ja?“), výber pilotného klubu s kartou zo Sportnetu, „Začnite tu“, karta Kompasu, 11 oblastí zoradených podľa roly s vetou pre rolu, „O Akadémii“; výber v adrese (`?track=&role=&club=`) a v prehliadači, prihlásenému sa predvolí rola a klub z členstva; rola z Hubu predvolí rolu v Praxi oblasti.
 - Katalóg rolí v2 (H2, ADR 0011): dráhy Klub v obci a Akadémia profesionálneho klubu („pripravujeme“), roly Hubu s poradím oblastí, vetami pre rolu, „Začnite tu“ a popisom roly; nové základné roly Dobrovoľník, Hráč / hráčka a Fanúšik (len verejný Hub). Úprava oblasti (názov, krátky názov, popis) adminom s históriou – `PUT /api/v1/areas/:area`.
 - Verejný obsah a Kompas na vyskúšanie (H1, ADR 0011): oblasti s Metodikou a Praxou a čítacie API bez prihlásenia; `/kompas` – výber pilotného klubu, kategórie zo Sportnetu, priebežné skóre, odpovede len v prehliadači, výzva prihlásiť sa.
 - Moja Akadémia (F6b, ADR 0010): `/moja-akademia` pre manažéra a výbor, trénera a mentora zväzu – kde klub stojí (Kompas, licenčné hodnotenie, Vizitka), „Čo mám urobiť ja“ s úlohami odvodenými z dát (nevyplnený / neodoslaný Kompas, neuzavreté licenčné hodnotenie, družstvá bez trénera, najslabšie oblasti → Prax), vlastné roly v oblastiach z katalógu (predvolia rolu v Praxi), kohorta mentora so súhrnnými úlohami; odkaz v hlavičke, po prihlásení sa otvorí Moja Akadémia, `/mentor` presmeruje mentorov sem.
@@ -34,6 +35,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Kompas na vyskúšanie: parameter adresy `?klub=` → `?club=` (konvencia anglických kľúčov).
 - Oblasť 4 „Tímoví hráči klubu“ → **Dobrovoľníci**, rola „Tímový hráč klubu“ → **Dobrovoľník**, „Mladí v klube“ → **Hráč / hráčka** – 58 zmien v obsahu (otázky Kompasu, Metodika, Prax) podľa schváleného zoznamu `docs/obsah/premenovanie-dobrovolnici.md`.
 - Čítanie oblastí, otázok Kompasu, Metodiky, Praxe a katalógu rolí už nevyžaduje prihlásenie (úpravy zostávajú adminovi SFZ).
 - Roly v klube v texte: „Vedenie klubu“ → „Manažér a výbor“, „Tréner“ → „Tréner a trénerka“, „Mentor“ → „Mentor zväzu“ (kľúče v dátach bez zmeny).

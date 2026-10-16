@@ -13,10 +13,13 @@ import { academyDeps, clubDeps, kompasDeps } from "@/server/clubs/deps";
 import {
   mongoContentStore,
   mongoPracticeStore,
+  mongoRoleCatalogStore,
   mongoSectionStore,
 } from "@/server/db/content.store";
 import type { ClubRole } from "@/server/db/types";
 import { practiceRoleFor } from "@/server/services/academy.service";
+import { practiceRoleForHubRole } from "@/server/services/hub.service";
+import { getRoleCatalog } from "@/server/services/role-catalog.service";
 import { isAdmin } from "@/server/services/club-access";
 import { listAreas } from "@/server/services/content.service";
 import { listMyClubs } from "@/server/services/clubs.service";
@@ -55,6 +58,11 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   const tab = practice && query.tab === "prax" ? "prax" : "metodika";
   const sections = tab === "metodika" ? await listMethodology(mongoSectionStore, user, number) : [];
   let roleId = typeof query.role === "string" ? query.role : undefined;
+  // a Hub role key (e.g. "coach") is translated to this area's Prax role (ADR 0011)
+  if (practice && roleId && !practice.content.roles.some((x) => x.id === roleId)) {
+    const catalog = (await getRoleCatalog(mongoRoleCatalogStore, user))?.content;
+    roleId = (catalog && practiceRoleForHubRole(catalog, number, roleId)) || undefined;
+  }
   const myClubs = user && practice && tab === "prax" ? await listMyClubs(clubDeps, user) : [];
   // "Kde klub stojí": this area's Kompas result for clubs where the user is management or coach
   const standing =
