@@ -6,6 +6,8 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Kluby zo Sportnetu (snapshot, ADR 0005): import v administrácii (`/admin/kluby`, `POST /api/v1/admin/club-snapshot`), karta klubu `/klub/[clubId]` s počtami a družstvami podľa sezóny.
+- Roly v klube (ADR 0004): vedenie, tréner, mentor na sezónu; pridelenie a odobratie adminom SFZ (`/admin/kluby/[clubId]`, `/api/v1/clubs/:clubId/members`); „Moje kluby“ na `/ucet`; `GET /api/v1/clubs`.
 - Prihlasovanie cez Better Auth: e-mailový odkaz (Ecomail, v dev režime do logu), príprava na Sportnet OIDC (zapne sa po doplnení client_id/secret).
 - Roly (admin SFZ, ObFZ/RFZ, manažér klubu, mentor, dobrovoľník, verejnosť); prví admini cez `INITIAL_ADMIN_EMAILS`.
 - API `GET /api/v1/me` a `PATCH /api/v1/users/:id/role` (len admin SFZ, ochrana proti odobratiu vlastnej roly admina).
@@ -15,8 +17,14 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 - Testy route handlerov `/api/v1/me` a `/api/v1/users/:id/role` a reprodukčné testy k opraveným bugom.
 - Projektové súbory: `CLAUDE.md`, `NEXT.md`, `CHANGELOG.md`, devlog a rozhodnutia (ADR 0001 Better Auth, ADR 0002 Sportnet OIDC).
 
+### Zmenené
+
+- Globálne roly zúžené na `admin_sfz` a `public`; ostatné roly sú roly v klube (ADR 0004).
+
 ### Opravené
 
+- `INITIAL_ADMIN_EMAILS` povýši na admina SFZ aj existujúci účet pri ďalšom prihlásení (predtým len pri vytvorení účtu).
+- Neplatný JSON v tele požiadavky API vracia 400 namiesto 500.
 - Prihlásenie na Vercel Preview: odkazy v e-mailoch a callbacky smerovali na `http://localhost:3000`; adresa sa teraz odvodí z adresy nasadenia (len vlastné hostiteľské mená, bez zástupných znakov).
 - Prázdne hodnoty v `.env` (`KEY=`) sa berú ako nenastavené (predtým zlyhala validácia).
 - MongoDB klient si nepamätá neúspešný prvý pokus o pripojenie; health endpoint loguje dôvod chyby DB.

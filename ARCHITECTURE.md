@@ -50,24 +50,39 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ### Oprávnenia
 
-- Rola je pole `user.role` (6 rolí v `src/server/auth/roles.ts`), predvolená `public`.
-- Prví administrátori: `INITIAL_ADMIN_EMAILS` pri vytvorení účtu.
-- API kontroluje rolu v service vrstve (`requireUser`, `requireRole`).
-- Tenant = klub (ADR 0003) – uplatní sa s prvými klubovými dátami (F3).
+- Globálna rola je pole `user.role`: `admin_sfz` alebo `public` (`src/server/auth/roles.ts`).
+- Prví administrátori: `INITIAL_ADMIN_EMAILS` – pri vytvorení účtu aj pri ďalšom prihlásení (len povýšenie, nikdy odobratie).
+- Roly v klube sú členstvá `club_memberships` (osoba – klub – rola – sezóna, ADR 0004): `management`, `coach` (voliteľne kategórie), `mentor`.
+- Prístup ku klubu: admin SFZ všetky kluby, ostatní len kluby s členstvom v aktuálnej sezóne (`src/server/services/club-access.ts`).
+- Tenant = klub (ADR 0003): každý dotaz na klubové dáta má filter `clubId` = Sportnet appSpace (ADR 0005).
+
+### Dáta klubov (snapshot, ADR 0005)
+
+1. Admin SFZ nahrá snapshot (JSON z návrhu Vizitky) na `/admin/kluby` alebo `POST /api/v1/admin/club-snapshot`
+2. `parseSnapshot` ho overí (Zod) a premapuje → upsert do `clubs` a `club_seasons`
+3. Karta klubu `/klub/[clubId]` a `GET /api/v1/clubs/:clubId` čítajú len počty a družstvá (mená trénerov nie)
+4. Snapshot s menami leží len lokálne v `data/private/` (gitignore), nikdy v gite
 
 ## Hranice systému
 
-- **Sportnet** je zdroj pravdy pre kluby a osoby (čítanie živo, F2) a hlavný poskytovateľ identity.
+- **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Dáta klubov zatiaľ zo snapshotu (ADR 0005), verejné API Sportnetu sa zatiaľ nepoužíva.
 - **MongoDB** drží len dáta aplikácie.
 - **Ecomail** len odosiela transakčné e-maily, nič neukladáme.
 
 ## Kolekcie a indexy (MongoDB `rozvojklubu_dev`)
 
-| Kolekcia       | Vlastník    | Poznámka                                        |
-| -------------- | ----------- | ----------------------------------------------- |
-| `user`         | Better Auth | + polia `role`, `sportnetId`                    |
-| `session`      | Better Auth | relácie                                         |
-| `account`      | Better Auth | prepojenia na poskytovateľov (Sportnet, e-mail) |
-| `verification` | Better Auth | tokeny magic linku                              |
+| Kolekcia           | Vlastník    | Poznámka                                                    |
+| ------------------ | ----------- | ----------------------------------------------------------- |
+| `user`             | Better Auth | + polia `role`, `sportnetId`                                |
+| `session`          | Better Auth | relácie                                                     |
+| `account`          | Better Auth | prepojenia na poskytovateľov (Sportnet, e-mail)             |
+| `verification`     | Better Auth | tokeny magic linku                                          |
+| `clubs`            | aplikácia   | klub zo snapshotu, `clubId` = Sportnet appSpace             |
+| `club_seasons`     | aplikácia   | družstvá, počty hráčov, tréneri s licenciami (osobné údaje) |
+| `club_memberships` | aplikácia   | roly v klube na sezónu (ADR 0004)                           |
 
-Vlastné indexy: zatiaľ žiadne. Kolekcie vzniknú pri prvom prihlásení (vyžaduje súhlas – zmena schémy).
+Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
+
+- `clubs`: `{ clubId: 1 }` unikátny
+- `club_seasons`: `{ clubId: 1, season: 1 }` unikátny
+- `club_memberships`: `{ userId: 1, season: 1 }`; `{ clubId: 1, season: 1, userId: 1, role: 1 }` unikátny (`club_season_user_role`)
