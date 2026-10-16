@@ -62,6 +62,8 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Admin SFZ na `/admin/obsah` (alebo `POST /api/v1/admin/content-seed`) doplní chýbajúce dokumenty – upravený obsah sa nikdy neprepíše
 3. Úpravy len admin SFZ; každá zvýši `version` (súbežná úprava → 409) a uloží `content_revisions` (pred/po, kto, kedy); vrátenie = nová zmena
 4. Čítanie (`/api/v1/areas`, `/api/v1/kompas/questions`) pre každého prihláseného – v pilote nie verejne
+5. **Metodika** oblastí: `content/metodika/NN.md` (front matter + sekcie `## Nadpis {#kľúč}`, Markdown/GFM) – strojovo prevedené z detailov oblastí, bez zmeny textu. Naplnenie ich číta zo súborov (`outputFileTracingIncludes` v `next.config.ts`) do `area_sections`
+6. Zobrazenie `/oblasti`, `/oblasti/[číslo]` cez `react-markdown` + `remark-gfm` (bez HTML v obsahu); úprava sekcií `/admin/obsah/[číslo]/metodika` s „platné k“ a „revidované“, históriou a vrátením
 
 ### Dáta klubov (snapshot, ADR 0005)
 
@@ -90,6 +92,7 @@ MCP server (F5, plánovaný)        ─┘        │
 | `areas`             | aplikácia   | 11 oblastí (spravovaný obsah, bez tenanta)                  |
 | `kompas_questions`  | aplikácia   | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia      |
 | `content_revisions` | aplikácia   | história zmien spravovaného obsahu                          |
+| `area_sections`     | aplikácia   | sekcie Metodiky (neskôr Praxe), Markdown, verzia            |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -102,3 +105,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `areas`: `{ number: 1 }` unikátny
 - `kompas_questions`: `{ questionId: 1 }` unikátny; `{ area: 1, column: 1, order: 1 }`
 - `content_revisions`: `{ entity: 1, entityId: 1, version: -1 }`
+- `area_sections`: `{ area: 1, kind: 1, key: 1 }` unikátny
