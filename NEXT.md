@@ -16,15 +16,15 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] F3c – Prax oblastí 3 a 4 (vetva `feat/content-practice`): hotové a overené lokálne, `area_practice` naplnené, čaká na PR (po #16).
   - [ ] Prax pre ďalšie oblasti – keď vznikne obsah (model je spoločný).
   - [ ] Ukladanie postupu klubu v Praxi (odškrtnuté kroky, zvolený variant, ukazovatele) – F6 Moja Akadémia.
-- [ ] F4 – Kompas klubu v aplikácii (rozhodnuté 16. 10.: vypĺňa vedenie, tréner číta, mentor vidí len odoslané; kategórie len zo Sportnetu; bez ručného režimu; pri odoslaní zmrazená kópia; Vizitka pre obec neskôr).
+- [x] F4 – Kompas klubu v aplikácii (rozhodnuté 16. 10.: vypĺňa vedenie, tréner číta, mentor vidí len odoslané; kategórie len zo Sportnetu; bez ručného režimu; pri odoslaní zmrazená kópia; Vizitka pre obec neskôr).
   - [x] F4a – výpočet, model, API – PR #18 (zlúčený 16. 10.).
   - [x] F4b – vyplnenie a výsledok v UI – PR #19 (zlúčený 16. 10.).
-  - [ ] F4c – odoslanie mentorovi (zmrazená kópia), pohľad mentora, export `SFZ-KOMPAS-1` (vetva `feat/kompas-submit`): hotové a overené lokálne, PR #20 na review.
+  - [x] F4c – odoslanie mentorovi (zmrazená kópia), pohľad mentora, export `SFZ-KOMPAS-1` – PR #20 (zlúčený 16. 10.).
 - [ ] F5 – licenčné hodnotenie a Vizitka klubu (ADR 0006).
-  - [ ] F5a – pravidlá, výpočet, model, API (vetva `feat/licensing`): hotové a overené lokálne, PR po #20.
+  - [x] F5a – pravidlá, výpočet, model, API – PR #21 (zlúčený 16. 10.).
   - [ ] Otvorené: dá sa uzavretá sezóna znovu otvoriť (napr. admin pri chybe)? Zatiaľ nie.
-  - [ ] F5b – licenčné hodnotenie v UI (vetva `feat/licensing-ui`): hotové a overené lokálne, PR po F5a.
-  - [ ] F5c – Vizitka klubu (ADR 0007): verejná `/vizitka/[clubId]` a pre roly `/klub/[clubId]/vizitka`, Kompas a licenčné hodnotenie vedľa seba za sezónu (vetva `feat/vizitka`): hotové a overené lokálne, PR po F5b.
+  - [x] F5b – licenčné hodnotenie v UI – PR #22 (zlúčený 16. 10.).
+  - [ ] F5c – Vizitka klubu (ADR 0007): verejná `/vizitka/[clubId]` a pre roly `/klub/[clubId]/vizitka`, Kompas a licenčné hodnotenie vedľa seba za sezónu (vetva `feat/vizitka`): hotové a overené lokálne, PR na review.
   - [ ] Neskôr: tlač / PDF Vizitky, vizitka pre obec.
   - [ ] Neskôr: levely klubu (malý / stredný / veľký podľa počtu hráčov) a 1–5 hviezd, samostatne pre Kompas a licenčné hodnotenie – pravidlo zatiaľ chýba.
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
