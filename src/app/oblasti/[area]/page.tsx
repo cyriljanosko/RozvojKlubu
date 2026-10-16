@@ -6,16 +6,28 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { MarkdownContent } from "@/components/content/markdown";
+import { PracticeView } from "@/components/content/practice-view";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
-import { mongoContentStore, mongoSectionStore } from "@/server/db/content.store";
+import { clubDeps } from "@/server/clubs/deps";
+import {
+  mongoContentStore,
+  mongoPracticeStore,
+  mongoSectionStore,
+} from "@/server/db/content.store";
+import type { ClubRole } from "@/server/db/types";
 import { isAdmin } from "@/server/services/club-access";
 import { listAreas } from "@/server/services/content.service";
+import { listMyClubs } from "@/server/services/clubs.service";
 import { listMethodology } from "@/server/services/methodology.service";
+import { getPractice } from "@/server/services/practice.service";
 
 export const metadata: Metadata = { title: defaultMessages.areas.title };
 
-async function AreaDetail({ params }: PageProps<"/oblasti/[area]">) {
+/** Practice roles that correspond to the pilot club roles (ADR 0004). */
+const PRACTICE_ROLE: Record<ClubRole, string> = { management: "v", coach: "t", mentor: "m" };
+
+async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">) {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
   const t = await getTranslations("areas");
@@ -34,7 +46,18 @@ async function AreaDetail({ params }: PageProps<"/oblasti/[area]">) {
       </div>
     );
   }
-  const sections = await listMethodology(mongoSectionStore, user, number);
+  const query = await searchParams;
+  const practice = await getPractice(mongoPracticeStore, user, number);
+  const tab = practice && query.tab === "prax" ? "prax" : "metodika";
+  const sections = tab === "metodika" ? await listMethodology(mongoSectionStore, user, number) : [];
+  let roleId = typeof query.role === "string" ? query.role : undefined;
+  if (practice && tab === "prax" && !roleId) {
+    const myRoles = (await listMyClubs(clubDeps, user)).flatMap((c) => c.roles);
+    roleId = myRoles
+      .map((r) => PRACTICE_ROLE[r])
+      .find((id) => practice.content.roles.some((x) => x.id === id));
+  }
+  const base = `/oblasti/${area.number}`;
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "long" });
 
   return (
@@ -55,7 +78,7 @@ async function AreaDetail({ params }: PageProps<"/oblasti/[area]">) {
         <p className="text-muted-foreground max-w-2xl">{area.description}</p>
         {isAdmin(user) && (
           <Link
-            href={`/admin/obsah/${area.number}/metodika`}
+            href={`/admin/obsah/${area.number}/${tab === "prax" ? "prax" : "metodika"}`}
             className="text-sm font-medium underline underline-offset-4"
           >
             {t("edit")}
@@ -63,7 +86,30 @@ async function AreaDetail({ params }: PageProps<"/oblasti/[area]">) {
         )}
       </header>
 
-      {sections.length === 0 ? (
+      {practice && (
+        <nav className="flex gap-2 border-b" aria-label={t("contents")}>
+          {(["metodika", "prax"] as const).map((key) => (
+            <Link
+              key={key}
+              href={key === "prax" ? `${base}?tab=prax` : base}
+              aria-current={tab === key ? "page" : undefined}
+              className="aria-[current=page]:border-primary -mb-px border-b-2 border-transparent px-3 py-2 text-sm font-medium"
+            >
+              {key === "prax" ? t("practice") : t("methodology")}
+            </Link>
+          ))}
+        </nav>
+      )}
+
+      {tab === "prax" && practice ? (
+        <PracticeView
+          practice={practice.content}
+          roleId={roleId ?? practice.content.roles[0].id}
+          hrefForRole={(id) => `${base}?tab=prax&role=${id}`}
+        />
+      ) : null}
+
+      {tab === "prax" ? null : sections.length === 0 ? (
         <p className="text-muted-foreground text-sm">{t("empty")}</p>
       ) : (
         <>

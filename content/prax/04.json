@@ -1,0 +1,1436 @@
+{
+  "area": 4,
+  "source": "https://claude.ai/code/artifact/d88df306-c280-4e5d-b084-a27c0ddc2061",
+  "validAsOf": null,
+  "reviewedAt": null,
+  "roles": [
+    {
+      "id": "v",
+      "label": "Vedenie a manažér",
+      "description": "organizuje tím",
+      "who": "prezident, výbor, manažér klubu, koordinátor podujatí",
+      "does": "Rozbehnete celý postup: pošlete dotazník, rozdelíte úlohy a poďakujete.",
+      "gain": "Viac ľudí, ktorí odbremenia vás a výbor.",
+      "responsibilities": [
+        "Klub vie, kto je okolo neho a čo vie",
+        "Každá úloha má meno a koniec",
+        "Ľudia dostanú poďakovanie a ponuku ďalšieho kroku"
+      ],
+      "notThis": ["Robiť všetko sám — vaša úloha je rozdeliť"],
+      "time": "2 h týždenne prvý mesiac, potom 1 h mesačne",
+      "withWhom": "tréneri, koordinátor podujatí, mentor zväzu",
+      "library": [
+        "dotaznik",
+        "mapa",
+        "koniec",
+        "ponuka",
+        "podujatie",
+        "karta",
+        "podakovanie",
+        "evidencia",
+        "benefity",
+        "potvrdenie"
+      ],
+      "indicators": [
+        "Odpovede z dotazníka",
+        "Ľudia mimo výboru a trénerov, ktorí pomohli na poslednom podujatí",
+        "Úlohy, pri ktorých je meno"
+      ],
+      "pathTitle": "Do mesiaca viac ľudí, ktorí klub ťahajú",
+      "pathSubtitle": "Štyri kroky na mesiac. Pri každom si vyberte možnosť, ktorá sedí vášmu času a veľkosti klubu.",
+      "firstStep": {
+        "title": "Pošlite rodičom krátky dotazník „Čo viete a čo vás baví“",
+        "who": "vy",
+        "time": "20 min",
+        "result": "prvé odpovede od rodičov",
+        "tasks": [
+          {
+            "id": "v1",
+            "title": "Skopírujte dotazník a doplňte názov klubu"
+          },
+          {
+            "id": "v2",
+            "title": "Pošlite ho do skupín rodičov všetkých kategórií",
+            "note": "alebo ho vytlačte a rozdajte po tréningu"
+          },
+          {
+            "id": "v3",
+            "title": "Po týždni spočítajte odpovede"
+          }
+        ],
+        "aside": {
+          "title": "Dotazník na skopírovanie",
+          "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme tímových hráčov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac.",
+          "note": "Pošlite ho do skupiny rodičov alebo ho vytlačte a rozdajte po tréningu."
+        },
+        "template": "dotaznik",
+        "myAcademy": "tim"
+      },
+      "steps": [
+        {
+          "id": "vs1",
+          "label": "1. týždeň",
+          "title": "Spíšte, čo treba robiť",
+          "why": "Ľudia nepomáhajú, keď nevedia s čím. Zoznam úloh je prvý krok k tomu, aby pri každej bolo meno.",
+          "links": [
+            {
+              "label": "Spísať mapu úloh",
+              "anchor": "Spísať mapu úloh"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "20 min",
+              "what": "Spíšte úlohy okolo najbližšieho zápasu: pokladňa, bufet, usporiadateľ, fotky, doprava.",
+              "result": "zoznam 5–8 úloh",
+              "template": "mapa"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a výbor",
+              "time": "1 h",
+              "what": "Mapa úloh na celú sezónu: zápasy, turnaje, údržba, papiere.",
+              "result": "mapa úloh klubu",
+              "template": "mapa"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy a koordinátor",
+              "time": "2 h",
+              "what": "Mapa úloh podľa kategórií a podujatí s odhadom času.",
+              "result": "mapa úloh s hodinami",
+              "template": "mapa",
+              "tag": "stredny+"
+            }
+          ],
+          "branchB": {
+            "title": "Napíšte, kto reálne čo robí",
+            "why": "Keď ťahajú stále tí istí, nepomôže hľadať nových na všetko. Pomôže odovzdať tri úlohy.",
+            "links": [
+              {
+                "label": "Kto reálne čo robí",
+                "anchor": "Napísať, kto reálne čo robí"
+              }
+            ],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "20 min",
+                "what": "Pri každej úlohe napíšte meno toho, kto ju dnes robí.",
+                "result": "kde všetko stojí na troch ľuďoch",
+                "template": "mapa"
+              },
+              {
+                "name": "Bežná",
+                "who": "vy a výbor",
+                "time": "1 h",
+                "what": "Označte úlohy, ktoré robí ten istý človek, a vyberte tri na odovzdanie.",
+                "result": "tri úlohy na odovzdanie",
+                "links": [
+                  {
+                    "label": "Vybrať tri úlohy",
+                    "anchor": "Vybrať tri úlohy na odovzdanie"
+                  }
+                ]
+              },
+              {
+                "name": "Pre väčší klub",
+                "who": "výbor",
+                "time": "1 h",
+                "what": "Rozdeľte agendu medzi koordinátorov podujatí, údržby a komunikácie.",
+                "result": "traja koordinátori namiesto jedného",
+                "tag": "stredny+"
+              }
+            ]
+          }
+        },
+        {
+          "id": "vs2",
+          "label": "2. týždeň",
+          "title": "Osloviť menovite s jednou úlohou",
+          "why": "Výzva v skupine nezaberie, lebo nikto nevie, či myslí jeho. Menovité oslovenie s úlohou s koncom funguje takmer vždy.",
+          "links": [
+            {
+              "label": "Osloviť menovite",
+              "anchor": "Osloviť menovite s jednou konkrétnou úlohou"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min na človeka",
+              "what": "Oslovte troch rodičov z dotazníka, každého s jednou úlohou s koncom.",
+              "result": "prvé „áno“",
+              "template": "koniec"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréneri",
+              "time": "1 týždeň",
+              "what": "Požiadajte trénerov, nech každý osloví jedného rodiča svojej kategórie.",
+              "result": "jeden človek na kategóriu",
+              "template": "ponuka"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy a koordinátor",
+              "time": "1 tréning",
+              "what": "Na začiatku sezóny stôl pri tréningu: zoznam úloh a kto sa zapíše.",
+              "result": "zapísaní ľudia na sezónu",
+              "template": "mapa",
+              "tag": "stredny+"
+            }
+          ],
+          "branchB": {
+            "title": "Nájdite ľudí na tri úlohy",
+            "why": "Odovzdať úlohu sa dá len konkrétnemu človeku. Dve mená na úlohu dávajú istotu.",
+            "links": [
+              {
+                "label": "Nájsť ľudí menovite",
+                "anchor": "Nájsť na ne ľudí menovite"
+              }
+            ],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "15 min",
+                "what": "Ku každej z troch úloh napíšte dve mená ľudí, ktorí by ju zvládli.",
+                "result": "šesť mien"
+              },
+              {
+                "name": "Bežná",
+                "who": "vy",
+                "time": "10 min na človeka",
+                "what": "Oslovte ich s ponukou: robíte to so mnou, kým to nezvládnete sami.",
+                "result": "nástupcovia na tri úlohy",
+                "template": "ponuka"
+              },
+              {
+                "name": "Pre väčší klub",
+                "who": "výbor",
+                "time": "1 h",
+                "what": "Na každé podujatie hlavný organizátor, ktorý si ľudí oslovuje sám.",
+                "result": "organizátori podujatí",
+                "template": "podujatie",
+                "tag": "stredny+"
+              }
+            ]
+          },
+          "mentor": {
+            "id": "w2b",
+            "title": "Rozhovor s rodičom o silných stránkach",
+            "practice": [
+              "Precvičíte na kohorte s mentorom zväzu.",
+              "Potom s rodičmi, ktorí odpovedali na dotazník."
+            ],
+            "template": "rozhovor",
+            "modules": ["roz"]
+          }
+        },
+        {
+          "id": "vs3",
+          "label": "3. týždeň",
+          "title": "Prvá úloha malá a s koncom",
+          "why": "Kto zažije úlohu s koncom, príde znova. Kto dostane „pomôž so všetkým“, nepríde.",
+          "links": [
+            {
+              "label": "Prvá úloha malá",
+              "anchor": "Prvá úloha malá a s koncom"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a rodič",
+              "time": "1 h",
+              "what": "Prvá úloha na jednu hodinu na najbližšom zápase.",
+              "result": "prvý človek, ktorý pomohol",
+              "template": "koniec"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a rodičia",
+              "time": "1 podujatie",
+              "what": "Úloha na celé podujatie s jasným začiatkom a koncom.",
+              "result": "podujatie s rozdelenými úlohami",
+              "template": "podujatie"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "koordinátor",
+              "time": "2 h prípravy",
+              "what": "Plán podujatia s rolami: každý vie, čo robí a kedy.",
+              "result": "plán podujatia",
+              "template": "podujatie",
+              "tag": "stredny+"
+            }
+          ],
+          "branchB": {
+            "title": "Zaškolte nástupcov",
+            "why": "Úloha, ktorú vie len jeden človek, odíde s ním. Karta a dve akcie spolu stačia.",
+            "links": [
+              {
+                "label": "Odovzdávanie know-how",
+                "anchor": "Zaviesť odovzdávanie know-how"
+              }
+            ],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "15 min",
+                "what": "Napíšte kartu jednej úlohy: postup v troch krokoch.",
+                "result": "karta úlohy",
+                "template": "karta"
+              },
+              {
+                "name": "Bežná",
+                "who": "vy a nástupca",
+                "time": "2 akcie",
+                "what": "Ukážem, spolu, sám, povedz: nástupca ide s vami na dve akcie.",
+                "result": "nástupca, ktorý to vie",
+                "template": "karta"
+              },
+              {
+                "name": "Pre väčší klub",
+                "who": "koordinátor",
+                "time": "sezóna",
+                "what": "Každá kľúčová úloha má kartu a dvoch ľudí, ktorí ju vedia.",
+                "result": "karty všetkých kľúčových úloh",
+                "template": "odovzdanie",
+                "tag": "stredny+"
+              }
+            ]
+          },
+          "mentor": {
+            "id": "w3b",
+            "title": "Zaškolenie: naučiť človeka robiť niečo dobre",
+            "practice": [
+              "Na kohorte si pripravíte jednu zaškolovaciu kartu.",
+              "Potom ju použijete s nováčikom."
+            ],
+            "template": "karta",
+            "modules": ["zas"]
+          }
+        },
+        {
+          "id": "vs4",
+          "label": "4. týždeň",
+          "title": "Poďakovať a ponúknuť ďalší krok",
+          "why": "Poďakovanie stojí málo a je hlavný dôvod, prečo ľudia prídu znova.",
+          "links": [
+            {
+              "label": "Poďakovať verejne",
+              "anchor": "Poďakovať verejne a ponúknuť ďalší krok"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Do dvoch dní napíšte ľuďom, ako akcia dopadla, a poďakujte menom.",
+              "result": "ľudia vedia, že to malo zmysel",
+              "template": "podakovanie"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "30 min",
+              "what": "Verejné poďakovanie s menami na Facebooku klubu a pred rodičmi.",
+              "result": "verejné poďakovanie",
+              "template": "podakovanie"
+            },
+            {
+              "name": "Na konci sezóny",
+              "who": "vy a výbor",
+              "time": "1 h",
+              "what": "Evidencia hodín, ocenenie a potvrdenie pre ľudí so 40 a viac hodinami.",
+              "result": "prehľad a ocenenie",
+              "template": "evidencia",
+              "myAcademy": "tim"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Koordinátor tímových hráčov klubu mimo výboru",
+          "tag": "all"
+        },
+        {
+          "text": "Benefity: tričko, vstup zdarma, posedenie po sezóne",
+          "tag": "all"
+        },
+        {
+          "text": "Profesie rodičov v jednej tabuľke",
+          "tag": "all"
+        },
+        {
+          "text": "Rodičovský deň s ukážkou úloh",
+          "tag": "D"
+        },
+        {
+          "text": "Dorastenci ako pomocníci na turnaji prípraviek",
+          "tag": "DO"
+        },
+        {
+          "text": "Študenti zo strednej školy na podujatia",
+          "tag": "stredny+"
+        },
+        {
+          "text": "Brigáda v areáli spolu s obcou",
+          "tag": "maly"
+        },
+        {
+          "text": "Mamy, hráčky a bývalé hráčky v tíme klubu",
+          "tag": "zd"
+        },
+        {
+          "text": "Potvrdenie pre ľudí so 40 a viac hodinami",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 6,
+          "title": "Plán podujatia s rolami",
+          "why": "Na podujatiach sa noví ľudia zapájajú najľahšie."
+        },
+        {
+          "area": 7,
+          "title": "Verejné poďakovanie",
+          "why": "Poďakovanie a fotky zároveň ukazujú klub obci a sponzorom."
+        },
+        {
+          "area": 8,
+          "title": "Benefity a potvrdenie na 3 %",
+          "why": "Klub, ktorý ľuďom dáva, ľahšie získa aj peniaze."
+        },
+        {
+          "area": 9,
+          "title": "Potvrdenie o hodinách pomoci",
+          "why": "Pomoc v klube má svoje pravidlá aj poistenie."
+        },
+        {
+          "area": 1,
+          "title": "Koordinátor mimo výboru",
+          "why": "Kto dlho a dobre pomáha, je kandidát do výboru."
+        }
+      ],
+      "myAcademyRole": "vedenie"
+    },
+    {
+      "id": "t",
+      "label": "Tréner",
+      "description": "pozná rodičov kategórie",
+      "who": "hlavný tréner, asistent, vedúci mužstva",
+      "does": "Porozprávate sa s rodičmi svojej kategórie a dáte jednému z nich prvú malú úlohu.",
+      "gain": "Pomoc na tréningoch a zápasoch vašej kategórie.",
+      "responsibilities": [
+        "Poznáte rodičov svojej kategórie a viete, čo vedia",
+        "Jeden rodič má malú úlohu pri vašej kategórii",
+        "Dáte klubu vedieť, kto čo vie"
+      ],
+      "notThis": ["Organizovať podujatia celého klubu — to robí vedenie"],
+      "time": "10 minút po tréningu raz týždenne",
+      "withWhom": "rodičia kategórie, manažér klubu",
+      "library": ["rozhovor", "dotaznik", "koniec", "ponuka", "karta", "podakovanie"],
+      "indicators": [
+        "Rodičia kategórie, s ktorými ste hovorili",
+        "Rodičia s úlohou pri vašej kategórii"
+      ],
+      "pathTitle": "Prvý rodič, ktorý pomôže vašej kategórii",
+      "pathSubtitle": "Tri kroky na mesiac. Všetko popri tréningoch, ktoré aj tak máte.",
+      "firstStep": {
+        "title": "Po tréningu sa dve minúty porozprávajte s troma rodičmi",
+        "who": "vy",
+        "time": "10 min",
+        "result": "viete, kto z rodičov čo vie a čo ho baví",
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Vyberte troch rodičov, ktorí chodia na tréningy"
+          },
+          {
+            "id": "t2",
+            "title": "Opýtajte sa ich na dve veci",
+            "note": "otázky sú vpravo"
+          },
+          {
+            "id": "t3",
+            "title": "Odpovede pošlite manažérovi"
+          }
+        ],
+        "aside": {
+          "title": "Dve otázky pre rodiča",
+          "text": "Dobrý deň, chcem sa opýtať na dve veci, zaberie to minútu.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n2. Keby ste klubu niekedy na hodinu pomohli, čo by vás bavilo?\n\nNič teraz nesľubujete. Len sa chcem dozvedieť, kto ste.",
+          "note": "Netreba to čítať, stačí sa opýtať vlastnými slovami."
+        },
+        "template": "rozhovor"
+      },
+      "steps": [
+        {
+          "id": "ts1",
+          "label": "Krok 1 · do 14 dní",
+          "title": "Prvá malá úloha pre rodiča",
+          "why": "Tréner pozná rodičov najlepšie a prosba od trénera má najväčšiu váhu.",
+          "links": [
+            {
+              "label": "Prvá úloha malá",
+              "anchor": "Prvá úloha malá a s koncom"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a rodič",
+              "time": "5 min",
+              "what": "Požiadajte jedného rodiča o jednu vec na najbližšom zápase.",
+              "result": "prvý rodič s úlohou",
+              "template": "koniec"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a rodič",
+              "time": "1 tréning",
+              "what": "Rodič na výpomoc pri jednom tréningu: pomôcky a rozcvička.",
+              "result": "rodič na tréningu",
+              "template": "karta"
+            },
+            {
+              "name": "Pre celú kategóriu",
+              "who": "vy a rodičia",
+              "time": "15 min",
+              "what": "Rozdeľte medzi rodičov dopravu na zápasy na celú jeseň.",
+              "result": "rozpis dopravy"
+            }
+          ],
+          "branchB": {
+            "title": "Odbremenite jedného človeka",
+            "why": "Rodič, ktorý robí pri kategórii všetko, odíde, keď dieťa prestane hrať. Kto to robí s ním, ostane.",
+            "links": [],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "5 min",
+                "what": "Zistite, ktorý rodič robí pri kategórii všetko, a vezmite mu jednu vec.",
+                "result": "jedna úloha odovzdaná"
+              },
+              {
+                "name": "Bežná",
+                "who": "rodič a nástupca",
+                "time": "2 zápasy",
+                "what": "Druhý rodič sa naučí jeho úlohu: ide s ním na dva zápasy.",
+                "result": "nástupca pri kategórii",
+                "template": "karta"
+              },
+              {
+                "name": "Pre celú kategóriu",
+                "who": "vy a rodič",
+                "time": "15 min",
+                "what": "Kontakt pre rodičov: jeden rodič zbiera informácie a posiela ich ďalej.",
+                "result": "kontakt pre rodičov kategórie"
+              }
+            ]
+          }
+        },
+        {
+          "id": "ts2",
+          "label": "Krok 2 · do 3 týždňov",
+          "title": "Dotazník pre rodičov kategórie",
+          "why": "Čo rodičia vedia z práce, klub často netuší. Dotazník to ukáže za týždeň.",
+          "links": [
+            {
+              "label": "Kto je okolo klubu",
+              "anchor": "Zistiť, kto je okolo klubu a čo vie"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "5 min",
+              "what": "Pošlite dotazník do skupiny rodičov vašej kategórie.",
+              "result": "odpovede rodičov",
+              "template": "dotaznik"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Rozdajte ho vytlačený po tréningu a počkajte na odpovede.",
+              "result": "vyplnené dotazníky",
+              "template": "dotaznik"
+            },
+            {
+              "name": "S manažérom",
+              "who": "vy a manažér",
+              "time": "20 min",
+              "what": "Odpovede preneste do mapy úloh klubu.",
+              "result": "nové mená v mape úloh",
+              "template": "mapa"
+            }
+          ]
+        },
+        {
+          "id": "ts3",
+          "label": "Krok 3 · do mesiaca",
+          "title": "Poďakujte pred deťmi",
+          "why": "Deti vidia, že pomoc rodiča má zmysel, a ďalší rodičia sa pridajú.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "2 min",
+              "what": "Na konci tréningu poďakujte rodičovi pred deťmi.",
+              "result": "rodič príde znova"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Napíšte do skupiny rodičov, čo rodič urobil a ako to pomohlo.",
+              "result": "poďakovanie pred rodičmi",
+              "template": "podakovanie"
+            },
+            {
+              "name": "Viac",
+              "who": "vy a manažér",
+              "time": "10 min",
+              "what": "Navrhnite manažérovi rodiča na ocenenie na konci sezóny.",
+              "result": "návrh na ocenenie",
+              "template": "evidencia"
+            }
+          ],
+          "mentor": {
+            "id": "tc4",
+            "title": "Rozhovor s rodičom o silných stránkach",
+            "practice": [
+              "Rozhovor si precvičíte na kohorte Stupňa II.",
+              "Potom s rodičom, ktorý už pomohol."
+            ],
+            "template": "rozhovor",
+            "modules": ["roz"]
+          }
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Rodič ako vedúci mužstva",
+          "tag": "all"
+        },
+        {
+          "text": "Kontakt pre rodičov kategórie",
+          "tag": "all"
+        },
+        {
+          "text": "Rodičovský tréning: rodičia hrajú s deťmi",
+          "tag": "D"
+        },
+        {
+          "text": "Rodič fotí zápasy kategórie",
+          "tag": "all"
+        },
+        {
+          "text": "Doprava na zápasy po rodičoch",
+          "tag": "Z"
+        },
+        {
+          "text": "Dorastenec ako pomocník na tréningu",
+          "tag": "DO"
+        },
+        {
+          "text": "Mama ako pomocníčka pri tréningu dievčat",
+          "tag": "zd"
+        },
+        {
+          "text": "Posedenie rodičov kategórie po sezóne",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 3,
+          "title": "Rodič na výpomoc pri tréningu",
+          "why": "Rodič, ktorý pomáha pri kategórii, je najčastejší budúci tréner."
+        },
+        {
+          "area": 5,
+          "title": "Rozhovor s rodičmi kategórie",
+          "why": "Dobrá komunikácia s rodičmi je základ práce s hráčmi."
+        },
+        {
+          "area": 6,
+          "title": "Doprava a turnaje",
+          "why": "Kategória potrebuje pomoc najmä pri zápasoch a podujatiach."
+        }
+      ],
+      "myAcademyRole": "trener"
+    },
+    {
+      "id": "r",
+      "label": "Rodič",
+      "description": "zvažuje, či pomôcť",
+      "who": "rodič alebo zákonný zástupca hráča či hráčky",
+      "does": "Vyplníte dotazník a vyskúšate jednu hodinu pomoci. Nič ďalšie nesľubujete.",
+      "gain": "Viete, či vás to baví, a nikto od vás nechce viac, než ponúknete.",
+      "responsibilities": [
+        "Vyskúšate jednu hodinu pomoci",
+        "Poviete, čo vás baví a čo viete",
+        "O ďalšom kroku rozhodujete vy"
+      ],
+      "notThis": ["Sľúbiť viac, než chcete"],
+      "time": "1 hodina",
+      "withWhom": "tréner kategórie, manažér klubu",
+      "library": ["dotaznik", "rodicKarta", "benefity", "pozvanie"],
+      "indicators": ["Hodiny, ktoré ste klubu dali", "Úlohy, ktoré ste si vyskúšali"],
+      "pathTitle": "Jedna hodina pomoci, nič viac",
+      "pathSubtitle": "Tri kroky. O ďalšom kroku rozhodujete len vy.",
+      "firstStep": {
+        "title": "Vyplňte dotazník a vyberte si jednu úlohu na najbližší zápas",
+        "who": "vy",
+        "time": "5 min",
+        "result": "klub vie, čo vás baví a kedy môžete",
+        "tasks": [
+          {
+            "id": "r1",
+            "title": "Vyplňte dotazník",
+            "note": "ak vám ho klub neposlal, opýtajte sa trénera"
+          },
+          {
+            "id": "r2",
+            "title": "Vyberte si jednu úlohu na najbližší zápas"
+          },
+          {
+            "id": "r3",
+            "title": "Povedzte trénerovi, kedy prídete"
+          }
+        ],
+        "aside": {
+          "title": "Takto vyzerá dotazník",
+          "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme tímových hráčov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac.",
+          "note": "Ak vám ho klub neposlal, opýtajte sa trénera."
+        },
+        "template": "dotaznik"
+      },
+      "steps": [
+        {
+          "id": "rs1",
+          "label": "Krok 1 · najbližší zápas",
+          "title": "Jedna hodina pomoci",
+          "why": "Nikto od vás nechce viac, než ponúknete. Úloha má začiatok a koniec.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "1 h",
+              "what": "Pokladňa alebo bufet na jednom domácom zápase.",
+              "result": "prvá hodina pomoci",
+              "template": "rodicKarta"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "2 h",
+              "what": "Doprava detí na jeden zápas vonku.",
+              "result": "deti dopravené na zápas",
+              "template": "rodicKarta"
+            },
+            {
+              "name": "Podľa toho, čo viete",
+              "who": "vy",
+              "time": "podľa dohody",
+              "what": "Ponúknite, čo robíte v práci: účty, opravy, fotky, počítače.",
+              "result": "úloha, ktorá vás baví"
+            }
+          ]
+        },
+        {
+          "id": "rs2",
+          "label": "Krok 2 · po akcii",
+          "title": "Povedzte, ako to šlo",
+          "why": "Krátka spätná väzba pomôže klubu aj vám: viete, či to chcete zopakovať.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "1 min",
+              "what": "Povedzte trénerovi jednou vetou, či by ste to zopakovali.",
+              "result": "klub vie, na čom je"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréner",
+              "time": "5 min",
+              "what": "Dohodnite si ďalší termín.",
+              "result": "ďalšia hodina pomoci"
+            },
+            {
+              "name": "Viac",
+              "who": "vy",
+              "time": "5 min",
+              "what": "Navrhnite úlohu, ktorú by ste chceli robiť pravidelne.",
+              "result": "vlastná úloha na obzore"
+            }
+          ]
+        },
+        {
+          "id": "rs3",
+          "label": "Krok 3 · len ak chcete",
+          "title": "Ďalší krok",
+          "why": "Rebríček zapojenia sa posúva vždy len o jeden stupeň. Aj „takto mi to stačí“ je dobrá odpoveď.",
+          "links": [
+            {
+              "label": "Typy zapojenia",
+              "anchor": "Typy zapojenia"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "raz za mesiac",
+              "what": "Jedna úloha mesačne.",
+              "result": "pravidelná výpomoc"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "sezóna",
+              "what": "Vlastná úloha: máte ju na starosti celú sezónu.",
+              "result": "vlastná úloha",
+              "template": "benefity"
+            },
+            {
+              "name": "Viac",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Pozvite ďalšieho rodiča na svoju úlohu.",
+              "result": "ďalší človek v tíme",
+              "template": "pozvanie"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Pomoc na turnaji prípraviek",
+          "tag": "D"
+        },
+        {
+          "text": "Fotky zo zápasu pre klub",
+          "tag": "all"
+        },
+        {
+          "text": "Brigáda v areáli spolu s obcou",
+          "tag": "all"
+        },
+        {
+          "text": "Pečenie na bufet",
+          "tag": "all"
+        },
+        {
+          "text": "Doprava na výjazdový zápas",
+          "tag": "Z"
+        },
+        {
+          "text": "Pomoc s papiermi klubu, ak to robíte v práci",
+          "tag": "all"
+        },
+        {
+          "text": "Sprievod dievčat na turnaji",
+          "tag": "zd"
+        },
+        {
+          "text": "Pomoc pri nábore detí v škole",
+          "tag": "D"
+        }
+      ],
+      "next": [
+        {
+          "area": 5,
+          "title": "Čo má klub robiť pre vaše dieťa",
+          "why": "Uvítanie, spätná väzba a hrací čas sú dobré otázky pre trénera."
+        },
+        {
+          "area": 6,
+          "title": "Hodina pomoci na podujatí",
+          "why": "Podujatia majú najviac malých úloh s koncom."
+        },
+        {
+          "area": 3,
+          "title": "Rodič ako asistent trénera",
+          "why": "Ak vás baví práca s deťmi, môžete to skúsiť bez záväzku."
+        }
+      ]
+    },
+    {
+      "id": "h",
+      "label": "Tímový hráč klubu",
+      "description": "už pomáha",
+      "who": "každý, kto už klubu mimo ihriska pomáha",
+      "does": "Zaučíte nováčika na svoju úlohu a poviete, či chcete viac, alebo vám to takto sedí.",
+      "gain": "Niekto, kto vás zastúpi, a certifikát s vetou o vás.",
+      "responsibilities": [
+        "Máte nástupcu alebo zástupcu na svoju úlohu",
+        "Vaša úloha je napísaná na karte",
+        "Poviete, či chcete viac, alebo to takto sedí"
+      ],
+      "notThis": ["Robiť všetko sám a nikomu to neukázať"],
+      "time": "hodina navyše pri najbližšej úlohe",
+      "withWhom": "nováčik, koordinátor alebo manažér",
+      "library": ["karta", "pozvanie", "odovzdanie", "evidencia", "potvrdenie", "benefity"],
+      "indicators": ["Ľudia, ktorých ste zaučili", "Úlohy, ktoré by bez vás zvládol niekto iný"],
+      "pathTitle": "Niekto, kto vás zastúpi",
+      "pathSubtitle": "Tri kroky. Zaučíte nováčika a poviete, ako chcete pokračovať.",
+      "firstStep": {
+        "title": "Doplňte svoj profil a vezmite nováčika na svoju najbližšiu úlohu",
+        "who": "vy a nováčik",
+        "time": "1 akcia",
+        "result": "niekto ďalší vie, čo robíte",
+        "tasks": [
+          {
+            "id": "h1",
+            "title": "Pošlite manažérovi svoj krátky profil",
+            "note": "čo viete, pri čom pomôžete, koľko času máte, ako chcete poďakovať"
+          },
+          {
+            "id": "h2",
+            "title": "Pozvite nováčika na svoju najbližšiu úlohu",
+            "note": "text je vpravo"
+          },
+          {
+            "id": "h3",
+            "title": "Ukážte mu jednu časť úlohy"
+          }
+        ],
+        "aside": {
+          "title": "Pozvanie pre nováčika",
+          "text": "Ahoj, v sobotu mám na zápase na starosti [úloha]. Poď so mnou, ukážem ti, ako to robím. Zaberie to hodinu a nič nemusíš vedieť vopred.",
+          "note": "Doplňte svoju úlohu a pošlite ako správu."
+        },
+        "template": "pozvanie"
+      },
+      "steps": [
+        {
+          "id": "hs1",
+          "label": "Krok 1 · do 14 dní",
+          "title": "Napíšte kartu svojej úlohy",
+          "why": "Úloha, ktorá je len v hlave jedného človeka, s ním aj odíde.",
+          "links": [
+            {
+              "label": "Odovzdávanie know-how",
+              "anchor": "Zaviesť odovzdávanie know-how"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Tri kroky, na čo si dať pozor a komu zavolať.",
+              "result": "karta úlohy",
+              "template": "karta"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "30 min",
+              "what": "Karta s fotkami alebo krátkym videom z akcie.",
+              "result": "karta, podľa ktorej to zvládne každý",
+              "template": "karta"
+            },
+            {
+              "name": "Viac",
+              "who": "vy",
+              "time": "1 h",
+              "what": "Karty na všetky úlohy, ktoré v klube robíte.",
+              "result": "karty všetkých vašich úloh",
+              "template": "karta"
+            }
+          ],
+          "mentor": {
+            "id": "hc1b",
+            "title": "Zaškolenie na kohorte",
+            "practice": [
+              "Klub si na kohorte pripraví zaškolovaciu kartu.",
+              "Vy ju potom použijete s nováčikom."
+            ],
+            "template": "karta",
+            "modules": ["zas"]
+          }
+        },
+        {
+          "id": "hs2",
+          "label": "Krok 2 · do mesiaca",
+          "title": "Zaučte nováčika",
+          "why": "Ukážem, spolu, sám, povedz: najprv pozerá, potom robíte spolu, potom on a vy ste pri tom.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a nováčik",
+              "time": "1 akcia",
+              "what": "Ukážem: nováčik pozerá, ako to robíte.",
+              "result": "nováčik videl celú úlohu"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a nováčik",
+              "time": "2 akcie",
+              "what": "Spolu a sám: na druhej akcii to robí on a vy ste pri tom.",
+              "result": "nováčik to zvládne s vami",
+              "template": "karta"
+            },
+            {
+              "name": "Viac",
+              "who": "vy a nováčik",
+              "time": "1 akcia",
+              "what": "Odovzdajte mu úlohu celú a ostaňte na telefóne.",
+              "result": "nástupca na vašu úlohu",
+              "template": "odovzdanie"
+            }
+          ]
+        },
+        {
+          "id": "hs3",
+          "label": "Krok 3 · na konci sezóny",
+          "title": "Povedzte, ako ďalej",
+          "why": "Ďalší krok je ponuka, nie povinnosť. Aj „takto mi to sedí“ je dobrá odpoveď.",
+          "links": [
+            {
+              "label": "Typy zapojenia",
+              "anchor": "Typy zapojenia"
+            }
+          ],
+          "options": [
+            {
+              "name": "Vyhovuje mi to takto",
+              "who": "vy",
+              "time": "1 min",
+              "what": "Poviete klubu, že chcete pokračovať v rovnakom rozsahu.",
+              "result": "istota pre vás aj klub",
+              "template": "potvrdenie"
+            },
+            {
+              "name": "Chcem viac",
+              "who": "vy a manažér",
+              "time": "10 min",
+              "what": "Vlastná úloha alebo organizácia jedného podujatia.",
+              "result": "nová úloha",
+              "template": "podujatie"
+            },
+            {
+              "name": "Chcem rozhodovať",
+              "who": "vy a výbor",
+              "time": "stretnutie",
+              "what": "Pomoc vo výbore alebo v komisii klubu.",
+              "result": "miesto vo výbore alebo komisii"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Organizátor jedného podujatia",
+          "tag": "all"
+        },
+        {
+          "text": "Karta úlohy pre celý klub",
+          "tag": "all"
+        },
+        {
+          "text": "Zaučiť dorastenca na usporiadateľa",
+          "tag": "DO"
+        },
+        {
+          "text": "Fotky a príspevky pre sociálne siete",
+          "tag": "all"
+        },
+        {
+          "text": "Koordinátor tímových hráčov klubu",
+          "tag": "stredny+"
+        },
+        {
+          "text": "Brigáda v areáli spolu s obcou",
+          "tag": "maly"
+        },
+        {
+          "text": "Potvrdenie pri 40 a viac hodinách",
+          "tag": "all"
+        },
+        {
+          "text": "Pozvať bývalú hráčku do tímu klubu",
+          "tag": "zd"
+        }
+      ],
+      "next": [
+        {
+          "area": 6,
+          "title": "Organizátor jedného podujatia",
+          "why": "Ďalší stupeň: vediete akciu a ľudí."
+        },
+        {
+          "area": 7,
+          "title": "Fotky a príspevky",
+          "why": "Vaša práca je vidieť a pomáha získať ďalších ľudí."
+        },
+        {
+          "area": 1,
+          "title": "Miesto vo výbore alebo komisii",
+          "why": "Najvyšší stupeň zapojenia, ak o to stojíte."
+        },
+        {
+          "area": 9,
+          "title": "Potvrdenie o hodinách",
+          "why": "Pri 40 a viac hodinách ročne môžete poukázať 3 % dane."
+        }
+      ]
+    },
+    {
+      "id": "m",
+      "label": "Mentor zväzu",
+      "description": "sprevádza klub",
+      "who": "mentor ObFZ alebo krajského zväzu",
+      "does": "Zmeriate východiskový stav klubu, po 14 dňoch prvý posun a vediete kohortu Stupňa II.",
+      "gain": "Vidíte, kde sa klub zasekol, a viete, s čím pomôcť.",
+      "responsibilities": [
+        "Klub vie, kde stojí s ľuďmi",
+        "Kluby si rozhovor s rodičom a zaškolenie precvičia",
+        "Po 30 dňoch overíte posun"
+      ],
+      "notThis": ["Robiť prácu za klub"],
+      "time": "3 telefonáty a jedna kohorta za mesiac",
+      "withWhom": "manažér klubu, ObFZ",
+      "library": ["zaznam", "dotaznik", "mapa", "evidencia"],
+      "indicators": [],
+      "pathTitle": "Klub, ktorý sa za mesiac pohne",
+      "pathSubtitle": "Tri merania a jedna kohorta. Vidíte posun, nie len sľuby.",
+      "firstStep": {
+        "title": "Zavolajte manažérovi klubu a opýtajte sa na tri čísla",
+        "who": "vy",
+        "time": "10 min",
+        "result": "východiskový stav klubu",
+        "tasks": [
+          {
+            "id": "m1",
+            "title": "Dohodnite si s manažérom 10 minút"
+          },
+          {
+            "id": "m2",
+            "title": "Zapíšte tri čísla",
+            "note": "tabuľka nižšie"
+          },
+          {
+            "id": "m3",
+            "title": "Dohodnite druhý telefonát o 14 dní"
+          }
+        ],
+        "aside": {
+          "title": "Čo povedať do telefónu",
+          "text": "Dobrý deň, volám kvôli oblasti 4, tímoví hráči klubu. Mám tri otázky, zaberie to päť minút.\n\n1. Koľko rodičov zatiaľ odpovedalo na dotazník?\n2. Koľko ľudí mimo výboru a trénerov vám dnes pomáha?\n3. Koľko z nich má konkrétnu úlohu?\n\nO 14 dní sa opýtam znova a pozrieme sa, čo sa pohlo.",
+          "note": "Rovnaké tri otázky použijete aj o 14 dní."
+        },
+        "template": "zaznam"
+      },
+      "steps": [
+        {
+          "id": "ms1",
+          "label": "Krok 1 · deň 14",
+          "title": "Druhý telefonát: čo sa pohlo",
+          "why": "Porovnanie s východiskom ukáže posun aj vtedy, keď klub má pocit, že sa nič nedeje.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Opýtajte sa na tie isté tri čísla a zapíšte ich.",
+              "result": "posun oproti začiatku",
+              "template": "zaznam"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a manažér",
+              "time": "30 min",
+              "what": "Pomôžte klubu spísať mapu úloh.",
+              "result": "mapa úloh klubu",
+              "template": "mapa"
+            },
+            {
+              "name": "Osobne",
+              "who": "vy",
+              "time": "1 zápas",
+              "what": "Navštívte klub na domácom zápase a pozrite, kto pomáha.",
+              "result": "postreh z ihriska"
+            }
+          ]
+        },
+        {
+          "id": "ms2",
+          "label": "Krok 2 · kohorta ObFZ",
+          "title": "Kohorta Stupňa II",
+          "why": "Kohorta šetrí čas mentora a kluby sa učia jeden od druhého.",
+          "links": [],
+          "options": [
+            {
+              "name": "Príprava",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Pozvite 8–12 klubov na 60 minút online.",
+              "result": "pozvánka na kohortu"
+            },
+            {
+              "name": "Na kohorte",
+              "who": "vy a kluby",
+              "time": "60 min",
+              "what": "Kluby si vo dvojiciach precvičia rozhovor s rodičom a pripravia kartu zaškolenia.",
+              "result": "precvičený rozhovor a karta",
+              "template": "karta"
+            },
+            {
+              "name": "Po kohorte",
+              "who": "vy",
+              "time": "30 min na klub",
+              "what": "Overenie: dva profily ľudí a jedna karta úlohy v každom klube.",
+              "result": "overené kluby",
+              "template": "evidencia"
+            }
+          ],
+          "mentor": {
+            "id": "mc2",
+            "title": "Veďte kohortu Stupňa II",
+            "practice": ["60 minút online pre 8–12 klubov.", "30 minút overenie pre každý klub."],
+            "template": "karta",
+            "modules": ["roz", "zas"]
+          }
+        },
+        {
+          "id": "ms3",
+          "label": "Krok 3 · deň 30",
+          "title": "Overte výsledok",
+          "why": "Overenie nie je kontrola. Je to chvíľa, keď klub uvidí vlastný pokrok.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Pozrite mapu úloh: je pri každej úlohe meno?",
+              "result": "stav klubu po mesiaci",
+              "myAcademy": "tim"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a manažér",
+              "time": "30 min",
+              "what": "Vyplňte s klubom oblasť 4 v Kompase znova.",
+              "result": "nové skóre oblasti 4"
+            },
+            {
+              "name": "Pre ObFZ",
+              "who": "vy",
+              "time": "20 min",
+              "what": "Napíšte do ObFZ, čo klubu pomohlo a čo mu chýba.",
+              "result": "podklad pre ObFZ"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Návšteva klubu na podujatí",
+          "tag": "all"
+        },
+        {
+          "text": "Spojiť dva kluby na spoločné podujatie",
+          "tag": "all"
+        },
+        {
+          "text": "Dobrá prax klubu na najbližšej kohorte",
+          "tag": "all"
+        },
+        {
+          "text": "Prehľad koordinátorov tímových hráčov v ObFZ",
+          "tag": "all"
+        },
+        {
+          "text": "Ocenenie tímového hráča klubu na ObFZ",
+          "tag": "all"
+        },
+        {
+          "text": "Spoločný kurz Ochrana detí pre rodičov viacerých klubov",
+          "tag": "all"
+        },
+        {
+          "text": "Dobrovoľnícky deň spolu s obcou",
+          "tag": "maly"
+        },
+        {
+          "text": "Študenti zo strednej školy pre viac klubov",
+          "tag": "stredny+"
+        }
+      ],
+      "next": [
+        {
+          "area": 1,
+          "title": "Koordinátor tímových hráčov",
+          "why": "Vedenie musí rozhodnúť, kto má ľudí na starosti."
+        },
+        {
+          "area": 6,
+          "title": "Spoločné podujatia klubov",
+          "why": "Podujatie je najlepší test, či rozdelenie úloh funguje."
+        },
+        {
+          "area": 2,
+          "title": "Mapa úloh klubu",
+          "why": "Manažér drží prehľad úloh a ľudí."
+        },
+        {
+          "area": 10,
+          "title": "Evidencia ľudí",
+          "why": "Údaje o ľuďoch patria do jednej evidencie."
+        }
+      ],
+      "myAcademyRole": "mentor",
+      "mentorNumbers": [
+        {
+          "key": "odp",
+          "label": "Odpovede z dotazníka",
+          "lowerIsBetter": false
+        },
+        {
+          "key": "lud",
+          "label": "Ľudia mimo výboru a trénerov",
+          "lowerIsBetter": false
+        },
+        {
+          "key": "ulo",
+          "label": "Z nich s konkrétnou úlohou",
+          "lowerIsBetter": false
+        }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "key": "mapa",
+      "title": "Mapa úloh a ľudí — kto čo robí",
+      "description": "zoznam úloh klubu s menami"
+    },
+    {
+      "key": "ponuka",
+      "title": "Ponuka konkrétnej úlohy pre rodiča",
+      "description": "text oslovenia s jednou úlohou s koncom"
+    },
+    {
+      "key": "podujatie",
+      "title": "Plán podujatia s rolami a harmonogramom",
+      "description": "kto čo robí na podujatí a kedy"
+    },
+    {
+      "key": "evidencia",
+      "title": "Evidencia tímových hráčov klubu a uznanie",
+      "description": "kto pomáha, koľko hodín a ako sme poďakovali"
+    },
+    {
+      "key": "benefity",
+      "title": "Čo klub ponúka ľuďom — benefity a aktivity",
+      "description": "čo ľudia od klubu dostanú"
+    },
+    {
+      "key": "dotaznik",
+      "title": "Dotazník „Čo viete a čo vás baví“",
+      "description": "dve minúty pre rodiča, päť otázok",
+      "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme tímových hráčov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac."
+    },
+    {
+      "key": "rozhovor",
+      "title": "Dve otázky pre rodiča po tréningu",
+      "description": "krátky rozhovor bez náboru",
+      "text": "Dobrý deň, chcem sa opýtať na dve veci, zaberie to minútu.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n2. Keby ste klubu niekedy na hodinu pomohli, čo by vás bavilo?\n\nNič teraz nesľubujete. Len sa chcem dozvedieť, kto ste."
+    },
+    {
+      "key": "pozvanie",
+      "title": "Pozvanie nováčika na vašu úlohu",
+      "description": "správa, ktorou vezmete niekoho so sebou",
+      "text": "Ahoj, v sobotu mám na zápase na starosti [úloha]. Poď so mnou, ukážem ti, ako to robím. Zaberie to hodinu a nič nemusíš vedieť vopred."
+    },
+    {
+      "key": "karta",
+      "title": "Karta úlohy na zaškolenie",
+      "description": "postup, na čo si dať pozor a komu zavolať",
+      "text": "ÚLOHA: ...........................\nKedy: ...........................\nČo treba mať pripravené: ...........................\nPostup:\n1. ...\n2. ...\n3. ...\nNa čo si dať pozor: ...........................\nKomu zavolať, keď niečo nejde: ..........................."
+    },
+    {
+      "key": "koniec",
+      "title": "Prosba s koncom: ako napísať úlohu",
+      "description": "úloha, ktorá má začiatok, rozsah a koniec",
+      "text": "PROSBA S KONCOM\n\nÚloha: ________ (napr. pokladňa pri vstupe)\nKedy: ________ (deň a čas od – do)\nKoľko to zaberie: ____ hodiny\nS kým: ________ (kto bude pri vás)\nČo treba vedieť vopred: ________\nČo dostanete: poďakovanie, vstup zdarma, ________\n\nText na poslanie:\nAhoj [meno], v sobotu potrebujeme človeka na [úloha] od [čas] do [čas]. Budeš tam s [meno], nič nemusíš vedieť vopred. Ide ti to? Ak nie, nič sa nedeje."
+    },
+    {
+      "key": "podakovanie",
+      "title": "Poďakovanie do dvoch dní po akcii",
+      "description": "krátka správa: ako to dopadlo a vďaka",
+      "text": "POĎAKOVANIE PO AKCII · do 2 dní\n\nAhoj všetci, v sobotu [podujatie] dopadlo takto:\n• prišlo [počet] ľudí / detí\n• vybralo sa [suma] € na [na čo]\n• [jedna vec, ktorá sa podarila]\n\nĎakujeme [mená], bez vás by to nešlo.\nNabudúce potrebujeme pomoc [dátum], ozvite sa [komu].\n\nTip: menom poďakujte každému, kto prišiel. Nikoho nevynechajte."
+    },
+    {
+      "key": "potvrdenie",
+      "title": "Potvrdenie o hodinách pomoci",
+      "description": "podklad pre ľudí so 40 a viac hodinami v roku",
+      "text": "POTVRDENIE O DOBROVOĽNÍCKEJ ČINNOSTI\n\nKlub: ________  IČO: ________\nPotvrdzujeme, že [meno a priezvisko], nar. ____,\nvykonával/a v roku ____ pre klub dobrovoľnícku činnosť\nv rozsahu ____ hodín (najmä: ________).\n\nV ________ dňa ____\nPodpis štatutára: ________   Pečiatka\n\nPoznámka: ľudia s aspoň 40 hodinami ročne môžu poukázať 3 % dane. Overte si aktuálne podmienky na Finančnej správe."
+    },
+    {
+      "key": "odovzdanie",
+      "title": "Odovzdanie úlohy nástupcovi",
+      "description": "čo musí nástupca vedieť, aby to zvládol sám",
+      "text": "ODOVZDANIE ÚLOHY\n\nÚloha: ________\nOdovzdáva: ________  Preberá: ________  Dátum: ____\n\n☐ Karta úlohy je napísaná a nástupca ju má\n☐ Nástupca bol pri úlohe aspoň dvakrát so mnou\n☐ Raz to robil sám a ja som bol pri tom\n☐ Má kontakty: ________ (kľúče, dodávateľ, rozhodca, obec)\n☐ Vie, komu zavolať, keď niečo nejde: ________\n\nPo prvej samostatnej akcii: krátky telefonát, ako to šlo."
+    },
+    {
+      "key": "rodicKarta",
+      "title": "Moja hodina pomoci: čo ma čaká",
+      "description": "pre rodiča pred prvou úlohou",
+      "text": "MOJA HODINA POMOCI\n\nÚloha: ________\nKedy a kde: ________\nKto ma privíta: ________  telefón: ________\nČo si vziať: ________\nČo budem robiť:\n1. ________\n2. ________\n3. ________\nKeď niečo nejde, volám: ________\n\nPo akcii mi klub do dvoch dní napíše, ako to dopadlo."
+    },
+    {
+      "key": "zaznam",
+      "title": "Záznam mentora (tri čísla)",
+      "description": "začiatok a deň 14",
+      "text": "ZÁZNAM MENTORA · oblasť 4 Tímoví hráči klubu\n\nKlub: ________\nManažér: ________  telefón: ________\n\nOdpovede z dotazníka\n  začiatok (____): ____   deň 14 (____): ____\nĽudia mimo výboru a trénerov, ktorí pomáhajú\n  začiatok: ____   deň 14: ____\nZ nich s konkrétnou úlohou\n  začiatok: ____   deň 14: ____\n\nČo klub urobil: ________\nS čím pomôžem: ________\nĎalší kontakt: ____"
+    }
+  ],
+  "mentorModules": [
+    {
+      "key": "roz",
+      "title": "Rozhovor s rodičom: odhaliť silné stránky",
+      "meta": ["60 min kohorta", "30 min overenie"],
+      "text": "Dotazník povie, čo človek vie. Rozhovor odhalí, v čom je naozaj dobrý a čo ho drží. Precvičíte si ho vo dvojiciach s iným klubom.",
+      "steps": [
+        "Ako sa začína rozhovor, aby to neznelo ako nábor",
+        "Päť otázok, ktoré odhalia silné stránky",
+        "Ako rozpoznať motiváciu: dieťa, partia, futbal, učenie, obec",
+        "Kedy rozhovor ukončiť a nič nechcieť"
+      ],
+      "lock": "Otázky a vzorový rozhovor dostanete na kohorte. Mentor si potom pozrie dva vaše profily."
+    },
+    {
+      "key": "zas",
+      "title": "Zaškolenie: naučiť človeka robiť niečo dobre",
+      "meta": ["60 min kohorta", "30 min overenie"],
+      "text": "Tímový hráč, ktorý vie, čo robí, sa vráti. Ten, ktorý stál pri bráne a nevedel, čo má robiť, už nepríde.",
+      "how": 1,
+      "lock": "Na kohorte si pripravíte jednu zaškolovaciu kartu pre úlohu vášho klubu, napríklad usporiadateľ na zápase alebo fotograf turnaja."
+    }
+  ]
+}

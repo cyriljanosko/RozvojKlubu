@@ -148,10 +148,20 @@ export interface AreaSectionDoc extends Versioned {
   reviewedAt: string | null;
 }
 
+/** Collection `area_practice` – Practice of one area (all roles), unique `area`. Shape: practice.schema.ts */
+export interface AreaPracticeDoc extends Versioned {
+  _id?: ObjectId;
+  area: number;
+  /** Validated by practiceSchema (roles, templates, mentor modules). */
+  content: Record<string, unknown>;
+  validAsOf: string | null;
+  reviewedAt: string | null;
+}
+
 /** Collection `content_revisions` – one document per change of managed content. */
 export interface ContentRevisionDoc {
   _id?: ObjectId;
-  entity: "area" | "kompas_question" | "area_section";
+  entity: "area" | "kompas_question" | "area_section" | "area_practice";
   entityId: string;
   /** Version created by this change. */
   version: number;

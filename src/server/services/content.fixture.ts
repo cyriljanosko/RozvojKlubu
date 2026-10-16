@@ -1,5 +1,6 @@
 import type {
   AreaDoc,
+  AreaPracticeDoc,
   AreaSectionDoc,
   ContentRevisionDoc,
   KompasQuestionDoc,
@@ -7,6 +8,7 @@ import type {
 
 import type { ContentStore, StoredRevision } from "./content.service";
 import type { SectionStore } from "./methodology.service";
+import type { PracticeStore } from "./practice.service";
 
 /** In-memory ContentStore for tests (same semantics as the Mongo store). */
 export function memoryContentStore(): ContentStore & {
@@ -76,6 +78,33 @@ export function memorySectionStore(
       if (!s) return null;
       Object.assign(s, changes);
       return { ...s };
+    },
+  };
+}
+
+/** In-memory PracticeStore sharing revisions with a memory ContentStore. */
+export function memoryPracticeStore(
+  content: ReturnType<typeof memoryContentStore>,
+): PracticeStore & ReturnType<typeof memoryContentStore> & { practiceDocs: AreaPracticeDoc[] } {
+  const practiceDocs: AreaPracticeDoc[] = [];
+  return {
+    ...content,
+    practiceDocs,
+    async insertMissingPractice(docs) {
+      const fresh = docs.filter((d) => !practiceDocs.some((p) => p.area === d.area));
+      practiceDocs.push(...fresh.map((d) => structuredClone(d)));
+      return fresh.length;
+    },
+    findPractice: async (area) => {
+      const p = practiceDocs.find((x) => x.area === area);
+      return p ? structuredClone(p) : null;
+    },
+    listPracticeAreas: async () => practiceDocs.map((p) => p.area),
+    async updatePractice(area, expectedVersion, changes) {
+      const p = practiceDocs.find((x) => x.area === area && x.version === expectedVersion);
+      if (!p) return null;
+      Object.assign(p, structuredClone(changes));
+      return structuredClone(p);
     },
   };
 }

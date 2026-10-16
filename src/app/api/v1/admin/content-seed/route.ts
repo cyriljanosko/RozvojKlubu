@@ -2,10 +2,15 @@ import { connection } from "next/server";
 
 import { apiHandler, ok } from "@/server/api/http";
 import { getCurrentUser } from "@/server/auth/session";
-import { loadMethodologyFiles } from "@/server/content/methodology-loader";
-import { mongoContentStore, mongoSectionStore } from "@/server/db/content.store";
+import { loadMethodologyFiles, loadPracticeFiles } from "@/server/content/methodology-loader";
+import {
+  mongoContentStore,
+  mongoPracticeStore,
+  mongoSectionStore,
+} from "@/server/db/content.store";
 import { seedContent } from "@/server/services/content.service";
 import { seedMethodology } from "@/server/services/methodology.service";
+import { seedPractice } from "@/server/services/practice.service";
 
 /** POST /api/v1/admin/content-seed – inserts missing areas, questions and methodology
  *  sections from content/ (never overwrites edits), admin_sfz. */
@@ -14,5 +19,6 @@ export const POST = apiHandler(async (request) => {
   const actor = await getCurrentUser(request.headers);
   const result = await seedContent(mongoContentStore, actor);
   const sections = await seedMethodology(mongoSectionStore, actor, await loadMethodologyFiles());
-  return ok({ ...result, sections });
+  const practice = await seedPractice(mongoPracticeStore, actor, await loadPracticeFiles());
+  return ok({ ...result, sections, practice });
 });
