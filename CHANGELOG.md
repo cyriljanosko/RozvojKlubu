@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Zrušenie odoslania Kompasu adminom SFZ (ADR 0009): odoslanie zostáva v histórii ako „zrušené“, Vizitka, prehľad mentora a riadok SFZ-KOMPAS-1 berú posledné platné; `POST /api/v1/clubs/:clubId/kompas/submissions/:submissionId/withdraw`, tlačidlo s potvrdením.
 - Znovuotvorenie uzavretej sezóny licenčného hodnotenia adminom SFZ (ADR 0008): uzavretá kópia zostáva v histórii ako „znovu otvorená“, sezóna sa dá upraviť a znovu uzavrieť; `POST /api/v1/clubs/:clubId/licensing/reopen`, tlačidlo s potvrdením.
 - Vizitka klubu (F5c, ADR 0007): verejná `/vizitka/[clubId]` bez prihlásenia (profil klubu a hodnotenie oblastí odoslaného Kompasu a uzavretého licenčného hodnotenia) a `/klub/[clubId]/vizitka` pre roly (navyše dátumy, koeficient, stav rozpracovaného hodnotenia, odkazy na detail); prepínanie sezón, odkaz z karty klubu.
 - Licenčné hodnotenie v UI (F5b): `/klub/[clubId]/licencne-hodnotenie` – prehľad 6 oblastí s pásmami, oblasti 2–4 zo Sportnetu (tabuľky, tréneri s opravou pohlavia), formuláre 5–7, počet obyvateľov a koeficient, priebežný výpočet, uloženie, uzavretie sezóny s potvrdením, prepínanie sezón; odkaz z karty klubu.
