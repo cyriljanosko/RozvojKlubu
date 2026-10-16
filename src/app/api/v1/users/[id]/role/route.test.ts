@@ -31,16 +31,16 @@ describe("PATCH /api/v1/users/:id/role", () => {
 
   it("lets admin_sfz change a role", async () => {
     getCurrentUser.mockResolvedValue(admin);
-    const res = await call({ role: "club_manager" });
+    const res = await call({ role: "admin_sfz" });
     expect(res.status).toBe(200);
-    expect((await res.json()).data).toEqual({ id: "u2", role: "club_manager" });
+    expect((await res.json()).data).toEqual({ id: "u2", role: "admin_sfz" });
   });
 
   it("returns 401 for anonymous and 403 for other roles", async () => {
     getCurrentUser.mockResolvedValue(null);
-    expect((await call({ role: "mentor" })).status).toBe(401);
-    getCurrentUser.mockResolvedValue({ ...admin, id: "m", role: "obfz" });
-    expect((await call({ role: "mentor" })).status).toBe(403);
+    expect((await call({ role: "admin_sfz" })).status).toBe(401);
+    getCurrentUser.mockResolvedValue({ ...admin, id: "m", role: "public" });
+    expect((await call({ role: "admin_sfz" })).status).toBe(403);
     expect(store.updateRole).not.toHaveBeenCalled();
   });
 

@@ -2,12 +2,13 @@
   "meta": {
     "siteTitle": "Rozvoj klubu – Akadémia vzdelávania",
     "titleTemplate": "%s | Rozvoj klubu",
-    "description": "Vzdelávanie a rozvoj futbalových klubov: vizitka klubu, mapa klubov, akadémia, 10 oblastí rozvoja a licencie."
+    "description": "Vzdelávanie a rozvoj futbalových klubov: vizitka klubu, Kompas klubu, 11 oblastí rozvoja a licenčný systém."
   },
   "header": {
     "brand": "Rozvoj klubu",
     "signIn": "Prihlásiť sa",
-    "myAccount": "Môj účet"
+    "myAccount": "Môj účet",
+    "admin": "Administrácia"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -52,16 +53,15 @@
     "sportnetAccount": "Účet Sportnet",
     "sportnetLinked": "Prepojený",
     "sportnetNotLinked": "Neprepojený",
-    "roleHint": "Rolu a klub vám pridelí administrátor SFZ alebo ObFZ.",
-    "signOut": "Odhlásiť sa"
+    "roleHint": "Klub a rolu v klube vám pridelí administrátor SFZ.",
+    "signOut": "Odhlásiť sa",
+    "myClubs": "Moje kluby",
+    "allClubs": "Všetky kluby",
+    "noClubs": "Zatiaľ nemáte pridelený žiadny klub."
   },
   "roles": {
     "admin_sfz": "Administrátor SFZ",
-    "obfz": "ObFZ / RFZ",
-    "club_manager": "Manažér klubu",
-    "mentor": "Mentor klubu",
-    "volunteer": "Dobrovoľník",
-    "public": "Verejnosť"
+    "public": "Používateľ"
   },
   "email": {
     "magicLink": {
@@ -72,5 +72,69 @@
       "validity": "Odkaz platí 15 minút a dá sa použiť iba raz. Ak ste o prihlásenie nežiadali, tento e-mail môžete ignorovať.",
       "signature": "Slovenský futbalový zväz"
     }
+  },
+  "clubRoles": {
+    "management": "Vedenie klubu",
+    "coach": "Tréner",
+    "mentor": "Mentor"
+  },
+  "club": {
+    "title": "Klub",
+    "notFound": "Klub sa nenašiel.",
+    "forbidden": "K tomuto klubu nemáte prístup.",
+    "union": "Zväz",
+    "region": "Kraj",
+    "season": "Sezóna",
+    "myRoles": "Moje roly",
+    "dataAsOf": "Dáta zo Sportnetu k {date}",
+    "noData": "Pre túto sezónu zatiaľ nemáme dáta.",
+    "stats": {
+      "teams": "Družstvá",
+      "teamsInCompetition": "v súťažiach",
+      "uniquePlayers": "Hráči a hráčky",
+      "girls": "z toho hráčky",
+      "coaches": "Tréneri"
+    },
+    "teams": {
+      "title": "Družstvá",
+      "noCompetition": "bez súťaže",
+      "players": "{count, plural, one {# hráč} few {# hráči} other {# hráčov}}"
+    },
+    "gender": {
+      "M": "mužské",
+      "F": "ženské"
+    },
+    "back": "Späť na môj účet"
+  },
+  "admin": {
+    "title": "Administrácia",
+    "clubs": "Kluby",
+    "noClubs": "Zatiaľ nie sú nahraté žiadne kluby. Nahrajte snapshot zo Sportnetu.",
+    "snapshot": {
+      "title": "Snapshot zo Sportnetu",
+      "description": "JSON súbor s dátami klubov (formát z návrhu Vizitky). Súbor obsahuje osobné údaje – nikdy ho nedávajte do gitu.",
+      "file": "Súbor JSON",
+      "submit": "Nahrať snapshot",
+      "done": "Nahraté: {clubs} klubov, {seasons} sezón (dáta k {date}).",
+      "error": "Snapshot sa nepodarilo nahrať. Skontrolujte formát súboru."
+    },
+    "members": {
+      "title": "Ľudia v klube",
+      "season": "Sezóna {season}",
+      "empty": "V tejto sezóne zatiaľ nikto nemá rolu.",
+      "email": "E-mail",
+      "role": "Rola",
+      "ageGroups": "Kategórie trénera (voliteľné, napr. U11, U13)",
+      "add": "Pridať",
+      "remove": "Odobrať",
+      "hint": "Človek sa musí do aplikácie aspoň raz prihlásiť, až potom mu môžete prideliť rolu.",
+      "errors": {
+        "NOT_FOUND": "Používateľ s týmto e-mailom sa ešte neprihlásil.",
+        "CONFLICT": "Tento človek už túto rolu v klube má.",
+        "BAD_REQUEST": "Skontrolujte e-mail a kategórie.",
+        "default": "Nepodarilo sa uložiť. Skúste to znova."
+      }
+    },
+    "back": "Späť na zoznam klubov"
   }
 }

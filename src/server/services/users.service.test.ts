@@ -31,15 +31,15 @@ describe("changeUserRole", () => {
 
   it("lets admin_sfz change another user's role", async () => {
     const s = store();
-    const result = await changeUserRole(s, admin, "u2", "mentor");
-    expect(result.role).toBe("mentor");
-    expect(s.updateRole).toHaveBeenCalledWith("u2", "mentor");
+    const result = await changeUserRole(s, admin, "u2", "admin_sfz");
+    expect(result.role).toBe("admin_sfz");
+    expect(s.updateRole).toHaveBeenCalledWith("u2", "admin_sfz");
   });
 
   it("forbids non-admins", async () => {
-    await expect(changeUserRole(store(), user({ role: "obfz" }), "u2", "mentor")).rejects.toThrow(
-      expect.objectContaining({ status: 403 }),
-    );
+    await expect(
+      changeUserRole(store(), user({ role: "public" }), "u2", "admin_sfz"),
+    ).rejects.toThrow(expect.objectContaining({ status: 403 }));
   });
 
   it("rejects unknown roles", async () => {
@@ -55,7 +55,7 @@ describe("changeUserRole", () => {
   });
 
   it("returns 404 for a missing user", async () => {
-    await expect(changeUserRole(store(null), admin, "nope", "mentor")).rejects.toThrow(
+    await expect(changeUserRole(store(null), admin, "nope", "admin_sfz")).rejects.toThrow(
       expect.objectContaining({ status: 404 }),
     );
   });

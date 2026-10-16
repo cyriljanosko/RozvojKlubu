@@ -15,8 +15,6 @@ describe("withFallback", () => {
 
 describe("Slovak messages", () => {
   it("define a label for every role", () => {
-    expect(Object.keys(defaultMessages.roles).sort()).toEqual(
-      ["admin_sfz", "club_manager", "mentor", "obfz", "public", "volunteer"].sort(),
-    );
+    expect(Object.keys(defaultMessages.roles).sort()).toEqual(["admin_sfz", "public"].sort());
   });
 });
