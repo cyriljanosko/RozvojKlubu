@@ -244,7 +244,11 @@
     "edit": "Upraviť v administrácii",
     "back": "Všetky oblasti",
     "notFound": "Oblasť sa nenašla.",
-    "practice": "Prax"
+    "practice": "Prax",
+    "roleFor": "Metodika pre rolu",
+    "allRoles": "Všetky roly",
+    "forYourRole": "pre vašu rolu",
+    "tagsDraft": "Priradenie sekcií k rolám je návrh a ešte ho skontroluje pracovná skupina. Rola mení len poradie – všetky sekcie zostávajú dostupné."
   },
   "practice": {
     "chooseRole": "Kto ste v tejto oblasti?",

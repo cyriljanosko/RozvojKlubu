@@ -98,6 +98,15 @@ export const roleCatalogSchema = z
           status,
           note: text(500).optional(),
           roles: z.array(areaRoleSchema).min(1).max(12),
+          /** Metodika sections for base roles (ADR 0011): section key → base role keys, "all" = intro for everyone */
+          sections: z
+            .record(
+              z.string().regex(/^[a-z0-9-]{1,40}$/),
+              z.array(z.union([key, z.literal("all")])).max(8),
+            )
+            .optional(),
+          /** true while the section tagging is a proposal (by Claude, to be reviewed) */
+          sectionsDraft: z.boolean().optional(),
         }),
       )
       .max(11),
@@ -141,6 +150,16 @@ export const roleCatalogSchema = z
     });
     const areas = new Set<number>();
     c.areas.forEach((a, i) => {
+      Object.entries(a.sections ?? {}).forEach(([section, roles]) =>
+        roles.forEach((r) => {
+          if (r !== "all" && !base.has(r))
+            ctx.addIssue({
+              code: "custom",
+              path: ["areas", i, "sections", section],
+              message: `Unknown base role ${r}`,
+            });
+        }),
+      );
       if (areas.has(a.area))
         ctx.addIssue({
           code: "custom",

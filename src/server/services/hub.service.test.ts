@@ -8,9 +8,11 @@ import { addClubMember } from "./clubs.service";
 import { memoryContentStore, memoryRoleCatalogStore } from "./content.fixture";
 import { seedContent } from "./content.service";
 import {
+  baseRoleForParam,
   getHub,
   lensForClubRoles,
   orderAreas,
+  orderSections,
   practiceRoleForHubRole,
   type HubDeps,
 } from "./hub.service";
@@ -51,6 +53,45 @@ describe("practiceRoleForHubRole", () => {
     expect(practiceRoleForHubRole(catalog, 3, "mentor")).toBe("m");
     expect(practiceRoleForHubRole(catalog, 3, "whole")).toBeNull();
     expect(practiceRoleForHubRole(catalog, 3, "fan")).toBeNull();
+  });
+});
+
+describe("Metodika for a role", () => {
+  it("resolves the base role from a Hub role, a Prax role or a base role", () => {
+    expect(baseRoleForParam(catalog, 3, "coach")).toBe("coach");
+    expect(baseRoleForParam(catalog, 4, "h")).toBe("volunteer");
+    expect(baseRoleForParam(catalog, 4, "volunteer")).toBe("volunteer");
+    expect(baseRoleForParam(catalog, 3, "whole")).toBeNull();
+    expect(baseRoleForParam(catalog, 3, "nope")).toBeNull();
+    expect(baseRoleForParam(catalog, 3, null)).toBeNull();
+  });
+
+  it("puts the intro first, then the role's sections, then the rest", () => {
+    const sections = ["popis", "dolezitost", "implementacia", "kategorie", "kniznica"].map(
+      (key) => ({ key }),
+    );
+    const tags = catalog.areas.find((a) => a.area === 3)!.sections;
+    expect(orderSections(sections, tags, "coach").map((s) => [s.key, s.forRole])).toEqual([
+      ["popis", false],
+      ["implementacia", true],
+      ["kategorie", true],
+      ["kniznica", true],
+      ["dolezitost", false],
+    ]);
+    expect(orderSections(sections, tags, null).map((s) => s.key)).toEqual([
+      "popis",
+      "dolezitost",
+      "implementacia",
+      "kategorie",
+      "kniznica",
+    ]);
+  });
+
+  it("tags every Metodika section of the 11 areas", () => {
+    for (const a of catalog.areas) {
+      expect(Object.keys(a.sections ?? {}).length).toBeGreaterThan(4);
+      expect(a.sections?.popis).toEqual(["all"]);
+    }
   });
 });
 

@@ -103,6 +103,40 @@ export function practiceRoleForHubRole(
   );
 }
 
+/** Pure: base role for a role in the address – a Hub role ("coach"), a Prax role ("t") or a base role. */
+export function baseRoleForParam(
+  catalog: RoleCatalog,
+  area: number,
+  param: string | null | undefined,
+): string | null {
+  if (!param) return null;
+  if (catalog.baseRoles.some((b) => b.key === param)) return param;
+  const lens = (catalog.tracks ?? []).flatMap((t) => t.hubRoles).find((h) => h.key === param);
+  if (lens) return lens.baseRole ?? null;
+  const areaRole = catalog.areas
+    .find((a) => a.area === area)
+    ?.roles.find((r) => r.practiceRole === param);
+  return areaRole?.baseRoles[0] ?? null;
+}
+
+/** Pure: Metodika for a role (ADR 0011) – intro ("all") first, then the role's sections, then the rest. */
+export function orderSections<T extends { key: string }>(
+  sections: readonly T[],
+  tags: Record<string, string[]> | undefined,
+  baseRole: string | null,
+): (T & { forRole: boolean })[] {
+  const tagged = (s: T, role: string) => (tags?.[s.key] ?? []).includes(role);
+  if (!baseRole) return sections.map((s) => ({ ...s, forRole: false }));
+  const intro = sections.filter((s) => tagged(s, "all"));
+  const mine = sections.filter((s) => !tagged(s, "all") && tagged(s, baseRole));
+  const rest = sections.filter((s) => !tagged(s, "all") && !tagged(s, baseRole));
+  return [
+    ...intro.map((s) => ({ ...s, forRole: false })),
+    ...mine.map((s) => ({ ...s, forRole: true })),
+    ...rest.map((s) => ({ ...s, forRole: false })),
+  ];
+}
+
 function pickTrack(catalog: RoleCatalog, key?: string | null): Track | null {
   const tracks = catalog.tracks ?? [];
   return tracks.find((t) => t.key === key) ?? tracks[0] ?? null;
