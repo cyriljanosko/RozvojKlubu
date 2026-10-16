@@ -91,6 +91,14 @@ export const mongoContentStore: ContentStore = {
       { returnDocument: "after", projection: { _id: 0 } },
     );
   },
+  async updateArea(number, expectedVersion, changes) {
+    const db = await getDb();
+    return areas(db).findOneAndUpdate(
+      { number, version: expectedVersion },
+      { $set: changes },
+      { returnDocument: "after", projection: { _id: 0 } },
+    );
+  },
   async addRevision(revision) {
     const db = await getDb();
     await ensureIndexes(db);

@@ -45,6 +45,12 @@ export function memoryContentStore(): ContentStore & {
       Object.assign(q, changes);
       return { ...q };
     },
+    async updateArea(number, expectedVersion, changes) {
+      const a = areaDocs.find((x) => x.number === number && x.version === expectedVersion);
+      if (!a) return null;
+      Object.assign(a, changes);
+      return { ...a };
+    },
     async addRevision(revision: Omit<ContentRevisionDoc, "_id">) {
       revisionDocs.push({ ...revision, id: `r${++seq}` });
     },

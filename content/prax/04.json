@@ -60,7 +60,7 @@
         ],
         "aside": {
           "title": "Dotazník na skopírovanie",
-          "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme tímových hráčov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac.",
+          "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme dobrovoľníkov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac.",
           "note": "Pošlite ho do skupiny rodičov alebo ho vytlačte a rozdajte po tréningu."
         },
         "template": "dotaznik",
@@ -360,7 +360,7 @@
       ],
       "backlog": [
         {
-          "text": "Koordinátor tímových hráčov klubu mimo výboru",
+          "text": "Koordinátor dobrovoľníkov klubu mimo výboru",
           "tag": "all"
         },
         {
@@ -716,7 +716,7 @@
         ],
         "aside": {
           "title": "Takto vyzerá dotazník",
-          "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme tímových hráčov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac.",
+          "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme dobrovoľníkov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac.",
           "note": "Ak vám ho klub neposlal, opýtajte sa trénera."
         },
         "template": "dotaznik"
@@ -876,7 +876,7 @@
     },
     {
       "id": "h",
-      "label": "Tímový hráč klubu",
+      "label": "Dobrovoľník",
       "description": "už pomáha",
       "who": "každý, kto už klubu mimo ihriska pomáha",
       "does": "Zaučíte nováčika na svoju úlohu a poviete, či chcete viac, alebo vám to takto sedí.",
@@ -1058,7 +1058,7 @@
           "tag": "all"
         },
         {
-          "text": "Koordinátor tímových hráčov klubu",
+          "text": "Koordinátor dobrovoľníkov klubu",
           "tag": "stredny+"
         },
         {
@@ -1138,7 +1138,7 @@
         ],
         "aside": {
           "title": "Čo povedať do telefónu",
-          "text": "Dobrý deň, volám kvôli oblasti 4, tímoví hráči klubu. Mám tri otázky, zaberie to päť minút.\n\n1. Koľko rodičov zatiaľ odpovedalo na dotazník?\n2. Koľko ľudí mimo výboru a trénerov vám dnes pomáha?\n3. Koľko z nich má konkrétnu úlohu?\n\nO 14 dní sa opýtam znova a pozrieme sa, čo sa pohlo.",
+          "text": "Dobrý deň, volám kvôli oblasti 4, dobrovoľníci klubu. Mám tri otázky, zaberie to päť minút.\n\n1. Koľko rodičov zatiaľ odpovedalo na dotazník?\n2. Koľko ľudí mimo výboru a trénerov vám dnes pomáha?\n3. Koľko z nich má konkrétnu úlohu?\n\nO 14 dní sa opýtam znova a pozrieme sa, čo sa pohlo.",
           "note": "Rovnaké tri otázky použijete aj o 14 dní."
         },
         "template": "zaznam"
@@ -1261,11 +1261,11 @@
           "tag": "all"
         },
         {
-          "text": "Prehľad koordinátorov tímových hráčov v ObFZ",
+          "text": "Prehľad koordinátorov dobrovoľníkov v ObFZ",
           "tag": "all"
         },
         {
-          "text": "Ocenenie tímového hráča klubu na ObFZ",
+          "text": "Ocenenie dobrovoľníka klubu na ObFZ",
           "tag": "all"
         },
         {
@@ -1284,7 +1284,7 @@
       "next": [
         {
           "area": 1,
-          "title": "Koordinátor tímových hráčov",
+          "title": "Koordinátor dobrovoľníkov",
           "why": "Vedenie musí rozhodnúť, kto má ľudí na starosti."
         },
         {
@@ -1341,7 +1341,7 @@
     },
     {
       "key": "evidencia",
-      "title": "Evidencia tímových hráčov klubu a uznanie",
+      "title": "Evidencia dobrovoľníkov klubu a uznanie",
       "description": "kto pomáha, koľko hodín a ako sme poďakovali"
     },
     {
@@ -1353,7 +1353,7 @@
       "key": "dotaznik",
       "title": "Dotazník „Čo viete a čo vás baví“",
       "description": "dve minúty pre rodiča, päť otázok",
-      "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme tímových hráčov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac."
+      "text": "Klub je o ľuďoch. Aj o vás.\n\nAhoj, v klube TJ Družstevník Nižný Žipov hľadáme dobrovoľníkov mimo ihriska. Nechceme od vás veľa času. Chceme vedieť, čo vás baví. Vyplnenie trvá 2 minúty.\n\n1. Čomu sa venujete v práci alebo vo voľnom čase?\n   (napr. účty, šoférovanie, varenie, fotenie, oprava vecí, počítače)\n\n2. Pri čom by ste klubu najradšej pomohli?\n   ☐ zápas alebo turnaj   ☐ doprava detí   ☐ fotky a sociálne siete\n   ☐ údržba areálu   ☐ papiere a účty   ☐ s deťmi na tréningu   ☐ niečo iné\n\n3. Koľko času by ste mohli dať?\n   ☐ raz za sezónu   ☐ raz za mesiac   ☐ raz za týždeň\n\n4. Prečo by ste do toho išli?\n   ☐ kvôli dieťaťu   ☐ partia ľudí   ☐ futbal   ☐ naučiť sa niečo nové   ☐ pre obec\n\n5. Ako vám máme poďakovať, aby to pre vás malo zmysel?\n   ☐ osobne   ☐ verejne na stránke klubu   ☐ pred deťmi na tréningu   ☐ stačí vedieť, že to pomohlo\n\nMeno a telefón: ____________________\n\nĎakujeme. Ozveme sa len s jednou konkrétnou prosbou, nič viac."
     },
     {
       "key": "rozhovor",
@@ -1407,7 +1407,7 @@
       "key": "zaznam",
       "title": "Záznam mentora (tri čísla)",
       "description": "začiatok a deň 14",
-      "text": "ZÁZNAM MENTORA · oblasť 4 Tímoví hráči klubu\n\nKlub: ________\nManažér: ________  telefón: ________\n\nOdpovede z dotazníka\n  začiatok (____): ____   deň 14 (____): ____\nĽudia mimo výboru a trénerov, ktorí pomáhajú\n  začiatok: ____   deň 14: ____\nZ nich s konkrétnou úlohou\n  začiatok: ____   deň 14: ____\n\nČo klub urobil: ________\nS čím pomôžem: ________\nĎalší kontakt: ____"
+      "text": "ZÁZNAM MENTORA · oblasť 4 Dobrovoľníci klubu\n\nKlub: ________\nManažér: ________  telefón: ________\n\nOdpovede z dotazníka\n  začiatok (____): ____   deň 14 (____): ____\nĽudia mimo výboru a trénerov, ktorí pomáhajú\n  začiatok: ____   deň 14: ____\nZ nich s konkrétnou úlohou\n  začiatok: ____   deň 14: ____\n\nČo klub urobil: ________\nS čím pomôžem: ________\nĎalší kontakt: ____"
     }
   ],
   "mentorModules": [
@@ -1428,7 +1428,7 @@
       "key": "zas",
       "title": "Zaškolenie: naučiť človeka robiť niečo dobre",
       "meta": ["60 min kohorta", "30 min overenie"],
-      "text": "Tímový hráč, ktorý vie, čo robí, sa vráti. Ten, ktorý stál pri bráne a nevedel, čo má robiť, už nepríde.",
+      "text": "Dobrovoľník, ktorý vie, čo robí, sa vráti. Ten, ktorý stál pri bráne a nevedel, čo má robiť, už nepríde.",
       "how": 1,
       "lock": "Na kohorte si pripravíte jednu zaškolovaciu kartu pre úlohu vášho klubu, napríklad usporiadateľ na zápase alebo fotograf turnaja."
     }
