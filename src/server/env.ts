@@ -2,6 +2,10 @@ import "server-only";
 
 import { z } from "zod";
 
+/** Treat empty strings (e.g. `KEY=` in .env files) as "not set". */
+const optional = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((v) => (v === "" ? undefined : v), schema.optional());
+
 /**
  * Server-side environment variables, validated on first access.
  * Never import this module from client components.
@@ -9,23 +13,42 @@ import { z } from "zod";
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   APP_URL: z.url().default("http://localhost:3000"),
-  MONGODB_URI: z.string().min(1).optional(),
+  MONGODB_URI: optional(z.string().min(1)),
   MONGODB_DB: z.string().min(1).default("rozvojklubu"),
-  SPORTNET_API_URL: z.url().optional(),
-  SPORTNET_API_KEY: z.string().min(1).optional(),
+  SPORTNET_API_URL: optional(z.url()),
+  SPORTNET_API_KEY: optional(z.string().min(1)),
+
+  // Authentication (Better Auth)
+  BETTER_AUTH_SECRET: optional(z.string().min(32)),
+  BETTER_AUTH_URL: optional(z.url()),
+  /** Comma-separated e-mails that receive the admin_sfz role on first sign-in. */
+  INITIAL_ADMIN_EMAILS: optional(z.string()),
+
+  // Sportnet OIDC (auth.sportnet.online)
+  SPORTNET_AUTH_URL: z.url().default("https://auth.sportnet.online"),
+  SPORTNET_OAUTH_CLIENT_ID: optional(z.string().min(1)),
+  SPORTNET_OAUTH_CLIENT_SECRET: optional(z.string().min(1)),
+
+  // E-mail (Ecomail transactional API)
+  ECOMAIL_API_KEY: optional(z.string().min(1)),
+  EMAIL_FROM: optional(z.email()),
+  EMAIL_FROM_NAME: z.string().min(1).default("Rozvoj klubu SFZ"),
 });
 
 export type Env = z.infer<typeof envSchema>;
 
 let cached: Env | undefined;
 
-export function getEnv(): Env {
-  if (cached) return cached;
-  const parsed = envSchema.safeParse(process.env);
+export function parseEnv(source: Record<string, string | undefined>): Env {
+  const parsed = envSchema.safeParse(source);
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`);
     throw new Error(`Invalid environment variables:\n${issues.join("\n")}`);
   }
-  cached = parsed.data;
+  return parsed.data;
+}
+
+export function getEnv(): Env {
+  cached ??= parseEnv(process.env);
   return cached;
 }

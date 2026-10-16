@@ -82,4 +82,4 @@ Nový shadcn/ui komponent: `npx shadcn@latest add <komponent>`.
 | F4   | Kvalita, bezpečnosť, pilot ObFZ Trebišov                            |
 | F5   | MCP server                                                          |
 
-Postup práce je v [CONTRIBUTING.md](CONTRIBUTING.md).
+Postup práce je v [CONTRIBUTING.md](CONTRIBUTING.md), konvencie v [CLAUDE.md](CLAUDE.md), architektúra v [ARCHITECTURE.md](ARCHITECTURE.md), prevádzka v [RUNBOOK.md](RUNBOOK.md).
