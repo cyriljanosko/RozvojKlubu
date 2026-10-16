@@ -8,6 +8,7 @@ import { mongoEvaluationStore, mongoLicensingSubmissionStore } from "@/server/db
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
+import type { VizitkaDeps } from "@/server/services/vizitka.service";
 import type { KompasDeps } from "@/server/services/kompas.service";
 
 /** Production wiring of the club services (route handlers, pages, server actions). */
@@ -27,6 +28,15 @@ export const submissionDeps: SubmissionDeps = { ...kompasDeps, submissions: mong
 
 export const licensingDeps: LicensingDeps = {
   ...clubDeps,
+  evaluations: mongoEvaluationStore,
+  licensingSubmissions: mongoLicensingSubmissionStore,
+};
+
+export const vizitkaDeps: VizitkaDeps = {
+  ...clubDeps,
+  content: mongoContentStore,
+  assessments: mongoAssessmentStore,
+  submissions: mongoSubmissionStore,
   evaluations: mongoEvaluationStore,
   licensingSubmissions: mongoLicensingSubmissionStore,
 };
