@@ -637,5 +637,18 @@
       "coach": "Tréner a trénerka vidí výsledky klubu (Kompas, licenčné hodnotenie, Vizitku) len na čítanie a pracuje hlavne s oblasťami 3 a 5.",
       "mentor": "Mentor zväzu vidí kluby svojej kohorty: odoslaný Kompas a licenčné hodnotenie, ktoré môže pri návšteve doplniť. Rozpracovaný Kompas nevidí."
     }
+  },
+  "trialKompas": {
+    "title": "Kompas klubu – vyskúšajte",
+    "intro": "Sebahodnotenie v 11 oblastiach. V každej zaškrtnete, čo v klube naozaj platí, a skóre sa vypočíta samo.",
+    "pick": "Najprv vyberte svoj klub. Kategórie (deti, žiaci, dorast, dospelí, ženy) vezmeme zo Sportnetu, nezadávajú sa ručne.",
+    "pilot": "Pilot: kluby zapojené do Akadémie. Ďalšie pribudnú po overení pilotu.",
+    "change": "Zmeniť klub",
+    "local": "Toto je vyskúšanie: odpovede zostanú len v tomto prehliadači, nikam sa neodosielajú a mentor ich nevidí.",
+    "signIn": "Ste manažér alebo člen výboru klubu? Prihláste sa a Kompas uložte a odošlite mentorovi.",
+    "signInButton": "Prihlásiť sa",
+    "member": "V tomto klube máte rolu – Kompas klubu si môžete uložiť a odoslať.",
+    "memberButton": "Otvoriť Kompas klubu",
+    "notFound": "Klub sa nenašiel."
   }
 }

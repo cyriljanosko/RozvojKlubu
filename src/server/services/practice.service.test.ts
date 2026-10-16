@@ -35,7 +35,8 @@ describe("practice service", () => {
     const p = await getPractice(store, alice, 3);
     expect(p?.content.roles.map((r) => r.id)).toEqual(["v", "t", "n", "nd", "k", "m"]);
     expect(await getPractice(store, alice, 5)).toBeNull();
-    await expect(getPractice(store, null, 3)).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+    // public read (ADR 0011)
+    expect((await getPractice(store, null, 3))?.area).toBe(3);
     await expect(getPractice(store, alice, 12)).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 

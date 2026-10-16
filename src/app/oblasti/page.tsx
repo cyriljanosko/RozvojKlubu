@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
@@ -16,7 +15,6 @@ const BAND_COLOR = { 1: "bg-blue-600", 2: "bg-amber-600", 3: "bg-zinc-500" } as 
 
 async function AreaList() {
   const user = await getCurrentUser(await headers());
-  if (!user) redirect("/prihlasenie");
   const t = await getTranslations("areas");
   const areas = await listAreas(mongoContentStore, user);
   if (areas.length === 0) return <p className="text-muted-foreground text-sm">{t("empty")}</p>;

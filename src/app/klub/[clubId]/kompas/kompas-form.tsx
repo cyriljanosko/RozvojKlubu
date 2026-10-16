@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { Save, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -18,6 +18,8 @@ import { saveKompasAction, submitKompasAction } from "./actions";
 
 export interface KompasFormProps {
   clubId: string;
+  /** public trial (ADR 0011): no saving, answers kept only in this browser */
+  trial?: boolean;
   editable: boolean;
   version: number;
   categories: ClubCategory[];
@@ -47,19 +49,38 @@ export function KompasForm(props: KompasFormProps) {
   >(null);
   const [pending, startTransition] = useTransition();
 
+  const storageKey = `kompas-trial:${props.clubId}`;
+  useEffect(() => {
+    if (!props.trial) return;
+    try {
+      const raw = window.localStorage.getItem(storageKey);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- restore answers saved in this browser
+      if (raw) setChecked(new Set(JSON.parse(raw) as string[]));
+    } catch {
+      // storage may be unavailable (private mode); the trial still works
+    }
+  }, [props.trial, storageKey]);
+
   const result = useMemo(
     () => scoreKompas(props.questions, props.categories, checked),
     [props.questions, props.categories, checked],
   );
   const dirty = checked.size !== saved.size || [...checked].some((id) => !saved.has(id));
 
-  const toggle = (id: string) =>
-    setChecked((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+  const toggle = (id: string) => {
+    const next = new Set(checked);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setChecked(next);
+    // trial answers are stored on change only – an effect would overwrite them before restoring
+    if (props.trial) {
+      try {
+        window.localStorage.setItem(storageKey, JSON.stringify([...next]));
+      } catch {
+        // storage may be unavailable (private mode); the trial still works
+      }
+    }
+  };
 
   const save = () =>
     startTransition(async () => {
@@ -101,7 +122,7 @@ export function KompasForm(props: KompasFormProps) {
               band: t(`bands.${bandOf(result.average).key}`),
             })}`}
         </p>
-        {props.editable && (
+        {props.editable && !props.trial && (
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <Button
               type="button"

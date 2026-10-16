@@ -89,7 +89,7 @@ export async function listPracticeAreas(
   store: PracticeStore,
   actor: CurrentUser | null,
 ): Promise<number[]> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   return (await store.listPracticeAreas()).sort((a, b) => a - b);
 }
 
@@ -99,7 +99,7 @@ export async function getPractice(
   actor: CurrentUser | null,
   area: number,
 ): Promise<PracticeDto | null> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   const doc = await store.findPractice(areaNumber(area));
   return doc ? toDto(doc) : null;
 }

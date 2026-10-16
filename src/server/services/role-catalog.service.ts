@@ -56,7 +56,7 @@ export async function getRoleCatalog(
   store: Pick<RoleCatalogStore, "findCatalog">,
   actor: CurrentUser | null,
 ): Promise<RoleCatalogDto | null> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   const doc = await store.findCatalog();
   return doc ? toDto(doc) : null;
 }

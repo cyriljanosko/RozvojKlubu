@@ -56,13 +56,14 @@ describe("content service", () => {
     await expect(seedContent(store, alice, at)).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
-  it("lets every signed-in user read, nobody anonymous", async () => {
+  it("lets everyone read, also anonymous (ADR 0011)", async () => {
     expect(await listAreas(store, alice)).toHaveLength(11);
     const area3 = await listQuestions(store, alice, 3);
     expect(area3).toHaveLength(20);
     expect(area3.map((q) => q.questionId).slice(0, 2)).toEqual(["3.i.1", "3.i.2"]);
     expect(area3[0]).not.toHaveProperty("updatedBy");
-    await expect(listAreas(store, null)).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+    // public read (ADR 0011)
+    expect(await listAreas(store, null)).toHaveLength(11);
     await expect(listQuestions(store, alice, 12)).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 

@@ -76,15 +76,16 @@ describe("content API", () => {
     ).toBe(403);
   });
 
-  it("signed-in users read areas and questions, anonymous gets 401", async () => {
+  it("everyone reads areas and questions, also anonymous", async () => {
     getCurrentUser.mockResolvedValue(alice);
     expect((await (await areas.GET(req("/api/v1/areas"), {})).json()).data).toHaveLength(11);
     const res = await questions.GET(req("/api/v1/kompas/questions?area=4"), {});
     expect((await res.json()).data).toHaveLength(20);
     expect((await questions.GET(req("/api/v1/kompas/questions?area=x"), {})).status).toBe(400);
     getCurrentUser.mockResolvedValue(null);
-    expect((await areas.GET(req("/api/v1/areas"), {})).status).toBe(401);
-    expect((await questions.GET(req("/api/v1/kompas/questions"), {})).status).toBe(401);
+    // public read (ADR 0011)
+    expect((await areas.GET(req("/api/v1/areas"), {})).status).toBe(200);
+    expect((await questions.GET(req("/api/v1/kompas/questions"), {})).status).toBe(200);
   });
 
   it("admin edits, sees history and reverts; others get 403", async () => {

@@ -120,7 +120,7 @@ export async function listAreas(
   store: ContentStore,
   actor: CurrentUser | null,
 ): Promise<AreaDto[]> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   return (await store.listAreas()).sort((a, b) => a.number - b.number).map(areaDto);
 }
 
@@ -129,7 +129,7 @@ export async function listQuestions(
   actor: CurrentUser | null,
   area?: number,
 ): Promise<QuestionDto[]> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   if (area !== undefined && (!Number.isInteger(area) || area < 1 || area > 11)) {
     throw new ApiError("BAD_REQUEST", "Invalid area");
   }
