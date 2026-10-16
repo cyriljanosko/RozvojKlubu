@@ -4,6 +4,7 @@ import { admin, alice } from "@/server/services/clubs.fixture";
 import {
   memoryContentStore,
   memoryPracticeStore,
+  memoryRoleCatalogStore,
   memorySectionStore,
 } from "@/server/services/content.fixture";
 
@@ -11,6 +12,7 @@ const getCurrentUser = vi.fn();
 const holder = { store: memoryContentStore() };
 const sections = { store: memorySectionStore(holder.store) };
 const practices = { store: memoryPracticeStore(holder.store) };
+const roleCatalogs = { store: memoryRoleCatalogStore(memoryContentStore()) };
 
 vi.mock("next/server", () => ({ connection: async () => {} }));
 vi.mock("@/server/auth/session", () => ({ getCurrentUser }));
@@ -24,6 +26,9 @@ vi.mock("@/server/db/content.store", () => ({
   get mongoPracticeStore() {
     return practices.store;
   },
+  get mongoRoleCatalogStore() {
+    return roleCatalogs.store;
+  },
 }));
 vi.mock("@/server/content/methodology-loader", () => ({
   loadMethodologyFiles: async () => [
@@ -36,6 +41,10 @@ vi.mock("@/server/content/methodology-loader", () => ({
     },
   ],
   loadPracticeFiles: async () => [],
+  loadRoleCatalogFile: async () => {
+    const { readFileSync } = await import("node:fs");
+    return JSON.parse(readFileSync(`${process.cwd()}/content/roly.json`, "utf8"));
+  },
 }));
 
 const questions = await import("./route");

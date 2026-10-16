@@ -161,7 +161,7 @@ export interface AreaPracticeDoc extends Versioned {
 /** Collection `content_revisions` – one document per change of managed content. */
 export interface ContentRevisionDoc {
   _id?: ObjectId;
-  entity: "area" | "kompas_question" | "area_section" | "area_practice";
+  entity: "area" | "kompas_question" | "area_section" | "area_practice" | "role_catalog";
   entityId: string;
   /** Version created by this change. */
   version: number;
@@ -169,6 +169,17 @@ export interface ContentRevisionDoc {
   after: Record<string, unknown>;
   changedBy: string;
   changedAt: Date;
+}
+
+/** Collection `role_catalog` – one document (`key: "roles"`): base roles and roles in the 11 areas (ADR 0010). */
+export interface RoleCatalogDoc {
+  _id?: ObjectId;
+  key: "roles";
+  /** validated by roleCatalogSchema */
+  content: Record<string, unknown>;
+  version: number;
+  updatedAt: Date;
+  updatedBy: string;
 }
 
 // ---- Kompas klubu (club data, tenant = clubId) ----

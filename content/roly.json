@@ -1,0 +1,556 @@
+{
+  "source": "Roly v 11 oblastiach – návrh na spoločné hodnotenie, verzia 1, 11. 10. 2026",
+  "baseRoles": [
+    {
+      "key": "management",
+      "name": "Manažér a výbor",
+      "status": "approved",
+      "clubRole": "management"
+    },
+    {
+      "key": "coach",
+      "name": "Tréner a trénerka",
+      "status": "approved",
+      "clubRole": "coach"
+    },
+    {
+      "key": "parent",
+      "name": "Rodič",
+      "status": "approved"
+    },
+    {
+      "key": "team_player",
+      "name": "Tímový hráč klubu",
+      "status": "approved"
+    },
+    {
+      "key": "youth",
+      "name": "Mladí v klube (15–25)",
+      "status": "proposal",
+      "note": "Otvorená otázka: siedma základná rola, alebo pod Tímového hráča klubu? Veková hranica 15–25?",
+      "rules": [
+        "Mladí do 18 rokov potrebujú súhlas zákonného zástupcu a pri deťoch sú vždy s dospelým, nikdy sami.",
+        "Fotky a videá detí len so súhlasom rodičov; heslá k účtom klubu má klub, nie jeden človek.",
+        "Citlivé témy (úraz, konflikt, odchod trénera) schvaľuje manažér pred zverejnením.",
+        "Žiadne súkromné správy deťom z účtov klubu.",
+        "Vlastný futbal a škola majú prednosť; rozsah je jedna úloha týždenne, nie viac."
+      ]
+    },
+    {
+      "key": "mentor",
+      "name": "Mentor zväzu",
+      "status": "approved",
+      "clubRole": "mentor"
+    }
+  ],
+  "areas": [
+    {
+      "area": 1,
+      "status": "proposal",
+      "note": "Funkcie podľa tabuľky „Kto to v klube má na starosti“ v detaile oblasti.",
+      "roles": [
+        {
+          "key": "chair",
+          "name": "Predseda a štatutár",
+          "who": "zakladajúci alebo najaktívnejší člen, podpisuje za klub",
+          "does": "dať funkciám mandát a zástupcu, rozdeliť agendy výboru",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "board_member",
+          "name": "Člen výboru",
+          "who": "3–7 ľudí, často tréneri a rodičia",
+          "does": "prevziať jednu agendu, pravidelná schôdza so zápisom",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "economist",
+          "name": "Ekonóm klubu",
+          "who": "rodič alebo člen s účtovníckou praxou",
+          "does": "oddeliť účty od podpisového práva, štvrťročný prehľad pre výbor",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "steward",
+          "name": "Hospodár klubu",
+          "who": "dobrovoľník pri mužstve, často dôchodca s časom",
+          "does": "materiál a areál zvlášť, zoznam majetku",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "team_leader",
+          "name": "Vedúci mužstva",
+          "who": "rodič z danej kategórie",
+          "does": "jeden na kategóriu, spojka medzi trénerom, rodičmi a klubom",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla na začiatku a po 14 dňoch, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 2,
+      "status": "proposal",
+      "note": "Manažér je jadro oblasti, výbor mu dáva mandát, tréner je jeho najčastejší partner.",
+      "roles": [
+        {
+          "key": "club_manager",
+          "name": "Manažér klubu",
+          "who": "platený alebo dobrovoľný manažér",
+          "does": "ročný cyklus klubu, kalendár, kontakty na obec a zväz",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "chair_board",
+          "name": "Predseda a výbor",
+          "who": "zadávateľ manažéra",
+          "does": "mandát, rozsah a odmena manažéra, spätná väzba raz za štvrťrok",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "issf_manager",
+          "name": "ISSF manažér (matrikár)",
+          "who": "presný človek, nemusí byť z výboru",
+          "does": "registrácie, prestupy, súpisky; druhý prístup ako záloha",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "coach",
+          "name": "Tréner",
+          "who": "partner manažéra pri kategórii",
+          "does": "termíny, súpisky a potreby kategórie včas manažérovi",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 3,
+      "status": "approved",
+      "note": "Schválené 9. 10. 2026, prax je hotová a zverejnená v detaile oblasti.",
+      "roles": [
+        {
+          "key": "management",
+          "name": "Vedenie a manažér",
+          "who": "prezident, výbor, manažér, koordinátor mládeže",
+          "does": "prehľad trénerov, nábor alebo plán vzdelávania, hodnotiaci rozhovor",
+          "baseRoles": ["management"],
+          "practiceRole": "v"
+        },
+        {
+          "key": "coach",
+          "name": "Tréner a trénerka",
+          "who": "hlavný tréner, asistent, vedúci mužstva",
+          "does": "licencia a ochrana detí, vzdelávanie, dvojica ku kategórii",
+          "baseRoles": ["coach"],
+          "practiceRole": "t"
+        },
+        {
+          "key": "new_coach",
+          "name": "Nový tréner a trénerka",
+          "who": "rodič, bývalý hráč, dorastenec alebo dorastenka",
+          "does": "mesiac ako asistent bez záväzku, potom licencia",
+          "baseRoles": ["coach"],
+          "practiceRole": "n"
+        },
+        {
+          "key": "club_mentor",
+          "name": "Mentor v klube",
+          "who": "skúsenejší tréner s nováčikom",
+          "does": "ukážem, spolu, sám, povedz; rozhovor po troch mesiacoch",
+          "baseRoles": ["coach"],
+          "practiceRole": "k"
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"],
+          "practiceRole": "m"
+        }
+      ]
+    },
+    {
+      "area": 4,
+      "status": "approved",
+      "note": "Schválené 8. 10. 2026, prax je hotová. Navrhujeme doplniť rolu Mladí v klube.",
+      "roles": [
+        {
+          "key": "management",
+          "name": "Vedenie a manažér",
+          "who": "prezident, výbor, manažér, koordinátor podujatí",
+          "does": "dotazník rodičom, mapa úloh, oslovenie menovite, poďakovanie",
+          "baseRoles": ["management"],
+          "practiceRole": "v"
+        },
+        {
+          "key": "coach",
+          "name": "Tréner",
+          "who": "hlavný tréner, asistent, vedúci mužstva",
+          "does": "rozhovor s rodičmi kategórie, prvá malá úloha pre rodiča",
+          "baseRoles": ["coach"],
+          "practiceRole": "t"
+        },
+        {
+          "key": "parent",
+          "name": "Rodič",
+          "who": "rodič alebo zákonný zástupca",
+          "does": "dotazník a jedna hodina pomoci, nič viac nesľubuje",
+          "baseRoles": ["parent"],
+          "practiceRole": "r"
+        },
+        {
+          "key": "team_player",
+          "name": "Tímový hráč klubu",
+          "who": "každý, kto už klubu pomáha mimo ihriska",
+          "does": "karta úlohy, zaučenie nováčika, ďalší krok len ak chce",
+          "baseRoles": ["team_player"],
+          "practiceRole": "h"
+        },
+        {
+          "key": "youth",
+          "name": "Mladí v klube (15–25)",
+          "who": "dorastenci, dorastenky, mladí hráči, študenti",
+          "does": "prvá úloha s koncom na podujatí, foto a video z akcie, pomoc pri prípravke",
+          "baseRoles": ["youth"],
+          "status": "proposal"
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"],
+          "practiceRole": "m"
+        }
+      ]
+    },
+    {
+      "area": 5,
+      "status": "proposal",
+      "note": "Podľa detailu väčšina oblasti stojí na trénerovi; mladí dostávajú vlastný hlas.",
+      "roles": [
+        {
+          "key": "category_coach",
+          "name": "Tréner kategórie",
+          "who": "hlavný tréner kategórie",
+          "does": "uvítací rozhovor, spätná väzba počas sezóny, hrací čas",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "club_manager",
+          "name": "Manažér klubu",
+          "who": "manažér alebo koordinátor mládeže",
+          "does": "rytmus a kontrola: rozhovory vo všetkých kategóriách, koľko detí prišlo a odišlo",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "parent",
+          "name": "Rodič",
+          "who": "rodič alebo zákonný zástupca",
+          "does": "uvítací rozhovor, otázky trénerovi, spojenec klubu",
+          "baseRoles": ["parent"]
+        },
+        {
+          "key": "youth",
+          "name": "Mladí v klube (15–25)",
+          "who": "dorastenci, dorastenky, mladí hráči a hráčky",
+          "does": "vlastný hlas v klube, duálna kariéra, prechod z dorastu do dospelých",
+          "baseRoles": ["youth"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 6,
+      "status": "proposal",
+      "note": "Detail vyžaduje jedného hlavného organizátora na akciu a mladých pomocníkov na festivaloch.",
+      "roles": [
+        {
+          "key": "club_manager",
+          "name": "Manažér klubu",
+          "who": "manažér klubu",
+          "does": "kalendár podujatí, kontakt s obcou a školou, kontakty z podujatí",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "event_lead",
+          "name": "Hlavný organizátor podujatia",
+          "who": "jeden človek na jednu akciu",
+          "does": "plán podujatia s rolami a harmonogramom",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "coach",
+          "name": "Tréner",
+          "who": "tvár klubu v škole a telocvični",
+          "does": "hodina telesnej, festival pre školu, pozvánka spolužiakov",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "parent_team_player",
+          "name": "Rodič a tímový hráč klubu",
+          "who": "rodičia a ľudia okolo klubu",
+          "does": "úlohy na podujatí, nábor v obci",
+          "baseRoles": ["parent", "team_player"]
+        },
+        {
+          "key": "youth",
+          "name": "Mladí v klube (15–25)",
+          "who": "dorastenci, dorastenky, študenti",
+          "does": "pomocníci na festivale a turnaji prípraviek, stanovištia, fotky a video",
+          "baseRoles": ["youth"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 7,
+      "status": "proposal",
+      "note": "Prioritou sú mladí: sociálne siete robia oni, tréner dodáva surovinu, manažér zodpovedá.",
+      "roles": [
+        {
+          "key": "youth_social",
+          "name": "Mladí v klube (15–25) · správca sociálnych sietí",
+          "who": "dorastenci, dorastenky, mladí hráči, študenti; prioritná rola oblasti",
+          "does": "dva príspevky týždenne, fotka a veta po zápase, krátke video, kalendár príspevkov",
+          "baseRoles": ["youth"]
+        },
+        {
+          "key": "club_manager",
+          "name": "Manažér klubu",
+          "who": "zodpovedá za obsah",
+          "does": "schvaľuje citlivé témy (úraz, konflikt, odchod trénera), vzťah s obcou, médiami a sponzormi",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "coach",
+          "name": "Tréner",
+          "who": "dodáva surovinu",
+          "does": "fotka a jedna veta zo svojej kategórie po zápase",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 8,
+      "status": "proposal",
+      "note": "Roly podľa tabuľky v detaile oblasti.",
+      "roles": [
+        {
+          "key": "chair_manager",
+          "name": "Predseda a manažér",
+          "who": "štatutár a manažér klubu",
+          "does": "rozpočet ako celok, väčšie výdavky, vzťah s obcou",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "economist",
+          "name": "Ekonóm klubu",
+          "who": "rodič alebo člen s účtovníckou praxou",
+          "does": "príspevky, faktúry, doklady, plán verzus skutočnosť",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "grants",
+          "name": "Zodpovedný za granty",
+          "who": "človek so zmyslom pre termíny",
+          "does": "výzvy, žiadosti, vyúčtovanie",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "sponsors",
+          "name": "Kontakt pre sponzorov",
+          "who": "človek s kontaktmi vo firmách",
+          "does": "vzťah s firmami a doručenie toho, čo klub sľúbil",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "auditor",
+          "name": "Revízor (kontrolná komisia)",
+          "who": "nezávislý od ekonóma a výboru",
+          "does": "ročná kontrola hospodárenia a správa pre valné zhromaždenie",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 9,
+      "status": "proposal",
+      "note": "Tréner je navyše: bezúhonnosť, súhlasy rodičov a úraz na tréningu sa ho týkajú priamo.",
+      "roles": [
+        {
+          "key": "chair",
+          "name": "Predseda a štatutár",
+          "who": "podpisuje a koná v mene klubu",
+          "does": "správne zápisy v registroch, zmluvy, spor alebo kontrola",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "club_manager",
+          "name": "Manažér klubu",
+          "who": "drží archív dokumentov",
+          "does": "zmluvy podľa vzorov, ročná kontrola, poistná udalosť",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "child_protection",
+          "name": "Osoba pre ochranu detí",
+          "who": "určená výborom",
+          "does": "prehľad o bezúhonnosti ľudí pri deťoch, kontakt pre dieťa a rodiča",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "coach",
+          "name": "Tréner",
+          "who": "pri deťoch každý týždeň",
+          "does": "výpis z registra trestov, súhlasy rodičov, postup pri úraze",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 10,
+      "status": "proposal",
+      "note": "Detail delí oblasť na vedie evidenciu, dodáva dochádzku a používa čísla; mladí pomáhajú s aplikáciami.",
+      "roles": [
+        {
+          "key": "issf_manager",
+          "name": "ISSF manažér (matrikár)",
+          "who": "presný človek, nemusí byť z výboru",
+          "does": "registrácie, prestupy, súpisky; kontrola evidencie raz mesačne",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "coach",
+          "name": "Tréner",
+          "who": "dodáva dochádzku",
+          "does": "dochádzka na každom tréningu, hlási odchod a príchod detí",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "manager_board",
+          "name": "Manažér a výbor",
+          "who": "používajú čísla",
+          "does": "raz ročne čísla na výbore, podklady pre obec a sponzorov",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "youth",
+          "name": "Mladí v klube (15–25)",
+          "who": "dorastenci, dorastenky, študenti",
+          "does": "dochádzka v aplikácii, zdieľané kalendáre, video z tréningu, pomoc trénerom s aplikáciami",
+          "baseRoles": ["youth"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    },
+    {
+      "area": 11,
+      "status": "proposal",
+      "note": "Zázemie, kultúra a bezpečie podľa delenia v detaile; rodič má hlas.",
+      "roles": [
+        {
+          "key": "steward",
+          "name": "Hospodár klubu",
+          "who": "stará sa o areál, výstroj a sklad",
+          "does": "kontrola areálu pred sezónou, zoznam opráv",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "club_manager",
+          "name": "Manažér klubu",
+          "who": "drží plán obnovy",
+          "does": "plán obnovy a peniaze naň",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "coach",
+          "name": "Tréner",
+          "who": "tvorí atmosféru v kategórii",
+          "does": "privítanie nováčika, kódex správania, prvá pomoc",
+          "baseRoles": ["coach"]
+        },
+        {
+          "key": "child_protection",
+          "name": "Osoba pre ochranu detí",
+          "who": "určená výborom",
+          "does": "kontakt pre dieťa a rodiča, kódex správania",
+          "baseRoles": ["management"]
+        },
+        {
+          "key": "team_player_coordinator",
+          "name": "Koordinátor tímových hráčov klubu",
+          "who": "koordinátor ľudí okolo klubu",
+          "does": "privítanie a poďakovanie, jeden spoločný moment za sezónu",
+          "baseRoles": ["team_player"]
+        },
+        {
+          "key": "parent",
+          "name": "Rodič",
+          "who": "rodič alebo zákonný zástupca",
+          "does": "hlas rodičov a detí, spätná väzba klubu",
+          "baseRoles": ["parent"]
+        },
+        {
+          "key": "federation_mentor",
+          "name": "Mentor zväzu",
+          "who": "mentor ObFZ alebo krajského zväzu",
+          "does": "tri čísla, kohorta, overenie",
+          "baseRoles": ["mentor"]
+        }
+      ]
+    }
+  ]
+}

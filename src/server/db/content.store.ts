@@ -6,6 +6,7 @@ import { getDb } from "@/server/db/mongo";
 import type {
   AreaDoc,
   AreaPracticeDoc,
+  RoleCatalogDoc,
   AreaSectionDoc,
   ContentRevisionDoc,
   KompasQuestionDoc,
@@ -13,6 +14,7 @@ import type {
 import type { ContentStore, StoredRevision } from "@/server/services/content.service";
 import type { SectionStore } from "@/server/services/methodology.service";
 import type { PracticeStore } from "@/server/services/practice.service";
+import type { RoleCatalogStore } from "@/server/services/role-catalog.service";
 
 /** MongoDB implementation of the managed-content store. Indexes are documented in ARCHITECTURE.md. */
 const areas = (db: Db) => db.collection<AreaDoc>("areas");
@@ -20,6 +22,7 @@ const questions = (db: Db) => db.collection<KompasQuestionDoc>("kompas_questions
 const revisions = (db: Db) => db.collection<ContentRevisionDoc>("content_revisions");
 const sections = (db: Db) => db.collection<AreaSectionDoc>("area_sections");
 const practice = (db: Db) => db.collection<AreaPracticeDoc>("area_practice");
+const roleCatalog = (db: Db) => db.collection<RoleCatalogDoc>("role_catalog");
 
 let indexes: Promise<unknown> | undefined;
 
@@ -31,6 +34,7 @@ function ensureIndexes(db: Db): Promise<unknown> {
     revisions(db).createIndex({ entity: 1, entityId: 1, version: -1 }),
     sections(db).createIndex({ area: 1, kind: 1, key: 1 }, { unique: true }),
     practice(db).createIndex({ area: 1 }, { unique: true }),
+    roleCatalog(db).createIndex({ key: 1 }, { unique: true }),
   ]).catch((error) => {
     indexes = undefined;
     throw error;
@@ -170,6 +174,31 @@ export const mongoPracticeStore: PracticeStore = {
     const db = await getDb();
     return practice(db).findOneAndUpdate(
       { area, version: expectedVersion },
+      { $set: changes },
+      { returnDocument: "after", projection: { _id: 0 } },
+    );
+  },
+};
+
+export const mongoRoleCatalogStore: RoleCatalogStore = {
+  async insertCatalogIfMissing(doc) {
+    const db = await getDb();
+    await ensureIndexes(db);
+    const result = await roleCatalog(db).updateOne(
+      { key: "roles" },
+      { $setOnInsert: { ...doc } },
+      { upsert: true },
+    );
+    return result.upsertedCount === 1;
+  },
+  async findCatalog() {
+    const db = await getDb();
+    return roleCatalog(db).findOne({ key: "roles" }, { projection: { _id: 0 } });
+  },
+  async updateCatalog(expectedVersion, changes) {
+    const db = await getDb();
+    return roleCatalog(db).findOneAndUpdate(
+      { key: "roles", version: expectedVersion },
       { $set: changes },
       { returnDocument: "after", projection: { _id: 0 } },
     );

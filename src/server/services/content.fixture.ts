@@ -4,11 +4,13 @@ import type {
   AreaSectionDoc,
   ContentRevisionDoc,
   KompasQuestionDoc,
+  RoleCatalogDoc,
 } from "@/server/db/types";
 
 import type { ContentStore, StoredRevision } from "./content.service";
 import type { SectionStore } from "./methodology.service";
 import type { PracticeStore } from "./practice.service";
+import type { RoleCatalogStore } from "./role-catalog.service";
 
 /** In-memory ContentStore for tests (same semantics as the Mongo store). */
 export function memoryContentStore(): ContentStore & {
@@ -107,4 +109,30 @@ export function memoryPracticeStore(
       return structuredClone(p);
     },
   };
+}
+
+/** In-memory RoleCatalogStore sharing revisions with a memory ContentStore. */
+export function memoryRoleCatalogStore(
+  content: ReturnType<typeof memoryContentStore>,
+): RoleCatalogStore & ReturnType<typeof memoryContentStore> & { catalog: RoleCatalogDoc | null } {
+  const state: { catalog: RoleCatalogDoc | null } = { catalog: null };
+  return Object.assign(content, {
+    get catalog() {
+      return state.catalog;
+    },
+    async insertCatalogIfMissing(doc: RoleCatalogDoc) {
+      if (state.catalog) return false;
+      state.catalog = structuredClone(doc);
+      return true;
+    },
+    findCatalog: async () => (state.catalog ? structuredClone(state.catalog) : null),
+    async updateCatalog(
+      expectedVersion: number,
+      changes: Pick<RoleCatalogDoc, "content" | "version" | "updatedAt" | "updatedBy">,
+    ) {
+      if (!state.catalog || state.catalog.version !== expectedVersion) return null;
+      Object.assign(state.catalog, structuredClone(changes));
+      return structuredClone(state.catalog);
+    },
+  });
 }

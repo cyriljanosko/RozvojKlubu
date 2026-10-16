@@ -76,9 +76,9 @@
     }
   },
   "clubRoles": {
-    "management": "Vedenie klubu",
-    "coach": "Tréner",
-    "mentor": "Mentor"
+    "management": "Manažér a výbor",
+    "coach": "Tréner a trénerka",
+    "mentor": "Mentor zväzu"
   },
   "club": {
     "title": "Klub",
@@ -145,7 +145,7 @@
       "seed": {
         "submit": "Naplniť chýbajúci obsah",
         "hint": "Doplní len to, čo v databáze chýba. Upravený obsah sa neprepíše.",
-        "done": "Doplnené: {areas} oblastí, {questions} otázok, {sections} sekcií metodiky, {practice} praxí.",
+        "done": "Doplnené: {areas} oblastí, {questions} otázok, {sections} sekcií metodiky, {practice} praxí, {roles} katalóg rolí.",
         "error": "Obsah sa nepodarilo naplniť."
       },
       "questionsCount": "{count, plural, one {# otázka} few {# otázky} other {# otázok}}",
@@ -195,6 +195,26 @@
           "BAD_REQUEST": "JSON nie je platný alebo nezodpovedá štruktúre praxe.",
           "CONFLICT": "Prax medzitým niekto zmenil. Obnovte stránku.",
           "default": "Nepodarilo sa uložiť. Skúste to znova."
+        }
+      },
+      "roles": {
+        "title": "Roly v oblastiach",
+        "open": "Roly v oblastiach (katalóg)",
+        "intro": "Základné roly a roly v 11 oblastiach. Podľa nich sa píše Prax a zoraďuje Moja Akadémia (ADR 0010).",
+        "hint": "Upravte JSON. Pred uložením sa skontroluje: jedinečné kľúče, oblasti 1–11, roly v oblastiach len zo základných rolí.",
+        "json": "Katalóg rolí (JSON)",
+        "source": "Zdroj: {source}",
+        "summaryArea": "{area}. oblasť · {count, plural, one {# rola} few {# roly} other {# rolí}} · {status}",
+        "summaryBase": "Základné roly: {list}",
+        "status": {
+          "approved": "schválené",
+          "proposal": "návrh"
+        },
+        "missing": "Katalóg rolí ešte nie je v databáze. Použite „Naplniť chýbajúci obsah“ v zozname oblastí.",
+        "errors": {
+          "CONFLICT": "Katalóg medzitým upravil niekto iný. Obnovte stránku.",
+          "BAD_REQUEST": "JSON nie je platný alebo nespĺňa pravidlá katalógu.",
+          "default": "Uloženie sa nepodarilo."
         }
       }
     }
@@ -266,7 +286,7 @@
   "kompas": {
     "title": "Kompas klubu",
     "intro": "Zaškrtnite, čo v klube naozaj platí. Skóre sa počíta samo; otázky, ktoré sa klubu netýkajú, sú sivé a do skóre sa nerátajú.",
-    "readOnly": "Kompas vypĺňa vedenie klubu. Vy vidíte výsledok len na čítanie.",
+    "readOnly": "Kompas vypĺňa manažér a výbor klubu. Vy vidíte výsledok len na čítanie.",
     "season": "Sezóna {season}",
     "categories": "Kategórie klubu zo Sportnetu",
     "categoriesFrom": "podľa sezóny {season}",
@@ -353,7 +373,7 @@
     "title": "Licenčné hodnotenie",
     "open": "Licenčné hodnotenie",
     "intro": "Oblasti 2 Tímy, 3 Hráči a 4 Tréneri sa počítajú zo Sportnetu a sú uzamknuté. Oblasti 5 Infraštruktúra, 6 Aktivity a 7 Spolupráca vypĺňa klub alebo mentor.",
-    "readOnly": "Licenčné hodnotenie si môžete pozrieť, upravuje ho vedenie klubu a mentor.",
+    "readOnly": "Licenčné hodnotenie si môžete pozrieť, upravuje ho manažér a výbor klubu a mentor zväzu.",
     "season": "Sezóna",
     "dataAsOf": "Dáta zo Sportnetu k {date}",
     "rules": "Pravidlá: pilot 2026, predbežné body",
