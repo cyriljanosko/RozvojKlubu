@@ -58,7 +58,8 @@
     "signOut": "Odhlásiť sa",
     "myClubs": "Moje kluby",
     "allClubs": "Všetky kluby",
-    "noClubs": "Zatiaľ nemáte pridelený žiadny klub."
+    "noClubs": "Zatiaľ nemáte pridelený žiadny klub.",
+    "areasLink": "Oblasti Akadémie"
   },
   "roles": {
     "admin_sfz": "Administrátor SFZ",
@@ -144,7 +145,7 @@
       "seed": {
         "submit": "Naplniť chýbajúci obsah",
         "hint": "Doplní len to, čo v databáze chýba. Upravený obsah sa neprepíše.",
-        "done": "Doplnené: {areas} oblastí, {questions} otázok.",
+        "done": "Doplnené: {areas} oblastí, {questions} otázok, {sections} sekcií metodiky.",
         "error": "Obsah sa nepodarilo naplniť."
       },
       "questionsCount": "{count, plural, one {# otázka} few {# otázky} other {# otázok}}",
@@ -167,7 +168,24 @@
           "default": "Nepodarilo sa uložiť. Skúste to znova."
         }
       },
-      "back": "Späť na obsah"
+      "back": "Späť na obsah",
+      "methodology": {
+        "title": "Metodika",
+        "open": "Upraviť metodiku",
+        "questions": "Otázky Kompasu",
+        "sectionTitle": "Nadpis sekcie",
+        "body": "Text (Markdown)",
+        "validAsOf": "Platné k",
+        "reviewedAt": "Revidované",
+        "save": "Uložiť sekciu",
+        "saved": "Uložené (verzia {version}).",
+        "preview": "Zobraziť na stránke oblasti",
+        "errors": {
+          "CONFLICT": "Sekciu medzitým niekto zmenil. Obnovte stránku.",
+          "BAD_REQUEST": "Skontrolujte nadpis, text a dátumy.",
+          "default": "Nepodarilo sa uložiť. Skúste to znova."
+        }
+      }
     }
   },
   "questionTags": {
@@ -177,5 +195,22 @@
     "S": "Dospelí",
     "zd": "Ženy a dievčatá",
     "rast": "Platí vždy"
+  },
+  "areas": {
+    "title": "Oblasti Akadémie",
+    "intro": "Jedenásť oblastí rozvoja klubu. Každá má metodiku a postupne pribudne aj prax podľa roly.",
+    "bands": {
+      "1": "Ľudia a riadenie",
+      "2": "Hráči a rast",
+      "3": "Chod klubu"
+    },
+    "empty": "Obsah ešte nie je pripravený.",
+    "methodology": "Metodika",
+    "contents": "Obsah",
+    "validAsOf": "Platné k {date}",
+    "reviewedAt": "Revidované {date}",
+    "edit": "Upraviť v administrácii",
+    "back": "Všetky oblasti",
+    "notFound": "Oblasť sa nenašla."
   }
 }

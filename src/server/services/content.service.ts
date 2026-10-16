@@ -148,7 +148,10 @@ export async function seedContent(
 }
 
 export const updateQuestionSchema = z.object({
-  text: z.string().trim().min(5).max(500),
+  text: z
+    .string()
+    .transform((v) => v.replace(/\s+/g, " ").trim())
+    .pipe(z.string().min(5).max(500)),
   tags: z.array(tagSchema).max(QUESTION_TAGS.length),
   expectedVersion: z.number().int().positive(),
 });

@@ -71,6 +71,9 @@ async function Account() {
             </p>
           )}
         </section>
+        <Link href="/oblasti" className="text-sm font-medium underline underline-offset-4">
+          {t("areasLink")}
+        </Link>
         {admin && (
           <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
             <Link href="/admin/kluby" className="underline underline-offset-4">

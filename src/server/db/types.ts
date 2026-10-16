@@ -129,10 +129,29 @@ export interface KompasQuestionDoc extends Versioned {
   tags: QuestionTag[];
 }
 
+export type SectionKind = "methodology" | "practice";
+
+/** Collection `area_sections` – Markdown sections of an area, unique `{ area, kind, key }`. */
+export interface AreaSectionDoc extends Versioned {
+  _id?: ObjectId;
+  area: number;
+  kind: SectionKind;
+  /** Stable slug from the source (e.g. "implementacia"). */
+  key: string;
+  order: number;
+  title: string;
+  /** Markdown (GFM). */
+  body: string;
+  /** Date the facts are valid for (YYYY-MM-DD), for time-sensitive content (taxes, laws). */
+  validAsOf: string | null;
+  /** Date of the last content review (YYYY-MM-DD). */
+  reviewedAt: string | null;
+}
+
 /** Collection `content_revisions` – one document per change of managed content. */
 export interface ContentRevisionDoc {
   _id?: ObjectId;
-  entity: "area" | "kompas_question";
+  entity: "area" | "kompas_question" | "area_section";
   entityId: string;
   /** Version created by this change. */
   version: number;

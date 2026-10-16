@@ -3,13 +3,20 @@ import "server-only";
 import { ObjectId, type Db } from "mongodb";
 
 import { getDb } from "@/server/db/mongo";
-import type { AreaDoc, ContentRevisionDoc, KompasQuestionDoc } from "@/server/db/types";
+import type {
+  AreaDoc,
+  AreaSectionDoc,
+  ContentRevisionDoc,
+  KompasQuestionDoc,
+} from "@/server/db/types";
 import type { ContentStore, StoredRevision } from "@/server/services/content.service";
+import type { SectionStore } from "@/server/services/methodology.service";
 
 /** MongoDB implementation of the managed-content store. Indexes are documented in ARCHITECTURE.md. */
 const areas = (db: Db) => db.collection<AreaDoc>("areas");
 const questions = (db: Db) => db.collection<KompasQuestionDoc>("kompas_questions");
 const revisions = (db: Db) => db.collection<ContentRevisionDoc>("content_revisions");
+const sections = (db: Db) => db.collection<AreaSectionDoc>("area_sections");
 
 let indexes: Promise<unknown> | undefined;
 
@@ -19,6 +26,7 @@ function ensureIndexes(db: Db): Promise<unknown> {
     questions(db).createIndex({ questionId: 1 }, { unique: true }),
     questions(db).createIndex({ area: 1, column: 1, order: 1 }),
     revisions(db).createIndex({ entity: 1, entityId: 1, version: -1 }),
+    sections(db).createIndex({ area: 1, kind: 1, key: 1 }, { unique: true }),
   ]).catch((error) => {
     indexes = undefined;
     throw error;
@@ -91,5 +99,42 @@ export const mongoContentStore: ContentStore = {
     const db = await getDb();
     const doc = await revisions(db).findOne({ _id: new ObjectId(revisionId) });
     return doc ? toRevision(doc) : null;
+  },
+};
+
+export const mongoSectionStore: SectionStore = {
+  async insertMissingSections(docs) {
+    if (docs.length === 0) return 0;
+    const db = await getDb();
+    await ensureIndexes(db);
+    const result = await sections(db).bulkWrite(
+      docs.map((doc) => ({
+        updateOne: {
+          filter: { area: doc.area, kind: doc.kind, key: doc.key },
+          update: { $setOnInsert: doc },
+          upsert: true,
+        },
+      })),
+    );
+    return result.upsertedCount;
+  },
+  async listSections(area, kind) {
+    const db = await getDb();
+    return sections(db)
+      .find({ area, kind }, { projection: { _id: 0 } })
+      .sort({ order: 1 })
+      .toArray();
+  },
+  async findSection(area, kind, key) {
+    const db = await getDb();
+    return sections(db).findOne({ area, kind, key }, { projection: { _id: 0 } });
+  },
+  async updateSection(area, kind, key, expectedVersion, changes) {
+    const db = await getDb();
+    return sections(db).findOneAndUpdate(
+      { area, kind, key, version: expectedVersion },
+      { $set: changes },
+      { returnDocument: "after", projection: { _id: 0 } },
+    );
   },
 };

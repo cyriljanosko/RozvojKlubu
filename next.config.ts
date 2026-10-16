@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // content/metodika/*.md is read at runtime by the admin content seed
+  outputFileTracingIncludes: {
+    "/api/v1/admin/content-seed": ["./content/**/*"],
+    "/admin/obsah": ["./content/**/*"],
+  },
   turbopack: {
     rules: {
       "*.css": {

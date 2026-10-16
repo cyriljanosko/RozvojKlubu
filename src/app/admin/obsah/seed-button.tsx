@@ -22,7 +22,11 @@ export function SeedButton() {
       </Button>
       <p role="status" className="text-sm">
         {state.status === "ok" &&
-          t("done", { areas: state.areas ?? 0, questions: state.questions ?? 0 })}
+          t("done", {
+            areas: state.areas ?? 0,
+            questions: state.questions ?? 0,
+            sections: state.sections ?? 0,
+          })}
         {state.status === "error" && <span className="text-destructive">{t("error")}</span>}
       </p>
     </form>

@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Metodika 11 oblastí (F3b): obsah detailov prevedený do Markdownu (`content/metodika`), stránky `/oblasti` a `/oblasti/[číslo]` pre prihlásených, úprava sekcií adminom s „platné k“, „revidované“, históriou a vrátením. Nové závislosti `react-markdown`, `remark-gfm`.
 - Spravovaný obsah (F3a): 11 oblastí a 220 otázok Kompasu v2 v databáze, úprava otázok adminom SFZ s verziou, históriou zmien a vrátením (`/admin/obsah`, `/api/v1/areas`, `/api/v1/kompas/questions`).
 - Kluby zo Sportnetu (snapshot, ADR 0005): import v administrácii (`/admin/kluby`, `POST /api/v1/admin/club-snapshot`), karta klubu `/klub/[clubId]` s počtami a družstvami podľa sezóny.
 - Roly v klube (ADR 0004): vedenie, tréner, mentor na sezónu; pridelenie a odobratie adminom SFZ (`/admin/kluby/[clubId]`, `/api/v1/clubs/:clubId/members`); „Moje kluby“ na `/ucet`; `GET /api/v1/clubs`.
@@ -24,6 +25,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Opravené
 
+- Uloženie obsahu z formulára prepísalo text na konce riadkov CRLF (falošná zmena v histórii) – text sa ukladá s LF.
 - `INITIAL_ADMIN_EMAILS` povýši na admina SFZ aj existujúci účet pri ďalšom prihlásení (predtým len pri vytvorení účtu).
 - Neplatný JSON v tele požiadavky API vracia 400 namiesto 500.
 - Prihlásenie na Vercel Preview: odkazy v e-mailoch a callbacky smerovali na `http://localhost:3000`; adresa sa teraz odvodí z adresy nasadenia (len vlastné hostiteľské mená, bez zástupných znakov).

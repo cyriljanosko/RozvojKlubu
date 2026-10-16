@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { admin, alice } from "@/server/services/clubs.fixture";
-import { memoryContentStore } from "@/server/services/content.fixture";
+import { memoryContentStore, memorySectionStore } from "@/server/services/content.fixture";
 
 const getCurrentUser = vi.fn();
 const holder = { store: memoryContentStore() };
+const sections = { store: memorySectionStore(holder.store) };
 
 vi.mock("next/server", () => ({ connection: async () => {} }));
 vi.mock("@/server/auth/session", () => ({ getCurrentUser }));
@@ -12,6 +13,20 @@ vi.mock("@/server/db/content.store", () => ({
   get mongoContentStore() {
     return holder.store;
   },
+  get mongoSectionStore() {
+    return sections.store;
+  },
+}));
+vi.mock("@/server/content/methodology-loader", () => ({
+  loadMethodologyFiles: async () => [
+    {
+      area: 1,
+      source: null,
+      validAsOf: null,
+      reviewedAt: null,
+      sections: [{ key: "popis", order: 1, title: "Popis", body: "Text" }],
+    },
+  ],
 }));
 
 const questions = await import("./route");
@@ -28,6 +43,7 @@ const patch = (body: unknown) => ({ method: "PATCH", body: JSON.stringify(body) 
 describe("content API", () => {
   beforeEach(async () => {
     holder.store = memoryContentStore();
+    sections.store = memorySectionStore(holder.store);
     getCurrentUser.mockReset().mockResolvedValue(admin);
     expect(
       (await seed.POST(req("/api/v1/admin/content-seed", { method: "POST" }), {})).status,
