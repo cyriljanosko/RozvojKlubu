@@ -89,22 +89,24 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ## Kolekcie a indexy (MongoDB `rozvojklubu_dev`)
 
-| Kolekcia             | Vlastník           | Poznámka                                                    |
-| -------------------- | ------------------ | ----------------------------------------------------------- |
-| `user`               | Better Auth        | + polia `role`, `sportnetId`                                |
-| `session`            | Better Auth        | relácie                                                     |
-| `account`            | Better Auth        | prepojenia na poskytovateľov (Sportnet, e-mail)             |
-| `verification`       | Better Auth        | tokeny magic linku                                          |
-| `clubs`              | aplikácia          | klub zo snapshotu, `clubId` = Sportnet appSpace             |
-| `club_seasons`       | aplikácia          | družstvá, počty hráčov, tréneri s licenciami (osobné údaje) |
-| `club_memberships`   | aplikácia          | roly v klube na sezónu (ADR 0004)                           |
-| `areas`              | aplikácia          | 11 oblastí (spravovaný obsah, bez tenanta)                  |
-| `kompas_questions`   | aplikácia          | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia      |
-| `content_revisions`  | aplikácia          | história zmien spravovaného obsahu                          |
-| `area_sections`      | aplikácia          | sekcie Metodiky, Markdown, verzia                           |
-| `area_practice`      | aplikácia          | Prax oblasti (všetky roly), validovaný JSON, verzia         |
-| `kompas_assessments` | aplikácia (tenant) | pracovné sebahodnotenie klubu na sezónu, verzia             |
-| `kompas_submissions` | aplikácia (tenant) | odoslané (zmrazené) kópie Kompasu pre mentora, história     |
+| Kolekcia                | Vlastník           | Poznámka                                                    |
+| ----------------------- | ------------------ | ----------------------------------------------------------- |
+| `user`                  | Better Auth        | + polia `role`, `sportnetId`                                |
+| `session`               | Better Auth        | relácie                                                     |
+| `account`               | Better Auth        | prepojenia na poskytovateľov (Sportnet, e-mail)             |
+| `verification`          | Better Auth        | tokeny magic linku                                          |
+| `clubs`                 | aplikácia          | klub zo snapshotu, `clubId` = Sportnet appSpace             |
+| `club_seasons`          | aplikácia          | družstvá, počty hráčov, tréneri s licenciami (osobné údaje) |
+| `club_memberships`      | aplikácia          | roly v klube na sezónu (ADR 0004)                           |
+| `areas`                 | aplikácia          | 11 oblastí (spravovaný obsah, bez tenanta)                  |
+| `kompas_questions`      | aplikácia          | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia      |
+| `content_revisions`     | aplikácia          | história zmien spravovaného obsahu                          |
+| `area_sections`         | aplikácia          | sekcie Metodiky, Markdown, verzia                           |
+| `area_practice`         | aplikácia          | Prax oblasti (všetky roly), validovaný JSON, verzia         |
+| `kompas_assessments`    | aplikácia (tenant) | pracovné sebahodnotenie klubu na sezónu, verzia             |
+| `kompas_submissions`    | aplikácia (tenant) | odoslané (zmrazené) kópie Kompasu pre mentora, história     |
+| `licensing_evaluations` | aplikácia (tenant) | licenčné hodnotenie – pracovná verzia na sezónu (ADR 0006)  |
+| `licensing_submissions` | aplikácia (tenant) | uzavreté (zmrazené) licenčné hodnotenie sezóny              |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -121,3 +123,5 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `area_practice`: `{ area: 1 }` unikátny
 - `kompas_assessments`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/kompas.store.ts`)
 - `kompas_submissions`: `{ clubId: 1, season: 1, submittedAt: -1 }` (zakladá `src/server/db/kompas.store.ts`, súhlas 16. 10. 2026)
+- `licensing_evaluations`: `{ clubId: 1, season: 1 }` unikátny; `licensing_submissions`: `{ clubId: 1, season: 1 }` unikátny
+  – jedno uzavretie na sezónu (zakladá `src/server/db/licensing.store.ts`, súhlas 16. 10. 2026)
