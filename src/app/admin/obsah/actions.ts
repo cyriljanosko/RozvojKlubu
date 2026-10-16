@@ -5,13 +5,19 @@ import { headers } from "next/headers";
 
 import { ApiError, type ApiErrorCode } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { mongoContentStore } from "@/server/db/content.store";
+import { loadMethodologyFiles } from "@/server/content/methodology-loader";
+import { mongoContentStore, mongoSectionStore } from "@/server/db/content.store";
 import { revertQuestion, seedContent, updateQuestion } from "@/server/services/content.service";
+import {
+  revertSection,
+  seedMethodology,
+  updateSection,
+} from "@/server/services/methodology.service";
 
 /** Thin Server Action layer over the content service (validation and permissions live there). */
 export type ContentActionState =
   | { status: "idle" }
-  | { status: "ok"; version?: number; areas?: number; questions?: number }
+  | { status: "ok"; version?: number; areas?: number; questions?: number; sections?: number }
   | { status: "error"; code: ApiErrorCode };
 
 const failure = (error: unknown): ContentActionState => {
@@ -25,9 +31,11 @@ const failure = (error: unknown): ContentActionState => {
 
 export async function seedContentAction(): Promise<ContentActionState> {
   try {
-    const result = await seedContent(mongoContentStore, await getCurrentUser(await headers()));
+    const actor = await getCurrentUser(await headers());
+    const result = await seedContent(mongoContentStore, actor);
+    const sections = await seedMethodology(mongoSectionStore, actor, await loadMethodologyFiles());
     refresh();
-    return { status: "ok", ...result };
+    return { status: "ok", ...result, sections };
   } catch (error) {
     return failure(error);
   }
@@ -58,5 +66,39 @@ export async function updateQuestionAction(
 
 export async function revertQuestionAction(revisionId: string): Promise<void> {
   await revertQuestion(mongoContentStore, await getCurrentUser(await headers()), revisionId);
+  refresh();
+}
+
+const sectionStore = { ...mongoSectionStore, ...mongoContentStore };
+
+export async function updateSectionAction(
+  area: number,
+  key: string,
+  _prev: ContentActionState,
+  formData: FormData,
+): Promise<ContentActionState> {
+  try {
+    const updated = await updateSection(
+      sectionStore,
+      await getCurrentUser(await headers()),
+      area,
+      key,
+      {
+        title: formData.get("title"),
+        body: formData.get("body"),
+        validAsOf: formData.get("validAsOf") || null,
+        reviewedAt: formData.get("reviewedAt") || null,
+        expectedVersion: Number(formData.get("expectedVersion")),
+      },
+    );
+    refresh();
+    return { status: "ok", version: updated.version };
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+export async function revertSectionAction(revisionId: string): Promise<void> {
+  await revertSection(sectionStore, await getCurrentUser(await headers()), revisionId);
   refresh();
 }

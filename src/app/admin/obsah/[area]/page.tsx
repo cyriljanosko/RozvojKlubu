@@ -43,6 +43,12 @@ async function AreaQuestions({ params }: PageProps<"/admin/obsah/[area]">) {
             {area.number}. {area.name}
           </CardTitle>
           <CardDescription>{area.description}</CardDescription>
+          <Link
+            href={`/admin/obsah/${area.number}/metodika`}
+            className="text-sm font-medium underline underline-offset-4"
+          >
+            {t("methodology.open")}
+          </Link>
         </CardHeader>
       </Card>
       {(["i", "s"] as const).map((column) => (
