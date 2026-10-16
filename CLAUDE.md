@@ -32,13 +32,13 @@ Zdroj pravdy pri rozpore: **kód → git log → ADR → NEXT.md → devlog** (v
 
 - Vetvy: `feat/<popis>`, `fix/<popis>`, `chore/<popis>`, `docs/<popis>`. Do `main` sa nepushuje priamo, pokiaľ si to Cyril výslovne neželá.
 - `main` je vždy nasaditeľný.
-- Každá zmena ide cez PR (squash merge). V jednočlennom režime PR merguje Cyril sám – PR aj tak vzniká, lebo nesie odôvodnenie zmeny.
+- Každá zmena ide cez PR (squash merge) priamo do `main`, bez reťazí PR. PR zlučuje Cyril, alebo Claude **len na jeho výslovný pokyn** pre konkrétny PR – PR aj tak vzniká, lebo nesie odôvodnenie zmeny. Po zlúčení sa stav overí cez GitHub API.
 - Conventional Commits v angličtine: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`. Jeden commit = jedna logická zmena.
 - Popis PR odpovedá na **prečo**, nie na čo. Odkaz na issue alebo ADR.
 - Zakázané bez súhlasu: `force push`, rebase zdieľanej vetvy, mazanie vetvy.
 - **Dve sessions v jednom repozitári = dve vetvy.** Nikdy dve na `main` ani na jednej spoločnej.
 - Súbory do commitu sa pridávajú **menovite**, nie `git add -A`. Cudzí `M` v `git status` = niekto ďalší pracuje → vlastná vetva, nepribaľovať.
-- Push robí Cyril (Claude zatiaľ nemá prístup ku GitHubu); commit lokálne je povolený.
+- Claude pushuje **vlastné** vetvy a otvára PR (cez `gh` účtom Cyrila, rozhodnutie 16. 10. 2026). Do `main` nepushuje nikdy.
 
 ## 4. Devlog
 
@@ -120,7 +120,7 @@ Sekcia „Nefungovalo“ je povinná, keď sa niečo zamietlo – z git logu sa 
 ## 10. Špecifiká prostredia
 
 - Lokálna kópia: MacBook `~/Developer/rozvojklubu` (mimo OneDrive/Synology).
-- Claude pracuje v cloude a prenáša zmeny do lokálnej kópie (patch → `git am`); z cloudu nemá prístup k Atlasu, GitHubu ani `ui.shadcn.com` (shadcn komponenty sa pridávajú z Macu alebo ručne).
+- Od 15. 10. 2026 Claude pracuje priamo v lokálnej kópii na Macu (Claude Code); `gh` je prihlásený, DB `rozvojklubu_dev` dostupná cez `.env.local`.
 - Atlas: projekt RozvojKlubu, cluster `rozvojklubu-dev` (M0, Frankfurt), DB `rozvojklubu_dev`.
 - Vercel: projekt `rozvojklubu` (tím cyro5); konektor Vercel nevie čítať logy, env premenné ani meniť domény.
 - Prihlásenie: Sportnet OIDC (`auth.sportnet.online`) – hlavné, e-mailový odkaz cez Ecomail – doplnok.
