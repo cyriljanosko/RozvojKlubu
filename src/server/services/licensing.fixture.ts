@@ -36,7 +36,9 @@ export function memoryEvaluationStore(): EvaluationStore & { docs: LicensingEval
   };
 }
 
-/** In-memory LicensingSubmissionStore – one closed copy per club and season. */
+const isValid = (d: StoredLicensingSubmission) => d.status !== "reopened";
+
+/** In-memory LicensingSubmissionStore – one valid closing per club and season. */
 export function memoryLicensingSubmissionStore(): LicensingSubmissionStore & {
   docs: StoredLicensingSubmission[];
 } {
@@ -45,14 +47,21 @@ export function memoryLicensingSubmissionStore(): LicensingSubmissionStore & {
   return {
     docs,
     async addSubmission(doc) {
-      if (docs.some((d) => d.clubId === doc.clubId && d.season === doc.season)) return null;
+      if (docs.some((d) => d.clubId === doc.clubId && d.season === doc.season && isValid(d)))
+        return null;
       const s = { ...structuredClone(doc), id: `l${++seq}` };
       docs.push(s);
       return structuredClone(s);
     },
     findSubmission: async (clubId, season) => {
-      const d = docs.find((x) => x.clubId === clubId && x.season === season);
+      const d = docs.find((x) => x.clubId === clubId && x.season === season && isValid(x));
       return d ? structuredClone(d) : null;
+    },
+    async reopenSubmission(clubId, season, reopenedBy, reopenedAt) {
+      const d = docs.find((x) => x.clubId === clubId && x.season === season && isValid(x));
+      if (!d) return null;
+      Object.assign(d, { status: "reopened", reopenedBy, reopenedAt });
+      return structuredClone(d);
     },
     listSubmissions: async (clubId) =>
       docs.filter((d) => d.clubId === clubId).map((d) => structuredClone(d)),

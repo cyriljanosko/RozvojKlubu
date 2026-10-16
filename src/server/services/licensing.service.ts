@@ -47,12 +47,21 @@ export interface EvaluationStore {
 export type StoredLicensingSubmission = Omit<LicensingSubmissionDoc, "_id"> & { id: string };
 
 export interface LicensingSubmissionStore {
-  /** null when the season is already closed (unique clubId + season). */
+  /** null when the season is already closed (unique clubId + season among valid closings). */
   addSubmission: (
     doc: Omit<LicensingSubmissionDoc, "_id">,
   ) => Promise<StoredLicensingSubmission | null>;
+  /** the valid (not reopened) closing of the season */
   findSubmission: (clubId: string, season: string) => Promise<StoredLicensingSubmission | null>;
+  /** all closings including reopened ones (history) */
   listSubmissions: (clubId: string) => Promise<StoredLicensingSubmission[]>;
+  /** marks the valid closing as reopened; null when the season is not closed */
+  reopenSubmission: (
+    clubId: string,
+    season: string,
+    reopenedBy: string,
+    reopenedAt: Date,
+  ) => Promise<StoredLicensingSubmission | null>;
 }
 
 export interface LicensingDeps extends ClubDeps {
@@ -94,6 +103,8 @@ export interface LicensingSubmissionSummary {
   closedAt: Date;
   closedBy: string;
   ruleSet: string;
+  /** set when admin_sfz reopened the season (ADR 0008) */
+  reopenedAt: Date | null;
 }
 
 const summary = (s: StoredLicensingSubmission): LicensingSubmissionSummary => ({
@@ -102,6 +113,7 @@ const summary = (s: StoredLicensingSubmission): LicensingSubmissionSummary => ({
   closedAt: s.closedAt,
   closedBy: s.closedBy,
   ruleSet: s.ruleSet,
+  reopenedAt: s.status === "reopened" ? (s.reopenedAt ?? null) : null,
 });
 
 export interface LicensingView {
@@ -112,6 +124,8 @@ export interface LicensingView {
   access: LicensingAccess;
   /** set when the season is closed; inputs and result are then the frozen copy */
   closed: LicensingSubmissionSummary | null;
+  /** admin_sfz may reopen a closed season (ADR 0008) */
+  canReopen: boolean;
   version: number;
   updatedAt: Date | null;
   dataAsOf: string | null;
@@ -147,6 +161,7 @@ export async function getLicensing(
     return {
       ...base,
       closed: summary(closed),
+      canReopen: isAdmin(user),
       dataAsOf: closed.dataAsOf,
       inputs: closed.inputs,
       result: closed.result as unknown as LicensingResult,
@@ -157,6 +172,7 @@ export async function getLicensing(
   return {
     ...base,
     closed: null,
+    canReopen: false,
     dataAsOf: seasonData?.dataAsOf ?? null,
     inputs,
     result: scoreLicensing(seasonData, inputs),
@@ -279,6 +295,7 @@ export async function closeLicensing(
     dataAsOf: view.dataAsOf,
     closedAt: deps.now?.() ?? new Date(),
     closedBy: user.id,
+    status: "closed",
   });
   if (!stored) throw new ApiError("CONFLICT", "This season is closed");
   return summary(stored);
@@ -294,4 +311,28 @@ export async function listLicensingSubmissions(
   return (await deps.licensingSubmissions.listSubmissions(clubId))
     .sort((a, b) => b.season.localeCompare(a.season))
     .map(summary);
+}
+
+export const reopenLicensingSchema = z.object({ season: z.string() });
+
+/** Reopens a closed season (admin_sfz only, ADR 0008). Nothing is deleted: the closing stays in the
+ *  history marked as reopened, the working version can be edited and closed again. */
+export async function reopenLicensing(
+  deps: LicensingDeps,
+  actor: CurrentUser | null,
+  clubId: string,
+  input: unknown,
+): Promise<LicensingSubmissionSummary> {
+  const user = requireUser(actor);
+  if (!isAdmin(user)) throw new ApiError("FORBIDDEN", "Only admin_sfz can reopen a season");
+  const { season } = reopenLicensingSchema.parse(input);
+  await resolveSeason(deps, clubId, season);
+  const reopened = await deps.licensingSubmissions.reopenSubmission(
+    clubId,
+    season,
+    user.id,
+    deps.now?.() ?? new Date(),
+  );
+  if (!reopened) throw new ApiError("CONFLICT", "This season is not closed");
+  return summary(reopened);
 }

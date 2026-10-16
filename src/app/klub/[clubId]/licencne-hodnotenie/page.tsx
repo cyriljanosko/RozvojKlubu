@@ -14,6 +14,7 @@ import { getLicensing } from "@/server/services/licensing.service";
 import { seasonFromSlug, seasonToSlug } from "@/server/services/season";
 
 import { LicensingForm } from "./licensing-form";
+import { ReopenSeason } from "./reopen-season";
 
 export const metadata: Metadata = { title: defaultMessages.licensing.title };
 
@@ -70,9 +71,10 @@ async function Licensing({ params, searchParams }: Props) {
           {view.dataAsOf && t("dataAsOf", { date: date(view.dataAsOf) })} · {t("rules")}
         </p>
         {view.closed ? (
-          <p className="bg-muted rounded-md p-3 text-sm">
-            {t("closed", { date: date(view.closed.closedAt) })}
-          </p>
+          <div className="bg-muted flex flex-col gap-2 rounded-md p-3 text-sm">
+            <p>{t("closed", { date: date(view.closed.closedAt) })}</p>
+            {view.canReopen && <ReopenSeason clubId={clubId} season={view.season} />}
+          </div>
         ) : (
           <p className="text-sm">{view.access === "edit" ? t("intro") : t("readOnly")}</p>
         )}
