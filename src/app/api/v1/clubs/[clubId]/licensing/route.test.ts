@@ -21,6 +21,7 @@ vi.mock("@/server/clubs/deps", () => ({
 
 const evaluation = await import("./route");
 const submissions = await import("./submissions/route");
+const reopen = await import("./reopen/route");
 const p = <T>(x: T) => ({ params: Promise.resolve(x) }) as never;
 const req = (url: string, init?: RequestInit) => new Request(`http://localhost${url}`, init);
 const inputs = {
@@ -106,5 +107,42 @@ describe("licensing API", () => {
       p({ clubId: A }),
     );
     expect(malformed.status).toBe(400);
+  });
+
+  it("lets admin reopen a closed season (200) and refuses management (403)", async () => {
+    getCurrentUser.mockResolvedValue(alice);
+    await evaluation.PUT(
+      req(`/api/v1/clubs/${A}/licensing`, {
+        method: "PUT",
+        body: JSON.stringify({ season: "2026/2027", inputs, expectedVersion: 0 }),
+      }),
+      p({ clubId: A }),
+    );
+    await submissions.POST(
+      req(`/api/v1/clubs/${A}/licensing/submissions`, {
+        method: "POST",
+        body: JSON.stringify({ season: "2026/2027", expectedVersion: 1 }),
+      }),
+      p({ clubId: A }),
+    );
+    const body = JSON.stringify({ season: "2026/2027" });
+    const denied = await reopen.POST(
+      req(`/api/v1/clubs/${A}/licensing/reopen`, { method: "POST", body }),
+      p({ clubId: A }),
+    );
+    expect(denied.status).toBe(403);
+
+    getCurrentUser.mockResolvedValue(admin);
+    const res = await reopen.POST(
+      req(`/api/v1/clubs/${A}/licensing/reopen`, { method: "POST", body }),
+      p({ clubId: A }),
+    );
+    expect(res.status).toBe(200);
+    expect((await res.json()).data.reopenedAt).toBeTruthy();
+    const again = await reopen.POST(
+      req(`/api/v1/clubs/${A}/licensing/reopen`, { method: "POST", body }),
+      p({ clubId: A }),
+    );
+    expect(again.status).toBe(409);
   });
 });

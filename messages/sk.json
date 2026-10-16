@@ -506,7 +506,15 @@
       "conflict": "Sezóna je už uzavretá alebo sa medzitým zmenila. Obnovte stránku."
     },
     "closed": "Sezóna je uzavretá {date}. Zobrazuje sa zmrazená kópia, údaje sa už nedajú meniť.",
-    "notFound": "Pre tento klub nie sú dáta zo Sportnetu."
+    "notFound": "Pre tento klub nie sú dáta zo Sportnetu.",
+    "reopen": {
+      "button": "Znovu otvoriť sezónu",
+      "confirm": "Znovu otvoriť sezónu {season}? Uzavreté hodnotenie zostane v histórii, sezóna sa bude dať upraviť a znovu uzavrieť. Vizitka do nového uzavretia ukáže „zatiaľ neuzavreté“.",
+      "yes": "Áno, otvoriť",
+      "no": "Nie",
+      "error": "Otvorenie sa nepodarilo. Obnovte stránku a skúste to znova.",
+      "adminOnly": "Len pre admina SFZ."
+    }
   },
   "vizitka": {
     "title": "Vizitka klubu",

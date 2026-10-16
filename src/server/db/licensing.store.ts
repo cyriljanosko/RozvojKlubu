@@ -18,7 +18,15 @@ let indexes: Promise<unknown> | undefined;
 function ensureIndexes(db: Db): Promise<unknown> {
   indexes ??= Promise.all([
     evaluations(db).createIndex({ clubId: 1, season: 1 }, { unique: true }),
-    submissions(db).createIndex({ clubId: 1, season: 1 }, { unique: true }),
+    // one valid closing per season; reopened closings stay as history (ADR 0008)
+    submissions(db).createIndex(
+      { clubId: 1, season: 1 },
+      {
+        name: "club_season_closed",
+        unique: true,
+        partialFilterExpression: { status: "closed" },
+      },
+    ),
   ]).catch((error) => {
     indexes = undefined;
     throw error;
@@ -79,7 +87,16 @@ export const mongoLicensingSubmissionStore: LicensingSubmissionStore = {
   },
   async findSubmission(clubId, season) {
     const db = await getDb();
-    const doc = await submissions(db).findOne({ clubId, season });
+    const doc = await submissions(db).findOne({ clubId, season, status: { $ne: "reopened" } });
+    return doc ? toStored(doc) : null;
+  },
+  async reopenSubmission(clubId, season, reopenedBy, reopenedAt) {
+    const db = await getDb();
+    const doc = await submissions(db).findOneAndUpdate(
+      { clubId, season, status: { $ne: "reopened" } },
+      { $set: { status: "reopened", reopenedBy, reopenedAt } },
+      { returnDocument: "after" },
+    );
     return doc ? toStored(doc) : null;
   },
   async listSubmissions(clubId) {

@@ -8,7 +8,7 @@ import { memoryAssessmentStore, memorySubmissionStore } from "./kompas.fixture";
 import { submitKompas } from "./kompas-submission.service";
 import { saveKompasAnswers } from "./kompas.service";
 import { memoryEvaluationStore, memoryLicensingSubmissionStore } from "./licensing.fixture";
-import { closeLicensing, saveLicensing } from "./licensing.service";
+import { closeLicensing, reopenLicensing, saveLicensing } from "./licensing.service";
 import { getClubVizitka, getPublicVizitka } from "./vizitka.service";
 
 const carl = { id: "carl", email: "carl@iny.sk", name: "Carl", role: "public" as const };
@@ -100,5 +100,18 @@ describe("Vizitka klubu", () => {
     await expect(getPublicVizitka(deps, A, "2019/2020")).rejects.toMatchObject({
       code: "NOT_FOUND",
     });
+  });
+
+  it("ignores a reopened licensing closing", async () => {
+    await saveLicensing(deps, alice, A, {
+      season: "2026/2027",
+      inputs: emptyInputs,
+      expectedVersion: 0,
+    });
+    await closeLicensing(deps, alice, A, { season: "2026/2027", expectedVersion: 1 });
+    expect((await getPublicVizitka(deps, A)).licensing).not.toBeNull();
+    await reopenLicensing(deps, admin, A, { season: "2026/2027" });
+    expect((await getPublicVizitka(deps, A)).licensing).toBeNull();
+    expect((await getClubVizitka(deps, alice, A)).licensingClosedAt).toBeNull();
   });
 });

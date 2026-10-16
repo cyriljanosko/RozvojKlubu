@@ -7,7 +7,11 @@ import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
 import { licensingDeps } from "@/server/clubs/deps";
 import type { LicensingInputs } from "@/server/db/types";
-import { closeLicensing, saveLicensing } from "@/server/services/licensing.service";
+import {
+  closeLicensing,
+  reopenLicensing,
+  saveLicensing,
+} from "@/server/services/licensing.service";
 
 /** Thin Server Actions over the licensing service (permissions and validation live there). */
 type ErrorCode = "CONFLICT" | "FORBIDDEN" | "BAD_REQUEST" | "INTERNAL";
@@ -60,5 +64,18 @@ export async function closeLicensingAction(
     return { status: "ok" };
   } catch (error) {
     return toError(error, "close");
+  }
+}
+
+export async function reopenLicensingAction(
+  clubId: string,
+  season: string,
+): Promise<CloseLicensingResult> {
+  try {
+    await reopenLicensing(licensingDeps, await getCurrentUser(await headers()), clubId, { season });
+    refresh();
+    return { status: "ok" };
+  } catch (error) {
+    return toError(error, "reopen");
   }
 }

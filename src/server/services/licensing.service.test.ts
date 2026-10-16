@@ -7,6 +7,7 @@ import {
   closeLicensing,
   getLicensing,
   listLicensingSubmissions,
+  reopenLicensing,
   saveLicensing,
   type LicensingDeps,
 } from "./licensing.service";
@@ -149,5 +150,44 @@ describe("licensing evaluation", () => {
 
     // the current season is still open
     expect((await getLicensing(deps, alice, A)).closed).toBeNull();
+  });
+
+  it("lets only admin_sfz reopen a closed season, keeps the history and allows closing again", async () => {
+    await saveLicensing(deps, alice, A, {
+      season: "2026/2027",
+      inputs: { ...emptyInputs, population: 700 },
+      expectedVersion: 0,
+    });
+    const first = await closeLicensing(deps, alice, A, { season: "2026/2027", expectedVersion: 1 });
+    expect((await getLicensing(deps, admin, A)).canReopen).toBe(true);
+    expect((await getLicensing(deps, alice, A)).canReopen).toBe(false);
+
+    for (const who of [alice, mona, bob]) {
+      await expect(reopenLicensing(deps, who, A, { season: "2026/2027" })).rejects.toMatchObject({
+        code: "FORBIDDEN",
+      });
+    }
+    await expect(reopenLicensing(deps, admin, A, { season: "2025/2026" })).rejects.toMatchObject({
+      code: "CONFLICT",
+    });
+    const reopened = await reopenLicensing(deps, admin, A, { season: "2026/2027" });
+    expect(reopened).toMatchObject({ id: first.id, reopenedAt: expect.any(Date) });
+
+    // open again: editable, working version kept, nothing deleted
+    const view = await getLicensing(deps, alice, A);
+    expect(view).toMatchObject({ closed: null, version: 1, inputs: { population: 700 } });
+    const reset = await saveLicensing(deps, alice, A, {
+      season: "2026/2027",
+      inputs: emptyInputs,
+      expectedVersion: 1,
+    });
+    expect(reset).toMatchObject({ version: 2, inputs: { population: null } });
+
+    const second = await closeLicensing(deps, mona, A, { season: "2026/2027", expectedVersion: 2 });
+    expect(second.id).not.toBe(first.id);
+    const history = await listLicensingSubmissions(deps, bob, A);
+    expect(history).toHaveLength(2);
+    expect(history.filter((h) => h.reopenedAt)).toHaveLength(1);
+    expect((await getLicensing(deps, bob, A)).closed?.id).toBe(second.id);
   });
 });

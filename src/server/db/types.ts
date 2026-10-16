@@ -227,7 +227,8 @@ export interface LicensingEvaluationDoc {
   updatedBy: string;
 }
 
-/** Collection `licensing_submissions` – closed (frozen) evaluation of a season, unique `{ clubId, season }`. */
+/** Collection `licensing_submissions` – closed (frozen) evaluations of a season; unique `{ clubId, season }`
+ *  among valid closings only (`status: "closed"`), reopened ones stay as history (ADR 0008). */
 export interface LicensingSubmissionDoc {
   _id?: ObjectId;
   clubId: string;
@@ -241,4 +242,8 @@ export interface LicensingSubmissionDoc {
   dataAsOf: string | null;
   closedAt: Date;
   closedBy: string;
+  /** missing on closings made before ADR 0008 = "closed" */
+  status?: "closed" | "reopened";
+  reopenedAt?: Date;
+  reopenedBy?: string;
 }
