@@ -20,11 +20,11 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] F4a – výpočet, model, API – PR #18 (zlúčený 16. 10.).
   - [x] F4b – vyplnenie a výsledok v UI – PR #19 (zlúčený 16. 10.).
   - [x] F4c – odoslanie mentorovi (zmrazená kópia), pohľad mentora, export `SFZ-KOMPAS-1` – PR #20 (zlúčený 16. 10.).
-- [ ] F5 – licenčné hodnotenie a Vizitka klubu (ADR 0006).
+- [x] F5 – licenčné hodnotenie a Vizitka klubu (ADR 0006, 0007) – v produkcii 16. 10. (`281f5f4`).
   - [x] F5a – pravidlá, výpočet, model, API – PR #21 (zlúčený 16. 10.).
-  - [ ] Otvorené: dá sa uzavretá sezóna znovu otvoriť (napr. admin pri chybe)? Zatiaľ nie.
+  - [ ] Otvorené: dá sa uzavretá sezóna znovu otvoriť (napr. admin pri chybe)? Zatiaľ nie. Žipov 2026/2027 je uzavretý z Cyrilovho testu (13:43) – rozhodnúť, či zostáva.
   - [x] F5b – licenčné hodnotenie v UI – PR #22 (zlúčený 16. 10.).
-  - [ ] F5c – Vizitka klubu (ADR 0007): verejná `/vizitka/[clubId]` a pre roly `/klub/[clubId]/vizitka`, Kompas a licenčné hodnotenie vedľa seba za sezónu (vetva `feat/vizitka`): hotové a overené lokálne, PR na review.
+  - [x] F5c – Vizitka klubu (ADR 0007): verejná `/vizitka/[clubId]` a pre roly `/klub/[clubId]/vizitka`, Kompas a licenčné hodnotenie vedľa seba za sezónu – PR #23 (zlúčený 16. 10.).
   - [ ] Neskôr: tlač / PDF Vizitky, vizitka pre obec.
   - [ ] Neskôr: levely klubu (malý / stredný / veľký podľa počtu hráčov) a 1–5 hviezd, samostatne pre Kompas a licenčné hodnotenie – pravidlo zatiaľ chýba.
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
