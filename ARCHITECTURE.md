@@ -66,6 +66,13 @@ MCP server (F5, plánovaný)        ─┘        │
 6. Zobrazenie `/oblasti`, `/oblasti/[číslo]` cez `react-markdown` + `remark-gfm` (bez HTML v obsahu); úprava sekcií `/admin/obsah/[číslo]/metodika` s „platné k“ a „revidované“, históriou a vrátením
 7. **Prax** oblastí 3 a 4: `content/prax/NN.json` (roly, prvý krok, cesta s 3 variantmi a cestou B, zásobník, vzory, mentorské moduly) – overuje Zod schéma `practice.schema.ts` vrátane odkazov na vzory; jeden dokument na oblasť v `area_practice`. Zobrazenie na `/oblasti/[číslo]?tab=prax&role=…` len na čítanie (predvolená rola podľa roly v klube), úprava ako JSON v `/admin/obsah/[číslo]/prax`. Postup klubu v Praxi príde s Mojou Akadémiou (F6)
 
+### Kompas klubu (F4)
+
+1. `GET /api/v1/clubs/:clubId/kompas` – 220 otázok s platnosťou podľa kategórií klubu, odpovede a výsledok; vedenie a admin SFZ upravujú, tréner len číta, mentor pracovné hodnotenie nevidí (len odoslané – F4c)
+2. Kategórie klubu len zo Sportnetu (snapshot): U06–U11 → D, U12–U15 → Z, U16–U19 → DO, U21/dospelí → S, ženské družstvo → zd (aktuálna sezóna, inak posledná s dátami)
+3. Výpočet `src/server/services/kompas-scoring.ts` (čisté funkcie): stĺpec = round(zaškrtnuté platné / platné × 10), menej než 3 platné → oblasť sa nepočíta, oblasť 0–20, pásma 0–4 / 5–8 / 9–12 / 13–16 / 17–20, „čo urobiť najbližšie“ = 3 najslabšie oblasti a ich nezaškrtnuté platné otázky
+4. `PUT` uloží odpovede s verziou (súbežná úprava → 409); jedno hodnotenie na klub a sezónu
+
 ### Dáta klubov (snapshot, ADR 0005)
 
 1. Admin SFZ nahrá snapshot (JSON z návrhu Vizitky) na `/admin/kluby` alebo `POST /api/v1/admin/club-snapshot`
@@ -81,20 +88,21 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ## Kolekcie a indexy (MongoDB `rozvojklubu_dev`)
 
-| Kolekcia            | Vlastník    | Poznámka                                                    |
-| ------------------- | ----------- | ----------------------------------------------------------- |
-| `user`              | Better Auth | + polia `role`, `sportnetId`                                |
-| `session`           | Better Auth | relácie                                                     |
-| `account`           | Better Auth | prepojenia na poskytovateľov (Sportnet, e-mail)             |
-| `verification`      | Better Auth | tokeny magic linku                                          |
-| `clubs`             | aplikácia   | klub zo snapshotu, `clubId` = Sportnet appSpace             |
-| `club_seasons`      | aplikácia   | družstvá, počty hráčov, tréneri s licenciami (osobné údaje) |
-| `club_memberships`  | aplikácia   | roly v klube na sezónu (ADR 0004)                           |
-| `areas`             | aplikácia   | 11 oblastí (spravovaný obsah, bez tenanta)                  |
-| `kompas_questions`  | aplikácia   | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia      |
-| `content_revisions` | aplikácia   | história zmien spravovaného obsahu                          |
-| `area_sections`     | aplikácia   | sekcie Metodiky, Markdown, verzia                           |
-| `area_practice`     | aplikácia   | Prax oblasti (všetky roly), validovaný JSON, verzia         |
+| Kolekcia             | Vlastník           | Poznámka                                                    |
+| -------------------- | ------------------ | ----------------------------------------------------------- |
+| `user`               | Better Auth        | + polia `role`, `sportnetId`                                |
+| `session`            | Better Auth        | relácie                                                     |
+| `account`            | Better Auth        | prepojenia na poskytovateľov (Sportnet, e-mail)             |
+| `verification`       | Better Auth        | tokeny magic linku                                          |
+| `clubs`              | aplikácia          | klub zo snapshotu, `clubId` = Sportnet appSpace             |
+| `club_seasons`       | aplikácia          | družstvá, počty hráčov, tréneri s licenciami (osobné údaje) |
+| `club_memberships`   | aplikácia          | roly v klube na sezónu (ADR 0004)                           |
+| `areas`              | aplikácia          | 11 oblastí (spravovaný obsah, bez tenanta)                  |
+| `kompas_questions`   | aplikácia          | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia      |
+| `content_revisions`  | aplikácia          | história zmien spravovaného obsahu                          |
+| `area_sections`      | aplikácia          | sekcie Metodiky, Markdown, verzia                           |
+| `area_practice`      | aplikácia          | Prax oblasti (všetky roly), validovaný JSON, verzia         |
+| `kompas_assessments` | aplikácia (tenant) | pracovné sebahodnotenie klubu na sezónu, verzia             |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -109,3 +117,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `content_revisions`: `{ entity: 1, entityId: 1, version: -1 }`
 - `area_sections`: `{ area: 1, kind: 1, key: 1 }` unikátny
 - `area_practice`: `{ area: 1 }` unikátny
+- `kompas_assessments`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/kompas.store.ts`)
