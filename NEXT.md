@@ -37,7 +37,8 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] H3 – Hub na `/` (dráhy, roly, výber klubu, oblasti podľa roly, „Začnite tu“, Kompas, O Akadémii; druhá dráha „pripravujeme“) – PR #33 (zlúčený 16. 10.).
     - [ ] H5 – nová úvodná obrazovka (rozhodnuté 16. 10.):
       - [x] H5a – verejná – PR #36 (zlúčený 16. 10.): úvod Akadémie s obrázkom → „Kto ste v klube?“ (karty rolí) → Kompas ako informácia s odkazom → oblasti (pri role 3 prioritné, ďalšie oblasti roly ako ďalšie kroky, ostatné stručne; bez roly všetkých 11) → na záver Kompas s výberom klubu. Profesionálna akadémia do päty („pripravujeme“).
-      - [ ] H5b – po prihlásení (vetva `feat/hub-signed-in`, hotové a overené lokálne na 375 px, PR na review): Vizitka klubu (hodnotenie) → úlohy z Moja Akadémia → slabé oblasti podľa Kompasu; mentor vidí svoje kluby so stavom Kompasu.
+      - [x] H5b – po prihlásení – PR #37 (zlúčený 16. 10., v produkcii `5d9f0ba`; prihlásený pohľad overený lokálne, na produkcii nie – prehliadač nie je prihlásený): Vizitka klubu (hodnotenie) → úlohy z Moja Akadémia → slabé oblasti podľa Kompasu; mentor vidí svoje kluby so stavom Kompasu.
+      - [x] Mentor zväzu na pozadí: rolu na úvode, v Metodike a v Praxi vidí len prihlásený mentor a admin SFZ (PR #37).
       - [ ] Obrázok v úvode je zatiaľ ilustrácia; nahradiť fotkou SFZ (dodá Cyril).
     - [ ] Neskôr: pri návrate na holé `/` sa zapamätaný výber obnoví až v prehliadači (krátko sa ukáže predvolená rola) – zvážiť cookie namiesto `localStorage`.
     - [x] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.) – PR #34 (zlúčený 16. 10.).
