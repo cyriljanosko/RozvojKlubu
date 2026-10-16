@@ -1,8 +1,12 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 15. 10. 2026. Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
+
+- [x] Mapa produktu z návrhov v artifactoch (`docs/produkt/mapa-produktu.md`) – schválená 16. 10., roly v klube v ADR 0004.
+- [ ] Pilot Stupňa II podľa mapy, časť 11 (F1 → F7). Rozsah: Vizitka, Kompas v aplikácii s odoslaním mentorovi, Moja Akadémia (vedenie, tréner, mentor), Naši tréneri; 10 pilotných klubov z Vizitky.
+- [ ] Zistiť prístup k Sportnet API (endpointy, kľúč) – dovtedy import snapshotu.
 
 - [ ] F1 / Krok 1 – základ prihlasovania (vetva `feat/auth-base`): kód hotový, čaká na review/PR a na nasadenie.
   - [ ] Súhlas s novými kolekciami Better Auth v DB (`user`, `session`, `account`, `verification`).
