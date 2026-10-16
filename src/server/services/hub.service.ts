@@ -41,7 +41,7 @@ export interface HubSelection {
 export interface HubView {
   tracks: { key: string; name: string; status: Track["status"] }[];
   track: { key: string; name: string; status: Track["status"]; intro: string };
-  roles: { key: string; name: string }[];
+  roles: { key: string; name: string; who: string; whole: boolean }[];
   role: Pick<HubRole, "key" | "name" | "info" | "start" | "draft"> & { whole: boolean };
   areas: HubArea[];
   clubs: { clubId: string; name: string; union: string }[];
@@ -77,6 +77,19 @@ export function orderAreas<T extends { number: number }>(
     .sort((a, b) => a.number - b.number)
     .map((a) => ({ ...a, forRole: false }));
   return [...first, ...rest];
+}
+
+/** Pure: the role's areas split into priority (first `count`), next steps (rest of the role) and others. */
+export function splitAreas<T extends { forRole: boolean }>(
+  areas: readonly T[],
+  count = 3,
+): { priority: T[]; next: T[]; others: T[] } {
+  const mine = areas.filter((a) => a.forRole);
+  return {
+    priority: mine.slice(0, count),
+    next: mine.slice(count),
+    others: areas.filter((a) => !a.forRole),
+  };
 }
 
 /** Pure: the Hub role lens for a club role (management → management lens, …). */
@@ -225,7 +238,12 @@ export async function getHub(
   return {
     tracks: (catalog.tracks ?? []).map((t) => ({ key: t.key, name: t.name, status: t.status })),
     track: { key: track.key, name: track.name, status: track.status, intro: track.intro },
-    roles: track.hubRoles.map((h) => ({ key: h.key, name: h.name })),
+    roles: track.hubRoles.map((h) => ({
+      key: h.key,
+      name: h.name,
+      who: h.info.who,
+      whole: h.order.length === 0,
+    })),
     role: {
       key: lens.key,
       name: lens.name,
