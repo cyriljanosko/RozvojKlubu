@@ -91,4 +91,14 @@ export const mongoSubmissionStore: SubmissionStore = {
     const doc = await submissions(db).findOne({ _id: new ObjectId(submissionId), clubId });
     return doc ? toStored(doc) : null;
   },
+  async withdrawSubmission(clubId, submissionId, withdrawnBy, withdrawnAt) {
+    if (!ObjectId.isValid(submissionId)) return null;
+    const db = await getDb();
+    const doc = await submissions(db).findOneAndUpdate(
+      { _id: new ObjectId(submissionId), clubId, status: { $ne: "withdrawn" } },
+      { $set: { status: "withdrawn", withdrawnBy, withdrawnAt } },
+      { returnDocument: "after" },
+    );
+    return doc ? toStored(doc) : null;
+  },
 };

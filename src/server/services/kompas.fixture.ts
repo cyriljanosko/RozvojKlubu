@@ -47,5 +47,11 @@ export function memorySubmissionStore(): SubmissionStore & { docs: StoredSubmiss
       const d = docs.find((x) => x.id === id && x.clubId === clubId);
       return d ? structuredClone(d) : null;
     },
+    async withdrawSubmission(clubId, id, withdrawnBy, withdrawnAt) {
+      const d = docs.find((x) => x.id === id && x.clubId === clubId && x.status !== "withdrawn");
+      if (!d) return null;
+      Object.assign(d, { status: "withdrawn", withdrawnBy, withdrawnAt });
+      return structuredClone(d);
+    },
   };
 }

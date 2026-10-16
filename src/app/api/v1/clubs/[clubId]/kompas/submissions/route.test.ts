@@ -21,6 +21,7 @@ vi.mock("@/server/clubs/deps", () => ({
 
 const list = await import("./route");
 const one = await import("./[submissionId]/route");
+const withdraw = await import("./[submissionId]/withdraw/route");
 const mentor = await import("../../../../mentor/clubs/route");
 const p = <T>(x: T) => ({ params: Promise.resolve(x) }) as never;
 const req = (url: string, init?: RequestInit) => new Request(`http://localhost${url}`, init);
@@ -89,5 +90,26 @@ describe("Kompas submissions API", () => {
     ).toBe(401);
     getCurrentUser.mockResolvedValue(alice);
     expect((await mentor.GET(req("/api/v1/mentor/clubs"), {})).status).toBe(403);
+  });
+
+  it("lets admin withdraw a submission (200), refuses others (403) and a second time (409)", async () => {
+    getCurrentUser.mockResolvedValue(alice);
+    const created = await list.POST(
+      req(`/api/v1/clubs/${A}/kompas/submissions`, {
+        method: "POST",
+        body: JSON.stringify({ expectedVersion: 1 }),
+      }),
+      p({ clubId: A }),
+    );
+    const { data: sub } = await created.json();
+    const url = `/api/v1/clubs/${A}/kompas/submissions/${sub.id}/withdraw`;
+    const ctx = () => p({ clubId: A, submissionId: sub.id });
+
+    expect((await withdraw.POST(req(url, { method: "POST" }), ctx())).status).toBe(403);
+    getCurrentUser.mockResolvedValue(admin);
+    const ok = await withdraw.POST(req(url, { method: "POST" }), ctx());
+    expect(ok.status).toBe(200);
+    expect((await ok.json()).data.withdrawnAt).toBeTruthy();
+    expect((await withdraw.POST(req(url, { method: "POST" }), ctx())).status).toBe(409);
   });
 });

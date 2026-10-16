@@ -320,7 +320,8 @@
       "row": "{date} · {total} z 220 · vyplnené {filled} z 11",
       "line": "Riadok pre zbernú tabuľku (SFZ-KOMPAS-1)",
       "copy": "Skopírovať riadok",
-      "copied": "Skopírované."
+      "copied": "Skopírované.",
+      "withdrawn": "zrušené"
     },
     "submission": {
       "title": "Odoslaný Kompas",
@@ -328,6 +329,15 @@
       "frozen": "Toto je zmrazená kópia z času odoslania.",
       "checked": "Platí v klube",
       "back": "Späť na Kompas klubu"
+    },
+    "withdraw": {
+      "button": "Zrušiť odoslanie",
+      "adminOnly": "Len pre admina SFZ.",
+      "confirm": "Zrušiť toto odoslanie? Zostane v histórii ako zrušené, Vizitka a prehľad mentora ukážu predchádzajúce platné odoslanie (alebo „zatiaľ neodoslané“).",
+      "yes": "Áno, zrušiť",
+      "no": "Nie",
+      "error": "Zrušenie sa nepodarilo. Obnovte stránku a skúste to znova.",
+      "withdrawn": "Odoslanie bolo zrušené {date}. Nezapočítava sa do Vizitky ani prehľadu mentora."
     }
   },
   "mentor": {

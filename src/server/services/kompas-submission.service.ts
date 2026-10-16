@@ -18,7 +18,18 @@ export interface SubmissionStore {
   addSubmission: (doc: Omit<KompasSubmissionDoc, "_id">) => Promise<StoredSubmission>;
   listSubmissions: (clubId: string, season?: string) => Promise<StoredSubmission[]>;
   findSubmission: (clubId: string, submissionId: string) => Promise<StoredSubmission | null>;
+  /** marks a submission as withdrawn; null when not found or already withdrawn */
+  withdrawSubmission: (
+    clubId: string,
+    submissionId: string,
+    withdrawnBy: string,
+    withdrawnAt: Date,
+  ) => Promise<StoredSubmission | null>;
 }
+
+/** A withdrawn submission stays in the history but no longer counts anywhere (ADR 0009). */
+export const isValidSubmission = (s: Pick<KompasSubmissionDoc, "status">) =>
+  s.status !== "withdrawn";
 
 export type StoredSubmission = Omit<KompasSubmissionDoc, "_id"> & { id: string };
 
@@ -34,6 +45,8 @@ export interface SubmissionSummary {
   total: number;
   filledAreas: number;
   line: string;
+  /** set when admin_sfz withdrew the submission (ADR 0009) */
+  withdrawnAt: Date | null;
 }
 
 const summary = (s: StoredSubmission): SubmissionSummary => {
@@ -46,6 +59,7 @@ const summary = (s: StoredSubmission): SubmissionSummary => {
     total: r.total,
     filledAreas: r.filledAreas,
     line: s.line,
+    withdrawnAt: s.status === "withdrawn" ? (s.withdrawnAt ?? null) : null,
   };
 };
 
@@ -102,6 +116,7 @@ export async function submitKompas(
     line,
     submittedAt: deps.now?.() ?? new Date(),
     submittedBy: user.id,
+    status: "submitted",
   });
   return summary(stored);
 }
@@ -154,9 +169,9 @@ export async function listMentorClubs(
   const clubs = await deps.clubs.listClubs(isAdmin(user) ? "all" : mentorIds);
   const rows = await Promise.all(
     clubs.map(async (c) => {
-      const subs = (await deps.submissions.listSubmissions(c.clubId, season)).sort(
-        (a, b) => +b.submittedAt - +a.submittedAt,
-      );
+      const subs = (await deps.submissions.listSubmissions(c.clubId, season))
+        .filter(isValidSubmission)
+        .sort((a, b) => +b.submittedAt - +a.submittedAt);
       return {
         clubId: c.clubId,
         name: c.name,
@@ -166,4 +181,27 @@ export async function listMentorClubs(
     }),
   );
   return rows.sort((a, b) => a.name.localeCompare(b.name, "sk"));
+}
+
+/** Withdraws a submission (admin_sfz only, ADR 0009). Nothing is deleted: it stays in the history
+ *  marked as withdrawn; the Vizitka and the mentor overview fall back to the previous valid one. */
+export async function withdrawKompasSubmission(
+  deps: SubmissionDeps,
+  actor: CurrentUser | null,
+  clubId: string,
+  submissionId: string,
+): Promise<SubmissionSummary> {
+  const user = requireUser(actor);
+  if (!isAdmin(user)) throw new ApiError("FORBIDDEN", "Only admin_sfz can withdraw a submission");
+  const existing = await deps.submissions.findSubmission(clubId, submissionId);
+  if (!existing) throw new ApiError("NOT_FOUND", "Submission not found");
+  if (!isValidSubmission(existing)) throw new ApiError("CONFLICT", "Already withdrawn");
+  const withdrawn = await deps.submissions.withdrawSubmission(
+    clubId,
+    submissionId,
+    user.id,
+    deps.now?.() ?? new Date(),
+  );
+  if (!withdrawn) throw new ApiError("CONFLICT", "Already withdrawn");
+  return summary(withdrawn);
 }
