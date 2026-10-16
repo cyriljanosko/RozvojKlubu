@@ -170,3 +170,18 @@ export interface ContentRevisionDoc {
   changedBy: string;
   changedAt: Date;
 }
+
+// ---- Kompas klubu (club data, tenant = clubId) ----
+
+/** Collection `kompas_assessments` – a club's working self-assessment, unique `{ clubId, season }`. */
+export interface KompasAssessmentDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  /** questionIds checked as "true for our club" */
+  answers: string[];
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}
