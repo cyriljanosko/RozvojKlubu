@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
 import type {
+  ClubSeasonDoc,
   LicensingEvaluationDoc,
   LicensingInputs,
   LicensingSubmissionDoc,
@@ -116,6 +117,8 @@ export interface LicensingView {
   dataAsOf: string | null;
   inputs: LicensingInputs;
   result: LicensingResult;
+  /** Sportnet data of an open season, so clients can score live; null when closed or missing */
+  sportnet: Pick<ClubSeasonDoc, "teams" | "players" | "coaches"> | null;
 }
 
 export async function getLicensing(
@@ -147,6 +150,7 @@ export async function getLicensing(
       dataAsOf: closed.dataAsOf,
       inputs: closed.inputs,
       result: closed.result as unknown as LicensingResult,
+      sportnet: null,
     };
   }
   const inputs = evaluation?.inputs ?? EMPTY_INPUTS;
@@ -156,6 +160,9 @@ export async function getLicensing(
     dataAsOf: seasonData?.dataAsOf ?? null,
     inputs,
     result: scoreLicensing(seasonData, inputs),
+    sportnet: seasonData
+      ? { teams: seasonData.teams, players: seasonData.players, coaches: seasonData.coaches }
+      : null,
   };
 }
 

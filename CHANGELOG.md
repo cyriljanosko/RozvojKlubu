@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Licenčné hodnotenie v UI (F5b): `/klub/[clubId]/licencne-hodnotenie` – prehľad 6 oblastí s pásmami, oblasti 2–4 zo Sportnetu (tabuľky, tréneri s opravou pohlavia), formuláre 5–7, počet obyvateľov a koeficient, priebežný výpočet, uloženie, uzavretie sezóny s potvrdením, prepínanie sezón; odkaz z karty klubu.
 - Licenčné hodnotenie – základ (F5a, ADR 0006): pravidlá „pilot 2026, predbežné“ z Vizitky (oblasti 2–4 zo Sportnetu, 5–7 vstupy klubu, koeficient sídla, pásma), uloženie na sezónu s verziou (vedenie, mentor, admin; tréner číta), uzavretie sezóny ako zmrazená kópia; `GET|PUT /api/v1/clubs/:clubId/licensing`, `GET|POST .../licensing/submissions`.
 - Odoslanie Kompasu mentorovi (F4c): zmrazená kópia (odpovede, znenie otázok, výsledok) pri každom odoslaní, história odoslaných verzií s detailom, riadok `SFZ-KOMPAS-1` na skopírovanie do zbernej tabuľky, prehľad mentora `/mentor` (len odoslané hodnotenia); API `GET|POST /api/v1/clubs/:clubId/kompas/submissions`, `GET .../submissions/:id`, `GET /api/v1/mentor/clubs`.
 - Kompas klubu v aplikácii (F4b): `/klub/[clubId]/kompas` – zaškrtávanie s priebežným skóre, pásma oblastí, „Čo urobiť najbližšie“ s odkazmi na Metodiku a Prax, uloženie (vedenie), čítanie (tréner); odkaz z karty klubu; blok „Kde stojí váš klub“ v Praxi oblastí 3 a 4.
