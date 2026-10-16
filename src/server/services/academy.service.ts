@@ -120,6 +120,19 @@ export function clubTasks(i: TaskInput): AcademyTask[] {
   return tasks.sort((a, b) => ORDER[a.severity] - ORDER[b.severity]);
 }
 
+/** Pure: home screen split (H5b) – up to `limit` tasks to do and the weak areas of the club apart. */
+export function splitTasks(
+  tasks: readonly AcademyTask[],
+  limit = 3,
+): { todo: AcademyTask[]; more: number; weak: AcademyTask[] } {
+  const todo = tasks.filter((t) => t.key !== "weak_area");
+  return {
+    todo: todo.slice(0, limit),
+    more: Math.max(0, todo.length - limit),
+    weak: tasks.filter((t) => t.key === "weak_area"),
+  };
+}
+
 /** Pure: tasks of a mentor over the clubs of the cohort, one summary task per kind. */
 export function mentorTasks(
   rows: (Pick<MentorClubRow, "clubId" | "name" | "latest"> & { licensingClosed: boolean })[],

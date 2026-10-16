@@ -718,6 +718,24 @@
     },
     "priorityTitle": "{role}: začnite týmito tromi oblasťami",
     "nextTitle": "Ďalšie kroky",
-    "nextText": "Keď zvládnete prvé tri, pokračujte týmito oblasťami."
+    "nextText": "Keď zvládnete prvé tri, pokračujte týmito oblasťami.",
+    "mine": {
+      "title": "Vaša Akadémia",
+      "hello": "Dobrý deň, {name}",
+      "vizitka": "Vizitka klubu – hodnotenie",
+      "kompas": "Kompas klubu",
+      "kompasScore": "{total} z 220",
+      "empty": "nevyplnený",
+      "licensing": "Licenčné hodnotenie",
+      "closed": "uzavreté",
+      "open": "rozpracované",
+      "openHint": "sezóna ešte nie je uzavretá",
+      "tasks": "Čaká na vás",
+      "more": "{count, plural, one {a # ďalšia úloha} few {a # ďalšie úlohy} other {a # ďalších úloh}} v Moja Akadémia",
+      "weak": "Slabé oblasti podľa Kompasu",
+      "points": "{points} z 20",
+      "academy": "Otvoriť Moja Akadémia",
+      "mentorSummary": "{count, plural, one {# klub} few {# kluby} other {# klubov}}, Kompas odoslaný {sent}"
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { clubRolesFor } from "@/server/services/club-access";
+import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import { listPublicClubs } from "@/server/services/clubs.service";
 import type { ContentStore } from "@/server/services/content.service";
@@ -77,6 +77,34 @@ export function orderAreas<T extends { number: number }>(
     .sort((a, b) => a.number - b.number)
     .map((a) => ({ ...a, forRole: false }));
   return [...first, ...rest];
+}
+
+/**
+ * Pure: the union mentor works behind the scenes (Cyril, 16. 10. 2026) – the mentor lens and
+ * the mentor's Prax are shown only to mentors of the season and to admin_sfz.
+ */
+export function seesMentor(
+  actor: CurrentUser | null,
+  memberships: readonly { role: string; season: string }[],
+  season: string,
+): boolean {
+  if (!actor) return false;
+  return isAdmin(actor) || memberships.some((m) => m.season === season && m.role === "mentor");
+}
+
+/** Pure: drops the mentor lens unless the user may see it. */
+export function withoutMentor<T extends { baseRole?: string }>(
+  roles: readonly T[],
+  sees: boolean,
+): T[] {
+  return sees ? [...roles] : roles.filter((r) => r.baseRole !== "mentor");
+}
+
+/** Pure: Prax role ids of an area that belong to the mentor base role. */
+export function mentorPracticeRoles(catalog: RoleCatalog, area: number): string[] {
+  return (catalog.areas.find((a) => a.area === area)?.roles ?? [])
+    .filter((r) => r.practiceRole && r.baseRoles.includes("mentor"))
+    .map((r) => r.practiceRole!);
 }
 
 /** Pure: the role's areas split into priority (first `count`), next steps (rest of the role) and others. */
@@ -175,10 +203,11 @@ export async function getHub(
   let defaultsFrom: HubView["defaultsFrom"] = selection.role || selection.club ? "url" : "none";
   let roleKey = selection.role ?? null;
   let clubId = selection.club ?? null;
+  const memberships = actor
+    ? (await deps.memberships.listByUser(actor.id)).filter((m) => m.season === season)
+    : [];
+  const hubRoles = withoutMentor(track.hubRoles, seesMentor(actor, memberships, season));
   if (actor && (!roleKey || !clubId)) {
-    const memberships = (await deps.memberships.listByUser(actor.id)).filter(
-      (m) => m.season === season,
-    );
     const own = memberships.find((m) => m.role !== "mentor") ?? memberships[0];
     if (own) {
       const lens = lensForClubRoles(track, clubRolesFor(memberships, own.clubId, season));
@@ -188,9 +217,9 @@ export async function getHub(
     }
   }
   const lens =
-    track.hubRoles.find((h) => h.key === roleKey) ??
-    track.hubRoles.find((h) => h.order.length === 0) ??
-    track.hubRoles[0];
+    hubRoles.find((h) => h.key === roleKey) ??
+    hubRoles.find((h) => h.order.length === 0) ??
+    hubRoles[0];
 
   const base =
     track.status === "approved"
@@ -238,7 +267,7 @@ export async function getHub(
   return {
     tracks: (catalog.tracks ?? []).map((t) => ({ key: t.key, name: t.name, status: t.status })),
     track: { key: track.key, name: track.name, status: track.status, intro: track.intro },
-    roles: track.hubRoles.map((h) => ({
+    roles: hubRoles.map((h) => ({
       key: h.key,
       name: h.name,
       who: h.info.who,

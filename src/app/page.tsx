@@ -6,6 +6,7 @@ import { Suspense } from "react";
 
 import { HubIllustration } from "@/components/hub/hub-illustration";
 import { HubMemory } from "@/components/hub/hub-memory";
+import { MyAcademyHome } from "@/components/hub/my-academy-home";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/server/auth/session";
 import { hubDeps } from "@/server/clubs/deps";
@@ -128,14 +129,27 @@ async function Hub({ searchParams }: Props) {
         </p>
       )}
 
-      <header className="grid items-center gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
-        <div className="flex flex-col gap-2">
+      {user ? (
+        <header className="flex flex-col gap-1">
           <p className="text-muted-foreground text-sm font-medium">{t("eyebrow")}</p>
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("title")}</h1>
-          <p className="text-muted-foreground max-w-2xl">{t("lead")}</p>
-        </div>
-        <HubIllustration className="mx-auto max-w-64 sm:max-w-sm" />
-      </header>
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{t("title")}</h1>
+        </header>
+      ) : (
+        <header className="grid items-center gap-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+          <div className="flex flex-col gap-2">
+            <p className="text-muted-foreground text-sm font-medium">{t("eyebrow")}</p>
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("title")}</h1>
+            <p className="text-muted-foreground max-w-2xl">{t("lead")}</p>
+          </div>
+          <HubIllustration className="mx-auto max-w-64 sm:max-w-sm" />
+        </header>
+      )}
+
+      {user && (
+        <Suspense fallback={<div className="h-40" aria-hidden />}>
+          <MyAcademyHome user={user} />
+        </Suspense>
+      )}
 
       <section aria-labelledby="hub-role" className="flex flex-col gap-3">
         <div>
