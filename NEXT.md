@@ -24,7 +24,8 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] F5a – pravidlá, výpočet, model, API (vetva `feat/licensing`): hotové a overené lokálne, PR po #20.
   - [ ] Otvorené: dá sa uzavretá sezóna znovu otvoriť (napr. admin pri chybe)? Zatiaľ nie.
   - [ ] F5b – licenčné hodnotenie v UI (vetva `feat/licensing-ui`): hotové a overené lokálne, PR po F5a.
-  - [ ] F5c – Vizitka klubu: Kompas a licenčné hodnotenie vedľa seba za sezónu.
+  - [ ] F5c – Vizitka klubu (ADR 0007): verejná `/vizitka/[clubId]` a pre roly `/klub/[clubId]/vizitka`, Kompas a licenčné hodnotenie vedľa seba za sezónu (vetva `feat/vizitka`): hotové a overené lokálne, PR po F5b.
+  - [ ] Neskôr: tlač / PDF Vizitky, vizitka pre obec.
   - [ ] Neskôr: levely klubu (malý / stredný / veľký podľa počtu hráčov) a 1–5 hviezd, samostatne pre Kompas a licenčné hodnotenie – pravidlo zatiaľ chýba.
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
 - [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.
