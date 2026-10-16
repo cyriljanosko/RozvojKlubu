@@ -9,7 +9,10 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 - [ ] F2 – roly v klube a dáta pilotných klubov (vetva `feat/club-memberships`): hotové a overené lokálne 16. 10., čaká na PR.
   - Snapshot (10 klubov, 19 sezón) nahratý do `rozvojklubu_dev`, Cyril: admin SFZ, vedenie FK v Nižnom Žipove, mentor 10 klubov.
   - Snapshot leží len v `data/private/` na Macu – pri inom počítači treba súbor preniesť mimo gitu.
-- [ ] F3 – spravovaný obsah: oblasti, Prax a Metodika, 220 otázok Kompasu (mapa produktu, časť 11).
+- [ ] F3 – spravovaný obsah (rozhodnuté 16. 10.: Markdown + `react-markdown`, len pre prihlásených, obsah môže byť vo verejnom gite, história zmien, „platné k“ a dátum revízie).
+  - [x] F3a – oblasti a 220 otázok Kompasu v2 (vetva `feat/content-catalog`), naplnené v `rozvojklubu_dev`.
+  - [ ] F3b – Metodika 11 oblastí (import z detailov, stránky `/oblasti/[číslo]`, editor sekcií).
+  - [ ] F3c – Prax oblastí 3 a 4 (štruktúrovaný model pre všetky oblasti).
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
 - [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.
 

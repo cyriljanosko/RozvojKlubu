@@ -1,0 +1,95 @@
+import "server-only";
+
+import { ObjectId, type Db } from "mongodb";
+
+import { getDb } from "@/server/db/mongo";
+import type { AreaDoc, ContentRevisionDoc, KompasQuestionDoc } from "@/server/db/types";
+import type { ContentStore, StoredRevision } from "@/server/services/content.service";
+
+/** MongoDB implementation of the managed-content store. Indexes are documented in ARCHITECTURE.md. */
+const areas = (db: Db) => db.collection<AreaDoc>("areas");
+const questions = (db: Db) => db.collection<KompasQuestionDoc>("kompas_questions");
+const revisions = (db: Db) => db.collection<ContentRevisionDoc>("content_revisions");
+
+let indexes: Promise<unknown> | undefined;
+
+function ensureIndexes(db: Db): Promise<unknown> {
+  indexes ??= Promise.all([
+    areas(db).createIndex({ number: 1 }, { unique: true }),
+    questions(db).createIndex({ questionId: 1 }, { unique: true }),
+    questions(db).createIndex({ area: 1, column: 1, order: 1 }),
+    revisions(db).createIndex({ entity: 1, entityId: 1, version: -1 }),
+  ]).catch((error) => {
+    indexes = undefined;
+    throw error;
+  });
+  return indexes;
+}
+
+const toRevision = ({ _id, ...rest }: ContentRevisionDoc): StoredRevision => ({
+  ...rest,
+  id: String(_id),
+});
+
+export const mongoContentStore: ContentStore = {
+  async insertMissing(seed) {
+    const db = await getDb();
+    await ensureIndexes(db);
+    const a = await areas(db).bulkWrite(
+      seed.areas.map((doc) => ({
+        updateOne: { filter: { number: doc.number }, update: { $setOnInsert: doc }, upsert: true },
+      })),
+    );
+    const q = await questions(db).bulkWrite(
+      seed.questions.map((doc) => ({
+        updateOne: {
+          filter: { questionId: doc.questionId },
+          update: { $setOnInsert: doc },
+          upsert: true,
+        },
+      })),
+    );
+    return { areas: a.upsertedCount, questions: q.upsertedCount };
+  },
+  async listAreas() {
+    const db = await getDb();
+    return areas(db)
+      .find({}, { projection: { _id: 0 } })
+      .toArray();
+  },
+  async listQuestions(area) {
+    const db = await getDb();
+    return questions(db)
+      .find(area === undefined ? {} : { area }, { projection: { _id: 0 } })
+      .toArray();
+  },
+  async findQuestion(questionId) {
+    const db = await getDb();
+    return questions(db).findOne({ questionId }, { projection: { _id: 0 } });
+  },
+  async updateQuestion(questionId, expectedVersion, changes) {
+    const db = await getDb();
+    return questions(db).findOneAndUpdate(
+      { questionId, version: expectedVersion },
+      { $set: changes },
+      { returnDocument: "after", projection: { _id: 0 } },
+    );
+  },
+  async addRevision(revision) {
+    const db = await getDb();
+    await ensureIndexes(db);
+    await revisions(db).insertOne({ ...revision });
+  },
+  async listRevisions(entity, entityId) {
+    const db = await getDb();
+    return (await revisions(db).find({ entity, entityId }).sort({ version: -1 }).toArray()).map(
+      toRevision,
+    );
+  },
+  async findRevision(revisionId) {
+    if (!ObjectId.isValid(revisionId)) return null;
+    const db = await getDb();
+    const doc = await revisions(db).findOne({ _id: new ObjectId(revisionId) });
+    return doc ? toRevision(doc) : null;
+  },
+};

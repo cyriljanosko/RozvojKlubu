@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Spravovaný obsah (F3a): 11 oblastí a 220 otázok Kompasu v2 v databáze, úprava otázok adminom SFZ s verziou, históriou zmien a vrátením (`/admin/obsah`, `/api/v1/areas`, `/api/v1/kompas/questions`).
 - Kluby zo Sportnetu (snapshot, ADR 0005): import v administrácii (`/admin/kluby`, `POST /api/v1/admin/club-snapshot`), karta klubu `/klub/[clubId]` s počtami a družstvami podľa sezóny.
 - Roly v klube (ADR 0004): vedenie, tréner, mentor na sezónu; pridelenie a odobratie adminom SFZ (`/admin/kluby/[clubId]`, `/api/v1/clubs/:clubId/members`); „Moje kluby“ na `/ucet`; `GET /api/v1/clubs`.
 - Prihlasovanie cez Better Auth: e-mailový odkaz (Ecomail, v dev režime do logu), príprava na Sportnet OIDC (zapne sa po doplnení client_id/secret).

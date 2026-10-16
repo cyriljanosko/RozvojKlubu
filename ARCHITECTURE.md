@@ -56,6 +56,13 @@ MCP server (F5, plánovaný)        ─┘        │
 - Prístup ku klubu: admin SFZ všetky kluby, ostatní len kluby s členstvom v aktuálnej sezóne (`src/server/services/club-access.ts`).
 - Tenant = klub (ADR 0003): každý dotaz na klubové dáta má filter `clubId` = Sportnet appSpace (ADR 0005).
 
+### Spravovaný obsah (F3)
+
+1. Zdroj v gite: `content/kompas-areas.json` – 11 oblastí a 220 otázok Kompasu v2 (verejné, bez osobných údajov)
+2. Admin SFZ na `/admin/obsah` (alebo `POST /api/v1/admin/content-seed`) doplní chýbajúce dokumenty – upravený obsah sa nikdy neprepíše
+3. Úpravy len admin SFZ; každá zvýši `version` (súbežná úprava → 409) a uloží `content_revisions` (pred/po, kto, kedy); vrátenie = nová zmena
+4. Čítanie (`/api/v1/areas`, `/api/v1/kompas/questions`) pre každého prihláseného – v pilote nie verejne
+
 ### Dáta klubov (snapshot, ADR 0005)
 
 1. Admin SFZ nahrá snapshot (JSON z návrhu Vizitky) na `/admin/kluby` alebo `POST /api/v1/admin/club-snapshot`
@@ -71,18 +78,27 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ## Kolekcie a indexy (MongoDB `rozvojklubu_dev`)
 
-| Kolekcia           | Vlastník    | Poznámka                                                    |
-| ------------------ | ----------- | ----------------------------------------------------------- |
-| `user`             | Better Auth | + polia `role`, `sportnetId`                                |
-| `session`          | Better Auth | relácie                                                     |
-| `account`          | Better Auth | prepojenia na poskytovateľov (Sportnet, e-mail)             |
-| `verification`     | Better Auth | tokeny magic linku                                          |
-| `clubs`            | aplikácia   | klub zo snapshotu, `clubId` = Sportnet appSpace             |
-| `club_seasons`     | aplikácia   | družstvá, počty hráčov, tréneri s licenciami (osobné údaje) |
-| `club_memberships` | aplikácia   | roly v klube na sezónu (ADR 0004)                           |
+| Kolekcia            | Vlastník    | Poznámka                                                    |
+| ------------------- | ----------- | ----------------------------------------------------------- |
+| `user`              | Better Auth | + polia `role`, `sportnetId`                                |
+| `session`           | Better Auth | relácie                                                     |
+| `account`           | Better Auth | prepojenia na poskytovateľov (Sportnet, e-mail)             |
+| `verification`      | Better Auth | tokeny magic linku                                          |
+| `clubs`             | aplikácia   | klub zo snapshotu, `clubId` = Sportnet appSpace             |
+| `club_seasons`      | aplikácia   | družstvá, počty hráčov, tréneri s licenciami (osobné údaje) |
+| `club_memberships`  | aplikácia   | roly v klube na sezónu (ADR 0004)                           |
+| `areas`             | aplikácia   | 11 oblastí (spravovaný obsah, bez tenanta)                  |
+| `kompas_questions`  | aplikácia   | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia      |
+| `content_revisions` | aplikácia   | história zmien spravovaného obsahu                          |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
 - `clubs`: `{ clubId: 1 }` unikátny
 - `club_seasons`: `{ clubId: 1, season: 1 }` unikátny
 - `club_memberships`: `{ userId: 1, season: 1 }`; `{ clubId: 1, season: 1, userId: 1, role: 1 }` unikátny (`club_season_user_role`)
+
+Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
+
+- `areas`: `{ number: 1 }` unikátny
+- `kompas_questions`: `{ questionId: 1 }` unikátny; `{ area: 1, column: 1, order: 1 }`
+- `content_revisions`: `{ entity: 1, entityId: 1, version: -1 }`

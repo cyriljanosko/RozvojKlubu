@@ -72,9 +72,14 @@ async function Account() {
           )}
         </section>
         {admin && (
-          <Link href="/admin/kluby" className="text-sm font-medium underline underline-offset-4">
-            {tHeader("admin")}
-          </Link>
+          <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
+            <Link href="/admin/kluby" className="underline underline-offset-4">
+              {tHeader("admin")}
+            </Link>
+            <Link href="/admin/obsah" className="underline underline-offset-4">
+              {tHeader("content")}
+            </Link>
+          </nav>
         )}
         <SignOutButton />
       </CardContent>
