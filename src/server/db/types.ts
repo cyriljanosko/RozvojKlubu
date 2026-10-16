@@ -87,3 +87,57 @@ export interface ClubMembershipDoc {
   createdBy: string;
   createdAt: Date;
 }
+
+// ---- Managed content (global, no tenant – ADR 0003) ----
+
+/** Age-group tags of Kompas questions; "rast" = always applies. */
+export const QUESTION_TAGS = ["D", "Z", "DO", "S", "zd", "rast"] as const;
+export type QuestionTag = (typeof QUESTION_TAGS)[number];
+
+/** Kompas columns: i = implementation, s = social responsibility. */
+export type QuestionColumn = "i" | "s";
+
+interface Versioned {
+  version: number;
+  updatedAt: Date;
+  /** Better Auth user id, or "seed" for the initial import. */
+  updatedBy: string;
+}
+
+/** Collection `areas` – the 11 development areas, unique `number`. */
+export interface AreaDoc extends Versioned {
+  _id?: ObjectId;
+  number: number;
+  name: string;
+  shortName: string;
+  /** Colour band: 1 people & leadership, 2 players & growth, 3 club operations. */
+  band: 1 | 2 | 3;
+  description: string;
+  /** Design artifacts the content was taken from. */
+  sources: { overview: string; detail: string };
+}
+
+/** Collection `kompas_questions` – unique `questionId` ("4.i.2"). */
+export interface KompasQuestionDoc extends Versioned {
+  _id?: ObjectId;
+  questionId: string;
+  area: number;
+  column: QuestionColumn;
+  /** 1–10 within the column. */
+  order: number;
+  text: string;
+  tags: QuestionTag[];
+}
+
+/** Collection `content_revisions` – one document per change of managed content. */
+export interface ContentRevisionDoc {
+  _id?: ObjectId;
+  entity: "area" | "kompas_question";
+  entityId: string;
+  /** Version created by this change. */
+  version: number;
+  before: Record<string, unknown> | null;
+  after: Record<string, unknown>;
+  changedBy: string;
+  changedAt: Date;
+}

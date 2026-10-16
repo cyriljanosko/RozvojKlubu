@@ -8,7 +8,8 @@
     "brand": "Rozvoj klubu",
     "signIn": "Prihlásiť sa",
     "myAccount": "Môj účet",
-    "admin": "Administrácia"
+    "admin": "Kluby a roly",
+    "content": "Obsah Akadémie"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -135,6 +136,46 @@
         "default": "Nepodarilo sa uložiť. Skúste to znova."
       }
     },
-    "back": "Späť na zoznam klubov"
+    "back": "Späť na zoznam klubov",
+    "content": {
+      "title": "Obsah Akadémie",
+      "areas": "Oblasti a otázky Kompasu",
+      "empty": "Obsah ešte nie je v databáze. Naplňte ho zo súborov v repozitári.",
+      "seed": {
+        "submit": "Naplniť chýbajúci obsah",
+        "hint": "Doplní len to, čo v databáze chýba. Upravený obsah sa neprepíše.",
+        "done": "Doplnené: {areas} oblastí, {questions} otázok.",
+        "error": "Obsah sa nepodarilo naplniť."
+      },
+      "questionsCount": "{count, plural, one {# otázka} few {# otázky} other {# otázok}}",
+      "columns": {
+        "i": "Implementácia",
+        "s": "Sociálna zodpovednosť"
+      },
+      "question": {
+        "text": "Text otázky",
+        "tags": "Platí pre kategórie (bez značky = vždy)",
+        "save": "Uložiť",
+        "saved": "Uložené (verzia {version}).",
+        "version": "verzia {version}",
+        "history": "História zmien",
+        "noHistory": "Bez zmien od naplnenia.",
+        "revert": "Vrátiť pred túto zmenu",
+        "errors": {
+          "CONFLICT": "Otázku medzitým niekto zmenil. Obnovte stránku.",
+          "BAD_REQUEST": "Text musí mať 5 až 500 znakov.",
+          "default": "Nepodarilo sa uložiť. Skúste to znova."
+        }
+      },
+      "back": "Späť na obsah"
+    }
+  },
+  "questionTags": {
+    "D": "Deti do 11",
+    "Z": "Žiaci",
+    "DO": "Dorast",
+    "S": "Dospelí",
+    "zd": "Ženy a dievčatá",
+    "rast": "Platí vždy"
   }
 }
