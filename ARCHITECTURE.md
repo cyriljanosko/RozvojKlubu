@@ -64,6 +64,7 @@ MCP server (F5, plánovaný)        ─┘        │
 4. Čítanie (`/api/v1/areas`, `/api/v1/kompas/questions`) pre každého prihláseného – v pilote nie verejne
 5. **Metodika** oblastí: `content/metodika/NN.md` (front matter + sekcie `## Nadpis {#kľúč}`, Markdown/GFM) – strojovo prevedené z detailov oblastí, bez zmeny textu. Naplnenie ich číta zo súborov (`outputFileTracingIncludes` v `next.config.ts`) do `area_sections`
 6. Zobrazenie `/oblasti`, `/oblasti/[číslo]` cez `react-markdown` + `remark-gfm` (bez HTML v obsahu); úprava sekcií `/admin/obsah/[číslo]/metodika` s „platné k“ a „revidované“, históriou a vrátením
+7. **Prax** oblastí 3 a 4: `content/prax/NN.json` (roly, prvý krok, cesta s 3 variantmi a cestou B, zásobník, vzory, mentorské moduly) – overuje Zod schéma `practice.schema.ts` vrátane odkazov na vzory; jeden dokument na oblasť v `area_practice`. Zobrazenie na `/oblasti/[číslo]?tab=prax&role=…` len na čítanie (predvolená rola podľa roly v klube), úprava ako JSON v `/admin/obsah/[číslo]/prax`. Postup klubu v Praxi príde s Mojou Akadémiou (F6)
 
 ### Dáta klubov (snapshot, ADR 0005)
 
@@ -92,7 +93,8 @@ MCP server (F5, plánovaný)        ─┘        │
 | `areas`             | aplikácia   | 11 oblastí (spravovaný obsah, bez tenanta)                  |
 | `kompas_questions`  | aplikácia   | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia      |
 | `content_revisions` | aplikácia   | história zmien spravovaného obsahu                          |
-| `area_sections`     | aplikácia   | sekcie Metodiky (neskôr Praxe), Markdown, verzia            |
+| `area_sections`     | aplikácia   | sekcie Metodiky, Markdown, verzia                           |
+| `area_practice`     | aplikácia   | Prax oblasti (všetky roly), validovaný JSON, verzia         |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -106,3 +108,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `kompas_questions`: `{ questionId: 1 }` unikátny; `{ area: 1, column: 1, order: 1 }`
 - `content_revisions`: `{ entity: 1, entityId: 1, version: -1 }`
 - `area_sections`: `{ area: 1, kind: 1, key: 1 }` unikátny
+- `area_practice`: `{ area: 1 }` unikátny
