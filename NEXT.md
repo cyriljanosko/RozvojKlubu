@@ -31,6 +31,10 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 - [ ] F6 – Moja Akadémia (rozhodnuté 16. 10., ADR 0010).
   - [x] F6a – roly ako spravovaný obsah: 6 základných rolí a roly v 11 oblastiach podľa návrhu z 11. 10., editor admina, „vedenie“ → „Manažér a výbor“ – PR #29 (zlúčený 16. 10.).
   - [ ] F6b – nástenka `/moja-akademia` pre manažéra a výbor, trénera a mentora; vlastné roly v oblastiach; prehľad mentora presunúť sem (vetva `feat/my-academy`): kód hotový, čaká na súhlas s `area_role_choices`.
+  - [ ] Hub (ADR 0011, po F6b): verejný Hub s výberom roly (Celý klub, Manažér a výbor, Tréner a trénerka, Rodič, Dobrovoľník, Hráč / hráčka, Mentor zväzu, Fanúšik), preusporiadanie oblastí, vety pre rolu, „Začnite tu“, výber klubu, dve dráhy (Akadémia profesionálneho klubu „pripravujeme“); Metodika a Prax verejne; Metodika podľa roly (sekcie zbalené, pre rolu hore); Kompas na vyskúšanie bez uloženia.
+    - [ ] Označenie 106 sekcií Metodiky rolami – návrh Claude, schvaľuje Cyril.
+    - [ ] Otvorené: premenovať aj oblasť 4 „Tímoví hráči klubu“ na „Dobrovoľníci“?
+    - [ ] Neskôr: vyhľadávanie v oblastiach a otázkach Kompasu; hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
   - [ ] F6d – postup v Praxi (kroky, varianty).
   - [ ] Neskôr: rodič a tímový hráč klubu pozvánkou (F7), mladí v klube po vyriešení súhlasu zákonného zástupcu; platnosť licencie a kurz ochrany detí, keď budú dáta zo Sportnetu/ISSF.
