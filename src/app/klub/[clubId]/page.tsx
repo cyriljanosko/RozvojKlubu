@@ -21,14 +21,21 @@ type Props = PageProps<"/klub/[clubId]">;
 async function loadOverview(
   clubId: string,
   seasonSlug: string | undefined,
-): Promise<(ClubOverview & { canKompas: boolean }) | "forbidden" | "notFound"> {
+): Promise<
+  (ClubOverview & { canKompas: boolean; canLicensing: boolean }) | "forbidden" | "notFound"
+> {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
   const season = seasonSlug ? (seasonFromSlug(seasonSlug) ?? undefined) : undefined;
   try {
     const overview = await getClubOverview(clubDeps, user, clubId, season);
     // Kompas: management edits, coaches read, admin_sfz both; mentors see only submitted versions (F4c)
-    return { ...overview, canKompas: isAdmin(user) || overview.roles.some((r) => r !== "mentor") };
+    // Licensing evaluation: management and mentor edit, coaches read (ADR 0006)
+    return {
+      ...overview,
+      canKompas: isAdmin(user) || overview.roles.some((r) => r !== "mentor"),
+      canLicensing: isAdmin(user) || overview.roles.length > 0,
+    };
   } catch (error) {
     if (error instanceof ApiError && error.code === "FORBIDDEN") return "forbidden";
     if (error instanceof ApiError && error.code === "NOT_FOUND") return "notFound";
@@ -45,6 +52,7 @@ async function ClubDetail({ params, searchParams }: Props) {
   const tClubRoles = await getTranslations("clubRoles");
   const format = await getFormatter();
   const tKompas = await getTranslations("kompas");
+  const tLicensing = await getTranslations("licensing");
 
   if (result === "forbidden" || result === "notFound") {
     return (
@@ -72,13 +80,25 @@ async function ClubDetail({ params, searchParams }: Props) {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4 text-sm">
-          {result.canKompas && (
-            <Link
-              href={`/klub/${encodeURIComponent(club.clubId)}/kompas`}
-              className="bg-primary text-primary-foreground self-start rounded-md px-3 py-2 text-sm font-medium"
-            >
-              {tKompas("open")}
-            </Link>
+          {(result.canKompas || result.canLicensing) && (
+            <div className="flex flex-wrap gap-2">
+              {result.canKompas && (
+                <Link
+                  href={`/klub/${encodeURIComponent(club.clubId)}/kompas`}
+                  className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+                >
+                  {tKompas("open")}
+                </Link>
+              )}
+              {result.canLicensing && (
+                <Link
+                  href={`/klub/${encodeURIComponent(club.clubId)}/licencne-hodnotenie?season=${seasonToSlug(result.season)}`}
+                  className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+                >
+                  {tLicensing("open")}
+                </Link>
+              )}
+            </div>
           )}
           {result.roles.length > 0 && (
             <p>
