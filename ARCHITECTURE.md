@@ -121,6 +121,7 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `content_revisions`: `{ entity: 1, entityId: 1, version: -1 }`
 - `area_sections`: `{ area: 1, kind: 1, key: 1 }` unikátny
 - `area_practice`: `{ area: 1 }` unikátny
+- `role_catalog`: `{ key: 1 }` unikátny (jeden dokument `key: "roles"`; čaká na súhlas pred prvým zápisom)
 - `kompas_assessments`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/kompas.store.ts`)
 - `kompas_submissions`: `{ clubId: 1, season: 1, submittedAt: -1 }` (zakladá `src/server/db/kompas.store.ts`, súhlas 16. 10. 2026)
 - `licensing_evaluations`: `{ clubId: 1, season: 1 }` unikátny; `licensing_submissions`: `{ clubId: 1, season: 1 }` unikátny
