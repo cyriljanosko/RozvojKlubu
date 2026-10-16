@@ -203,6 +203,10 @@ export interface KompasSubmissionDoc {
   line: string;
   submittedAt: Date;
   submittedBy: string;
+  /** missing = "submitted"; "withdrawn" = cancelled by admin_sfz, kept as history (ADR 0009) */
+  status?: "submitted" | "withdrawn";
+  withdrawnAt?: Date;
+  withdrawnBy?: string;
 }
 
 /** Club inputs of the licensing evaluation (areas 5–7, population, coach gender corrections). */

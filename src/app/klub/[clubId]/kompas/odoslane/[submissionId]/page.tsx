@@ -14,7 +14,10 @@ import { mongoContentStore } from "@/server/db/content.store";
 import { getClubOverview } from "@/server/services/clubs.service";
 import { listAreas } from "@/server/services/content.service";
 import type { KompasResult } from "@/server/services/kompas-scoring";
-import { getSubmission } from "@/server/services/kompas-submission.service";
+import { isAdmin } from "@/server/services/club-access";
+import { getSubmission, isValidSubmission } from "@/server/services/kompas-submission.service";
+
+import { WithdrawSubmission } from "./withdraw-submission";
 
 export const metadata: Metadata = { title: defaultMessages.kompas.submission.title };
 
@@ -67,6 +70,20 @@ async function Submission({ params }: PageProps<"/klub/[clubId]/kompas/odoslane/
           {t("submission.meta", { date, season: sub.season })}
         </p>
         <p className="text-sm">{t("submission.frozen")}</p>
+        {!isValidSubmission(sub) && sub.withdrawnAt && (
+          <p className="bg-muted rounded-md p-3 text-sm">
+            {t("withdraw.withdrawn", {
+              date: sub.withdrawnAt.toLocaleString("sk", {
+                dateStyle: "medium",
+                timeStyle: "short",
+                timeZone: "Europe/Bratislava",
+              }),
+            })}
+          </p>
+        )}
+        {isValidSubmission(sub) && isAdmin(user) && (
+          <WithdrawSubmission clubId={clubId} submissionId={sub.id} />
+        )}
       </header>
       <section className="bg-primary text-primary-foreground flex flex-col gap-1 rounded-xl p-4">
         <p className="text-2xl font-semibold tabular-nums">{t("total", { total: result.total })}</p>

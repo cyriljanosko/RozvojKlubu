@@ -5,7 +5,7 @@ import { addClubMember } from "./clubs.service";
 import { memoryContentStore } from "./content.fixture";
 import { seedContent } from "./content.service";
 import { memoryAssessmentStore, memorySubmissionStore } from "./kompas.fixture";
-import { submitKompas } from "./kompas-submission.service";
+import { submitKompas, withdrawKompasSubmission } from "./kompas-submission.service";
 import { saveKompasAnswers } from "./kompas.service";
 import { memoryEvaluationStore, memoryLicensingSubmissionStore } from "./licensing.fixture";
 import { closeLicensing, reopenLicensing, saveLicensing } from "./licensing.service";
@@ -113,5 +113,14 @@ describe("Vizitka klubu", () => {
     await reopenLicensing(deps, admin, A, { season: "2026/2027" });
     expect((await getPublicVizitka(deps, A)).licensing).toBeNull();
     expect((await getClubVizitka(deps, alice, A)).licensingClosedAt).toBeNull();
+  });
+
+  it("ignores a withdrawn Kompas submission", async () => {
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    const sub = await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    expect((await getPublicVizitka(deps, A)).kompas).not.toBeNull();
+    await withdrawKompasSubmission(deps, admin, A, sub.id);
+    expect((await getPublicVizitka(deps, A)).kompas).toBeNull();
+    expect((await getClubVizitka(deps, alice, A)).kompasSubmittedAt).toBeNull();
   });
 });

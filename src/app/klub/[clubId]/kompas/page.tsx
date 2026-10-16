@@ -105,11 +105,16 @@ async function Kompas({ params }: PageProps<"/klub/[clubId]/kompas">) {
                       total: s.total,
                       filled: s.filledAreas,
                     })}
+                    {s.withdrawnAt && (
+                      <span className="text-muted-foreground"> · {tSubmit("withdrawn")}</span>
+                    )}
                   </Link>
                 </li>
               ))}
             </ul>
-            <CopyLine line={submissions[0].line} />
+            {submissions.find((s) => !s.withdrawnAt) && (
+              <CopyLine line={submissions.find((s) => !s.withdrawnAt)!.line} />
+            )}
           </>
         ) : (
           <p className="text-muted-foreground rounded-md border p-3 text-sm">{tSubmit("none")}</p>

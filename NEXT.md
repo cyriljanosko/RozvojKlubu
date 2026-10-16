@@ -23,7 +23,7 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 - [x] F5 – licenčné hodnotenie a Vizitka klubu (ADR 0006, 0007) – v produkcii 16. 10. (`281f5f4`).
   - [x] F5a – pravidlá, výpočet, model, API – PR #21 (zlúčený 16. 10.).
   - [x] Znovuotvorenie sezóny adminom (ADR 0008) – PR #25 (zlúčený 16. 10.); index zmenený, Žipov 2026/2027 otvorený a vstupy prázdne.
-  - [ ] Kompas Žipova: verejná Vizitka ukazuje skúšobné odoslanie z F4c (testovacie odpovede) – rozhodnúť (zmazať, „zrušiť odoslanie“ pre admina, alebo nechať).
+  - [ ] Zrušenie odoslania Kompasu adminom (ADR 0009, vetva `feat/kompas-withdraw`): kód hotový, PR #27 na review; skúšobné odoslanie Žipova z F4c už zrušené (zdieľaná DB) – produkcia ho prestane ukazovať po zlúčení #27.
   - [x] F5b – licenčné hodnotenie v UI – PR #22 (zlúčený 16. 10.).
   - [x] F5c – Vizitka klubu (ADR 0007): verejná `/vizitka/[clubId]` a pre roly `/klub/[clubId]/vizitka`, Kompas a licenčné hodnotenie vedľa seba za sezónu – PR #23 (zlúčený 16. 10.).
   - [ ] Neskôr: tlač / PDF Vizitky, vizitka pre obec.

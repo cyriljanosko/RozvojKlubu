@@ -4,7 +4,10 @@ import type { ClubDeps } from "@/server/services/clubs.service";
 import type { ContentStore } from "@/server/services/content.service";
 import { profileFromSeason, sizeLabel } from "@/server/services/kompas-export";
 import type { BandKey, KompasResult } from "@/server/services/kompas-scoring";
-import type { SubmissionStore } from "@/server/services/kompas-submission.service";
+import {
+  isValidSubmission,
+  type SubmissionStore,
+} from "@/server/services/kompas-submission.service";
 import type { AssessmentStore } from "@/server/services/kompas.service";
 import type { LicensingBand } from "@/server/services/licensing-rules";
 import type { AreaKey, LicensingResult } from "@/server/services/licensing-scoring";
@@ -89,7 +92,8 @@ async function build(deps: VizitkaDeps, clubId: string, requested?: string | nul
     deps.submissions.listSubmissions(clubId, season),
     deps.licensingSubmissions.findSubmission(clubId, season),
   ]);
-  const latest = [...kompasSubs].sort((a, b) => +b.submittedAt - +a.submittedAt)[0] ?? null;
+  const latest =
+    kompasSubs.filter(isValidSubmission).sort((a, b) => +b.submittedAt - +a.submittedAt)[0] ?? null;
   const kompasResult = latest ? (latest.result as unknown as KompasResult) : null;
   const licensingResult = closed ? (closed.result as unknown as LicensingResult) : null;
   const profile = seasonData ? profileFromSeason(seasonData) : null;

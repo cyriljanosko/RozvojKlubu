@@ -10,6 +10,7 @@ import {
   listClubSubmissions,
   listMentorClubs,
   submitKompas,
+  withdrawKompasSubmission,
   type SubmissionDeps,
 } from "./kompas-submission.service";
 import { getKompas, saveKompasAnswers } from "./kompas.service";
@@ -85,5 +86,36 @@ describe("kompas submissions", () => {
     });
     await expect(listMentorClubs(deps, alice)).rejects.toMatchObject({ code: "FORBIDDEN" });
     expect((await listMentorClubs(deps, admin)).map((r) => r.clubId).sort()).toEqual([B, A].sort());
+  });
+
+  it("lets only admin_sfz withdraw a submission, keeps it in the history and falls back", async () => {
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    const first = await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1", "3.i.2"], expectedVersion: 1 });
+    const second = await submitKompas(deps, alice, A, { expectedVersion: 2 });
+
+    for (const who of [alice, bob, mona]) {
+      await expect(withdrawKompasSubmission(deps, who, A, second.id)).rejects.toMatchObject({
+        code: "FORBIDDEN",
+      });
+    }
+    await expect(withdrawKompasSubmission(deps, admin, B, second.id)).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
+    const withdrawn = await withdrawKompasSubmission(deps, admin, A, second.id);
+    expect(withdrawn.withdrawnAt).toBeInstanceOf(Date);
+    await expect(withdrawKompasSubmission(deps, admin, A, second.id)).rejects.toMatchObject({
+      code: "CONFLICT",
+    });
+
+    const history = await listClubSubmissions(deps, mona, A);
+    expect(history).toHaveLength(2);
+    expect(Object.fromEntries(history.map((h) => [h.id, h.withdrawnAt !== null]))).toEqual({
+      [first.id]: false,
+      [second.id]: true,
+    });
+    expect((await getSubmission(deps, mona, A, second.id)).status).toBe("withdrawn");
+    const [row] = (await listMentorClubs(deps, mona)).filter((r) => r.clubId === A);
+    expect(row.latest?.id).toBe(first.id);
   });
 });
