@@ -53,6 +53,7 @@ async function ClubDetail({ params, searchParams }: Props) {
   const format = await getFormatter();
   const tKompas = await getTranslations("kompas");
   const tLicensing = await getTranslations("licensing");
+  const tVizitka = await getTranslations("vizitka");
 
   if (result === "forbidden" || result === "notFound") {
     return (
@@ -82,6 +83,12 @@ async function ClubDetail({ params, searchParams }: Props) {
         <CardContent className="flex flex-col gap-4 text-sm">
           {(result.canKompas || result.canLicensing) && (
             <div className="flex flex-wrap gap-2">
+              <Link
+                href={`/klub/${encodeURIComponent(club.clubId)}/vizitka?season=${seasonToSlug(result.season)}`}
+                className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+              >
+                {tVizitka("open")}
+              </Link>
               {result.canKompas && (
                 <Link
                   href={`/klub/${encodeURIComponent(club.clubId)}/kompas`}

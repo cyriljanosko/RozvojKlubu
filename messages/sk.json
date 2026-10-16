@@ -507,5 +507,44 @@
     },
     "closed": "Sezóna je uzavretá {date}. Zobrazuje sa zmrazená kópia, údaje sa už nedajú meniť.",
     "notFound": "Pre tento klub nie sú dáta zo Sportnetu."
+  },
+  "vizitka": {
+    "title": "Vizitka klubu",
+    "open": "Vizitka klubu",
+    "publicIntro": "Ako klub stojí v Akadémii rozvoja klubov SFZ: sebahodnotenie Kompas a licenčné hodnotenie za sezónu.",
+    "clubIntro": "Vizitka ukazuje posledný odoslaný Kompas a uzavreté licenčné hodnotenie sezóny. Rovnaké hodnotenie oblastí vidí aj verejnosť.",
+    "publicLink": "Verejná vizitka",
+    "season": "Sezóna",
+    "union": "{union} · {region}",
+    "size": {
+      "small": "malý klub",
+      "medium": "stredný klub",
+      "large": "veľký klub"
+    },
+    "profile": "{teams, plural, one {# družstvo} few {# družstvá} other {# družstiev}} · {players, plural, one {# hráč} few {# hráči} other {# hráčov}} · {coaches, plural, one {# tréner} few {# tréneri} other {# trénerov}}",
+    "noProfile": "Pre túto sezónu nie sú dáta zo Sportnetu.",
+    "kompas": {
+      "title": "Kompas klubu",
+      "subtitle": "sebahodnotenie v 11 oblastiach",
+      "total": "{total} z 220 bodov",
+      "filled": "vyplnené oblasti: {filled} z 11",
+      "none": "Zatiaľ neodoslané.",
+      "points": "{points} / 20",
+      "empty": "nevyplnené",
+      "few": "nehodnotí sa",
+      "submittedAt": "Odoslané {date}",
+      "draft": "Rozpracovaná verzia {version} ešte nie je odoslaná – vo Vizitke je posledná odoslaná.",
+      "draftOnly": "Rozpracovaný Kompas (verzia {version}) ešte nie je odoslaný mentorovi.",
+      "link": "Otvoriť Kompas"
+    },
+    "licensing": {
+      "title": "Licenčné hodnotenie",
+      "subtitle": "licenčný systém, 6 oblastí",
+      "none": "Zatiaľ neuzavreté.",
+      "closedAt": "Uzavreté {date} · koeficient sídla {coef}",
+      "draftOnly": "Rozpracované hodnotenie (verzia {version}) ešte nie je uzavreté.",
+      "link": "Otvoriť licenčné hodnotenie"
+    },
+    "notFound": "Klub sa nenašiel."
   }
 }
