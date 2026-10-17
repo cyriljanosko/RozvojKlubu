@@ -6,11 +6,14 @@ import { mongoAreaRoleChoiceStore } from "@/server/db/academy.store";
 import { mongoContentStore, mongoRoleCatalogStore } from "@/server/db/content.store";
 import { mongoAssessmentStore, mongoSubmissionStore } from "@/server/db/kompas.store";
 import { mongoEvaluationStore, mongoLicensingSubmissionStore } from "@/server/db/licensing.store";
+import { mongoPracticeStore } from "@/server/db/content.store";
+import { mongoProgressStore } from "@/server/db/practice-progress.store";
 import type { AcademyDeps } from "@/server/services/academy.service";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { HubDeps } from "@/server/services/hub.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
+import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
 import type { VizitkaDeps } from "@/server/services/vizitka.service";
 import type { KompasDeps } from "@/server/services/kompas.service";
 
@@ -57,4 +60,10 @@ export const hubDeps: HubDeps = {
   ...clubDeps,
   content: mongoContentStore,
   roleCatalog: mongoRoleCatalogStore,
+};
+
+export const progressDeps: PracticeProgressDeps = {
+  ...clubDeps,
+  practice: mongoPracticeStore,
+  progress: mongoProgressStore,
 };

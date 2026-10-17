@@ -47,7 +47,10 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] Neskôr: knižnica vzorov s dokumentmi (PDF, Word, Excel, obrázky) – úložisko súborov rozhodnúť.
     - [ ] Neskôr: vyhľadávanie v oblastiach a otázkach Kompasu; hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
-  - [ ] F6d – postup v Praxi (kroky, varianty).
+  - [ ] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
+    - [ ] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` (vetva `feat/practice-progress`): hotové, kolekcia a index v `rozvojklubu_dev` (súhlas 17. 10.), skúšobný zápis Žipova vrátený na prázdny, PR na review.
+    - [ ] F6d-b – UI v Praxi: úlohy prvého kroku, výber možnosti a „hotové“ pri kroku, priebeh roly, výber klubu.
+    - [ ] F6d-c – úloha „pokračujte krokom…“ v Moja Akadémia a na úvodnej obrazovke, postup pri slabej oblasti.
   - [ ] Neskôr: rodič a tímový hráč klubu pozvánkou (F7), mladí v klube po vyriešení súhlasu zákonného zástupcu; platnosť licencie a kurz ochrany detí, keď budú dáta zo Sportnetu/ISSF.
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
 - [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.

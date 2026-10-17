@@ -95,7 +95,7 @@ export async function listPracticeAreas(
 
 /** null when the area has no practice yet (only areas 3 and 4 in the pilot). */
 export async function getPractice(
-  store: PracticeStore,
+  store: Pick<PracticeStore, "findPractice">,
   actor: CurrentUser | null,
   area: number,
 ): Promise<PracticeDto | null> {
