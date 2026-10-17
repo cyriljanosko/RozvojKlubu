@@ -33,6 +33,7 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
       area: task.area ?? 0,
       points: task.points ?? 0,
       club: task.clubName ?? "",
+      step: task.step ?? "",
     });
 
   return (
@@ -49,7 +50,7 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
 
       {view.clubs.map((club) => {
         const base = `/klub/${encodeURIComponent(club.clubId)}`;
-        const { todo, more, weak } = splitTasks(club.tasks);
+        const { todo, more, weak, practice } = splitTasks(club.tasks);
         return (
           <div key={club.clubId} className="flex flex-col gap-4">
             <p className="font-semibold break-words">
@@ -120,6 +121,24 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
               )}
             </div>
 
+            {practice.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <h3 className="text-sm font-semibold">{t("practice")}</h3>
+                <ul className="flex flex-col gap-2">
+                  {practice.map((task) => (
+                    <li key={`${task.key}-${task.area}`}>
+                      <Link
+                        href={task.href}
+                        className={`hover:bg-muted/50 block rounded-md border border-l-4 p-3 text-sm ${SEVERITY[task.severity]}`}
+                      >
+                        {taskText(task)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {weak.length > 0 && (
               <div className="flex flex-col gap-1">
                 <h3 className="text-sm font-semibold">{t("weak")}</h3>
@@ -134,8 +153,16 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
                           {w.area}
                         </span>
                         <span className="min-w-0 flex-1 break-words">{areaName(w.area!)}</span>
-                        <span className="text-muted-foreground shrink-0 text-xs">
+                        <span className="text-muted-foreground shrink-0 text-right text-xs">
                           {t("points", { points: w.points ?? 0 })}
+                          {w.practice && (
+                            <span className="block">
+                              {tTask("practiceProgress", {
+                                done: w.practice.stepsDone,
+                                total: w.practice.stepsTotal,
+                              })}
+                            </span>
+                          )}
                         </span>
                       </Link>
                     </li>

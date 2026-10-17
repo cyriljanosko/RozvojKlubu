@@ -632,7 +632,10 @@
       "weak_area": "Oblasť {area} má {points} z 20 – pozrieť Prax a prvý krok",
       "club_kompas_missing": "Kompas neodoslalo {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
       "club_licensing_open": "Licenčné hodnotenie neuzavrelo {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
-      "open": "Otvoriť"
+      "open": "Otvoriť",
+      "practice_first": "Prax oblasti {area}: dokončite prvý krok – {step}",
+      "practice_next": "Prax oblasti {area}: pokračujte – {step}",
+      "practiceProgress": "Prax: {done} z {total} krokov"
     },
     "roles": {
       "title": "Moje roly v oblastiach",
@@ -751,7 +754,8 @@
       "weak": "Slabé oblasti podľa Kompasu",
       "points": "{points} z 20",
       "academy": "Otvoriť Moja Akadémia",
-      "mentorSummary": "{count, plural, one {# klub} few {# kluby} other {# klubov}}, Kompas odoslaný {sent}"
+      "mentorSummary": "{count, plural, one {# klub} few {# kluby} other {# klubov}}, Kompas odoslaný {sent}",
+      "practice": "Pokračujte v Praxi"
     },
     "how": {
       "title": "Ako Akadémia funguje",

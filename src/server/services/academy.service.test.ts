@@ -12,11 +12,15 @@ import {
   roleOptions,
   saveAreaRoleChoice,
   splitTasks,
+  practiceInput,
   type AcademyDeps,
 } from "./academy.service";
 import { A, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import { addClubMember } from "./clubs.service";
-import { memoryContentStore, memoryRoleCatalogStore } from "./content.fixture";
+import { memoryContentStore, memoryPracticeStore, memoryRoleCatalogStore } from "./content.fixture";
+import { memoryProgressStore } from "./practice-progress.fixture";
+import { savePracticeProgress } from "./practice-progress.service";
+import { seedPractice } from "./practice.service";
 import { seedContent } from "./content.service";
 import { memoryAssessmentStore, memorySubmissionStore } from "./kompas.fixture";
 import { submitKompas } from "./kompas-submission.service";
@@ -27,6 +31,7 @@ import { seedRoleCatalog } from "./role-catalog.service";
 
 const file = JSON.parse(readFileSync(join(process.cwd(), "content/roly.json"), "utf8"));
 const catalog = roleCatalogSchema.parse(file);
+const prax3 = JSON.parse(readFileSync(join(process.cwd(), "content/prax/03.json"), "utf8"));
 const mona = { id: "mona", email: "mona@obfz.sk", name: "Mona", role: "public" as const };
 
 const emptyResult = { filledAreas: 0, next: [], areas: [] };
@@ -114,7 +119,10 @@ async function setup(): Promise<AcademyDeps> {
     licensingSubmissions: memoryLicensingSubmissionStore(),
     roleCatalog,
     choices: memoryChoiceStore(),
+    practice: memoryPracticeStore(memoryContentStore()),
+    progress: memoryProgressStore(),
   };
+  await seedPractice(deps.practice as ReturnType<typeof memoryPracticeStore>, admin, [prax3]);
   await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
   await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
   await addClubMember(deps, admin, A, { email: "mona@obfz.sk", role: "mentor" });
@@ -150,6 +158,25 @@ describe("getMyAcademy", () => {
     );
   });
 
+  it("adds the Prax task of the user's role once the club has started (F6d)", async () => {
+    const keys = async (u: typeof alice) =>
+      (await getMyAcademy(deps, u)).clubs[0].tasks.map((t) => t.key);
+    expect(await keys(alice)).not.toContain("practice_first");
+    await savePracticeProgress(
+      { ...deps, practice: deps.practice, progress: deps.progress } as never,
+      alice,
+      A,
+      3,
+      { tasks: ["v1"], steps: [], expectedVersion: 0 },
+    );
+    const task = (await getMyAcademy(deps, alice)).clubs[0].tasks.find(
+      (t) => t.key === "practice_first",
+    );
+    expect(task).toMatchObject({ area: 3, href: expect.stringContaining("role=v") });
+    // the coach has their own role "t" in the shared record – nothing started yet
+    expect(await keys(bob)).not.toContain("practice_first");
+  });
+
   it("gives the mentor the cohort with tasks and no own club section", async () => {
     const view = await getMyAcademy(deps, mona);
     expect(view.clubs).toHaveLength(0);
@@ -176,6 +203,66 @@ describe("getMyAcademy", () => {
   });
 });
 
+describe("Prax tasks (F6d)", () => {
+  const input = {
+    clubId: A,
+    roles: ["management" as const],
+    kompasVersion: 1,
+    kompasResult: { filledAreas: 11, areas: [], next: [{ area: 3, points: 6 }] as never },
+    kompasUnsent: false,
+    licensingClosed: true,
+    teamsWithoutCoach: 0,
+  };
+  const p = {
+    area: 3,
+    roleId: "v",
+    firstStepTitle: "Vyplňte prehľad trénerov",
+    tasksTotal: 3,
+    stepsTotal: 4,
+    next: { label: "1. týždeň", title: "Spočítajte, koho treba" },
+  };
+
+  it("asks to finish the first step, then to continue with the next step, only once started", () => {
+    expect(clubTasks({ ...input, practice: [{ ...p, tasksDone: 0, stepsDone: 0 }] })).toEqual([
+      expect.objectContaining({
+        key: "weak_area",
+        area: 3,
+        practice: { stepsDone: 0, stepsTotal: 4 },
+      }),
+    ]);
+    const first = clubTasks({ ...input, practice: [{ ...p, tasksDone: 1, stepsDone: 0 }] });
+    expect(first[0]).toMatchObject({
+      key: "practice_first",
+      step: "Vyplňte prehľad trénerov",
+      href: `/oblasti/3?tab=prax&role=v&club=${encodeURIComponent(A)}`,
+    });
+    const next = clubTasks({ ...input, practice: [{ ...p, tasksDone: 3, stepsDone: 0 }] });
+    expect(next[0]).toMatchObject({
+      key: "practice_next",
+      step: "1. týždeň: Spočítajte, koho treba",
+    });
+    const done = clubTasks({
+      ...input,
+      practice: [{ ...p, tasksDone: 3, stepsDone: 4, next: null }],
+    });
+    expect(done.map((t) => t.key)).toEqual(["weak_area"]);
+  });
+
+  it("builds the input from the Prax content and the role", async () => {
+    const store = memoryPracticeStore(memoryContentStore());
+    await seedPractice(store, admin, [prax3]);
+    const content = (await store.findPractice(3))!.content as never;
+    expect(practiceInput(3, content, null, "nope")).toBeNull();
+    expect(practiceInput(3, content, { tasks: ["t1"], steps: [] }, "t")).toMatchObject({
+      roleId: "t",
+      tasksDone: 1,
+      tasksTotal: 3,
+      stepsDone: 0,
+      next: { label: expect.any(String) },
+    });
+  });
+});
+
 describe("splitTasks", () => {
   it("keeps up to three tasks to do and the weak areas apart", () => {
     const tasks = clubTasks({
@@ -198,5 +285,11 @@ describe("splitTasks", () => {
     expect(split.todo.map((t) => t.key)).toEqual(["kompas_unsent", "licensing_open"]);
     expect(split.more).toBe(1);
     expect(split.weak.map((t) => t.area)).toEqual([8, 4]);
+    expect(split.practice).toEqual([]);
+    const withPrax = splitTasks([
+      { key: "practice_next", severity: "info", href: "/x", area: 3, step: "s" },
+    ]);
+    expect(withPrax.practice.map((t) => t.key)).toEqual(["practice_next"]);
+    expect(withPrax.todo).toEqual([]);
   });
 });

@@ -17,6 +17,12 @@ import type {
   EvaluationStore,
   LicensingSubmissionStore,
 } from "@/server/services/licensing.service";
+import {
+  summarizeProgress,
+  type PracticeProgressStore,
+} from "@/server/services/practice-progress.service";
+import { getPractice, type PracticeStore } from "@/server/services/practice.service";
+import type { PracticeContent } from "@/server/services/practice.schema";
 import type { RoleCatalog } from "@/server/services/role-catalog.schema";
 import { getRoleCatalog, type RoleCatalogStore } from "@/server/services/role-catalog.service";
 import { currentSeason } from "@/server/services/season";
@@ -39,6 +45,8 @@ export interface AcademyDeps extends SubmissionDeps {
   licensingSubmissions: Pick<LicensingSubmissionStore, "findSubmission">;
   roleCatalog: Pick<RoleCatalogStore, "findCatalog">;
   choices: AreaRoleChoiceStore;
+  practice: Pick<PracticeStore, "findPractice" | "listPracticeAreas">;
+  progress: Pick<PracticeProgressStore, "findProgress">;
 }
 
 export type TaskSeverity = "crit" | "warn" | "info";
@@ -51,7 +59,9 @@ export interface AcademyTask {
     | "teams_without_coach"
     | "weak_area"
     | "club_kompas_missing"
-    | "club_licensing_open";
+    | "club_licensing_open"
+    | "practice_first"
+    | "practice_next";
   severity: TaskSeverity;
   /** relative link inside the app */
   href: string;
@@ -59,6 +69,22 @@ export interface AcademyTask {
   points?: number;
   count?: number;
   clubName?: string;
+  /** Prax: the step to continue with (label and title) */
+  step?: string;
+  /** Prax progress of the user's role in the area (weak areas, F6d) */
+  practice?: { stepsDone: number; stepsTotal: number };
+}
+
+/** Prax progress of the user's role in one area of a club (F6d). */
+export interface PracticeTaskInput {
+  area: number;
+  roleId: string;
+  firstStepTitle: string;
+  tasksDone: number;
+  tasksTotal: number;
+  stepsDone: number;
+  stepsTotal: number;
+  next: { label: string; title: string } | null;
 }
 
 export interface TaskInput {
@@ -70,6 +96,8 @@ export interface TaskInput {
   kompasUnsent: boolean;
   licensingClosed: boolean;
   teamsWithoutCoach: number;
+  /** Prax progress per area with practice (F6d) */
+  practice?: PracticeTaskInput[];
 }
 
 const ORDER: Record<TaskSeverity, number> = { crit: 0, warn: 1, info: 2 };
@@ -108,28 +136,57 @@ export function clubTasks(i: TaskInput): AcademyTask[] {
           .slice(0, 1)
           .map((a) => ({ area: a.area, points: a.points! }))
       : [];
+  const practice = new Map((i.practice ?? []).map((p) => [p.area, p]));
+  const praxHref = (p: PracticeTaskInput) =>
+    `/oblasti/${p.area}?tab=prax&role=${encodeURIComponent(p.roleId)}&club=${encodeURIComponent(i.clubId)}`;
+  // started Prax that is not finished: continue with the first step, then the next step of the path
+  for (const p of practice.values()) {
+    const started = p.tasksDone + p.stepsDone > 0;
+    if (!started) continue;
+    if (p.tasksDone < p.tasksTotal) {
+      tasks.push({
+        key: "practice_first",
+        severity: "info",
+        href: praxHref(p),
+        area: p.area,
+        step: p.firstStepTitle,
+      });
+    } else if (p.next) {
+      tasks.push({
+        key: "practice_next",
+        severity: "info",
+        href: praxHref(p),
+        area: p.area,
+        step: `${p.next.label}: ${p.next.title}`,
+      });
+    }
+  }
   for (const w of weak) {
+    const p = practice.get(w.area);
     tasks.push({
       key: "weak_area",
       severity: "info",
-      href: `/oblasti/${w.area}?tab=prax`,
+      href: p ? praxHref(p) : `/oblasti/${w.area}?tab=prax`,
       area: w.area,
       points: w.points,
+      ...(p ? { practice: { stepsDone: p.stepsDone, stepsTotal: p.stepsTotal } } : {}),
     });
   }
   return tasks.sort((a, b) => ORDER[a.severity] - ORDER[b.severity]);
 }
 
-/** Pure: home screen split (H5b) – up to `limit` tasks to do and the weak areas of the club apart. */
+/** Pure: home screen split (H5b) – up to `limit` tasks to do; weak areas and Prax steps (F6d) apart. */
 export function splitTasks(
   tasks: readonly AcademyTask[],
   limit = 3,
-): { todo: AcademyTask[]; more: number; weak: AcademyTask[] } {
-  const todo = tasks.filter((t) => t.key !== "weak_area");
+): { todo: AcademyTask[]; more: number; weak: AcademyTask[]; practice: AcademyTask[] } {
+  const isPractice = (t: AcademyTask) => t.key === "practice_first" || t.key === "practice_next";
+  const todo = tasks.filter((t) => t.key !== "weak_area" && !isPractice(t));
   return {
     todo: todo.slice(0, limit),
     more: Math.max(0, todo.length - limit),
     weak: tasks.filter((t) => t.key === "weak_area"),
+    practice: tasks.filter(isPractice),
   };
 }
 
@@ -159,6 +216,47 @@ export function mentorTasks(
     });
   }
   return tasks;
+}
+
+/** Pure: Prax role of an area from the user's own roles in the areas ("area.key"), if any. */
+export function practiceRoleFromChoice(
+  catalog: RoleCatalog,
+  chosen: readonly string[],
+  area: number,
+): string | null {
+  const areaRoles = catalog.areas.find((a) => a.area === area)?.roles ?? [];
+  return (
+    chosen
+      .filter((r) => r.startsWith(`${area}.`))
+      .map((r) => areaRoles.find((x) => x.key === r.slice(String(area).length + 1)))
+      .find((r) => r?.practiceRole)?.practiceRole ?? null
+  );
+}
+
+/** Prax roles of the pilot club roles (ADR 0004); mentors only read. */
+const CLUB_PRACTICE_ROLE: Partial<Record<ClubRole, string>> = { management: "v", coach: "t" };
+
+/** Pure: the user's Prax role and progress in one area of a club. */
+export function practiceInput(
+  area: number,
+  content: Pick<PracticeContent, "roles">,
+  progress: Parameters<typeof summarizeProgress>[1],
+  roleId: string | null,
+): PracticeTaskInput | null {
+  const role = content.roles.find((r) => r.id === roleId);
+  if (!role) return null;
+  const summary = summarizeProgress(content, progress).find((r) => r.roleId === role.id)!;
+  const next = role.steps.find((s) => s.id === summary.nextStepId);
+  return {
+    area,
+    roleId: role.id,
+    firstStepTitle: role.firstStep.title,
+    tasksDone: summary.tasksDone,
+    tasksTotal: summary.tasksTotal,
+    stepsDone: summary.stepsDone,
+    stepsTotal: summary.stepsTotal,
+    next: next ? { label: next.label, title: next.title } : null,
+  };
 }
 
 export interface AreaRoleOption {
@@ -216,6 +314,14 @@ export async function getMyAcademy(
   const clubs = (await deps.clubs.listClubs(clubIds)).sort((a, b) =>
     a.name.localeCompare(b.name, "sk"),
   );
+  const practices = (
+    await Promise.all(
+      (await deps.practice.listPracticeAreas()).map(async (area) => ({
+        area,
+        content: (await getPractice(deps.practice, user, area))?.content ?? null,
+      })),
+    )
+  ).filter((p): p is { area: number; content: PracticeContent } => p.content !== null);
 
   const own: AcademyClub[] = [];
   for (const club of clubs) {
@@ -232,6 +338,20 @@ export async function getMyAcademy(
     ]);
     const latest =
       subs.filter(isValidSubmission).sort((a, b) => +b.submittedAt - +a.submittedAt)[0] ?? null;
+    const practice = (
+      await Promise.all(
+        practices.map(async ({ area, content }) => {
+          const roleId =
+            (catalog ? practiceRoleFromChoice(catalog, choice?.roles ?? [], area) : null) ??
+            roles
+              .map((r) => CLUB_PRACTICE_ROLE[r])
+              .find((id) => content.roles.some((x) => x.id === id)) ??
+            null;
+          const progress = await deps.progress.findProgress(club.clubId, season, area);
+          return practiceInput(area, content, progress, roleId);
+        }),
+      )
+    ).filter((p): p is PracticeTaskInput => p !== null);
     const unsent = !latest || (view.updatedAt !== null && +view.updatedAt > +latest.submittedAt);
     own.push({
       clubId: club.clubId,
@@ -258,6 +378,7 @@ export async function getMyAcademy(
         kompasUnsent: unsent,
         licensingClosed: closed !== null,
         teamsWithoutCoach: seasonData ? profileFromSeason(seasonData).teamsWithoutCoach : 0,
+        practice,
       }),
       chosenRoles: choice?.roles ?? [],
       roleOptions: catalog ? roleOptions(catalog, roles) : [],
@@ -324,16 +445,12 @@ export async function practiceRoleFor(
   const season = currentSeason(deps.now?.() ?? new Date());
   const catalog = (await getRoleCatalog(deps.roleCatalog, user))?.content;
   if (!catalog) return null;
-  const areaRoles = catalog.areas.find((a) => a.area === area)?.roles ?? [];
   const memberships = await deps.memberships.listByUser(user.id);
   const clubIds = [...new Set(memberships.filter((m) => m.season === season).map((m) => m.clubId))];
   for (const clubId of clubIds) {
     const choice = await deps.choices.findChoice(user.id, clubId, season);
-    const hit = choice?.roles
-      .filter((r) => r.startsWith(`${area}.`))
-      .map((r) => areaRoles.find((x) => x.key === r.slice(String(area).length + 1)))
-      .find((r) => r?.practiceRole);
-    if (hit?.practiceRole) return hit.practiceRole;
+    const hit = practiceRoleFromChoice(catalog, choice?.roles ?? [], area);
+    if (hit) return hit;
   }
   return null;
 }
