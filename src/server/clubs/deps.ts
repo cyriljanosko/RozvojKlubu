@@ -54,6 +54,8 @@ export const academyDeps: AcademyDeps = {
   licensingSubmissions: mongoLicensingSubmissionStore,
   roleCatalog: mongoRoleCatalogStore,
   choices: mongoAreaRoleChoiceStore,
+  practice: mongoPracticeStore,
+  progress: mongoProgressStore,
 };
 
 export const hubDeps: HubDeps = {

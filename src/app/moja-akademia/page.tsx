@@ -42,7 +42,10 @@ async function TaskList({ tasks }: { tasks: AcademyTask[] }) {
                 area: task.area ?? 0,
                 points: task.points ?? 0,
                 club: task.clubName ?? "",
+                step: task.step ?? "",
               })}
+              {task.practice &&
+                ` · ${t("practiceProgress", { done: task.practice.stepsDone, total: task.practice.stepsTotal })}`}
             </span>
             <span className="text-muted-foreground shrink-0 text-xs">{t("open")} →</span>
           </Link>
