@@ -341,11 +341,7 @@
       "title": "Čo urobiť najbližšie",
       "intro": "Tri oblasti, kde klub získa najviac. Úlohy sú otázky, ktoré ste nezaškrtli.",
       "empty": "Najprv vyplňte aspoň jednu oblasť.",
-      "order": [
-        "Začnite tu",
-        "Potom",
-        "A ďalej"
-      ],
+      "order": ["Začnite tu", "Potom", "A ďalej"],
       "methodology": "Metodika oblasti",
       "practice": "Prax oblasti"
     },
@@ -789,13 +785,7 @@
     "button": "Hľadať",
     "headerLink": "Hľadať",
     "tipsTitle": "Napríklad:",
-    "tips": [
-      "licencia trénera",
-      "dotácia",
-      "dobrovoľníci",
-      "ochrana detí",
-      "nábor hráčov"
-    ],
+    "tips": ["licencia trénera", "dotácia", "dobrovoľníci", "ochrana detí", "nábor hráčov"],
     "results": "{count, plural, one {# výsledok} few {# výsledky} other {# výsledkov}} pre „{query}“",
     "none": "Pre „{query}“ sme nič nenašli. Skúste iné slovo alebo jeden z tipov.",
     "inArea": "Oblasť {number} · {name}",
