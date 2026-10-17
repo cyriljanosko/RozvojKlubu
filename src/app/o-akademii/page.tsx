@@ -17,9 +17,15 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { connection } from "next/server";
+import { Suspense } from "react";
+
+import { Formation } from "@/components/about/formation";
 import { YouTubeVideo } from "@/components/content/youtube-video";
 import { Button } from "@/components/ui/button";
 import { defaultMessages } from "@/i18n/config";
+import { mongoContentStore } from "@/server/db/content.store";
+import { listAreas } from "@/server/services/content.service";
 
 export const metadata: Metadata = { title: defaultMessages.aboutPage.title };
 
@@ -65,7 +71,15 @@ const SECTIONS: { key: Section; items: [string, LucideIcon][] }[] = [
   },
 ];
 
-/** About the Academy (H7): short texts with icons, static content. */
+const LINES = ["goalkeeper", "defense", "midfield", "attack"] as const;
+
+/** The eleven with area descriptions from the managed content (read per request). */
+async function Eleven() {
+  await connection();
+  return <Formation areas={await listAreas(mongoContentStore, null)} />;
+}
+
+/** About the Academy (H7): short texts with icons; the eleven reads the areas. */
 export default async function AboutPage() {
   const t = await getTranslations("aboutPage");
   return (
@@ -87,6 +101,32 @@ export default async function AboutPage() {
           note={t("video.note")}
         />
         <p className="text-muted-foreground text-xs">{t("video.credit")}</p>
+      </section>
+
+      <section
+        aria-labelledby="about-eleven"
+        className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)]"
+      >
+        <div className="flex flex-col gap-4">
+          <h2 id="about-eleven" className="text-xl font-semibold sm:text-2xl">
+            {t("eleven.title")}
+          </h2>
+          <p className="text-muted-foreground">{t("eleven.text")}</p>
+          <dl className="flex flex-col gap-3">
+            {LINES.map((line) => (
+              <div key={line} className="border-l-primary border-l-2 pl-3">
+                <dt className="font-semibold">
+                  {t(`eleven.lines.${line}.title`)} ·{" "}
+                  <span className="font-normal">{t(`eleven.lines.${line}.areas`)}</span>
+                </dt>
+                <dd className="text-muted-foreground text-sm">{t(`eleven.lines.${line}.text`)}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <Suspense fallback={<div className="mx-auto aspect-[3/4] w-full max-w-md" aria-hidden />}>
+          <Eleven />
+        </Suspense>
       </section>
 
       {SECTIONS.map(({ key, items }) => (

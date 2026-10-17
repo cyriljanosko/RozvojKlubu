@@ -889,6 +889,37 @@
       "play": "Prehrať video (8 min)",
       "note": "Video sa prehrá z YouTube. Kým ho nespustíte, nič sa z YouTube nenačíta.",
       "credit": "Video bolo vytvorené pomocou umelej inteligencie (Google Gemini)."
+    },
+    "eleven": {
+      "title": "Prečo 11 oblastí",
+      "text": "Futbal hrá jedenásť hráčov a každý post má v zápase svoju úlohu. Keď jeden chýba alebo nehrá svoju rolu, cíti to celý tím. Rovnako funguje klub, preto sme Akadémiu postavili ako jedenástku: 11 oblastí rozvoja. Klub nemusí byť najlepší vo všetkom naraz, ale potrebuje mať obsadený každý post.",
+      "hint": "Kliknite na hráča a zistite, čo oblasť rieši.",
+      "pitch": "Jedenástka Akadémie – 11 oblastí na ihrisku",
+      "lines": {
+        "goalkeeper": {
+          "title": "Brankár",
+          "areas": "Vedenie klubu",
+          "text": "Vidí celé ihrisko, rozhoduje a drží poriadok vzadu."
+        },
+        "defense": {
+          "title": "Obrana",
+          "areas": "Financie, Právne minimum, Digitalizácia, Prostredie klubu",
+          "text": "Pevný základ, aby klub nedostával zbytočné góly."
+        },
+        "midfield": {
+          "title": "Stred",
+          "areas": "Manažér, Tréneri, Dobrovoľníci",
+          "text": "Spájajú obranu s útokom a ťahajú každodenný chod klubu."
+        },
+        "attack": {
+          "title": "Útok",
+          "areas": "Hráč a hráčka, Aktivity v klube, Marketing a fanúšikovia",
+          "text": "To, čo vidno – hráči na ihrisku, podujatia a ľudia na tribúne."
+        }
+      },
+      "position": "{line} · oblasť {number}",
+      "detail": "Detail oblasti",
+      "close": "Zavrieť"
     }
   }
 }
