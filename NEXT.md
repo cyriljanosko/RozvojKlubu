@@ -1,6 +1,6 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
@@ -42,8 +42,9 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
       - [x] H5c – „Ako Akadémia funguje“ pre neprihlásených: Vizitka klubu (zoznam pilotných klubov), 1. úroveň samoštúdium, 2. úroveň po prihlásení (komunikácia „pripravujeme“, mentor zväzu) – PR #38 (zlúčený 16. 10., v produkcii `16c2e65`, overené na 375 px).
       - [ ] Obrázok v úvode je zatiaľ ilustrácia; nahradiť fotkou SFZ (dodá Cyril).
     - [x] H7 – stránka „O Akadémii“ `/o-akademii` – PR #43 (zlúčený 17. 10.): základné info, pomoc klubom na každej úrovni a v každej oblasti, prečo futbal v obci, benefity klubu (obec, škola, rodiny, mladí), význam športovania cez futbal (komunita, zdravie, výchova); krátke texty s ikonami, bez čísel; odkaz z úvodu, z päty a ikonou v hlavičke.
-    - [ ] Video „Akadémia za 8 minút“ na `/o-akademii` (vetva `feat/about-video`, PR na review): na YouTube je zatiaľ súkromné – Cyril ho prepne na neverejné alebo verejné, inak sa návštevníkom neprehrá.
+    - [x] Video „Akadémia za 8 minút“ na `/o-akademii` (YouTube neverejné, načíta sa po kliknutí) – PR #44 (zlúčený 17. 10., v produkcii `713faf6`, prehranie overené).
     - [ ] Infografika „Ako Akadémia funguje“ – návrh ukázaný 17. 10., odložené.
+    - [ ] Neskôr (téma do budúcnosti, rozhodnuté 17. 10.): „Vypočuť si“ Metodiku – audio pri každej sekcii a playlist celej oblasti (napr. v aute). Pre auto treba nahovorené MP3 neurónovým hlasom sk-SK (hlas prehliadača sa pri zamknutom telefóne zastaví), úložisko súborov, kľúč poskytovateľa a prepis ~420 riadkov tabuliek do viet; odhad ~430 000 znakov, ~7 h audia.
     - [ ] Neskôr: pri návrate na holé `/` sa zapamätaný výber obnoví až v prehliadači (krátko sa ukáže predvolená rola) – zvážiť cookie namiesto `localStorage`.
     - [x] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.) – PR #34 (zlúčený 16. 10.).
     - [ ] Pracovná skupina: skontrolovať označenie sekcií rolami (napr. Manažér a výbor má v oblasti 8 zvýraznených 12 z 13 sekcií; fanúšik v oblasti 3 žiadnu).
