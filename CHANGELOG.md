@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Video „Akadémia za 8 minút“ na stránke „O Akadémii“ pod úvodom: YouTube (bez cookies) sa načíta až po kliknutí, s označením, že video vytvorila umelá inteligencia.
 - Stránka „O Akadémii“ (H7): `/o-akademii` – základné info, pomoc klubom na každej úrovni a v každej oblasti, prečo futbal v obci, čo klub prináša obci, škole, rodinám a mladým, význam športovania cez futbal (komunita, zdravie, výchova); krátke texty s ikonami a výzva na výber roly a Kompas. Odkaz z úvodu, z päty (namiesto rozbaľovacieho „O Akadémii“) a ikonou „i“ v hlavičke.
 - Vyhľadávanie (H6): pole „Čo vo vašom klube riešite?“ na úvodnej stránke pod blokom „Ako Akadémia funguje“ (s tipmi) a v hlavičke (na mobile lupa); stránka `/hladat` s výsledkami podľa typu (oblasti, Metodika, Prax, vzory, kluby/Vizitka); bez diakritiky a so skloňovaním; odkaz otvorí a ukáže sekciu, krok Praxe alebo vzor; mentorská Prax len pre mentorov; `GET /api/v1/search?q=`.
 - Postup v Praxi v Moja Akadémia a na úvodnej obrazovke (F6d-c): keď klub v Praxi začal, úloha „Prax oblasti N: dokončite prvý krok – …“ alebo „pokračujte – 2. týždeň: …“ s odkazom na rolu a klub (rola z vlastných rolí v oblastiach, inak z roly v klube); na úvode samostatne „Pokračujte v Praxi“; pri slabej oblasti „Prax: x z y krokov“.

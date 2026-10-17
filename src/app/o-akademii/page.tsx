@@ -17,10 +17,14 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { YouTubeVideo } from "@/components/content/youtube-video";
 import { Button } from "@/components/ui/button";
 import { defaultMessages } from "@/i18n/config";
 
 export const metadata: Metadata = { title: defaultMessages.aboutPage.title };
+
+/** "Akadémia za 8 minút" on YouTube (uploaded by Cyril, 17. 10. 2026). */
+const VIDEO_ID = "hkSBUbxYWFA";
 
 type Section = "levels" | "village" | "benefits" | "meaning";
 
@@ -71,6 +75,19 @@ export default async function AboutPage() {
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("intro.title")}</h1>
         <p className="text-muted-foreground text-lg">{t("intro.text")}</p>
       </header>
+
+      <section aria-labelledby="about-video" className="flex max-w-3xl flex-col gap-3">
+        <h2 id="about-video" className="text-xl font-semibold sm:text-2xl">
+          {t("video.title")}
+        </h2>
+        <YouTubeVideo
+          videoId={VIDEO_ID}
+          title={t("video.title")}
+          playLabel={t("video.play")}
+          note={t("video.note")}
+        />
+        <p className="text-muted-foreground text-xs">{t("video.credit")}</p>
+      </section>
 
       {SECTIONS.map(({ key, items }) => (
         <section key={key} aria-labelledby={`about-${key}`} className="flex flex-col gap-4">
