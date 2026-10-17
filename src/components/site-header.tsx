@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Suspense } from "react";
-import { Search, UserRound } from "lucide-react";
+import { Info, Search, UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { SearchForm } from "@/components/search/search-form";
@@ -54,11 +54,18 @@ export async function SiteHeader() {
         <div className="ml-auto hidden w-full max-w-64 md:block">
           <SearchForm size="compact" />
         </div>
-        <Button asChild size="icon" variant="ghost" className="ml-auto md:hidden">
-          <Link href="/hladat" aria-label={t("search")}>
-            <Search aria-hidden />
-          </Link>
-        </Button>
+        <div className="ml-auto flex shrink-0 items-center md:ml-0">
+          <Button asChild size="icon" variant="ghost" className="md:hidden">
+            <Link href="/hladat" aria-label={t("search")}>
+              <Search aria-hidden />
+            </Link>
+          </Button>
+          <Button asChild size="icon" variant="ghost">
+            <Link href="/o-akademii" aria-label={t("about")} title={t("about")}>
+              <Info aria-hidden />
+            </Link>
+          </Button>
+        </div>
         <Suspense fallback={<div className="h-8 w-24" aria-hidden />}>
           <AccountLink />
         </Suspense>
