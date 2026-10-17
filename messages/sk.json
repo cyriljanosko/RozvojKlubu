@@ -248,7 +248,8 @@
     "roleFor": "Metodika pre rolu",
     "allRoles": "Všetky roly",
     "forYourRole": "pre vašu rolu",
-    "tagsDraft": "Priradenie sekcií k rolám je návrh a ešte ho skontroluje pracovná skupina. Rola mení len poradie – všetky sekcie zostávajú dostupné."
+    "tagsDraft": "Priradenie sekcií k rolám je návrh a ešte ho skontroluje pracovná skupina. Rola mení len poradie – všetky sekcie zostávajú dostupné.",
+    "progressClub": "Postup za klub"
   },
   "practice": {
     "chooseRole": "Kto ste v tejto oblasti?",
@@ -275,7 +276,6 @@
     "library": "Knižnica vzorov",
     "textToCopy": "Text na skopírovanie",
     "inMethodology": "Vzor je v metodike oblasti (knižnica).",
-    "progressLater": "Postup si budete môcť ukladať v Mojej Akadémii – pripravujeme.",
     "tags": {
       "all": "pre každý klub",
       "maly": "malý klub",
@@ -286,6 +286,22 @@
       "DO": "Dorast",
       "S": "Dospelí",
       "zd": "Ženy a dievčatá"
+    },
+    "progress": {
+      "title": "Postup klubu {club}",
+      "summary": "Prvý krok: {tasks} z {tasksTotal} · cesta: {steps} z {stepsTotal} krokov",
+      "readOnly": "len na čítanie",
+      "saving": "Ukladám…",
+      "saved": "Uložené",
+      "conflict": "Postup medzitým zmenil niekto iný – načítali sme aktuálny stav.",
+      "error": "Uloženie sa nepodarilo. Skúste to znova.",
+      "choose": "Vybrať túto možnosť",
+      "chosen": "Zvolené",
+      "markDone": "Označiť krok ako hotový",
+      "doneOn": "Hotové {date}",
+      "signIn": "Postup klubu si po prihlásení môžete odškrtávať a ukladať.",
+      "signInLink": "Prihlásiť sa",
+      "noClub": "Postup si ukladá klub – vedenie alebo tréner s rolou v klube."
     }
   },
   "kompas": {
