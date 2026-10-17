@@ -64,7 +64,7 @@ MCP server (F5, plánovaný)        ─┘        │
 4. Čítanie obsahu je **verejné bez prihlásenia** (ADR 0011): `/api/v1/areas`, `/api/v1/kompas/questions`, Metodika, Prax, katalóg rolí, stránky `/oblasti` a `/oblasti/[číslo]`. Kompas na vyskúšanie `/kompas?club=…` berie kategórie z vybraného klubu, odpovede drží len v prehliadači (`localStorage`), nič neukladá. Bloky klubu a predvolená rola v Praxi len pre prihlásených
 5. **Metodika** oblastí: `content/metodika/NN.md` (front matter + sekcie `## Nadpis {#kľúč}`, Markdown/GFM) – strojovo prevedené z detailov oblastí, bez zmeny textu. Naplnenie ich číta zo súborov (`outputFileTracingIncludes` v `next.config.ts`) do `area_sections`
 6. Zobrazenie `/oblasti`, `/oblasti/[číslo]` cez `react-markdown` + `remark-gfm` (bez HTML v obsahu); úprava sekcií `/admin/obsah/[číslo]/metodika` s „platné k“ a „revidované“, históriou a vrátením
-7. **Prax** oblastí 3 a 4: `content/prax/NN.json` (roly, prvý krok, cesta s 3 variantmi a cestou B, zásobník, vzory, mentorské moduly) – overuje Zod schéma `practice.schema.ts` vrátane odkazov na vzory; jeden dokument na oblasť v `area_practice`. Zobrazenie na `/oblasti/[číslo]?tab=prax&role=…` len na čítanie (predvolená rola: vlastná rola z Moja Akadémia, inak podľa roly v klube), úprava ako JSON v `/admin/obsah/[číslo]/prax`. Postup klubu v Praxi príde s Mojou Akadémiou (F6)
+7. **Prax** oblastí 3 a 4: `content/prax/NN.json` (roly, prvý krok, cesta s 3 variantmi a cestou B, zásobník, vzory, mentorské moduly) – overuje Zod schéma `practice.schema.ts` vrátane odkazov na vzory; jeden dokument na oblasť v `area_practice`. Zobrazenie na `/oblasti/[číslo]?tab=prax&role=…` len na čítanie (predvolená rola: vlastná rola z Moja Akadémia, inak podľa roly v klube), úprava ako JSON v `/admin/obsah/[číslo]/prax`. Postup klubu v Praxi – pozri „Postup v Praxi (F6d)“
 
 ### Kompas klubu (F4)
 
@@ -73,6 +73,12 @@ MCP server (F5, plánovaný)        ─┘        │
 3. Výpočet `src/server/services/kompas-scoring.ts` (čisté funkcie): stĺpec = round(zaškrtnuté platné / platné × 10), menej než 3 platné → oblasť sa nepočíta, oblasť 0–20, pásma 0–4 / 5–8 / 9–12 / 13–16 / 17–20, „čo urobiť najbližšie“ = 3 najslabšie oblasti a ich nezaškrtnuté platné otázky
 4. `PUT` uloží odpovede s verziou (súbežná úprava → 409); jedno hodnotenie na klub a sezónu
 5. UI `/klub/[clubId]/kompas`: priebežný výpočet v prehliadači (rovnaké čisté funkcie), uloženie cez Server Action; v Praxi oblastí 3 a 4 blok „Kde stojí váš klub“ pre kluby, kde je používateľ vedenie alebo tréner
+
+### Postup v Praxi (F6d)
+
+1. `GET /api/v1/clubs/:clubId/practice/:area` – postup klubu v Praxi oblasti v aktuálnej sezóne: odškrtnuté úlohy prvého kroku, pri krokoch zvolená možnosť a „hotové“ s dátumom, súhrn po rolách (úlohy, kroky, ďalší krok); vedenie, tréner a admin SFZ upravujú, mentor zväzu číta
+2. `PUT` uloží postup s verziou (súbežná úprava → 409); id úloh, krokov a možností sa overia proti obsahu Praxe, dátum „hotové“ sa pri ďalšom uložení zachová
+3. Jeden spoločný záznam na klub, oblasť a sezónu (každá rola má vlastné kroky); bez prihlásenia sa nič neukladá, vo Vizitke sa neukazuje (rozhodnutie 17. 10. 2026)
 
 ### Dáta klubov (snapshot, ADR 0005)
 
@@ -107,6 +113,7 @@ MCP server (F5, plánovaný)        ─┘        │
 | `kompas_submissions`    | aplikácia (tenant) | odoslané (zmrazené) kópie Kompasu pre mentora, história     |
 | `licensing_evaluations` | aplikácia (tenant) | licenčné hodnotenie – pracovná verzia na sezónu (ADR 0006)  |
 | `licensing_submissions` | aplikácia (tenant) | uzavreté (zmrazené) licenčné hodnotenie sezóny              |
+| `practice_progress`     | aplikácia (tenant) | postup klubu v Praxi oblasti na sezónu, verzia (F6d)        |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -128,3 +135,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `licensing_evaluations`: `{ clubId: 1, season: 1 }` unikátny; `licensing_submissions`: `{ clubId: 1, season: 1 }` unikátny
   len pre platné uzavretia (`club_season_closed`, `partialFilterExpression: { status: "closed" }`, ADR 0008)
   – jedno platné uzavretie na sezónu, znovu otvorené zostávajú v histórii (zakladá `src/server/db/licensing.store.ts`, súhlas 16. 10. 2026)
+- `practice_progress`: `{ clubId: 1, season: 1, area: 1 }` unikátny (zakladá `src/server/db/practice-progress.store.ts`, súhlas 17. 10. 2026; dotaz overený cez `explain` – IXSCAN)

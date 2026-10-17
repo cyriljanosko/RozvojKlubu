@@ -273,3 +273,26 @@ export interface AreaRoleChoiceDoc {
   roles: string[];
   updatedAt: Date;
 }
+
+/** Collection `practice_progress` – a club's progress in the Prax of an area per season (F6d, 17. 10. 2026). */
+export interface PracticeProgressStep {
+  stepId: string;
+  /** index of the chosen option of the step, null when none chosen yet */
+  option: number | null;
+  done: boolean;
+  doneAt: Date | null;
+}
+
+export interface PracticeProgressDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  area: number;
+  /** ids of the first-step tasks that are done */
+  tasks: string[];
+  steps: PracticeProgressStep[];
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}

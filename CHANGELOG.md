@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Postup v Praxi – základ (F6d-a): spoločný záznam klubu na oblasť a sezónu (úlohy prvého kroku, zvolená možnosť a „hotové“ pri krokoch, súhrn po rolách), vedenie a tréner zapisujú, mentor zväzu číta; `GET|PUT /api/v1/clubs/:clubId/practice/:area`, kolekcia `practice_progress`.
 - „Ako Akadémia funguje“ na úvodnej stránke pre neprihlásených (H5c): Vizitka klubu so zoznamom pilotných klubov, 1. úroveň samoštúdium v 11 oblastiach, 2. úroveň klub v Akadémii po prihlásení (mentor zväzu; komunikácia s ľuďmi klubu „pripravujeme“).
 - Mentor zväzu je na pozadí (rozhodnutie 16. 10.): rolu Mentor zväzu na úvodnej obrazovke, v Metodike aj v Praxi oblastí vidí len prihlásený mentor sezóny a admin SFZ; verejnosť a ostatní členovia klubu ju nevidia (katalóg rolí bez zmeny).
 - Úvodná obrazovka po prihlásení (H5b): blok „Vaša Akadémia“ nad verejnou časťou – pre každý klub Vizitka (Kompas a licenčné hodnotenie), „Čaká na vás“ (najviac 3 úlohy, ďalšie v Moja Akadémia) a slabé oblasti podľa Kompasu s odkazom na Prax; mentor vidí kluby kohorty so stavom Kompasu (zbalené). Úvod s obrázkom sa prihlásenému skráti.
