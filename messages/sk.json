@@ -341,7 +341,11 @@
       "title": "Čo urobiť najbližšie",
       "intro": "Tri oblasti, kde klub získa najviac. Úlohy sú otázky, ktoré ste nezaškrtli.",
       "empty": "Najprv vyplňte aspoň jednu oblasť.",
-      "order": ["Začnite tu", "Potom", "A ďalej"],
+      "order": [
+        "Začnite tu",
+        "Potom",
+        "A ďalej"
+      ],
       "methodology": "Metodika oblasti",
       "practice": "Prax oblasti"
     },
@@ -785,7 +789,13 @@
     "button": "Hľadať",
     "headerLink": "Hľadať",
     "tipsTitle": "Napríklad:",
-    "tips": ["licencia trénera", "dotácia", "dobrovoľníci", "ochrana detí", "nábor hráčov"],
+    "tips": [
+      "licencia trénera",
+      "dotácia",
+      "dobrovoľníci",
+      "ochrana detí",
+      "nábor hráčov"
+    ],
     "results": "{count, plural, one {# výsledok} few {# výsledky} other {# výsledkov}} pre „{query}“",
     "none": "Pre „{query}“ sme nič nenašli. Skúste iné slovo alebo jeden z tipov.",
     "inArea": "Oblasť {number} · {name}",
@@ -883,6 +893,12 @@
       "text": "Vyberte svoju rolu a pozrite sa, čím začať, alebo si vyskúšajte Kompas klubu.",
       "roles": "Vybrať rolu",
       "kompas": "Vyskúšať Kompas"
+    },
+    "video": {
+      "title": "Akadémia za 8 minút vo videu",
+      "play": "Prehrať video (8 min)",
+      "note": "Video sa prehrá z YouTube. Kým ho nespustíte, nič sa z YouTube nenačíta.",
+      "credit": "Video bolo vytvorené pomocou umelej inteligencie (Google Gemini)."
     }
   }
 }
