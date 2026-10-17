@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { HubIllustration } from "@/components/hub/hub-illustration";
 import { HubMemory } from "@/components/hub/hub-memory";
 import { MyAcademyHome } from "@/components/hub/my-academy-home";
+import { SearchForm } from "@/components/search/search-form";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/server/auth/session";
 import { hubDeps } from "@/server/clubs/deps";
@@ -33,6 +34,7 @@ async function Hub({ searchParams }: Props) {
   await connection();
   const t = await getTranslations("hub");
   const tTags = await getTranslations("questionTags");
+  const tSearch = await getTranslations("search");
   const q = await searchParams;
   const selection: HubSelection = { track: str(q.track), role: str(q.role), club: str(q.club) };
   const user = isDatabaseConfigured()
@@ -205,6 +207,14 @@ async function Hub({ searchParams }: Props) {
           <MyAcademyHome user={user} />
         </Suspense>
       )}
+
+      <section aria-labelledby="hub-search" className="flex flex-col gap-2">
+        <h2 id="hub-search" className="text-xl font-semibold">
+          {tSearch("homeTitle")}
+        </h2>
+        <p className="text-muted-foreground text-sm">{tSearch("homeLead")}</p>
+        <SearchForm tips />
+      </section>
 
       <section aria-labelledby="hub-role" className="flex flex-col gap-3">
         <div>

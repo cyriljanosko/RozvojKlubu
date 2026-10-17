@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Vyhľadávanie (H6): pole „Čo vo vašom klube riešite?“ na úvodnej stránke pod blokom „Ako Akadémia funguje“ (s tipmi) a v hlavičke (na mobile lupa); stránka `/hladat` s výsledkami podľa typu (oblasti, Metodika, Prax, vzory, kluby/Vizitka); bez diakritiky a so skloňovaním; odkaz otvorí a ukáže sekciu, krok Praxe alebo vzor; mentorská Prax len pre mentorov; `GET /api/v1/search?q=`.
 - Postup v Praxi v Moja Akadémia a na úvodnej obrazovke (F6d-c): keď klub v Praxi začal, úloha „Prax oblasti N: dokončite prvý krok – …“ alebo „pokračujte – 2. týždeň: …“ s odkazom na rolu a klub (rola z vlastných rolí v oblastiach, inak z roly v klube); na úvode samostatne „Pokračujte v Praxi“; pri slabej oblasti „Prax: x z y krokov“.
 - Postup v Praxi v UI (F6d-b): na karte Prax oblasti zaškrtávanie úloh prvého kroku, výber možnosti pri kroku a „hotové“ s dátumom, priebeh roly a stav ukladania; ukladá sa hneď pri zmene (Server Action), mentor zväzu vidí len na čítanie, výber klubu pri viacerých kluboch (`?club=`); neprihlásený vidí výzvu prihlásiť sa.
 - Postup v Praxi – základ (F6d-a): spoločný záznam klubu na oblasť a sezónu (úlohy prvého kroku, zvolená možnosť a „hotové“ pri krokoch, súhrn po rolách), vedenie a tréner zapisujú, mentor zväzu číta; `GET|PUT /api/v1/clubs/:clubId/practice/:area`, kolekcia `practice_progress`.

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Suspense } from "react";
-import { UserRound } from "lucide-react";
+import { Search, UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { SearchForm } from "@/components/search/search-form";
 import { Button } from "@/components/ui/button";
 import { isDatabaseConfigured } from "@/server/db/mongo";
 import { getCurrentUser } from "@/server/auth/session";
@@ -47,9 +48,17 @@ export async function SiteHeader() {
   return (
     <header className="border-b">
       <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
-        <Link href="/" className="truncate font-semibold">
+        <Link href="/" className="min-w-0 truncate font-semibold">
           {t("brand")}
         </Link>
+        <div className="ml-auto hidden w-full max-w-64 md:block">
+          <SearchForm size="compact" />
+        </div>
+        <Button asChild size="icon" variant="ghost" className="ml-auto md:hidden">
+          <Link href="/hladat" aria-label={t("search")}>
+            <Search aria-hidden />
+          </Link>
+        </Button>
         <Suspense fallback={<div className="h-8 w-24" aria-hidden />}>
           <AccountLink />
         </Suspense>

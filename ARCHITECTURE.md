@@ -80,6 +80,12 @@ MCP server (F5, plánovaný)        ─┘        │
 2. `PUT` uloží postup s verziou (súbežná úprava → 409); id úloh, krokov a možností sa overia proti obsahu Praxe, dátum „hotové“ sa pri ďalšom uložení zachová
 3. Jeden spoločný záznam na klub, oblasť a sezónu (každá rola má vlastné kroky); bez prihlásenia sa nič neukladá, vo Vizitke sa neukazuje (rozhodnutie 17. 10. 2026)
 
+### Vyhľadávanie (H6)
+
+1. `GET /api/v1/search?q=` a stránka `/hladat` volajú `search.service.ts`: oblasti, sekcie Metodiky, Prax (prvý krok, kroky, vzory) a kluby; otázky Kompasu nie (rozhodnutie 17. 10. 2026)
+2. Bez indexu a bez novej kolekcie – obsah (stovky textov) sa prehľadá v pamäti servera: normalizácia bez diakritiky, hrubý kmeň slova pre skloňovanie, všetky slová musia sedieť (inak aspoň jedno), názov váži viac, oblasť najviac; Atlas Search až pri väčšom obsahu
+3. Mentorská Prax len pre mentora sezóny a admina SFZ (`seesMentor`); odkazy `?open=` otvoria sekciu alebo vzor, `ScrollToHash` sa po načítaní posunie na kotvu
+
 ### Dáta klubov (snapshot, ADR 0005)
 
 1. Admin SFZ nahrá snapshot (JSON z návrhu Vizitky) na `/admin/kluby` alebo `POST /api/v1/admin/club-snapshot`

@@ -7,6 +7,7 @@ import { Suspense } from "react";
 
 import { MarkdownContent } from "@/components/content/markdown";
 import { PracticeView } from "@/components/content/practice-view";
+import { ScrollToHash } from "@/components/content/scroll-to-hash";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { academyDeps, clubDeps, kompasDeps, progressDeps } from "@/server/clubs/deps";
@@ -81,6 +82,8 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   const tab = practice && query.tab === "prax" ? "prax" : "metodika";
   const sections = tab === "metodika" ? await listMethodology(mongoSectionStore, user, number) : [];
   const roleParam = typeof query.role === "string" ? query.role : null;
+  // a search hit opens its section or template (H6)
+  const openKey = typeof query.open === "string" ? query.open : null;
   let roleId = roleParam ?? undefined;
   // a Hub role key (e.g. "coach") is translated to this area's Prax role (ADR 0011)
   if (practice && roleId && !practice.content.roles.some((x) => x.id === roleId)) {
@@ -142,6 +145,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
 
   return (
     <article className="flex flex-col gap-6">
+      <ScrollToHash />
       <header className="flex flex-col gap-2">
         <Link
           href="/oblasti"
@@ -233,6 +237,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
           roleId={roleId ?? practice.content.roles[0].id}
           hrefForRole={(id) => `${base}?tab=prax&role=${id}${clubQuery}`}
           signedIn={Boolean(user)}
+          openKey={openKey}
           progress={
             progressView && progressClub
               ? {
@@ -302,6 +307,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
             <details
               key={s.key}
               id={s.key}
+              open={openKey === s.key}
               className={`group scroll-mt-6 rounded-xl border sm:p-0 ${s.forRole ? "border-primary bg-primary/5" : ""}`}
             >
               <summary className="flex cursor-pointer flex-wrap items-center gap-x-2 gap-y-1 p-4 sm:px-6">
