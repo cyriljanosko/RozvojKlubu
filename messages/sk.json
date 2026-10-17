@@ -11,7 +11,8 @@
     "admin": "Kluby a roly",
     "content": "Obsah Akadémie",
     "academy": "Moja Akadémia",
-    "search": "Hľadať"
+    "search": "Hľadať",
+    "about": "O Akadémii"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -721,8 +722,6 @@
       "3": "Chod klubu"
     },
     "about": {
-      "title": "O Akadémii",
-      "text": "Akadémia rozvoja klubov je program SFZ pre amatérske futbalové kluby. Má jedenásť oblastí a každá má rovnakú stavbu: čo to je, prečo na tom záleží, čo klub reálne robí, sebahodnotenie, čo robiť ďalej a kto to má na starosti. Začnite Kompasom klubu – za pár minút uvidíte, kde klub stojí.",
       "academy": "Moja Akadémia",
       "academyText": "Ste vo vedení klubu, tréner alebo mentor? Po prihlásení vidíte úlohy, Kompas a licenčné hodnotenie svojho klubu.",
       "signIn": "Prihlásiť sa"
@@ -776,7 +775,8 @@
         "text": "Vedenie, tréneri a ďalší ľudia klubu pracujú spolu: Kompas a licenčné hodnotenie sa ukladajú za sezónu a klub ich odošle mentorovi zväzu. Každý vidí svoje úlohy a klub sa vzdeláva s mentorom zväzu, ktorý ho sprevádza.",
         "communication": "Klub komunikuje so svojimi ľuďmi – rodičmi, dobrovoľníkmi a hráčmi."
       }
-    }
+    },
+    "aboutLink": "Viac o Akadémii"
   },
   "search": {
     "title": "Hľadať v Akadémii",
@@ -798,5 +798,91 @@
     },
     "homeTitle": "Čo vo vašom klube riešite?",
     "homeLead": "Hľadajte v 11 oblastiach, Metodike, Praxi a vzoroch alebo nájdite Vizitku klubu."
+  },
+  "aboutPage": {
+    "title": "O Akadémii",
+    "eyebrow": "Slovenský futbalový zväz",
+    "intro": {
+      "title": "Akadémia rozvoja klubov",
+      "text": "Program SFZ pre amatérske futbalové kluby. Na jednom mieste spája návody v 11 oblastiach, sebahodnotenie Kompas, licenčné hodnotenie a Vizitku klubu. V sezóne 2026/2027 ho skúša 10 pilotných klubov."
+    },
+    "levels": {
+      "title": "Pomáhame klubom na každej úrovni a v každej oblasti",
+      "items": {
+        "size": {
+          "title": "Každá veľkosť klubu",
+          "text": "Malý klub v obci s jedným mužstvom aj veľký klub s mládežou. Kroky majú varianty podľa veľkosti klubu a času, ktorý máte."
+        },
+        "area": {
+          "title": "Každá oblasť",
+          "text": "Od vedenia a trénerov cez hráčov a dobrovoľníkov až po financie, formálne minimum a zázemie."
+        },
+        "way": {
+          "title": "Sami alebo s mentorom",
+          "text": "Návody si môžete prejsť sami. Po prihlásení klub sprevádza mentor zväzu a vidíte úlohy pre svoju rolu."
+        }
+      }
+    },
+    "village": {
+      "title": "Prečo robiť futbal v obci",
+      "items": {
+        "kids": {
+          "title": "Pravidelná aktivita pre deti",
+          "text": "V mnohých obciach je klub jediná organizovaná aktivita, kam deti a mladí chodia každý týždeň."
+        },
+        "generations": {
+          "title": "Miesto, kde sa stretávajú generácie",
+          "text": "Hráči, rodičia, tréneri, dobrovoľníci aj fanúšikovia – vznikajú tu priateľstvá a ľudia sa zapájajú."
+        },
+        "identity": {
+          "title": "Spoločný zážitok obce",
+          "text": "Víkendový zápas je udalosť, na ktorú sa chodí. Klub je súčasťou identity a dobrého mena obce."
+        }
+      }
+    },
+    "benefits": {
+      "title": "Čo klub prináša",
+      "items": {
+        "municipality": {
+          "title": "Obci",
+          "text": "Živú komunitu, využitý areál, dobrovoľníkov, prevenciu a dobré meno."
+        },
+        "school": {
+          "title": "Škole",
+          "text": "Pohyb detí, spoluprácu na turnajoch a krúžkoch a cestu pre športové talenty."
+        },
+        "families": {
+          "title": "Rodinám",
+          "text": "Bezpečné miesto pre deti, spoločný čas a príležitosť zapojiť sa do diania v klube."
+        },
+        "youth": {
+          "title": "Mladým ľuďom",
+          "text": "Partiu, pohyb, zodpovednosť a prvé roly v klube – asistent trénera, rozhodca, organizátor."
+        }
+      }
+    },
+    "meaning": {
+      "title": "Význam športovania cez futbal",
+      "items": {
+        "community": {
+          "title": "Komunita",
+          "text": "Tímovosť, spolupatričnosť a prepojenie generácií na jednom ihrisku."
+        },
+        "health": {
+          "title": "Zdravie",
+          "text": "Pravidelný pohyb, lepšia kondícia a duševná pohoda pre deti aj dospelých."
+        },
+        "upbringing": {
+          "title": "Výchova",
+          "text": "Fair play, rešpekt k súperovi a rozhodcovi, disciplína, zvládanie prehry a bezpečné prostredie pre deti."
+        }
+      }
+    },
+    "cta": {
+      "title": "Začnite s Akadémiou",
+      "text": "Vyberte svoju rolu a pozrite sa, čím začať, alebo si vyskúšajte Kompas klubu.",
+      "roles": "Vybrať rolu",
+      "kompas": "Vyskúšať Kompas"
+    }
   }
 }

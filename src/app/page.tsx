@@ -142,6 +142,12 @@ async function Hub({ searchParams }: Props) {
             <p className="text-muted-foreground text-sm font-medium">{t("eyebrow")}</p>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("title")}</h1>
             <p className="text-muted-foreground max-w-2xl">{t("lead")}</p>
+            <Link
+              href="/o-akademii"
+              className="self-start text-sm font-medium underline underline-offset-4"
+            >
+              {t("aboutLink")} →
+            </Link>
           </div>
           <HubIllustration className="mx-auto max-w-64 sm:max-w-sm" />
         </header>
@@ -444,10 +450,12 @@ async function Hub({ searchParams }: Props) {
       </section>
 
       <footer className="flex flex-col gap-3 border-t pt-6">
-        <details className="rounded-xl border p-4">
-          <summary className="cursor-pointer font-semibold">{t("about.title")}</summary>
-          <p className="mt-2 text-sm">{t("about.text")}</p>
-        </details>
+        <Link
+          href="/o-akademii"
+          className="hover:bg-muted/50 flex items-center justify-between rounded-xl border p-4 font-semibold"
+        >
+          {t("aboutLink")} <span aria-hidden>→</span>
+        </Link>
         {!user && (
           <div className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
             <p className="font-semibold">{t("about.academy")}</p>
