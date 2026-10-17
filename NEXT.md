@@ -45,13 +45,14 @@ Aktualizované: 16. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.) – PR #34 (zlúčený 16. 10.).
     - [ ] Pracovná skupina: skontrolovať označenie sekcií rolami (napr. Manažér a výbor má v oblasti 8 zvýraznených 12 z 13 sekcií; fanúšik v oblasti 3 žiadnu).
     - [ ] Neskôr: knižnica vzorov s dokumentmi (PDF, Word, Excel, obrázky) – úložisko súborov rozhodnúť.
-    - [ ] Neskôr: vyhľadávanie v oblastiach a otázkach Kompasu; hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
+    - [ ] H6 – vyhľadávanie (rozhodnuté 17. 10., vetva `feat/search`, hotové a overené lokálne, PR na review; tipy pod poľom čakajú na schválenie): pole na úvodnej stránke pod blokom „Ako Akadémia funguje“ a v hlavičke; prehľadáva oblasti, Metodiku, Prax a vzory a kluby (Vizitka), bez otázok Kompasu; bez diakritiky a so skloňovaním; výsledky na `/hladat`, `GET /api/v1/search`; rýchle tipy pod poľom (návrh, schváli Cyril); mentorská Prax len pre mentorov.
+    - [ ] Neskôr: hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
-  - [ ] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
+  - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).
     - [x] F6d-b – UI v Praxi: úlohy prvého kroku, výber možnosti a „hotové“ pri kroku, priebeh roly, výber klubu – PR #40 (zlúčený 17. 10.).
     - [ ] Neskôr: zvýrazniť celú kartu zvolenej možnosti (dnes len tlačidlo „Zvolené“).
-    - [ ] F6d-c – úloha „pokračujte krokom…“ v Moja Akadémia a na úvodnej obrazovke, postup pri slabej oblasti (vetva `feat/practice-next-step`): hotové, overené na 375 px, skúšobný postup Žipova vrátený na prázdny, PR na review. Úloha sa ukáže až keď klub v Praxi začal.
+    - [x] F6d-c – úloha „pokračujte krokom…“ v Moja Akadémia a na úvodnej obrazovke, postup pri slabej oblasti – PR #41 (zlúčený 17. 10.). Úloha sa ukáže až keď klub v Praxi začal.
   - [ ] Neskôr: rodič a tímový hráč klubu pozvánkou (F7), mladí v klube po vyriešení súhlasu zákonného zástupcu; platnosť licencie a kurz ochrany detí, keď budú dáta zo Sportnetu/ISSF.
 - [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
 - [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.

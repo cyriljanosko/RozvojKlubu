@@ -3,7 +3,11 @@ import "server-only";
 import { betterAuthUserDirectory } from "@/server/auth/session";
 import { mongoClubStore, mongoMembershipStore } from "@/server/db/clubs.store";
 import { mongoAreaRoleChoiceStore } from "@/server/db/academy.store";
-import { mongoContentStore, mongoRoleCatalogStore } from "@/server/db/content.store";
+import {
+  mongoContentStore,
+  mongoRoleCatalogStore,
+  mongoSectionStore,
+} from "@/server/db/content.store";
 import { mongoAssessmentStore, mongoSubmissionStore } from "@/server/db/kompas.store";
 import { mongoEvaluationStore, mongoLicensingSubmissionStore } from "@/server/db/licensing.store";
 import { mongoPracticeStore } from "@/server/db/content.store";
@@ -14,6 +18,7 @@ import type { HubDeps } from "@/server/services/hub.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
 import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
+import type { SearchDeps } from "@/server/services/search.service";
 import type { VizitkaDeps } from "@/server/services/vizitka.service";
 import type { KompasDeps } from "@/server/services/kompas.service";
 
@@ -68,4 +73,12 @@ export const progressDeps: PracticeProgressDeps = {
   ...clubDeps,
   practice: mongoPracticeStore,
   progress: mongoProgressStore,
+};
+
+export const searchDeps: SearchDeps = {
+  ...clubDeps,
+  content: mongoContentStore,
+  sections: mongoSectionStore,
+  practice: mongoPracticeStore,
+  roleCatalog: mongoRoleCatalogStore,
 };

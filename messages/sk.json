@@ -10,7 +10,8 @@
     "myAccount": "Môj účet",
     "admin": "Kluby a roly",
     "content": "Obsah Akadémie",
-    "academy": "Moja Akadémia"
+    "academy": "Moja Akadémia",
+    "search": "Hľadať"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -776,5 +777,26 @@
         "communication": "Klub komunikuje so svojimi ľuďmi – rodičmi, dobrovoľníkmi a hráčmi."
       }
     }
+  },
+  "search": {
+    "title": "Hľadať v Akadémii",
+    "label": "Hľadať v Akadémii",
+    "placeholder": "Čo vo vašom klube riešite?",
+    "button": "Hľadať",
+    "headerLink": "Hľadať",
+    "tipsTitle": "Napríklad:",
+    "tips": ["licencia trénera", "dotácia", "dobrovoľníci", "ochrana detí", "nábor hráčov"],
+    "results": "{count, plural, one {# výsledok} few {# výsledky} other {# výsledkov}} pre „{query}“",
+    "none": "Pre „{query}“ sme nič nenašli. Skúste iné slovo alebo jeden z tipov.",
+    "inArea": "Oblasť {number} · {name}",
+    "kinds": {
+      "area": "Oblasti",
+      "section": "Metodika",
+      "practice": "Prax",
+      "template": "Vzory",
+      "club": "Kluby (Vizitka)"
+    },
+    "homeTitle": "Čo vo vašom klube riešite?",
+    "homeLead": "Hľadajte v 11 oblastiach, Metodike, Praxi a vzoroch alebo nájdite Vizitku klubu."
   }
 }

@@ -34,12 +34,15 @@ export async function PracticeView({
   hrefForRole,
   progress,
   signedIn,
+  openKey = null,
 }: {
   practice: PracticeContent;
   roleId: string;
   hrefForRole: (id: string) => string;
   progress?: PracticeProgressProps | null;
   signedIn: boolean;
+  /** template to open, e.g. "tpl-prehlad" (search hit, H6) */
+  openKey?: string | null;
 }) {
   const t = await getTranslations("practice");
   const role = practice.roles.find((r) => r.id === roleId) ?? practice.roles[0];
@@ -135,7 +138,10 @@ export async function PracticeView({
         </p>
       </section>
 
-      <section className="flex flex-col gap-3 rounded-xl border p-4 sm:p-6">
+      <section
+        id="first-step"
+        className="flex scroll-mt-6 flex-col gap-3 rounded-xl border p-4 sm:p-6"
+      >
         <h2 className="text-lg font-semibold">{t("firstStep")}</h2>
         <p className="font-medium">{role.firstStep.title}</p>
         <p className="text-muted-foreground text-xs">
@@ -190,7 +196,11 @@ export async function PracticeView({
         </header>
         <ol className="flex flex-col gap-4">
           {role.steps.map((step) => (
-            <li key={step.id} className="flex flex-col gap-3 rounded-xl border p-4 sm:p-6">
+            <li
+              key={step.id}
+              id={`step-${step.id}`}
+              className="flex scroll-mt-6 flex-col gap-3 rounded-xl border p-4 sm:p-6"
+            >
               <p className="text-muted-foreground text-xs">{step.label}</p>
               <h3 className="font-semibold break-words">{step.title}</h3>
               <p className="text-sm">
@@ -305,7 +315,11 @@ export async function PracticeView({
             .filter((tpl) => tpl !== undefined)
             .map((tpl) => (
               <li key={tpl.key}>
-                <details className="rounded-lg border p-3">
+                <details
+                  id={`tpl-${tpl.key}`}
+                  open={openKey === `tpl-${tpl.key}`}
+                  className="scroll-mt-6 rounded-lg border p-3"
+                >
                   <summary className="cursor-pointer font-medium">{tpl.title}</summary>
                   <p className="text-muted-foreground mt-1 text-xs">{tpl.description}</p>
                   {tpl.text ? (
