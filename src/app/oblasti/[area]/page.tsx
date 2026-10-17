@@ -9,7 +9,7 @@ import { MarkdownContent } from "@/components/content/markdown";
 import { PracticeView } from "@/components/content/practice-view";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
-import { academyDeps, clubDeps, kompasDeps } from "@/server/clubs/deps";
+import { academyDeps, clubDeps, kompasDeps, progressDeps } from "@/server/clubs/deps";
 import {
   mongoContentStore,
   mongoPracticeStore,
@@ -35,6 +35,7 @@ import { listMyClubs } from "@/server/services/clubs.service";
 import { listMethodology } from "@/server/services/methodology.service";
 import { getKompas } from "@/server/services/kompas.service";
 import { getPractice } from "@/server/services/practice.service";
+import { getPracticeProgress } from "@/server/services/practice-progress.service";
 
 export const metadata: Metadata = { title: defaultMessages.areas.title };
 
@@ -122,7 +123,21 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
       .map((r) => PRACTICE_ROLE[r])
       .find((id) => practice.content.roles.some((x) => x.id === id));
   }
+  // club progress in the Prax (F6d): a club where the user has a role, chosen by ?club=
+  const clubParam = typeof query.club === "string" ? query.club : null;
+  // own clubs (management, coach) first, then clubs the user mentors (read-only)
+  const progressClubs = [
+    ...myClubs.filter((c) => c.roles.some((r) => r !== "mentor")),
+    ...myClubs.filter((c) => c.roles.length > 0 && c.roles.every((r) => r === "mentor")),
+  ];
+  const progressClub =
+    progressClubs.find((c) => c.clubId === clubParam) ?? progressClubs[0] ?? null;
+  const progressView =
+    practice && tab === "prax" && user && progressClub
+      ? await getPracticeProgress(progressDeps, user, progressClub.clubId, number).catch(() => null)
+      : null;
   const base = `/oblasti/${area.number}`;
+  const clubQuery = progressClub && clubParam ? `&club=${encodeURIComponent(clubParam)}` : "";
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "long" });
 
   return (
@@ -194,11 +209,46 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
         </section>
       )}
 
+      {tab === "prax" && progressClub && progressClubs.length > 1 && (
+        <nav aria-label={t("progressClub")} className="flex flex-col gap-2 text-sm">
+          <p className="font-medium">{t("progressClub")}</p>
+          <div className="flex gap-1 overflow-x-auto pb-1">
+            {progressClubs.map((c) => (
+              <Link
+                key={c.clubId}
+                href={`${base}?tab=prax${roleId ? `&role=${encodeURIComponent(roleId)}` : ""}&club=${encodeURIComponent(c.clubId)}`}
+                aria-current={c.clubId === progressClub.clubId ? "page" : undefined}
+                className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground shrink-0 rounded-md border px-3 py-1.5 whitespace-nowrap"
+              >
+                {c.name}
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
+
       {tab === "prax" && practice ? (
         <PracticeView
           practice={practice.content}
           roleId={roleId ?? practice.content.roles[0].id}
-          hrefForRole={(id) => `${base}?tab=prax&role=${id}`}
+          hrefForRole={(id) => `${base}?tab=prax&role=${id}${clubQuery}`}
+          signedIn={Boolean(user)}
+          progress={
+            progressView && progressClub
+              ? {
+                  clubId: progressClub.clubId,
+                  clubName: progressClub.name,
+                  area: number,
+                  editable: progressView.access === "edit",
+                  version: progressView.version,
+                  tasks: progressView.tasks,
+                  steps: progressView.steps.map((x) => ({
+                    ...x,
+                    doneAt: x.doneAt ? new Date(x.doneAt).toISOString() : null,
+                  })),
+                }
+              : null
+          }
         />
       ) : null}
 

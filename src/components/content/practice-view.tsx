@@ -1,21 +1,45 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 
+import {
+  OptionPick,
+  ProgressProvider,
+  RoleProgressBar,
+  StepDone,
+  TaskCheck,
+  type ProgressStep,
+} from "@/components/content/practice-progress";
 import type { PracticeContent } from "@/server/services/practice.schema";
 
 type Role = PracticeContent["roles"][number];
 type Step = Role["steps"][number];
 type Option = Step["options"][number];
 
-/** Read-only Practice of one role (progress tracking comes with Moja Akadémia, F6). */
+/** Club progress shown in the Practice (F6d); absent for visitors without a club role. */
+export interface PracticeProgressProps {
+  clubId: string;
+  clubName: string;
+  area: number;
+  editable: boolean;
+  version: number;
+  tasks: string[];
+  steps: ProgressStep[];
+}
+
+/** Practice of one role; with `progress` the club ticks tasks, picks options and marks steps done (F6d). */
 export async function PracticeView({
   practice,
   roleId,
   hrefForRole,
+  progress,
+  signedIn,
 }: {
   practice: PracticeContent;
   roleId: string;
   hrefForRole: (id: string) => string;
+  progress?: PracticeProgressProps | null;
+  signedIn: boolean;
 }) {
   const t = await getTranslations("practice");
   const role = practice.roles.find((r) => r.id === roleId) ?? practice.roles[0];
@@ -27,7 +51,7 @@ export async function PracticeView({
     ) : null;
   const tplTitle = (key?: string) => (key ? (templates.get(key)?.title ?? key) : null);
 
-  const OptionCard = ({ o }: { o: Option }) => (
+  const OptionCard = ({ o, pick }: { o: Option; pick?: ReactNode }) => (
     <li className="flex flex-col gap-1.5 rounded-lg border p-3 text-sm">
       <span className="flex flex-wrap items-center gap-2 font-semibold">
         {o.name} {tag(o.tag)}
@@ -51,10 +75,11 @@ export async function PracticeView({
           {o.copyText}
         </pre>
       )}
+      {pick}
     </li>
   );
 
-  return (
+  const body = (
     <div className="flex flex-col gap-6">
       <nav aria-label={t("chooseRole")} className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold">{t("chooseRole")}</h2>
@@ -71,6 +96,27 @@ export async function PracticeView({
           ))}
         </div>
       </nav>
+
+      {progress ? (
+        <RoleProgressBar
+          clubName={progress.clubName}
+          taskIds={role.firstStep.tasks.map((x) => x.id)}
+          stepIds={role.steps.map((x) => x.id)}
+        />
+      ) : (
+        <p className="text-muted-foreground rounded-xl border border-dashed p-3 text-sm">
+          {signedIn ? (
+            t("progress.noClub")
+          ) : (
+            <>
+              {t("progress.signIn")}{" "}
+              <Link href="/prihlasenie" className="font-medium underline underline-offset-4">
+                {t("progress.signInLink")}
+              </Link>
+            </>
+          )}
+        </p>
+      )}
 
       <section className="flex flex-col gap-3 rounded-xl border p-4 sm:p-6">
         <h2 className="text-lg font-semibold break-words">{role.label}</h2>
@@ -96,14 +142,30 @@ export async function PracticeView({
           {t("byWhom")}: {role.firstStep.who} · {t("time")}: {role.firstStep.time} · {t("result")}:{" "}
           {role.firstStep.result}
         </p>
-        <ol className="list-decimal space-y-1.5 pl-5 text-sm">
-          {role.firstStep.tasks.map((task) => (
-            <li key={task.id}>
-              {task.title}
-              {task.note && <span className="text-muted-foreground"> – {task.note}</span>}
-            </li>
-          ))}
-        </ol>
+        {progress ? (
+          <ul className="space-y-1.5 text-sm">
+            {role.firstStep.tasks.map((task) => (
+              <li key={task.id}>
+                <label className="flex items-start gap-2">
+                  <TaskCheck taskId={task.id} label={task.title} />
+                  <span>
+                    {task.title}
+                    {task.note && <span className="text-muted-foreground"> – {task.note}</span>}
+                  </span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ol className="list-decimal space-y-1.5 pl-5 text-sm">
+            {role.firstStep.tasks.map((task) => (
+              <li key={task.id}>
+                {task.title}
+                {task.note && <span className="text-muted-foreground"> – {task.note}</span>}
+              </li>
+            ))}
+          </ol>
+        )}
         <div className="bg-muted/50 rounded-md p-3 text-sm">
           <p className="font-semibold">{role.firstStep.aside.title}</p>
           <pre className="mt-2 font-sans text-sm whitespace-pre-wrap">
@@ -136,8 +198,12 @@ export async function PracticeView({
                 {step.why}
               </p>
               <ul className="grid gap-2 lg:grid-cols-3">
-                {step.options.map((o) => (
-                  <OptionCard key={o.name} o={o} />
+                {step.options.map((o, i) => (
+                  <OptionCard
+                    key={o.name}
+                    o={o}
+                    pick={progress ? <OptionPick stepId={step.id} option={i} /> : undefined}
+                  />
                 ))}
               </ul>
               {step.branchB && (
@@ -172,6 +238,7 @@ export async function PracticeView({
                   })}
                 </div>
               )}
+              {progress && <StepDone stepId={step.id} />}
             </li>
           ))}
         </ol>
@@ -253,9 +320,22 @@ export async function PracticeView({
             ))}
         </ul>
       </section>
-
-      <p className="text-muted-foreground text-xs">{t("progressLater")}</p>
     </div>
+  );
+
+  return progress ? (
+    <ProgressProvider
+      key={`${progress.clubId}-${progress.version}`}
+      clubId={progress.clubId}
+      area={progress.area}
+      editable={progress.editable}
+      version={progress.version}
+      initial={{ tasks: progress.tasks, steps: progress.steps }}
+    >
+      {body}
+    </ProgressProvider>
+  ) : (
+    body
   );
 }
 
