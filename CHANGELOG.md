@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Jedenástka na „O Akadémii“ v novej podobe: ihrisko v perspektíve s pruhovaným trávnikom (na mobile vyššia varianta), ikony oblastí namiesto čísel v pinoch vo farbe línie (brankár fialová s kapitánskou páskou, stred modrá, obrana sivá, útok oranžová), skrátené názvy oblastí, hráči bližšie k stredu ihriska; ikona oblasti aj v okne.
 - „Prečo 11 oblastí“ na stránke „O Akadémii“: Akadémia ako futbalová jedenástka 1-4-3-3 (brankár Vedenie; obrana Financie, Právo, Dáta, Prostredie; stred Manažér, Tréneri, Dobrovoľníci; útok Hráč, Aktivity, Marketing) s textom o úlohe každej línie; ihrisko s 11 hráčmi, každý otvorí okno s opisom oblasti z obsahu a odkazom na detail (natívny popover, bez JavaScriptu).
 - Ukotvená hlavička: pri posune stránky ostáva hore (mobil aj počítač); skok na kotvu (výsledok hľadania, sekcia Metodiky, krok Praxe) sa zastaví pod hlavičkou.
 - Video „Akadémia za 8 minút“ na stránke „O Akadémii“ pod úvodom: YouTube (bez cookies) sa načíta až po kliknutí, s označením, že video vytvorila umelá inteligencia.
