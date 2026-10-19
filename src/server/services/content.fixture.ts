@@ -1,12 +1,16 @@
 import type {
   AreaDoc,
+  AreaPracticeDoc,
   AreaSectionDoc,
   ContentRevisionDoc,
   KompasQuestionDoc,
+  RoleCatalogDoc,
 } from "@/server/db/types";
 
 import type { ContentStore, StoredRevision } from "./content.service";
 import type { SectionStore } from "./methodology.service";
+import type { PracticeStore } from "./practice.service";
+import type { RoleCatalogStore } from "./role-catalog.service";
 
 /** In-memory ContentStore for tests (same semantics as the Mongo store). */
 export function memoryContentStore(): ContentStore & {
@@ -40,6 +44,12 @@ export function memoryContentStore(): ContentStore & {
       if (!q) return null;
       Object.assign(q, changes);
       return { ...q };
+    },
+    async updateArea(number, expectedVersion, changes) {
+      const a = areaDocs.find((x) => x.number === number && x.version === expectedVersion);
+      if (!a) return null;
+      Object.assign(a, changes);
+      return { ...a };
     },
     async addRevision(revision: Omit<ContentRevisionDoc, "_id">) {
       revisionDocs.push({ ...revision, id: `r${++seq}` });
@@ -78,4 +88,57 @@ export function memorySectionStore(
       return { ...s };
     },
   };
+}
+
+/** In-memory PracticeStore sharing revisions with a memory ContentStore. */
+export function memoryPracticeStore(
+  content: ReturnType<typeof memoryContentStore>,
+): PracticeStore & ReturnType<typeof memoryContentStore> & { practiceDocs: AreaPracticeDoc[] } {
+  const practiceDocs: AreaPracticeDoc[] = [];
+  return {
+    ...content,
+    practiceDocs,
+    async insertMissingPractice(docs) {
+      const fresh = docs.filter((d) => !practiceDocs.some((p) => p.area === d.area));
+      practiceDocs.push(...fresh.map((d) => structuredClone(d)));
+      return fresh.length;
+    },
+    findPractice: async (area) => {
+      const p = practiceDocs.find((x) => x.area === area);
+      return p ? structuredClone(p) : null;
+    },
+    listPracticeAreas: async () => practiceDocs.map((p) => p.area),
+    async updatePractice(area, expectedVersion, changes) {
+      const p = practiceDocs.find((x) => x.area === area && x.version === expectedVersion);
+      if (!p) return null;
+      Object.assign(p, structuredClone(changes));
+      return structuredClone(p);
+    },
+  };
+}
+
+/** In-memory RoleCatalogStore sharing revisions with a memory ContentStore. */
+export function memoryRoleCatalogStore(
+  content: ReturnType<typeof memoryContentStore>,
+): RoleCatalogStore & ReturnType<typeof memoryContentStore> & { catalog: RoleCatalogDoc | null } {
+  const state: { catalog: RoleCatalogDoc | null } = { catalog: null };
+  return Object.assign(content, {
+    get catalog() {
+      return state.catalog;
+    },
+    async insertCatalogIfMissing(doc: RoleCatalogDoc) {
+      if (state.catalog) return false;
+      state.catalog = structuredClone(doc);
+      return true;
+    },
+    findCatalog: async () => (state.catalog ? structuredClone(state.catalog) : null),
+    async updateCatalog(
+      expectedVersion: number,
+      changes: Pick<RoleCatalogDoc, "content" | "version" | "updatedAt" | "updatedBy">,
+    ) {
+      if (!state.catalog || state.catalog.version !== expectedVersion) return null;
+      Object.assign(state.catalog, structuredClone(changes));
+      return structuredClone(state.catalog);
+    },
+  });
 }

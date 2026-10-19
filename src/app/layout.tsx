@@ -24,7 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={DEFAULT_LOCALE}
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full scroll-pt-16 antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
         <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={defaultMessages}>

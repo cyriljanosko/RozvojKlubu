@@ -9,6 +9,7 @@ import {
   listQuestions,
   revertQuestion,
   seedContent,
+  updateArea,
   updateQuestion,
 } from "./content.service";
 
@@ -19,7 +20,7 @@ describe("content seed", () => {
     const seed = buildContentSeed(undefined, at);
     expect(seed.areas).toHaveLength(11);
     expect(seed.questions).toHaveLength(220);
-    expect(seed.areas[3]).toMatchObject({ number: 4, name: "Tímoví hráči klubu", band: 1 });
+    expect(seed.areas[3]).toMatchObject({ number: 4, name: "Dobrovoľníci", band: 1 });
     expect(seed.questions.find((q) => q.questionId === "4.i.2")).toMatchObject({
       area: 4,
       column: "i",
@@ -56,13 +57,14 @@ describe("content service", () => {
     await expect(seedContent(store, alice, at)).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
-  it("lets every signed-in user read, nobody anonymous", async () => {
+  it("lets everyone read, also anonymous (ADR 0011)", async () => {
     expect(await listAreas(store, alice)).toHaveLength(11);
     const area3 = await listQuestions(store, alice, 3);
     expect(area3).toHaveLength(20);
     expect(area3.map((q) => q.questionId).slice(0, 2)).toEqual(["3.i.1", "3.i.2"]);
     expect(area3[0]).not.toHaveProperty("updatedBy");
-    await expect(listAreas(store, null)).rejects.toMatchObject({ code: "UNAUTHORIZED" });
+    // public read (ADR 0011)
+    expect(await listAreas(store, null)).toHaveLength(11);
     await expect(listQuestions(store, alice, 12)).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
@@ -126,5 +128,20 @@ describe("content service", () => {
     await expect(revertQuestion(store, admin, "nope")).rejects.toMatchObject({
       code: "NOT_FOUND",
     });
+  });
+
+  it("lets admin rename an area with version check and history", async () => {
+    const input = {
+      name: "Dobrovoľníci",
+      shortName: "Dobrovoľníci",
+      description: "Rodičia a ďalší ľudia, ktorí klubu pomáhajú.",
+      expectedVersion: 1,
+    };
+    await expect(updateArea(store, alice, 4, input)).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(updateArea(store, admin, 12, input)).rejects.toMatchObject({ code: "NOT_FOUND" });
+    const renamed = await updateArea(store, admin, 4, { ...input, name: "Dobrovoľníci klubu" }, at);
+    expect(renamed).toMatchObject({ number: 4, name: "Dobrovoľníci klubu", version: 2 });
+    await expect(updateArea(store, admin, 4, input)).rejects.toMatchObject({ code: "CONFLICT" });
+    expect(store.revisionDocs.filter((r) => r.entity === "area")).toHaveLength(1);
   });
 });

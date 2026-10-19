@@ -20,7 +20,7 @@
     "clsx": "^2.1.1",
     "geist": "^1.7.2",
     "jose": "^6.2.12",
-    "lucide-react": "^1.55.0",
+    "lucide-react": "^1.56.0",
     "mongodb": "^7.7.0",
     "next": "16.4.0",
     "next-intl": "^4.14.9",
@@ -30,14 +30,14 @@
     "remark-gfm": "^4.0.1",
     "server-only": "^0.0.1",
     "tailwind-merge": "^3.7.0",
-    "zod": "^4.6.6"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^26.6.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
+    "eslint": "^10",
     "eslint-config-next": "16.4.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",

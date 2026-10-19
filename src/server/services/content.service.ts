@@ -89,6 +89,15 @@ export interface ContentStore {
     expectedVersion: number,
     changes: Pick<KompasQuestionDoc, "text" | "tags" | "version" | "updatedAt" | "updatedBy">,
   ) => Promise<KompasQuestionDoc | null>;
+  /** Atomic update of an area's texts guarded by `expectedVersion`; null on a version conflict. */
+  updateArea: (
+    number: number,
+    expectedVersion: number,
+    changes: Pick<
+      AreaDoc,
+      "name" | "shortName" | "description" | "version" | "updatedAt" | "updatedBy"
+    >,
+  ) => Promise<AreaDoc | null>;
   addRevision: (revision: Omit<ContentRevisionDoc, "_id">) => Promise<void>;
   listRevisions: (
     entity: ContentRevisionDoc["entity"],
@@ -120,7 +129,7 @@ export async function listAreas(
   store: ContentStore,
   actor: CurrentUser | null,
 ): Promise<AreaDto[]> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   return (await store.listAreas()).sort((a, b) => a.number - b.number).map(areaDto);
 }
 
@@ -129,7 +138,7 @@ export async function listQuestions(
   actor: CurrentUser | null,
   area?: number,
 ): Promise<QuestionDto[]> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   if (area !== undefined && (!Number.isInteger(area) || area < 1 || area > 11)) {
     throw new ApiError("BAD_REQUEST", "Invalid area");
   }
@@ -196,6 +205,57 @@ export async function updateQuestion(
     changedAt: at,
   });
   return questionDto(updated);
+}
+
+export const updateAreaSchema = z.object({
+  name: z.string().trim().min(1).max(120),
+  shortName: z.string().trim().min(1).max(60),
+  description: z.string().trim().min(1).max(500),
+  expectedVersion: z.number().int().positive(),
+});
+
+const areaSnapshot = (a: Pick<AreaDoc, "name" | "shortName" | "description">) => ({
+  name: a.name,
+  shortName: a.shortName,
+  description: a.description,
+});
+
+/** Edits an area's name, short name and description (admin_sfz), with history (e.g. area 4 → Dobrovoľníci). */
+export async function updateArea(
+  store: ContentStore,
+  actor: CurrentUser | null,
+  number: number,
+  input: unknown,
+  at: Date = new Date(),
+): Promise<AreaDto> {
+  const user = requireUser(actor);
+  requireAdmin(user);
+  const data = updateAreaSchema.parse(input);
+  const current = (await store.listAreas()).find((a) => a.number === number);
+  if (!current) throw new ApiError("NOT_FOUND", "Area not found");
+  if (current.version !== data.expectedVersion) {
+    throw new ApiError("CONFLICT", "Area was changed by someone else");
+  }
+  const next = areaSnapshot(data);
+  const before = areaSnapshot(current);
+  if (JSON.stringify(before) === JSON.stringify(next)) return areaDto(current);
+  const updated = await store.updateArea(number, current.version, {
+    ...next,
+    version: current.version + 1,
+    updatedAt: at,
+    updatedBy: user.id,
+  });
+  if (!updated) throw new ApiError("CONFLICT", "Area was changed by someone else");
+  await store.addRevision({
+    entity: "area",
+    entityId: String(number),
+    version: updated.version,
+    before,
+    after: areaSnapshot(updated),
+    changedBy: user.id,
+    changedAt: at,
+  });
+  return areaDto(updated);
 }
 
 export async function listQuestionRevisions(
