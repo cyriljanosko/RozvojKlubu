@@ -148,10 +148,20 @@ export interface AreaSectionDoc extends Versioned {
   reviewedAt: string | null;
 }
 
+/** Collection `area_practice` – Practice of one area (all roles), unique `area`. Shape: practice.schema.ts */
+export interface AreaPracticeDoc extends Versioned {
+  _id?: ObjectId;
+  area: number;
+  /** Validated by practiceSchema (roles, templates, mentor modules). */
+  content: Record<string, unknown>;
+  validAsOf: string | null;
+  reviewedAt: string | null;
+}
+
 /** Collection `content_revisions` – one document per change of managed content. */
 export interface ContentRevisionDoc {
   _id?: ObjectId;
-  entity: "area" | "kompas_question" | "area_section";
+  entity: "area" | "kompas_question" | "area_section" | "area_practice" | "role_catalog";
   entityId: string;
   /** Version created by this change. */
   version: number;
@@ -159,4 +169,130 @@ export interface ContentRevisionDoc {
   after: Record<string, unknown>;
   changedBy: string;
   changedAt: Date;
+}
+
+/** Collection `role_catalog` – one document (`key: "roles"`): base roles and roles in the 11 areas (ADR 0010). */
+export interface RoleCatalogDoc {
+  _id?: ObjectId;
+  key: "roles";
+  /** validated by roleCatalogSchema */
+  content: Record<string, unknown>;
+  version: number;
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+// ---- Kompas klubu (club data, tenant = clubId) ----
+
+/** Collection `kompas_assessments` – a club's working self-assessment, unique `{ clubId, season }`. */
+export interface KompasAssessmentDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  /** questionIds checked as "true for our club" */
+  answers: string[];
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+/** Collection `kompas_submissions` – frozen copy sent to the mentor (decision 16. 10. 2026). */
+export interface KompasSubmissionDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  /** assessment version that was submitted */
+  assessmentVersion: number;
+  answers: string[];
+  categories: string[];
+  /** question texts and tags as they were at submission time */
+  questions: { questionId: string; text: string; tags: string[] }[];
+  /** scored result at submission time (KompasResult) */
+  result: Record<string, unknown>;
+  /** SFZ-KOMPAS-1 transfer line */
+  line: string;
+  submittedAt: Date;
+  submittedBy: string;
+  /** missing = "submitted"; "withdrawn" = cancelled by admin_sfz, kept as history (ADR 0009) */
+  status?: "submitted" | "withdrawn";
+  withdrawnAt?: Date;
+  withdrawnBy?: string;
+}
+
+/** Club inputs of the licensing evaluation (areas 5–7, population, coach gender corrections). */
+export interface LicensingInputs {
+  population: number | null;
+  infrastructure: Record<string, number>;
+  activities: Record<string, number | boolean>;
+  cooperation: Record<string, number | boolean>;
+  /** corrections of the guessed coach gender, keyed by coach name */
+  coachGender: Record<string, Gender>;
+}
+
+/** Collection `licensing_evaluations` – working version per club and season, unique `{ clubId, season }` (ADR 0006). */
+export interface LicensingEvaluationDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  inputs: LicensingInputs;
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+/** Collection `licensing_submissions` – closed (frozen) evaluations of a season; unique `{ clubId, season }`
+ *  among valid closings only (`status: "closed"`), reopened ones stay as history (ADR 0008). */
+export interface LicensingSubmissionDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  ruleSet: string;
+  evaluationVersion: number;
+  inputs: LicensingInputs;
+  /** scored result at closing time (LicensingResult) */
+  result: Record<string, unknown>;
+  /** date of the Sportnet data the result was computed from */
+  dataAsOf: string | null;
+  closedAt: Date;
+  closedBy: string;
+  /** missing on closings made before ADR 0008 = "closed" */
+  status?: "closed" | "reopened";
+  reopenedAt?: Date;
+  reopenedBy?: string;
+}
+
+/** Collection `area_role_choices` – the user's own roles in the areas for a club and season,
+ *  unique `{ userId, clubId, season }` (F6b, ADR 0010). Roles as "area.key", e.g. "8.economist". */
+export interface AreaRoleChoiceDoc {
+  _id?: ObjectId;
+  userId: string;
+  clubId: string;
+  season: string;
+  roles: string[];
+  updatedAt: Date;
+}
+
+/** Collection `practice_progress` – a club's progress in the Prax of an area per season (F6d, 17. 10. 2026). */
+export interface PracticeProgressStep {
+  stepId: string;
+  /** index of the chosen option of the step, null when none chosen yet */
+  option: number | null;
+  done: boolean;
+  doneAt: Date | null;
+}
+
+export interface PracticeProgressDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  area: number;
+  /** ids of the first-step tasks that are done */
+  tasks: string[];
+  steps: PracticeProgressStep[];
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
 }

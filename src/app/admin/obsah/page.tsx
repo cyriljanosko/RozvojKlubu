@@ -60,6 +60,9 @@ async function ContentOverview() {
         ) : (
           <p className="text-muted-foreground text-sm">{t("empty")}</p>
         )}
+        <Link href="/admin/obsah/roly" className="text-sm font-medium underline underline-offset-4">
+          {t("roles.open")}
+        </Link>
         <SeedButton />
       </CardContent>
     </Card>

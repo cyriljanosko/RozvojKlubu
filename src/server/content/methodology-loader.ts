@@ -16,3 +16,15 @@ export async function loadMethodologyFiles(): Promise<MethodologyFile[]> {
     names.map(async (n) => parseMethodologyFile(await readFile(join(dir, n), "utf8"))),
   );
 }
+
+/** Reads content/prax/*.json (raw JSON – validated by the practice service). */
+export async function loadPracticeFiles(): Promise<unknown[]> {
+  const dir = join(process.cwd(), "content", "prax");
+  const names = (await readdir(dir)).filter((n) => n.endsWith(".json")).sort();
+  return Promise.all(names.map(async (n) => JSON.parse(await readFile(join(dir, n), "utf8"))));
+}
+
+/** Reads content/roly.json (raw JSON – validated by the role catalog service, ADR 0010). */
+export async function loadRoleCatalogFile(): Promise<unknown> {
+  return JSON.parse(await readFile(join(process.cwd(), "content", "roly.json"), "utf8"));
+}

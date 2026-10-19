@@ -49,6 +49,14 @@ async function AreaQuestions({ params }: PageProps<"/admin/obsah/[area]">) {
           >
             {t("methodology.open")}
           </Link>
+          {[3, 4].includes(area.number) && (
+            <Link
+              href={`/admin/obsah/${area.number}/prax`}
+              className="text-sm font-medium underline underline-offset-4"
+            >
+              {t("practice.open")}
+            </Link>
+          )}
         </CardHeader>
       </Card>
       {(["i", "s"] as const).map((column) => (

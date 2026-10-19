@@ -21,7 +21,7 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
     setRedirecting(true);
     const { error } = await authClient.signIn.social({
       provider: "sportnet",
-      callbackURL: "/ucet",
+      callbackURL: "/moja-akademia",
     });
     if (error) {
       setRedirecting(false);
@@ -32,7 +32,7 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
   async function sendLink(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus("sending");
-    const { error } = await authClient.signIn.magicLink({ email, callbackURL: "/ucet" });
+    const { error } = await authClient.signIn.magicLink({ email, callbackURL: "/moja-akademia" });
     setStatus(error ? "error" : "sent");
   }
 

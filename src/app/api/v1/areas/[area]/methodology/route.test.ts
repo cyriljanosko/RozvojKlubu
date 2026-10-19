@@ -51,16 +51,17 @@ describe("methodology API", () => {
     getCurrentUser.mockReset();
   });
 
-  it("signed-in users read sections, anonymous 401, bad area 400", async () => {
+  it("everyone reads sections (also anonymous), bad area 400", async () => {
     getCurrentUser.mockResolvedValue(alice);
     const res = await list.GET(req("/api/v1/areas/2/methodology"), params({ area: "2" }));
     expect((await res.json()).data).toMatchObject([{ key: "popis", body: "Pôvodný text" }]);
     expect((await list.GET(req("/api/v1/areas/x/methodology"), params({ area: "x" }))).status).toBe(
       400,
     );
+    // public read (ADR 0011)
     getCurrentUser.mockResolvedValue(null);
     expect((await list.GET(req("/api/v1/areas/2/methodology"), params({ area: "2" }))).status).toBe(
-      401,
+      200,
     );
   });
 

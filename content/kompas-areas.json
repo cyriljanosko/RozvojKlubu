@@ -294,8 +294,8 @@
     },
     {
       "number": 4,
-      "name": "Tímoví hráči klubu",
-      "shortName": "Tímoví hráči",
+      "name": "Dobrovoľníci",
+      "shortName": "Dobrovoľníci",
       "band": 1,
       "description": "Rodičia a ďalší ľudia, ktorí klubu pomáhajú mimo ihriska, a ako im poďakovať.",
       "sources": {
@@ -317,7 +317,7 @@
             "tags": []
           },
           {
-            "text": "Niekto má koordináciu tímových hráčov klubu a dobrovoľníčok ako svoju agendu (nemusí to byť manažér)",
+            "text": "Niekto má koordináciu dobrovoľníkov klubu a dobrovoľníčok ako svoju agendu (nemusí to byť manažér)",
             "tags": []
           },
           {
@@ -337,7 +337,7 @@
             "tags": []
           },
           {
-            "text": "Skúsený tímový hráč klubu zapracuje nového — know-how neodchádza s človekom",
+            "text": "Skúsený dobrovoľník klubu zapracuje nového — know-how neodchádza s človekom",
             "tags": []
           },
           {
@@ -351,7 +351,7 @@
             "tags": []
           },
           {
-            "text": "Tímoví hráči klubu a dobrovoľníčky v kontakte s deťmi vedia, čo je bezpečné správanie, a poznajú kontaktnú osobu pre ochranu detí",
+            "text": "Dobrovoľníci klubu a dobrovoľníčky v kontakte s deťmi vedia, čo je bezpečné správanie, a poznajú kontaktnú osobu pre ochranu detí",
             "tags": ["D", "Z", "DO"]
           },
           {
@@ -371,7 +371,7 @@
             "tags": []
           },
           {
-            "text": "Tímový hráč klubu vie, čo klub od neho čaká, a môže povedať nie bez zlého pocitu",
+            "text": "Dobrovoľník vie, čo klub od neho čaká, a môže povedať nie bez zlého pocitu",
             "tags": []
           },
           {
@@ -379,7 +379,7 @@
             "tags": ["D", "Z", "DO"]
           },
           {
-            "text": "Klub vie, čo tímovým hráčom klubu ponúka (vstup, oblečenie, školenie, akcia pre nich) a povie im to vopred",
+            "text": "Klub vie, čo dobrovoľníkom klubu ponúka (vstup, oblečenie, školenie, akcia pre nich) a povie im to vopred",
             "tags": []
           },
           {

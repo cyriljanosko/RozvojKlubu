@@ -25,6 +25,8 @@ async function Account() {
   const tHeader = await getTranslations("header");
   const clubs = await listMyClubs(clubDeps, user);
   const admin = isAdmin(user);
+  const mentor = admin || clubs.some((c) => c.roles.includes("mentor"));
+  const tMentor = await getTranslations("mentor");
 
   return (
     <Card>
@@ -74,6 +76,11 @@ async function Account() {
         <Link href="/oblasti" className="text-sm font-medium underline underline-offset-4">
           {t("areasLink")}
         </Link>
+        {mentor && (
+          <Link href="/mentor" className="text-sm font-medium underline underline-offset-4">
+            {tMentor("link")}
+          </Link>
+        )}
         {admin && (
           <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
             <Link href="/admin/kluby" className="underline underline-offset-4">

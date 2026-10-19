@@ -1,11 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { admin, alice } from "@/server/services/clubs.fixture";
-import { memoryContentStore, memorySectionStore } from "@/server/services/content.fixture";
+import {
+  memoryContentStore,
+  memoryPracticeStore,
+  memoryRoleCatalogStore,
+  memorySectionStore,
+} from "@/server/services/content.fixture";
 
 const getCurrentUser = vi.fn();
 const holder = { store: memoryContentStore() };
 const sections = { store: memorySectionStore(holder.store) };
+const practices = { store: memoryPracticeStore(holder.store) };
+const roleCatalogs = { store: memoryRoleCatalogStore(memoryContentStore()) };
 
 vi.mock("next/server", () => ({ connection: async () => {} }));
 vi.mock("@/server/auth/session", () => ({ getCurrentUser }));
@@ -15,6 +22,12 @@ vi.mock("@/server/db/content.store", () => ({
   },
   get mongoSectionStore() {
     return sections.store;
+  },
+  get mongoPracticeStore() {
+    return practices.store;
+  },
+  get mongoRoleCatalogStore() {
+    return roleCatalogs.store;
   },
 }));
 vi.mock("@/server/content/methodology-loader", () => ({
@@ -27,6 +40,11 @@ vi.mock("@/server/content/methodology-loader", () => ({
       sections: [{ key: "popis", order: 1, title: "Popis", body: "Text" }],
     },
   ],
+  loadPracticeFiles: async () => [],
+  loadRoleCatalogFile: async () => {
+    const { readFileSync } = await import("node:fs");
+    return JSON.parse(readFileSync(`${process.cwd()}/content/roly.json`, "utf8"));
+  },
 }));
 
 const questions = await import("./route");
@@ -44,6 +62,7 @@ describe("content API", () => {
   beforeEach(async () => {
     holder.store = memoryContentStore();
     sections.store = memorySectionStore(holder.store);
+    practices.store = memoryPracticeStore(holder.store);
     getCurrentUser.mockReset().mockResolvedValue(admin);
     expect(
       (await seed.POST(req("/api/v1/admin/content-seed", { method: "POST" }), {})).status,
@@ -57,15 +76,16 @@ describe("content API", () => {
     ).toBe(403);
   });
 
-  it("signed-in users read areas and questions, anonymous gets 401", async () => {
+  it("everyone reads areas and questions, also anonymous", async () => {
     getCurrentUser.mockResolvedValue(alice);
     expect((await (await areas.GET(req("/api/v1/areas"), {})).json()).data).toHaveLength(11);
     const res = await questions.GET(req("/api/v1/kompas/questions?area=4"), {});
     expect((await res.json()).data).toHaveLength(20);
     expect((await questions.GET(req("/api/v1/kompas/questions?area=x"), {})).status).toBe(400);
     getCurrentUser.mockResolvedValue(null);
-    expect((await areas.GET(req("/api/v1/areas"), {})).status).toBe(401);
-    expect((await questions.GET(req("/api/v1/kompas/questions"), {})).status).toBe(401);
+    // public read (ADR 0011)
+    expect((await areas.GET(req("/api/v1/areas"), {})).status).toBe(200);
+    expect((await questions.GET(req("/api/v1/kompas/questions"), {})).status).toBe(200);
   });
 
   it("admin edits, sees history and reverts; others get 403", async () => {
