@@ -67,6 +67,10 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Overiť názov hlavičky Ecomail API (`key`) pri prvom reálnom odoslaní – nepodarilo sa potvrdiť z dokumentácie.
   - [ ] Overiť názvy claimov v Sportnet ID tokene (meno, e-mail) po registrácii klienta.
 
+## Závislosti
+
+- [ ] TypeScript 7 (Dependabot PR #5) – čaká na podporu v typescript-eslint (`eslint-config-next`); dovtedy TS 5.9.
+
 ## Pred prvými ostrými dátami
 
 - [ ] Samostatná databáza pre Preview (vlastný DB používateľ, iné `MONGODB_URI`/`MONGODB_DB` pre Preview vo Verceli).

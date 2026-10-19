@@ -49,6 +49,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Závislosti (19. 10.): lucide-react 1.56.0, zod 4.6.7, eslint 10.12.0, @types/node 26.6.5; v CI actions/checkout a actions/setup-node v7 (Node 24). TypeScript zostáva na 5.9 – typescript-eslint verziu 7 zatiaľ nepodporuje.
 - Kompas na vyskúšanie: parameter adresy `?klub=` → `?club=` (konvencia anglických kľúčov).
 - Oblasť 4 „Tímoví hráči klubu“ → **Dobrovoľníci**, rola „Tímový hráč klubu“ → **Dobrovoľník**, „Mladí v klube“ → **Hráč / hráčka** – 58 zmien v obsahu (otázky Kompasu, Metodika, Prax) podľa schváleného zoznamu `docs/obsah/premenovanie-dobrovolnici.md`.
 - Čítanie oblastí, otázok Kompasu, Metodiky, Praxe a katalógu rolí už nevyžaduje prihlásenie (úpravy zostávajú adminovi SFZ).
