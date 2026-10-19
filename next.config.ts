@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+// Uses src/i18n/request.ts
+const withNextIntl = createNextIntlPlugin();
 
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -12,6 +16,11 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // content/metodika/*.md is read at runtime by the admin content seed
+  outputFileTracingIncludes: {
+    "/api/v1/admin/content-seed": ["./content/**/*"],
+    "/admin/obsah": ["./content/**/*"],
+  },
   turbopack: {
     rules: {
       "*.css": {
@@ -25,4 +34,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

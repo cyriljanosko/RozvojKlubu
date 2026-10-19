@@ -37,6 +37,18 @@ describe("errorResponse", () => {
 });
 
 describe("apiHandler", () => {
+  // Bug 2026-10-16: a malformed JSON body (request.json() → SyntaxError) returned 500.
+  it("answers 400 to a malformed JSON body", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const handler = apiHandler(async (request) => ok(await request.json()));
+    const res = await handler(
+      new Request("http://localhost/api/v1/x", { method: "POST", body: "{not json" }),
+      {},
+    );
+    expect(res.status).toBe(400);
+    expect((await res.json()).error.code).toBe("BAD_REQUEST");
+  });
+
   it("converts thrown errors into responses", async () => {
     const handler = apiHandler(async () => {
       throw new ApiError("FORBIDDEN", "Nope");

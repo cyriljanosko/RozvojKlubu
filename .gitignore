@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local data with personal information (e.g. Sportnet snapshots) – never commit
+/data/private/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

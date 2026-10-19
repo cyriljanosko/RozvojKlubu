@@ -1,0 +1,924 @@
+{
+  "meta": {
+    "siteTitle": "Rozvoj klubu – Akadémia vzdelávania",
+    "titleTemplate": "%s | Rozvoj klubu",
+    "description": "Vzdelávanie a rozvoj futbalových klubov: vizitka klubu, Kompas klubu, 11 oblastí rozvoja a licenčný systém."
+  },
+  "header": {
+    "brand": "Rozvoj klubu",
+    "signIn": "Prihlásiť sa",
+    "myAccount": "Môj účet",
+    "admin": "Kluby a roly",
+    "content": "Obsah Akadémie",
+    "academy": "Moja Akadémia",
+    "search": "Hľadať",
+    "about": "O Akadémii"
+  },
+  "home": {
+    "eyebrow": "Slovenský futbalový zväz",
+    "title": "Rozvoj klubu – Akadémia vzdelávania",
+    "intro": "Aplikácia je vo vývoji. Nižšie sú moduly prvej verzie.",
+    "modules": {
+      "clubCard": {
+        "title": "Vizitka klubu a mapa",
+        "description": "Profil klubu napojený na dáta zo Sportnetu a mapa klubov v obciach a mestách."
+      },
+      "academy": {
+        "title": "Akadémia vzdelávania",
+        "description": "Vzdelávanie pre manažéra klubu, mentora klubu a dobrovoľníka."
+      },
+      "personDashboard": {
+        "title": "Dashboard osoby",
+        "description": "Osobný prehľad, vekové značky a pokrok vo vzdelávaní."
+      },
+      "development": {
+        "title": "10 oblastí rozvoja a licencie",
+        "description": "Hodnotenie rozvoja klubu a licenčný systém grassroots klubov."
+      }
+    }
+  },
+  "login": {
+    "title": "Prihlásenie",
+    "introWithSportnet": "Prihláste sa účtom Sportnet. Ak ho nemáte, pošleme vám prihlasovací odkaz e-mailom.",
+    "introEmailOnly": "Zadajte e-mail a pošleme vám prihlasovací odkaz.",
+    "sportnetButton": "Prihlásiť sa cez Sportnet",
+    "or": "alebo",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "meno@klub.sk",
+    "sendLink": "Poslať prihlasovací odkaz",
+    "sentTitle": "Skontrolujte si e-mail",
+    "sentBody": "Na adresu <strong>{email}</strong> sme poslali prihlasovací odkaz. Platí 15 minút.",
+    "useAnotherEmail": "Použiť inú adresu",
+    "error": "Prihlásenie sa nepodarilo. Skúste to prosím znova."
+  },
+  "account": {
+    "title": "Môj účet",
+    "role": "Rola",
+    "sportnetAccount": "Účet Sportnet",
+    "sportnetLinked": "Prepojený",
+    "sportnetNotLinked": "Neprepojený",
+    "roleHint": "Klub a rolu v klube vám pridelí administrátor SFZ.",
+    "signOut": "Odhlásiť sa",
+    "myClubs": "Moje kluby",
+    "allClubs": "Všetky kluby",
+    "noClubs": "Zatiaľ nemáte pridelený žiadny klub.",
+    "areasLink": "Oblasti Akadémie"
+  },
+  "roles": {
+    "admin_sfz": "Administrátor SFZ",
+    "public": "Používateľ"
+  },
+  "email": {
+    "magicLink": {
+      "subject": "Prihlásenie do aplikácie Rozvoj klubu",
+      "greeting": "Dobrý deň,",
+      "intro": "na prihlásenie do aplikácie Rozvoj klubu kliknite na tlačidlo alebo otvorte odkaz:",
+      "button": "Prihlásiť sa",
+      "validity": "Odkaz platí 15 minút a dá sa použiť iba raz. Ak ste o prihlásenie nežiadali, tento e-mail môžete ignorovať.",
+      "signature": "Slovenský futbalový zväz"
+    }
+  },
+  "clubRoles": {
+    "management": "Manažér a výbor",
+    "coach": "Tréner a trénerka",
+    "mentor": "Mentor zväzu"
+  },
+  "club": {
+    "title": "Klub",
+    "notFound": "Klub sa nenašiel.",
+    "forbidden": "K tomuto klubu nemáte prístup.",
+    "union": "Zväz",
+    "region": "Kraj",
+    "season": "Sezóna",
+    "myRoles": "Moje roly",
+    "dataAsOf": "Dáta zo Sportnetu k {date}",
+    "noData": "Pre túto sezónu zatiaľ nemáme dáta.",
+    "stats": {
+      "teams": "Družstvá",
+      "teamsInCompetition": "v súťažiach",
+      "uniquePlayers": "Hráči a hráčky",
+      "girls": "z toho hráčky",
+      "coaches": "Tréneri"
+    },
+    "teams": {
+      "title": "Družstvá",
+      "noCompetition": "bez súťaže",
+      "players": "{count, plural, one {# hráč} few {# hráči} other {# hráčov}}"
+    },
+    "gender": {
+      "M": "mužské",
+      "F": "ženské"
+    },
+    "back": "Späť na môj účet"
+  },
+  "admin": {
+    "title": "Administrácia",
+    "clubs": "Kluby",
+    "noClubs": "Zatiaľ nie sú nahraté žiadne kluby. Nahrajte snapshot zo Sportnetu.",
+    "snapshot": {
+      "title": "Snapshot zo Sportnetu",
+      "description": "JSON súbor s dátami klubov (formát z návrhu Vizitky). Súbor obsahuje osobné údaje – nikdy ho nedávajte do gitu.",
+      "file": "Súbor JSON",
+      "submit": "Nahrať snapshot",
+      "done": "Nahraté: {clubs} klubov, {seasons} sezón (dáta k {date}).",
+      "error": "Snapshot sa nepodarilo nahrať. Skontrolujte formát súboru."
+    },
+    "members": {
+      "title": "Ľudia v klube",
+      "season": "Sezóna {season}",
+      "empty": "V tejto sezóne zatiaľ nikto nemá rolu.",
+      "email": "E-mail",
+      "role": "Rola",
+      "ageGroups": "Kategórie trénera (voliteľné, napr. U11, U13)",
+      "add": "Pridať",
+      "remove": "Odobrať",
+      "hint": "Človek sa musí do aplikácie aspoň raz prihlásiť, až potom mu môžete prideliť rolu.",
+      "errors": {
+        "NOT_FOUND": "Používateľ s týmto e-mailom sa ešte neprihlásil.",
+        "CONFLICT": "Tento človek už túto rolu v klube má.",
+        "BAD_REQUEST": "Skontrolujte e-mail a kategórie.",
+        "default": "Nepodarilo sa uložiť. Skúste to znova."
+      }
+    },
+    "back": "Späť na zoznam klubov",
+    "content": {
+      "title": "Obsah Akadémie",
+      "areas": "Oblasti a otázky Kompasu",
+      "empty": "Obsah ešte nie je v databáze. Naplňte ho zo súborov v repozitári.",
+      "seed": {
+        "submit": "Naplniť chýbajúci obsah",
+        "hint": "Doplní len to, čo v databáze chýba. Upravený obsah sa neprepíše.",
+        "done": "Doplnené: {areas} oblastí, {questions} otázok, {sections} sekcií metodiky, {practice} praxí, {roles} katalóg rolí.",
+        "error": "Obsah sa nepodarilo naplniť."
+      },
+      "questionsCount": "{count, plural, one {# otázka} few {# otázky} other {# otázok}}",
+      "columns": {
+        "i": "Implementácia",
+        "s": "Sociálna zodpovednosť"
+      },
+      "question": {
+        "text": "Text otázky",
+        "tags": "Platí pre kategórie (bez značky = vždy)",
+        "save": "Uložiť",
+        "saved": "Uložené (verzia {version}).",
+        "version": "verzia {version}",
+        "history": "História zmien",
+        "noHistory": "Bez zmien od naplnenia.",
+        "revert": "Vrátiť pred túto zmenu",
+        "errors": {
+          "CONFLICT": "Otázku medzitým niekto zmenil. Obnovte stránku.",
+          "BAD_REQUEST": "Text musí mať 5 až 500 znakov.",
+          "default": "Nepodarilo sa uložiť. Skúste to znova."
+        }
+      },
+      "back": "Späť na obsah",
+      "methodology": {
+        "title": "Metodika",
+        "open": "Upraviť metodiku",
+        "questions": "Otázky Kompasu",
+        "sectionTitle": "Nadpis sekcie",
+        "body": "Text (Markdown)",
+        "validAsOf": "Platné k",
+        "reviewedAt": "Revidované",
+        "save": "Uložiť sekciu",
+        "saved": "Uložené (verzia {version}).",
+        "preview": "Zobraziť na stránke oblasti",
+        "errors": {
+          "CONFLICT": "Sekciu medzitým niekto zmenil. Obnovte stránku.",
+          "BAD_REQUEST": "Skontrolujte nadpis, text a dátumy.",
+          "default": "Nepodarilo sa uložiť. Skúste to znova."
+        }
+      },
+      "practice": {
+        "title": "Prax",
+        "open": "Upraviť prax",
+        "json": "Obsah praxe (JSON)",
+        "hint": "Štruktúra sa pri uložení kontroluje (roly, kroky, varianty, odkazy na vzory). Pri chybe sa nič neuloží.",
+        "errors": {
+          "BAD_REQUEST": "JSON nie je platný alebo nezodpovedá štruktúre praxe.",
+          "CONFLICT": "Prax medzitým niekto zmenil. Obnovte stránku.",
+          "default": "Nepodarilo sa uložiť. Skúste to znova."
+        }
+      },
+      "roles": {
+        "title": "Roly v oblastiach",
+        "open": "Roly v oblastiach (katalóg)",
+        "intro": "Základné roly a roly v 11 oblastiach. Podľa nich sa píše Prax a zoraďuje Moja Akadémia (ADR 0010).",
+        "hint": "Upravte JSON. Pred uložením sa skontroluje: jedinečné kľúče, oblasti 1–11, roly v oblastiach len zo základných rolí.",
+        "json": "Katalóg rolí (JSON)",
+        "source": "Zdroj: {source}",
+        "summaryArea": "{area}. oblasť · {count, plural, one {# rola} few {# roly} other {# rolí}} · {status}",
+        "summaryBase": "Základné roly: {list}",
+        "status": {
+          "approved": "schválené",
+          "proposal": "návrh"
+        },
+        "missing": "Katalóg rolí ešte nie je v databáze. Použite „Naplniť chýbajúci obsah“ v zozname oblastí.",
+        "errors": {
+          "CONFLICT": "Katalóg medzitým upravil niekto iný. Obnovte stránku.",
+          "BAD_REQUEST": "JSON nie je platný alebo nespĺňa pravidlá katalógu.",
+          "default": "Uloženie sa nepodarilo."
+        }
+      }
+    }
+  },
+  "questionTags": {
+    "D": "Deti do 11",
+    "Z": "Žiaci",
+    "DO": "Dorast",
+    "S": "Dospelí",
+    "zd": "Ženy a dievčatá",
+    "rast": "Platí vždy"
+  },
+  "areas": {
+    "title": "Oblasti Akadémie",
+    "intro": "Jedenásť oblastí rozvoja klubu. Každá má metodiku a postupne pribudne aj prax podľa roly.",
+    "bands": {
+      "1": "Ľudia a riadenie",
+      "2": "Hráči a rast",
+      "3": "Chod klubu"
+    },
+    "empty": "Obsah ešte nie je pripravený.",
+    "methodology": "Metodika",
+    "contents": "Obsah",
+    "validAsOf": "Platné k {date}",
+    "reviewedAt": "Revidované {date}",
+    "edit": "Upraviť v administrácii",
+    "back": "Všetky oblasti",
+    "notFound": "Oblasť sa nenašla.",
+    "practice": "Prax",
+    "roleFor": "Metodika pre rolu",
+    "allRoles": "Všetky roly",
+    "forYourRole": "pre vašu rolu",
+    "tagsDraft": "Priradenie sekcií k rolám je návrh a ešte ho skontroluje pracovná skupina. Rola mení len poradie – všetky sekcie zostávajú dostupné.",
+    "progressClub": "Postup za klub"
+  },
+  "practice": {
+    "chooseRole": "Kto ste v tejto oblasti?",
+    "who": "Kto sem patrí",
+    "does": "Čo budete robiť",
+    "gain": "Čo z toho máte",
+    "responsibilities": "Za čo zodpovedáte",
+    "notThis": "Čo táto rola nerobí",
+    "time": "Čas",
+    "withWhom": "S kým",
+    "firstStep": "Prvý krok tento týždeň",
+    "byWhom": "Kto",
+    "result": "Čo vznikne",
+    "template": "Vzor",
+    "path": "Cesta",
+    "why": "Prečo",
+    "branchB": "Ak ste na ceste B",
+    "mentor": "Stupeň II · s mentorom",
+    "backlog": "Zásobník ďalších krokov",
+    "indicators": "Ako poznáte, že to funguje",
+    "mentorNumbers": "Čísla, ktoré sledujete",
+    "lowerIsBetter": "menej je lepšie",
+    "next": "Kam ďalej",
+    "library": "Knižnica vzorov",
+    "textToCopy": "Text na skopírovanie",
+    "inMethodology": "Vzor je v metodike oblasti (knižnica).",
+    "tags": {
+      "all": "pre každý klub",
+      "maly": "malý klub",
+      "stredny+": "stredný a veľký klub",
+      "velky": "veľký klub",
+      "D": "Deti do 11",
+      "Z": "Žiaci",
+      "DO": "Dorast",
+      "S": "Dospelí",
+      "zd": "Ženy a dievčatá"
+    },
+    "progress": {
+      "title": "Postup klubu {club}",
+      "summary": "Prvý krok: {tasks} z {tasksTotal} · cesta: {steps} z {stepsTotal} krokov",
+      "readOnly": "len na čítanie",
+      "saving": "Ukladám…",
+      "saved": "Uložené",
+      "conflict": "Postup medzitým zmenil niekto iný – načítali sme aktuálny stav.",
+      "error": "Uloženie sa nepodarilo. Skúste to znova.",
+      "choose": "Vybrať túto možnosť",
+      "chosen": "Zvolené",
+      "markDone": "Označiť krok ako hotový",
+      "doneOn": "Hotové {date}",
+      "signIn": "Postup klubu si po prihlásení môžete odškrtávať a ukladať.",
+      "signInLink": "Prihlásiť sa",
+      "noClub": "Postup si ukladá klub – vedenie alebo tréner s rolou v klube."
+    }
+  },
+  "kompas": {
+    "title": "Kompas klubu",
+    "intro": "Zaškrtnite, čo v klube naozaj platí. Skóre sa počíta samo; otázky, ktoré sa klubu netýkajú, sú sivé a do skóre sa nerátajú.",
+    "readOnly": "Kompas vypĺňa manažér a výbor klubu. Vy vidíte výsledok len na čítanie.",
+    "season": "Sezóna {season}",
+    "categories": "Kategórie klubu zo Sportnetu",
+    "categoriesFrom": "podľa sezóny {season}",
+    "noCategories": "Sportnet neuvádza žiadne družstvá – platia všetky otázky.",
+    "total": "{total} z 220 bodov",
+    "filled": "Vyplnené oblasti: {filled} z 11",
+    "average": "Priemer oblasti {average} · {band}",
+    "save": "Uložiť odpovede",
+    "saved": "Uložené (verzia {version}).",
+    "unsaved": "Máte neuložené zmeny.",
+    "conflict": "Kompas medzitým uložil niekto iný. Obnovte stránku – vaše zmeny sa neuložili.",
+    "error": "Nepodarilo sa uložiť. Skúste to znova.",
+    "columns": {
+      "i": "Implementácia",
+      "s": "Sociálna zodpovednosť"
+    },
+    "notApplicable": "Netýka sa – klub nemá: {tags}",
+    "areaScore": "{points} / 20",
+    "areaEmpty": "nevyplnené",
+    "areaFew": "primálo otázok pre váš klub",
+    "bands": {
+      "start": "Začiatok",
+      "rising": "Rozbieha sa",
+      "average": "Priemer",
+      "good": "Dobré",
+      "model": "Vzor"
+    },
+    "next": {
+      "title": "Čo urobiť najbližšie",
+      "intro": "Tri oblasti, kde klub získa najviac. Úlohy sú otázky, ktoré ste nezaškrtli.",
+      "empty": "Najprv vyplňte aspoň jednu oblasť.",
+      "order": ["Začnite tu", "Potom", "A ďalej"],
+      "methodology": "Metodika oblasti",
+      "practice": "Prax oblasti"
+    },
+    "open": "Kompas klubu",
+    "practiceBlock": {
+      "title": "Kde stojí váš klub v tejto oblasti",
+      "none": "V Kompase klubu zatiaľ nie je táto oblasť vyplnená.",
+      "fill": "Otvoriť Kompas klubu"
+    },
+    "submit": {
+      "button": "Odoslať mentorovi",
+      "hint": "Mentor uvidí zmrazenú kópiu. Odpovede môžete ďalej upravovať a odoslať znova.",
+      "saveFirst": "Pred odoslaním uložte odpovede.",
+      "done": "Odoslané mentorovi.",
+      "empty": "Najprv vyplňte aspoň jednu oblasť.",
+      "error": "Odoslanie sa nepodarilo. Skúste to znova.",
+      "history": "Odoslané verzie",
+      "none": "Zatiaľ nič neodoslané.",
+      "row": "{date} · {total} z 220 · vyplnené {filled} z 11",
+      "line": "Riadok pre zbernú tabuľku (SFZ-KOMPAS-1)",
+      "copy": "Skopírovať riadok",
+      "copied": "Skopírované.",
+      "withdrawn": "zrušené"
+    },
+    "submission": {
+      "title": "Odoslaný Kompas",
+      "meta": "Odoslané {date} · sezóna {season}",
+      "frozen": "Toto je zmrazená kópia z času odoslania.",
+      "checked": "Platí v klube",
+      "back": "Späť na Kompas klubu"
+    },
+    "withdraw": {
+      "button": "Zrušiť odoslanie",
+      "adminOnly": "Len pre admina SFZ.",
+      "confirm": "Zrušiť toto odoslanie? Zostane v histórii ako zrušené, Vizitka a prehľad mentora ukážu predchádzajúce platné odoslanie (alebo „zatiaľ neodoslané“).",
+      "yes": "Áno, zrušiť",
+      "no": "Nie",
+      "error": "Zrušenie sa nepodarilo. Obnovte stránku a skúste to znova.",
+      "withdrawn": "Odoslanie bolo zrušené {date}. Nezapočítava sa do Vizitky ani prehľadu mentora."
+    }
+  },
+  "mentor": {
+    "title": "Moje kluby v kohorte",
+    "intro": "Kluby, pri ktorých ste mentor. Vidíte len odoslané hodnotenia, nie rozpracované.",
+    "none": "Zatiaľ neodoslané",
+    "latest": "{date} · {total} z 220 · vyplnené {filled} z 11",
+    "open": "Otvoriť",
+    "forbidden": "Nie ste mentor žiadneho klubu.",
+    "link": "Moje kluby v kohorte"
+  },
+  "licensing": {
+    "title": "Licenčné hodnotenie",
+    "open": "Licenčné hodnotenie",
+    "intro": "Oblasti 2 Tímy, 3 Hráči a 4 Tréneri sa počítajú zo Sportnetu a sú uzamknuté. Oblasti 5 Infraštruktúra, 6 Aktivity a 7 Spolupráca vypĺňa klub alebo mentor.",
+    "readOnly": "Licenčné hodnotenie si môžete pozrieť, upravuje ho manažér a výbor klubu a mentor zväzu.",
+    "season": "Sezóna",
+    "dataAsOf": "Dáta zo Sportnetu k {date}",
+    "rules": "Pravidlá: pilot 2026, predbežné body",
+    "population": "Sídlo – počet obyvateľov",
+    "populationPlaceholder": "zadajte",
+    "coefficient": "koeficient {value}",
+    "coefficientMissing": "nezadané → koeficient 1,0",
+    "points": "{points} b.",
+    "overview": "Prehľad oblastí",
+    "overallPending": "Celková úroveň klubu sa zatiaľ neurčuje – pribudnú levely (malý, stredný, veľký klub) s 1–5 hviezdami.",
+    "sourceSportnet": "Sportnet · uzamknuté",
+    "sourceClub": "vypĺňa klub",
+    "provisional": "predbežné body",
+    "bands": {
+      "grassroots": "Grassroots",
+      "bronze": "Bronzový",
+      "silver": "Strieborný",
+      "gold": "Zlatý",
+      "none": "Bez pásma",
+      "empty": "Nevyplnené",
+      "unbanded": "Pásmo neurčené"
+    },
+    "thresholds": "Pásma: {list}",
+    "areas": {
+      "teams": "Tímy, družstvá v súťažiach",
+      "players": "Hráči",
+      "coaches": "Tréneri, odborníci",
+      "infrastructure": "Infraštruktúra",
+      "activities": "Aktivity klubu",
+      "cooperation": "Spolupráca s tretími stranami"
+    },
+    "area": "Oblasť {number}",
+    "formula": {
+      "teams": "Body = (počet družstiev v súťaži, ženské × 1,5) × 20 b. × koeficient sídla. Družstvo bez súťaže sa nepočíta.",
+      "players": "Body = (hráči + hráčky × 1,5) × koeficient sídla. Pod 15 bodov klub v tejto oblasti nie je zaradený.",
+      "coaches": "Body za každého trénera podľa najvyššej platnej hlavnej licencie (UEFA PRO 15 · A 10 · B 6 · C 4 · Grassroots C 2 · SFZ Grassroots Leader 1), trénerky × 1,5. Koeficient sídla sa neuplatňuje.",
+      "infrastructure": "Body = počet kusov × body podľa rozmeru.",
+      "activities": "Bodované sú XPS, nábory, turnaje, letný kemp, web a sociálne siete. Ostatné aktivity sa evidujú bez bodov.",
+      "cooperation": "Body za komisie, GTM, festivaly, krúžky, McDonald’s Cup a školskú futsalovú ligu. Oblasť nemá stanovené pásmo."
+    },
+    "subtotalCoef": "Medzisúčet {subtotal} b. × koeficient {coef} = {points} b.",
+    "teamsWithoutCompetition": "Družstvá bez súťaže (nepočítajú sa): {count}",
+    "buckets": {
+      "adults": "Dospelí",
+      "u11": "Mládež do U11",
+      "u12_u15": "Mládež U12–U15",
+      "u16_u19": "Mládež U16–U19"
+    },
+    "genderRow": {
+      "M": "muži / chlapci",
+      "F": "ženy / dievčatá (× 1,5)"
+    },
+    "col": {
+      "category": "Kategória",
+      "men": "Muži",
+      "women": "Ženy",
+      "points": "Body",
+      "item": "Položka",
+      "count": "Počet",
+      "perItem": "b./ks",
+      "input": "Vstup",
+      "coach": "Tréner",
+      "gender": "M/Ž",
+      "licence": "Najvyššia platná licencia"
+    },
+    "ageAdults": "Dospelí",
+    "total": "Spolu",
+    "noLicence": "bez platnej hlavnej licencie",
+    "expired": "po platnosti: {list}",
+    "genderGuessed": "odhad z priezviska",
+    "genderNote": "Pohlavie trénera Sportnet nezverejňuje – je odhadnuté z priezviska a dá sa opraviť. Trénerky sa rátajú × 1,5.",
+    "noCoaches": "V realizačných tímoch družstiev nie je uvedený žiadny tréner.",
+    "gender": {
+      "M": "M",
+      "F": "Ž"
+    },
+    "yes": "Áno",
+    "no": "Nie",
+    "tier": {
+      "0": "0",
+      "1": "1",
+      "2": "2 a viac"
+    },
+    "records": "Ďalšie – evidencia, bez bodov",
+    "infrastructure": {
+      "grass_105x68": "Ihrisko tráva 105×68 m",
+      "grass_100x60": "Ihrisko tráva 100×60 m",
+      "grass_90x45": "Ihrisko tráva 90×45 m",
+      "grass_small": "Ihrisko tráva menšie",
+      "turf_105x68": "Ihrisko UMT 105×68 m",
+      "turf_100x60": "Ihrisko UMT 100×60 m",
+      "turf_90x45": "Ihrisko UMT 90×45 m",
+      "turf_small": "Ihrisko UMT menšie",
+      "mini_40x20": "Minihrisko UMT/multifunkčné 40×20 m",
+      "mini_small": "Minihrisko menšie",
+      "floodlit_pitches": "Umelé osvetlenie ihriska (počet ihrísk)",
+      "hall_40x20": "Športová hala 40×20 m",
+      "hall_36x16": "Športová hala 36×16 m",
+      "hall_small": "Športová hala menšia",
+      "air_dome": "Nafukovacia hala",
+      "goals_732x244": "Prenosné bránky 7,32×2,44 m",
+      "goals_5x2": "Prenosné bránky 5×2 m",
+      "goals_15x1": "Prenosné bránky 1,5×1 m"
+    },
+    "activities": {
+      "xps_training_records": "Evidencia tréningov v systéme XPS",
+      "recruitment_events": "Nábory hráčov (počet akcií za sezónu)",
+      "youth_tournaments": "Organizácia turnajov pre mládež (počet)",
+      "summer_camps": "Pravidelné letné kempy (aspoň 1 turnus)",
+      "website": "Aktuálne webové stránky klubu",
+      "facebook": "Aktívny Facebook",
+      "instagram": "Aktívny Instagram",
+      "youtube": "Aktívny YouTube kanál",
+      "training_camp_teams": "Letné sústredenie min. 3 dni / 2 noci – počet tímov",
+      "veterans_40": "Veteránsky futbal 40+",
+      "seniors_60": "Seniorský futbal 60+",
+      "internal_coach_education": "Interné vzdelávanie trénerov",
+      "guest_coach_sessions": "Ukážkové hodiny externých trénerov",
+      "specialised_sessions_per_month": "Špecializované tréningy – počet za mesiac"
+    },
+    "cooperation": {
+      "commission_sfz": "Členovia v komisii SFZ (počet osôb)",
+      "commission_rfz": "Členovia v komisii RFZ (počet osôb)",
+      "commission_obfz": "Členovia v komisii ObFZ (počet osôb)",
+      "regional_gtm": "Spolupráca s GTM krajského zväzu",
+      "school_festivals": "Dopoludňajšie festivaly pre MŠ a ZŠ (počet za sezónu)",
+      "school_clubs": "Pravidelné krúžky v MŠ/ZŠ/družine",
+      "coach_teaches_school": "Tréner klubu vyučuje v MŠ/ZŠ",
+      "mcdonalds_cup": "Deti z klubu v McDonald’s Cupe",
+      "school_futsal_league": "Deti z klubu v školskej futsalovej lige",
+      "regional_selections": "Výbery RFZ/ObFZ (zastúpenie)",
+      "pitch_rental_selections": "Prenájom plochy pre výbery RFZ/ObFZ",
+      "regional_competitions": "Súťaže riadené RFZ/ObFZ (účasť)",
+      "russ": "RUŠS",
+      "school_competitions": "Školské športové súťaže",
+      "municipality": "Spolupráca s obcou/MČ/VÚC",
+      "other_sports_club": "Spolupráca s iným športovým subjektom",
+      "business_partner": "Spolupráca s podnikateľským subjektom",
+      "private_groups": "Spolupráca so súkromnými osobami/partiami",
+      "coach_dsg_school": "Tréner klubu = tréner DSG v MŠ/ZŠ",
+      "coach_afternoon_school": "Tréner klubu – popoludňajšie aktivity v MŠ/ZŠ",
+      "school_tournaments": "Organizovanie turnajov pre MŠ/ZŠ/SŠ",
+      "childrens_homes": "Turnaje/aktivity pre detské domovy",
+      "disability_activities": "Turnaje/aktivity pre zdravotne znevýhodnených",
+      "open_pitches_weekend": "Otvorené ihriská pre verejnosť cez víkend",
+      "public_events": "Spoločenské podujatia pre verejnosť"
+    },
+    "save": "Uložiť zmeny",
+    "saved": "Uložené (verzia {version}).",
+    "unsaved": "Máte neuložené zmeny.",
+    "conflict": "Medzitým to upravil niekto iný. Obnovte stránku – vaše zmeny sa neuložili.",
+    "error": "Uloženie sa nepodarilo. Skúste to znova.",
+    "close": {
+      "button": "Uzavrieť hodnotenie sezóny",
+      "confirm": "Naozaj uzavrieť sezónu {season}? Hodnotenie sa uloží ako zmrazená kópia a už sa nebude dať upraviť.",
+      "yes": "Áno, uzavrieť",
+      "no": "Nie",
+      "saveFirst": "Pred uzavretím uložte zmeny.",
+      "error": "Uzavretie sa nepodarilo. Skúste to znova.",
+      "conflict": "Sezóna je už uzavretá alebo sa medzitým zmenila. Obnovte stránku."
+    },
+    "closed": "Sezóna je uzavretá {date}. Zobrazuje sa zmrazená kópia, údaje sa už nedajú meniť.",
+    "notFound": "Pre tento klub nie sú dáta zo Sportnetu.",
+    "reopen": {
+      "button": "Znovu otvoriť sezónu",
+      "confirm": "Znovu otvoriť sezónu {season}? Uzavreté hodnotenie zostane v histórii, sezóna sa bude dať upraviť a znovu uzavrieť. Vizitka do nového uzavretia ukáže „zatiaľ neuzavreté“.",
+      "yes": "Áno, otvoriť",
+      "no": "Nie",
+      "error": "Otvorenie sa nepodarilo. Obnovte stránku a skúste to znova.",
+      "adminOnly": "Len pre admina SFZ."
+    }
+  },
+  "vizitka": {
+    "title": "Vizitka klubu",
+    "open": "Vizitka klubu",
+    "publicIntro": "Ako klub stojí v Akadémii rozvoja klubov SFZ: sebahodnotenie Kompas a licenčné hodnotenie za sezónu.",
+    "clubIntro": "Vizitka ukazuje posledný odoslaný Kompas a uzavreté licenčné hodnotenie sezóny. Rovnaké hodnotenie oblastí vidí aj verejnosť.",
+    "publicLink": "Verejná vizitka",
+    "season": "Sezóna",
+    "union": "{union} · {region}",
+    "size": {
+      "small": "malý klub",
+      "medium": "stredný klub",
+      "large": "veľký klub"
+    },
+    "profile": "{teams, plural, one {# družstvo} few {# družstvá} other {# družstiev}} · {players, plural, one {# hráč} few {# hráči} other {# hráčov}} · {coaches, plural, one {# tréner} few {# tréneri} other {# trénerov}}",
+    "noProfile": "Pre túto sezónu nie sú dáta zo Sportnetu.",
+    "kompas": {
+      "title": "Kompas klubu",
+      "subtitle": "sebahodnotenie v 11 oblastiach",
+      "total": "{total} z 220 bodov",
+      "filled": "vyplnené oblasti: {filled} z 11",
+      "none": "Zatiaľ neodoslané.",
+      "points": "{points} / 20",
+      "empty": "nevyplnené",
+      "few": "nehodnotí sa",
+      "submittedAt": "Odoslané {date}",
+      "draft": "Rozpracovaná verzia {version} ešte nie je odoslaná – vo Vizitke je posledná odoslaná.",
+      "draftOnly": "Rozpracovaný Kompas (verzia {version}) ešte nie je odoslaný mentorovi.",
+      "link": "Otvoriť Kompas"
+    },
+    "licensing": {
+      "title": "Licenčné hodnotenie",
+      "subtitle": "licenčný systém, 6 oblastí",
+      "none": "Zatiaľ neuzavreté.",
+      "closedAt": "Uzavreté {date} · koeficient sídla {coef}",
+      "draftOnly": "Rozpracované hodnotenie (verzia {version}) ešte nie je uzavreté.",
+      "link": "Otvoriť licenčné hodnotenie"
+    },
+    "notFound": "Klub sa nenašiel."
+  },
+  "academy": {
+    "title": "Moja Akadémia",
+    "intro": "Čo sa týka vás a vášho klubu: kde klub stojí, čo urobiť najbližšie a vaše roly v oblastiach.",
+    "season": "Sezóna {season}",
+    "noRoles": "Zatiaľ nemáte v žiadnom klube pridelenú rolu. Rolu prideľuje admin SFZ.",
+    "myRoles": "Moje roly v klube",
+    "standing": {
+      "title": "Kde klub stojí",
+      "kompas": "Kompas: {total} z 220 · vyplnené {filled} z 11",
+      "kompasEmpty": "Kompas zatiaľ nevyplnený",
+      "kompasSent": "odoslané mentorovi {date}",
+      "kompasNotSent": "zatiaľ neodoslané mentorovi",
+      "licensingClosed": "Licenčné hodnotenie uzavreté {date}",
+      "licensingOpen": "Licenčné hodnotenie zatiaľ neuzavreté",
+      "vizitka": "Vizitka klubu"
+    },
+    "tasks": {
+      "title": "Čo mám urobiť ja",
+      "none": "Teraz nič nehorí.",
+      "kompas_empty": "Vyplniť Kompas klubu",
+      "kompas_unsent": "Odoslať Kompas mentorovi – posledné zmeny ešte nie sú odoslané",
+      "licensing_open": "Doplniť a uzavrieť licenčné hodnotenie sezóny",
+      "teams_without_coach": "{count, plural, one {# družstvo nemá} few {# družstvá nemajú} other {# družstiev nemá}} v Sportnete trénera",
+      "weak_area": "Oblasť {area} má {points} z 20 – pozrieť Prax a prvý krok",
+      "club_kompas_missing": "Kompas neodoslalo {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
+      "club_licensing_open": "Licenčné hodnotenie neuzavrelo {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
+      "open": "Otvoriť",
+      "practice_first": "Prax oblasti {area}: dokončite prvý krok – {step}",
+      "practice_next": "Prax oblasti {area}: pokračujte – {step}",
+      "practiceProgress": "Prax: {done} z {total} krokov"
+    },
+    "roles": {
+      "title": "Moje roly v oblastiach",
+      "hint": "Označte, čo v klube naozaj robíte. Podľa toho vám v detaile oblasti predvolíme Prax pre vašu rolu. Nepovinné.",
+      "proposal": "návrh",
+      "save": "Uložiť moje roly",
+      "saved": "Uložené.",
+      "error": "Uloženie sa nepodarilo.",
+      "area": "Oblasť {area}"
+    },
+    "mentor": {
+      "title": "Moje kluby v kohorte",
+      "intro": "Kluby, pri ktorých ste mentor zväzu. Vidíte len odoslané hodnotenia.",
+      "latest": "{date} · {total} z 220 · vyplnené {filled} z 11",
+      "none": "Kompas zatiaľ neodoslaný",
+      "licensingClosed": "licenčné uzavreté",
+      "licensingOpen": "licenčné neuzavreté"
+    },
+    "sees": {
+      "title": "Čo táto rola vidí",
+      "management": "Manažér a výbor vidí o klube všetko: Kompas aj s rozpracovanou verziou, licenčné hodnotenie a Vizitku. Upravuje Kompas a licenčné hodnotenie.",
+      "coach": "Tréner a trénerka vidí výsledky klubu (Kompas, licenčné hodnotenie, Vizitku) len na čítanie a pracuje hlavne s oblasťami 3 a 5.",
+      "mentor": "Mentor zväzu vidí kluby svojej kohorty: odoslaný Kompas a licenčné hodnotenie, ktoré môže pri návšteve doplniť. Rozpracovaný Kompas nevidí."
+    }
+  },
+  "trialKompas": {
+    "title": "Kompas klubu – vyskúšajte",
+    "intro": "Sebahodnotenie v 11 oblastiach. V každej zaškrtnete, čo v klube naozaj platí, a skóre sa vypočíta samo.",
+    "pick": "Najprv vyberte svoj klub. Kategórie (deti, žiaci, dorast, dospelí, ženy) vezmeme zo Sportnetu, nezadávajú sa ručne.",
+    "pilot": "Pilot: kluby zapojené do Akadémie. Ďalšie pribudnú po overení pilotu.",
+    "change": "Zmeniť klub",
+    "local": "Toto je vyskúšanie: odpovede zostanú len v tomto prehliadači, nikam sa neodosielajú a mentor ich nevidí.",
+    "signIn": "Ste manažér alebo člen výboru klubu? Prihláste sa a Kompas uložte a odošlite mentorovi.",
+    "signInButton": "Prihlásiť sa",
+    "member": "V tomto klube máte rolu – Kompas klubu si môžete uložiť a odoslať.",
+    "memberButton": "Otvoriť Kompas klubu",
+    "notFound": "Klub sa nenašiel."
+  },
+  "hub": {
+    "eyebrow": "Slovenský futbalový zväz",
+    "title": "Akadémia rozvoja klubov",
+    "lead": "Program SFZ pre amatérske futbalové kluby: jedenásť oblastí so vzormi, krokmi a sebahodnotením Kompas. Pre vedenie, trénerov, rodičov, dobrovoľníkov aj hráčov – každý v klube tu nájde, čím môže pomôcť.",
+    "track": "Dráha",
+    "preparing": "pripravujeme",
+    "roleTitle": "Kto ste v klube?",
+    "roleHint": "Rola nemení obsah Akadémie, mení poradie: čo sa vás týka, uvidíte hore.",
+    "whoTitle": "Ktorá rola som ja?",
+    "who": "Kto to je",
+    "see": "Čo uvidíte",
+    "why": "Prečo",
+    "draft": "Text tejto roly je návrh a ešte ho skontroluje pracovná skupina.",
+    "fromMembership": "Rolu a klub sme predvolili podľa vašej roly v klube. Môžete ich zmeniť.",
+    "club": {
+      "pick": "Vybrať klub",
+      "change": "Zmeniť klub",
+      "none": "Bez klubu",
+      "hint": "Pilot: kluby zapojené do Akadémie. Čísla sú zo Sportnetu a prenesú sa do Kompasu.",
+      "size": {
+        "small": "malý klub",
+        "medium": "stredný klub",
+        "large": "veľký klub"
+      },
+      "profile": "{teams, plural, one {# družstvo} few {# družstvá} other {# družstiev}} · {players, plural, one {# hráč} few {# hráči} other {# hráčov}} · {coaches, plural, one {# tréner} few {# tréneri} other {# trénerov}}",
+      "categories": "Kategórie",
+      "vizitka": "Vizitka klubu",
+      "season": "sezóna {season}"
+    },
+    "start": "Začnite tu",
+    "kompas": {
+      "title": "Ohodnoťte svoj klub",
+      "text": "Kompas klubu je sebahodnotenie v 11 oblastiach. Zaškrtnete, čo v klube naozaj platí, a dozviete sa, kde klub stojí a kde začať.",
+      "button": "Spustiť Kompas klubu",
+      "preparing": "Kompas akadémie pripravujeme: rovnaký princíp, otázky podľa oblastí akadémie."
+    },
+    "areas": "Jedenásť oblastí",
+    "areasAk": "Jedenásť oblastí akadémie",
+    "others": "Ostatné oblasti",
+    "open": "Otvoriť oblasť",
+    "bands": {
+      "1": "Ľudia a riadenie",
+      "2": "Hráči a rast",
+      "3": "Chod klubu"
+    },
+    "about": {
+      "academy": "Moja Akadémia",
+      "academyText": "Ste vo vedení klubu, tréner alebo mentor? Po prihlásení vidíte úlohy, Kompas a licenčné hodnotenie svojho klubu.",
+      "signIn": "Prihlásiť sa"
+    },
+    "roleLead": "Vyberte svoju rolu a ukážeme vám, čím začať. Obsah zostane rovnaký, zmení sa poradie.",
+    "noRole": "Bez roly – zobraziť všetkých 11 oblastí",
+    "preparingTrack": "pripravujeme. Oblasti a roly ukazujeme ako náhľad.",
+    "backTo": "Späť na {track}",
+    "kompasInfo": {
+      "title": "Čo je Kompas klubu",
+      "text": "Sebahodnotenie klubu v 11 oblastiach. Zaškrtnete, čo v klube naozaj platí, a uvidíte, kde klub stojí a kde začať. Vyskúšať ho môže ktokoľvek, uložiť a odoslať mentorovi ho môže vedenie klubu po prihlásení.",
+      "link": "Pozrieť Kompas klubu →"
+    },
+    "priorityTitle": "{role}: začnite týmito tromi oblasťami",
+    "nextTitle": "Ďalšie kroky",
+    "nextText": "Keď zvládnete prvé tri, pokračujte týmito oblasťami.",
+    "mine": {
+      "title": "Vaša Akadémia",
+      "hello": "Dobrý deň, {name}",
+      "vizitka": "Vizitka klubu – hodnotenie",
+      "kompas": "Kompas klubu",
+      "kompasScore": "{total} z 220",
+      "empty": "nevyplnený",
+      "licensing": "Licenčné hodnotenie",
+      "closed": "uzavreté",
+      "open": "rozpracované",
+      "openHint": "sezóna ešte nie je uzavretá",
+      "tasks": "Čaká na vás",
+      "more": "{count, plural, one {a # ďalšia úloha} few {a # ďalšie úlohy} other {a # ďalších úloh}} v Moja Akadémia",
+      "weak": "Slabé oblasti podľa Kompasu",
+      "points": "{points} z 20",
+      "academy": "Otvoriť Moja Akadémia",
+      "mentorSummary": "{count, plural, one {# klub} few {# kluby} other {# klubov}}, Kompas odoslaný {sent}",
+      "practice": "Pokračujte v Praxi"
+    },
+    "how": {
+      "title": "Ako Akadémia funguje",
+      "vizitka": {
+        "title": "Vizitka klubu",
+        "text": "Každý klub tu má svoju Vizitku: profil zo Sportnetu (družstvá, hráči, tréneri), výsledok Kompasu v 11 oblastiach a licenčné hodnotenie za sezónu. Vizitku si môže pozrieť ktokoľvek.",
+        "find": "Nájsť Vizitku klubu"
+      },
+      "level1": {
+        "badge": "1. úroveň · bez prihlásenia",
+        "title": "Samoštúdium",
+        "text": "Jedenásť oblastí, ktoré klub robia klubom: od vedenia a trénerov cez hráčov a dobrovoľníkov až po financie a zázemie. Každá oblasť je podrobne opísaná: čo to je, prečo na tom záleží, ako to kluby reálne robia, vzory a prvé kroky. K tomu Kompas klubu na vyskúšanie, ktorý ukáže, kde klub stojí."
+      },
+      "level2": {
+        "badge": "2. úroveň · po prihlásení",
+        "title": "Klub v Akadémii",
+        "text": "Vedenie, tréneri a ďalší ľudia klubu pracujú spolu: Kompas a licenčné hodnotenie sa ukladajú za sezónu a klub ich odošle mentorovi zväzu. Každý vidí svoje úlohy a klub sa vzdeláva s mentorom zväzu, ktorý ho sprevádza.",
+        "communication": "Klub komunikuje so svojimi ľuďmi – rodičmi, dobrovoľníkmi a hráčmi."
+      }
+    },
+    "aboutLink": "Viac o Akadémii"
+  },
+  "search": {
+    "title": "Hľadať v Akadémii",
+    "label": "Hľadať v Akadémii",
+    "placeholder": "Čo vo vašom klube riešite?",
+    "button": "Hľadať",
+    "headerLink": "Hľadať",
+    "tipsTitle": "Napríklad:",
+    "tips": ["licencia trénera", "dotácia", "dobrovoľníci", "ochrana detí", "nábor hráčov"],
+    "results": "{count, plural, one {# výsledok} few {# výsledky} other {# výsledkov}} pre „{query}“",
+    "none": "Pre „{query}“ sme nič nenašli. Skúste iné slovo alebo jeden z tipov.",
+    "inArea": "Oblasť {number} · {name}",
+    "kinds": {
+      "area": "Oblasti",
+      "section": "Metodika",
+      "practice": "Prax",
+      "template": "Vzory",
+      "club": "Kluby (Vizitka)"
+    },
+    "homeTitle": "Čo vo vašom klube riešite?",
+    "homeLead": "Hľadajte v 11 oblastiach, Metodike, Praxi a vzoroch alebo nájdite Vizitku klubu."
+  },
+  "aboutPage": {
+    "title": "O Akadémii",
+    "eyebrow": "Slovenský futbalový zväz",
+    "intro": {
+      "title": "Akadémia rozvoja klubov",
+      "text": "Program SFZ pre amatérske futbalové kluby. Na jednom mieste spája návody v 11 oblastiach, sebahodnotenie Kompas, licenčné hodnotenie a Vizitku klubu. V sezóne 2026/2027 ho skúša 10 pilotných klubov."
+    },
+    "levels": {
+      "title": "Pomáhame klubom na každej úrovni a v každej oblasti",
+      "items": {
+        "size": {
+          "title": "Každá veľkosť klubu",
+          "text": "Malý klub v obci s jedným mužstvom aj veľký klub s mládežou. Kroky majú varianty podľa veľkosti klubu a času, ktorý máte."
+        },
+        "area": {
+          "title": "Každá oblasť",
+          "text": "Od vedenia a trénerov cez hráčov a dobrovoľníkov až po financie, formálne minimum a zázemie."
+        },
+        "way": {
+          "title": "Sami alebo s mentorom",
+          "text": "Návody si môžete prejsť sami. Po prihlásení klub sprevádza mentor zväzu a vidíte úlohy pre svoju rolu."
+        }
+      }
+    },
+    "village": {
+      "title": "Prečo robiť futbal v obci",
+      "items": {
+        "kids": {
+          "title": "Pravidelná aktivita pre deti",
+          "text": "V mnohých obciach je klub jediná organizovaná aktivita, kam deti a mladí chodia každý týždeň."
+        },
+        "generations": {
+          "title": "Miesto, kde sa stretávajú generácie",
+          "text": "Hráči, rodičia, tréneri, dobrovoľníci aj fanúšikovia – vznikajú tu priateľstvá a ľudia sa zapájajú."
+        },
+        "identity": {
+          "title": "Spoločný zážitok obce",
+          "text": "Víkendový zápas je udalosť, na ktorú sa chodí. Klub je súčasťou identity a dobrého mena obce."
+        }
+      }
+    },
+    "benefits": {
+      "title": "Čo klub prináša",
+      "items": {
+        "municipality": {
+          "title": "Obci",
+          "text": "Živú komunitu, využitý areál, dobrovoľníkov, prevenciu a dobré meno."
+        },
+        "school": {
+          "title": "Škole",
+          "text": "Pohyb detí, spoluprácu na turnajoch a krúžkoch a cestu pre športové talenty."
+        },
+        "families": {
+          "title": "Rodinám",
+          "text": "Bezpečné miesto pre deti, spoločný čas a príležitosť zapojiť sa do diania v klube."
+        },
+        "youth": {
+          "title": "Mladým ľuďom",
+          "text": "Partiu, pohyb, zodpovednosť a prvé roly v klube – asistent trénera, rozhodca, organizátor."
+        }
+      }
+    },
+    "meaning": {
+      "title": "Význam športovania cez futbal",
+      "items": {
+        "community": {
+          "title": "Komunita",
+          "text": "Tímovosť, spolupatričnosť a prepojenie generácií na jednom ihrisku."
+        },
+        "health": {
+          "title": "Zdravie",
+          "text": "Pravidelný pohyb, lepšia kondícia a duševná pohoda pre deti aj dospelých."
+        },
+        "upbringing": {
+          "title": "Výchova",
+          "text": "Fair play, rešpekt k súperovi a rozhodcovi, disciplína, zvládanie prehry a bezpečné prostredie pre deti."
+        }
+      }
+    },
+    "cta": {
+      "title": "Začnite s Akadémiou",
+      "text": "Vyberte svoju rolu a pozrite sa, čím začať, alebo si vyskúšajte Kompas klubu.",
+      "roles": "Vybrať rolu",
+      "kompas": "Vyskúšať Kompas"
+    },
+    "video": {
+      "title": "Akadémia za 8 minút vo videu",
+      "play": "Prehrať video (8 min)",
+      "note": "Video sa prehrá z YouTube. Kým ho nespustíte, nič sa z YouTube nenačíta.",
+      "credit": "Video bolo vytvorené pomocou umelej inteligencie (Google Gemini)."
+    },
+    "eleven": {
+      "title": "Prečo 11 oblastí",
+      "text": "Futbal hrá jedenásť hráčov a každý post má v zápase svoju úlohu. Keď jeden chýba alebo nehrá svoju rolu, cíti to celý tím. Rovnako funguje klub, preto sme Akadémiu postavili ako jedenástku: 11 oblastí rozvoja. Klub nemusí byť najlepší vo všetkom naraz, ale potrebuje mať obsadený každý post.",
+      "hint": "Kliknite na hráča a zistite, čo oblasť rieši.",
+      "pitch": "Jedenástka Akadémie – 11 oblastí na ihrisku",
+      "lines": {
+        "goalkeeper": {
+          "title": "Brankár",
+          "areas": "Vedenie klubu",
+          "text": "Vidí celé ihrisko, rozhoduje a drží poriadok vzadu."
+        },
+        "defense": {
+          "title": "Obrana",
+          "areas": "Financie, Právne minimum, Digitalizácia, Prostredie klubu",
+          "text": "Pevný základ, aby klub nedostával zbytočné góly."
+        },
+        "midfield": {
+          "title": "Stred",
+          "areas": "Manažér, Tréneri, Dobrovoľníci",
+          "text": "Spájajú obranu s útokom a ťahajú každodenný chod klubu."
+        },
+        "attack": {
+          "title": "Útok",
+          "areas": "Hráč a hráčka, Aktivity v klube, Marketing a fanúšikovia",
+          "text": "To, čo vidno – hráči na ihrisku, podujatia a ľudia na tribúne."
+        }
+      },
+      "detail": "Detail oblasti",
+      "close": "Zavrieť"
+    }
+  }
+}

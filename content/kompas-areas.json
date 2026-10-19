@@ -1,0 +1,1072 @@
+{
+  "source": "Kompas klubu v2 (https://claude.ai/artifact/Ae7wEPZywnW5wXWnGCVgEt), otázky zhodné s Kompasom v13",
+  "areas": [
+    {
+      "number": 1,
+      "name": "Vedenie klubu",
+      "shortName": "Vedenie",
+      "band": 1,
+      "description": "Prezident, výbor, ISSF manažér a ekonóm. Kto rozhoduje a kto má prístupy.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/a1fe4e94-9f18-4360-966e-b3e8e3bec55b",
+        "detail": "https://claude.ai/code/artifact/1cd0c1b5-0aa4-4cc2-bdbb-15cfbdfa5d1a"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Klub má zapísaného štatutára a údaje v registri sedia s realitou (meno, adresa, obdobie)",
+            "tags": []
+          },
+          {
+            "text": "Existuje zoznam funkcií s menami — vrátane prázdnych riadkov pri neobsadených",
+            "tags": []
+          },
+          {
+            "text": "Výbor má určený rytmus zasadnutí a po každom zostáva zápis s uzneseniami",
+            "tags": []
+          },
+          {
+            "text": "Je napísané, do akej sumy rozhoduje predseda sám a od akej to patrí výboru",
+            "tags": []
+          },
+          {
+            "text": "Prístup do ISSF majú aspoň dvaja ľudia a klub vie, kto ďalší má aké prístupy",
+            "tags": []
+          },
+          {
+            "text": "Ekonóm klubu a hospodár sú dve rôzne pomenované role (peniaze vs. materiál a areál)",
+            "tags": []
+          },
+          {
+            "text": "Podpisové právo k účtu a vedenie dokladov nie sú v rukách jedného človeka",
+            "tags": []
+          },
+          {
+            "text": "Ku každej funkcii je pripravený odovzdávací balík (prístupy, kontakty, posledná zápisnica)",
+            "tags": []
+          },
+          {
+            "text": "Klub má v kalendári tvrdé termíny orgánov a súťaží — nie v pamäti jedného človeka",
+            "tags": []
+          },
+          {
+            "text": "Vedenie sa obnovuje — v posledných troch rokoch doň prišiel aspoň jeden nový človek",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Členovia sa dozvedia o rozhodnutiach výboru bez toho, aby sa museli pýtať",
+            "tags": []
+          },
+          {
+            "text": "Hospodárenie klubu raz ročne niekto skontroluje a členovia výsledok vidia",
+            "tags": []
+          },
+          {
+            "text": "Je jasné, ako sa rieši konflikt záujmov (člen výboru ako dodávateľ, rodinné väzby)",
+            "tags": []
+          },
+          {
+            "text": "Voľby do vedenia sa konajú podľa stanov a členovia sa o nich dozvedia vopred",
+            "tags": []
+          },
+          {
+            "text": "Výbor má menovanú osobu pre ochranu detí a vie, čo robí pri podozrení",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub má napísaný kódex správania a vedenie sa ním riadi ako prvé",
+            "tags": []
+          },
+          {
+            "text": "Vedenie rieši, aby členské a výstroj nerozhodovali o tom, kto môže hrať",
+            "tags": []
+          },
+          {
+            "text": "Výbor aspoň raz ročne prerokuje, čo klub urobil pre obec, nielen pre vlastných hráčov",
+            "tags": []
+          },
+          {
+            "text": "Poďakovanie dobrovoľníkom a rodičom je bod, ktorý vedenie plánuje, nie náhoda",
+            "tags": []
+          },
+          {
+            "text": "Vedenie rieši areál a prevádzku aj z pohľadu spotreby energií, vody a odpadu",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 2,
+      "name": "Manažér klubu",
+      "shortName": "Manažér",
+      "band": 1,
+      "description": "Človek, ktorý drží chod klubu pokope od súpisky po dotáciu.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/9f01cc85-2dd7-41a6-89c5-adb6070a4840",
+        "detail": "https://claude.ai/code/artifact/76b6d262-f7ea-4a86-b3f8-bb2ecb2e8afd"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Klub má menovanú osobu v role manažéra a vie to povedať aj bez váhania",
+            "tags": []
+          },
+          {
+            "text": "Rola je zapísaná (uznesenie výboru, zápisnica, alebo aspoň e-mail členom) — nie len ústna dohoda",
+            "tags": []
+          },
+          {
+            "text": "Manažér má prístup k všetkým podkladom, ktoré rola potrebuje (evidencia, rozpočet, kontakty)",
+            "tags": []
+          },
+          {
+            "text": "Existuje zoznam krokov na túto sezónu s určeným zodpovedným ku každému",
+            "tags": []
+          },
+          {
+            "text": "Ku každému kroku je aj termín, nie len „počas sezóny“",
+            "tags": []
+          },
+          {
+            "text": "Klub si raz počas sezóny prejde, čo z plánu je hotové a čo nie",
+            "tags": []
+          },
+          {
+            "text": "Manažér má určeného zástupcu alebo aspoň jednu osobu, ktorá vie prevziať agendu pri jeho absencii",
+            "tags": []
+          },
+          {
+            "text": "Odovzdanie roly je pripravené — je jasné, čo by nový manažér dostal do rúk (dokumenty, kontakty, prístupy)",
+            "tags": []
+          },
+          {
+            "text": "Klub vie, na koho sa obrátiť na ObFZ, krajskom zväze a SFZ (menovite, nie len „na zväz“)",
+            "tags": []
+          },
+          {
+            "text": "Manažér si vyhradil pravidelný čas na agendu klubu (napr. hodina týždenne), nie len keď „horí“",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Klub má napísaný kódex správania alebo súbor hodnôt a ľudia v klube o ňom vedia",
+            "tags": []
+          },
+          {
+            "text": "Je určená osoba, na ktorú sa môže dieťa alebo rodič obrátiť pri ubližovaní či nevhodnom správaní",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub má súhlasy rodičov s fotografovaním detí a rieši ich pred zverejnením, nie po ňom",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Dieťa z rodiny v núdzi má v klube cestu, ako pokračovať aj bez plného členského (fond, výnimka, sponzor)",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Dievčatá majú v klube jasnú „ďalšiu zastávku“ — kategóriu, tréning alebo kontakt, kam môžu prejsť",
+            "tags": ["rast"]
+          },
+          {
+            "text": "Klub vie prijať dieťa so zdravotným alebo iným znevýhodnením a vie, s kým sa o tom poradiť",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub aspoň raz ročne robí niečo pre celú obec, nielen pre vlastných hráčov",
+            "tags": []
+          },
+          {
+            "text": "Klub verejne poďakuje dobrovoľníkom a rodičom — nielen oceňuje športové výsledky",
+            "tags": []
+          },
+          {
+            "text": "Po podujatiach klub rieši odpad a poriadok na ihrisku ako súčasť organizácie, nie ako dodatok",
+            "tags": []
+          },
+          {
+            "text": "Klub sleduje spotrebu energií a vody v areáli a vie povedať, či rastie alebo klesá",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 3,
+      "name": "Tréneri",
+      "shortName": "Tréneri",
+      "band": 1,
+      "description": "Nábor, licencie a udržanie trénerov v každej kategórii.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/0923f8a0-a574-4cca-b96b-73d048c07d21",
+        "detail": "https://claude.ai/code/artifact/a2883ec3-2a4e-4d9e-9356-a77279a2de88"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Klub má aktuálny prehľad: kategória → tréner → licencia → dokedy platí → náhradník",
+            "tags": []
+          },
+          {
+            "text": "Klub vie, ktorá kategória je najzraniteľnejšia (stojí na jednom človeku bez náhrady)",
+            "tags": []
+          },
+          {
+            "text": "Každý tréner má funkčné ISSF konto a vie sa doň prihlásiť",
+            "tags": []
+          },
+          {
+            "text": "Klub sleduje expirácie licencií a rieši ich vopred, nie až keď licencia prepadne",
+            "tags": []
+          },
+          {
+            "text": "Kontinuálne vzdelávanie je naplánované — kto ide na čo a z čoho sa to zaplatí",
+            "tags": []
+          },
+          {
+            "text": "Klub má v rozpočte samostatnú položku na vzdelávanie trénerov",
+            "tags": []
+          },
+          {
+            "text": "Nový človek začína ako asistent — licenciu rieši, až keď vie, že chce pokračovať",
+            "tags": []
+          },
+          {
+            "text": "Každý tréner má napísané, čo od neho klub očakáva (rozsah, komunikácia, prístup k deťom)",
+            "tags": []
+          },
+          {
+            "text": "Nový tréner má v klube mentora, na ktorého sa môže obrátiť",
+            "tags": []
+          },
+          {
+            "text": "Tréneri a trénerky sa aspoň raz za sezónu spoločne stretnú a raz s nimi klub prejde, ako sa im vedie",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Všetci tréneri majú absolvovaný kurz UEFA — Ochrana detí vo futbale",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub si pri každom novom trénerovi overí bezúhonnosť (výpis z registra trestov)",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Tréner vie, na koho sa v klube obrátiť, keď rieši ubližovanie alebo nevhodné správanie",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Sú jasné pravidlá pre situácie, keď je tréner s deťmi sám (šatňa, doprava, tréning)",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Tréner vie, že v mládeži nemá tlačiť na výsledok — a klub mu to povedal nahlas",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Na tréning sa dostane každé dieťa, aj keď nie je najlepšie — nikto nie je „odložený“",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub vie prijať dieťa so znevýhodnením a tréner nezostane s tým sám",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub oslovuje do trénerských rolí aj ženy — má aspoň jednu trénerku či asistentku, alebo vie povedať, prečo nie",
+            "tags": ["rast"]
+          },
+          {
+            "text": "Klub sa trénerov pýta, či nie sú preťažení, a berie odpoveď vážne",
+            "tags": []
+          },
+          {
+            "text": "Tréner či trénerka vie, ako komunikovať s rodičmi, a v konflikte s rodičom nezostáva sám",
+            "tags": ["D", "Z", "DO"]
+          }
+        ]
+      }
+    },
+    {
+      "number": 4,
+      "name": "Dobrovoľníci",
+      "shortName": "Dobrovoľníci",
+      "band": 1,
+      "description": "Rodičia a ďalší ľudia, ktorí klubu pomáhajú mimo ihriska, a ako im poďakovať.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/2173b5c9-4fe2-4f59-9d25-02cd984e3eb4",
+        "detail": "https://claude.ai/code/artifact/d88df306-c280-4e5d-b084-a27c0ddc2061"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Klub má napísaný zoznam konkrétnych úloh — názov, čo treba urobiť, koľko to zaberie času",
+            "tags": []
+          },
+          {
+            "text": "Pri každej úlohe je meno; prázdny riadok klub berie ako zadanie, nie ako detail",
+            "tags": []
+          },
+          {
+            "text": "Klub vie, koľko ľudí reálne pomáha, a či to nie sú stále tí istí traja",
+            "tags": []
+          },
+          {
+            "text": "Niekto má koordináciu dobrovoľníkov klubu a dobrovoľníčok ako svoju agendu (nemusí to byť manažér)",
+            "tags": []
+          },
+          {
+            "text": "Nový človek dostane prvú úlohu malú a ohraničenú, nie „pomôž so všetkým“",
+            "tags": []
+          },
+          {
+            "text": "Klub vie, kto z rodičov má akú profesiu alebo zručnosť — a spýtal sa na to",
+            "tags": []
+          },
+          {
+            "text": "Zapojiť sa dá aj bez osobného oslovenia (formulár, nástenka, kontakt, skupina)",
+            "tags": []
+          },
+          {
+            "text": "Pri každom podujatí je jeden hlavný organizátor a rozpis rolí, nie kolektívna nezodpovednosť",
+            "tags": []
+          },
+          {
+            "text": "Skúsený dobrovoľník klubu zapracuje nového — know-how neodchádza s človekom",
+            "tags": []
+          },
+          {
+            "text": "Klub raz ročne prejde, kto sa preťažuje, a záťaž prerozdelí",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Klub oslovuje rovnako mužov aj ženy a úlohy nerozdeľuje automaticky podľa rodu",
+            "tags": []
+          },
+          {
+            "text": "Dobrovoľníci klubu a dobrovoľníčky v kontakte s deťmi vedia, čo je bezpečné správanie, a poznajú kontaktnú osobu pre ochranu detí",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Pri doprave detí a pri podujatiach je jasné, kto za deti zodpovedá a čo sa robí pri úraze",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Zapojiť sa dá aj bez peňazí a bez auta — klub myslí na ľudí, ktorí ich nemajú",
+            "tags": []
+          },
+          {
+            "text": "Klub oslovuje aj ľudí mimo „našej partie“ — nových rodičov, ľudí z okolitých obcí, seniorov",
+            "tags": []
+          },
+          {
+            "text": "Poďakovanie je verejné a pravidelné, nie len pri jubileu klubu",
+            "tags": []
+          },
+          {
+            "text": "Dobrovoľník vie, čo klub od neho čaká, a môže povedať nie bez zlého pocitu",
+            "tags": []
+          },
+          {
+            "text": "Klub rieši konflikty medzi rodičmi vecne a včas, nie cez skupinový chat",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub vie, čo dobrovoľníkom klubu ponúka (vstup, oblečenie, školenie, akcia pre nich) a povie im to vopred",
+            "tags": []
+          },
+          {
+            "text": "Klub berie dobrovoľníctvo aj ako službu obci — a hovorí o tom navonok",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 5,
+      "name": "Hráč, hráčka",
+      "shortName": "Hráč",
+      "band": 2,
+      "description": "Prvý tréning, komunikácia s rodinou a udržanie hráča v hre.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/c0197f4f-4221-439c-b599-16025e42e03d",
+        "detail": "https://claude.ai/code/artifact/18eacd05-c64e-4a5d-9585-7800d815b98b"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Pri nástupe dieťaťa má klub uvítací rozhovor s rodičom — nie len prihlášku a číslo účtu",
+            "tags": ["D", "Z"]
+          },
+          {
+            "text": "Rodič vie na začiatku, ako často sa trénuje, čo klub od dieťaťa čaká a čo čaká od rodiny",
+            "tags": ["D", "Z"]
+          },
+          {
+            "text": "Aspoň raz počas sezóny dostane každý rodič krátku spätnú väzbu o svojom dieťati",
+            "tags": ["D", "Z"]
+          },
+          {
+            "text": "Spätná väzba hovorí o tom, čo sa dieťa naučilo, nie o tom, koľko dalo gólov",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "V mladších kategóriách hrajú všetky deti — hrací čas nie je odmena za výkon",
+            "tags": ["D"]
+          },
+          {
+            "text": "Klub vie, koľko detí mu za poslednú sezónu odišlo a koľko prišlo",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Keď dieťa skončí, niekto sa spýta prečo — a odpoveď sa zapíše",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Prechod dieťaťa do vyššej kategórie je pripravený, nie len oznámený",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Tréner pozná dieťa aj mimo futbalu — školu, súrodencov, čo ho ťaží",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Dievčatá majú v klube rovnakú ponuku ako chlapci — a klub to hovorí nahlas",
+            "tags": ["rast"]
+          }
+        ],
+        "s": [
+          {
+            "text": "Každé dieťa sa dostane na hraciu plochu, aj to slabšie — hlavne do U11",
+            "tags": ["D"]
+          },
+          {
+            "text": "Klub prijme dieťa aj vtedy, keď rodina nemá na výstroj alebo na členské; rieši sa to diskrétne",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Deti aj rodičia vedia, kto je v klube kontaktná osoba pre ochranu detí a čo je neprijateľné správanie",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Tréneri nekričia na deti spôsobom, ktorý by klub nechcel mať na videu",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub pracuje s rodičmi na tribúne — hučanie na deti a rozhodcov nie je „súčasť futbalu“",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Dievčatá a chlapci majú porovnateľné tréningové časy, plochy a vybavenie",
+            "tags": ["zd"]
+          },
+          {
+            "text": "Klub myslí na deti, ktoré nedokážu hrať súťažne — má pre nich formu, kde sa hýbu a patria niekam",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Prestup dieťaťa do iného klubu klub nebrzdí a nepoužíva dieťa ako rukojemníka",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub berie ohľad na školu — termíny, prázdniny, skúškové obdobie dorastencov",
+            "tags": ["Z", "DO"]
+          },
+          {
+            "text": "Klub vie o dieťati len to, čo potrebuje, a údaje detí chráni (súhlasy, fotky, skupinové chaty)",
+            "tags": ["D", "Z", "DO"]
+          }
+        ]
+      }
+    },
+    {
+      "number": 6,
+      "name": "Aktivity v klube",
+      "shortName": "Aktivity",
+      "band": 2,
+      "description": "Spolupráca s obcou a školou, nábor a podujatia.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/23fdf503-6e62-4ae2-874b-bbe0d3dae04d",
+        "detail": "https://claude.ai/artifact/5ttqA1ZAWtNo8Rrw1P6qEi"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Klub má menovanú osobu, ktorá drží kontakt s obcou a školou — nie „to robí vždy niekto“",
+            "tags": []
+          },
+          {
+            "text": "Klub vie, koľko detí je v školách a škôlkach jeho obce, a porovnal to s počtom vlastných hráčov",
+            "tags": ["rast"]
+          },
+          {
+            "text": "So školou je dohodnutý aspoň jeden termín, ktorý je zapísaný v jej pláne, nie len prisľúbený",
+            "tags": ["D", "Z"]
+          },
+          {
+            "text": "Klub má na sezónu kalendár podujatí s dátumami a menami zodpovedných, nie zoznam nápadov",
+            "tags": []
+          },
+          {
+            "text": "Pri každom podujatí je jeden hlavný organizátor a rozpis úloh pred, počas a po",
+            "tags": []
+          },
+          {
+            "text": "Z podujatia odchádza klub s kontaktmi na deti (návratky), nie len s fotkami",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Do dvoch dní po podujatí niekto zavolá rodičom oslovených detí — telefonát, nie hromadná správa",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Nové dieťa dostane konkrétny termín prvého tréningu a niekto ho tam privíta",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub sa aspoň raz ročne zapojí do obecného podujatia, ktoré sám neorganizuje",
+            "tags": []
+          },
+          {
+            "text": "Po sezóne klub vyhodnotí, koľko detí z podujatí v klube reálne zostalo",
+            "tags": ["D", "Z", "DO"]
+          }
+        ],
+        "s": [
+          {
+            "text": "Aspoň jedno podujatie za sezónu je otvorené aj pre deti, ktoré v klube nie sú",
+            "tags": ["rast"]
+          },
+          {
+            "text": "Účasť na podujatí nie je podmienená poplatkom, dresom ani vlastným vybavením",
+            "tags": []
+          },
+          {
+            "text": "Na akciách hrajú dievčatá aj chlapci spolu a klub to hovorí vopred",
+            "tags": ["rast"]
+          },
+          {
+            "text": "Klub myslí na deti, ktoré nemá kto priviezť — čas, miesto konania, spolujazda",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Na podujatí je určená osoba pre ochranu detí a vedia o nej aj rodičia mimo klubu",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Pri podujatí je pripravená prvá pomoc a je jasné, kto volá záchranku",
+            "tags": []
+          },
+          {
+            "text": "Fotky detí z podujatí sa zverejňujú len so súhlasom — pri školskej akcii cez školu",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub po akcii upratuje po sebe a odpad rieši ako súčasť organizácie, nie ako dodatok",
+            "tags": []
+          },
+          {
+            "text": "Klub pozýva na podujatia aj seniorov a bývalých hráčov, nielen rodiny s malými deťmi",
+            "tags": []
+          },
+          {
+            "text": "Klub spolupracuje s okolitými klubmi (spoločné turnaje) namiesto toho, aby im bral deti",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 7,
+      "name": "Marketing a fanúšikovia",
+      "shortName": "Marketing a fanúšikovia",
+      "band": 2,
+      "description": "Pravidelné správy o klube, fanúšikovia, diváci, sponzori a obec.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/26dd5c6a-92bf-4ed7-8c99-2b466f858b62",
+        "detail": "https://claude.ai/artifact/QNtCudkTNqvSKNQNz3NKWx"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Za komunikáciu klubu je zodpovedný jeden menovaný človek — nie „výbor“ a nie „všetci“",
+            "tags": []
+          },
+          {
+            "text": "Klub má aspoň jeden živý kanál (sociálna sieť, obecný spravodaj alebo rozhlas, web obce)",
+            "tags": []
+          },
+          {
+            "text": "Počas sezóny ide von aspoň jeden príspevok alebo správa týždenne",
+            "tags": []
+          },
+          {
+            "text": "Klub pravidelne ukazuje fanúšikom, divákom a verejnosti, čo sa v klube robí, nielen výsledky (deti, tréneri, podujatia, ľudia okolo klubu)",
+            "tags": []
+          },
+          {
+            "text": "Verejne sú dostupné tréningové časy kategórií aj meno a telefón konkrétneho človeka",
+            "tags": []
+          },
+          {
+            "text": "Informáciu o nábore nájde aj rodič, ktorý klub vôbec nepozná a nikoho v ňom nemá",
+            "tags": []
+          },
+          {
+            "text": "Tréneri vedia, kam posielať fotky a jednu vetu zo svojej kategórie — existuje spoločná skupina",
+            "tags": []
+          },
+          {
+            "text": "Na správy a otázky cez kanál klubu niekto odpovedá do 24 hodín",
+            "tags": []
+          },
+          {
+            "text": "Klub má kontakt na konkrétnu osobu v obci alebo v miestnych médiách, nie len na podateľňu",
+            "tags": []
+          },
+          {
+            "text": "Pri prihláške sa klub pýta, odkiaľ sa rodič o klube dozvedel, a raz ročne odpovede spočíta",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Klub má od zákonných zástupcov písomné súhlasy so zverejňovaním fotiek detí",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Správca profilu vie, ktoré deti súhlas nemajú, a pri výbere fotiek to kontroluje",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Pri fotkách detí sa nezverejňuje celé meno spolu s miestom, školou ani zdravotnými údajmi",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub vie do dvoch dní vybaviť žiadosť rodiča o odstránenie fotky, bez diskusie",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Dievčatá sú na profile klubu vidieť rovnako často ako chlapci",
+            "tags": ["rast"]
+          },
+          {
+            "text": "Za sezónu sa objaví každá kategória a čo najviac detí, nielen tí najlepší",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub verejne ďakuje dobrovoľníkom, trénerom a rodičom, nielen sponzorom",
+            "tags": []
+          },
+          {
+            "text": "Sponzor vopred vie, čo presne za sezónu dostane, a dostane to doložiteľne",
+            "tags": []
+          },
+          {
+            "text": "Je vopred dohodnuté, kto hovorí za klub pri úraze, konflikte alebo inej zlej správe",
+            "tags": []
+          },
+          {
+            "text": "Klub pracuje s fanúšikmi a divákmi: pozýva ich, ďakuje im a ponúka im spôsob, ako sa do klubu zapojiť",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 8,
+      "name": "Financie a zdroje",
+      "shortName": "Financie",
+      "band": 3,
+      "description": "Rozpočet, evidencia a odkiaľ môžu prísť peniaze.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/4cfd302c-444d-4425-9347-74e16e20874d",
+        "detail": "https://claude.ai/artifact/2EFy1ucRTrZk6ddAGAG6mA"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Klub má na kalendárny rok písaný rozpočet, ktorý schválil výbor",
+            "tags": []
+          },
+          {
+            "text": "Ekonóm aspoň raz za štvrťrok porovná rozpočet so skutočnosťou a ukáže to výboru",
+            "tags": []
+          },
+          {
+            "text": "Klub vie, koľko ho stojí jeden hráč za sezónu, aspoň pre mládež spolu",
+            "tags": []
+          },
+          {
+            "text": "Peniaze sú na bankovom účte klubu a prístup k nemu majú aspoň dvaja ľudia",
+            "tags": []
+          },
+          {
+            "text": "Výdavky nad dohodnutý limit odsúhlasí druhý človek",
+            "tags": []
+          },
+          {
+            "text": "Hotovosť ide cez pokladničnú knihu s dokladom a po akcii ju spočítajú dvaja",
+            "tags": []
+          },
+          {
+            "text": "Peňažný denník, pohľadávky a záväzky sa vedú priebežne, nie až pri závierke",
+            "tags": []
+          },
+          {
+            "text": "Klub má rezervu aspoň na jeden až dva mesiace prevádzky a pravidlo, kedy ju smie použiť",
+            "tags": []
+          },
+          {
+            "text": "Revízor alebo kontrolná komisia raz ročne preverí doklady a pokladňu",
+            "tags": []
+          },
+          {
+            "text": "Klub je pripravený prijímať elektronické faktúry od roku 2027 — má DIČ, prístup na portál a schránku",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Žiadny jeden zdroj netvorí viac než polovicu príjmov klubu",
+            "tags": []
+          },
+          {
+            "text": "Klub sa každý rok registruje na 2 % z dane a robí kampaň medzi rodičmi",
+            "tags": []
+          },
+          {
+            "text": "Dobrovoľníci so 40 a viac hodinami dostanú od klubu potvrdenie, aby mohli dať 3 %",
+            "tags": []
+          },
+          {
+            "text": "Termíny žiadostí a vyúčtovaní dotácií sú v kalendári s menom zodpovedného človeka",
+            "tags": []
+          },
+          {
+            "text": "Klub za posledné dva roky podal aspoň jednu žiadosť mimo obce — kraj, fond alebo nadácia",
+            "tags": []
+          },
+          {
+            "text": "Každý sponzor má zmluvu, z ktorej je jasné, čo za podporu dostane",
+            "tags": []
+          },
+          {
+            "text": "Výška členského je odvodená od nákladu na hráča a schválená výborom",
+            "tags": []
+          },
+          {
+            "text": "Klub má súrodeneckú zľavu alebo splátky a diskrétne pravidlo pre deti, ktoré si členské nemôžu dovoliť",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Žiadne dieťa nie je vyradené zo zápasu ani verejne upozornené kvôli dlhu rodiča",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Členovia na valnom zhromaždení a obec dostanú raz ročne finančnú správu",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 9,
+      "name": "Právne a formálne minimum",
+      "shortName": "Právo",
+      "band": 3,
+      "description": "Zmluvy, poistenie, GDPR a bezpečnosť práce.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/02474a87-eb6a-4533-a0cb-8a769f45af20",
+        "detail": "https://claude.ai/artifact/BTQcu18MZN59RTgr1Soj6Q"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Stanovy sú aktuálne, uložené v archíve a zodpovedajú tomu, ako klub naozaj funguje",
+            "tags": []
+          },
+          {
+            "text": "Štatutár zapísaný v registri ministerstva vnútra a v ISSF je ten, kto naozaj koná za klub",
+            "tags": []
+          },
+          {
+            "text": "Každý tréner má písomnú zmluvu, ktorá zodpovedá tomu, či a ako je odmeňovaný",
+            "tags": []
+          },
+          {
+            "text": "Tréneri mládeže sú zapísaní v registri fyzických osôb v športe s preukázanou bezúhonnosťou",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Zmluvy so sponzormi sú písomné a klub rozlišuje sponzorstvo od daru",
+            "tags": []
+          },
+          {
+            "text": "Zmluva o užívaní ihriska a priestorov je platná a klub pozná jej podmienky",
+            "tags": []
+          },
+          {
+            "text": "Klub vie, kto je poistený a proti čomu, a poistné podmienky má k dispozícii",
+            "tags": []
+          },
+          {
+            "text": "Hráči majú platnú lekársku prehliadku a klub to vie doložiť",
+            "tags": []
+          },
+          {
+            "text": "Dokumenty klubu sú v jednom archíve, ku ktorému majú prístup aspoň dvaja ľudia",
+            "tags": []
+          },
+          {
+            "text": "Raz ročne pred sezónou prebehne kontrola zmlúv, poistenia, súhlasov a registrov",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Prihláška obsahuje informáciu o spracovaní osobných údajov a samostatný súhlas s fotkami",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub vie, kde všade sú osobné údaje hráčov a rodičov a kto k nim má prístup",
+            "tags": []
+          },
+          {
+            "text": "Ľudia, ktorí z klubu odišli, nemajú prístup k údajom, skupinám rodičov ani účtom klubu",
+            "tags": []
+          },
+          {
+            "text": "Výpis z registra trestov predložili aj vedúci, asistenti a šoféri, ktorí sú s deťmi sami",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Tréneri a dobrovoľníci majú podpísaný záznam o poučení o bezpečnosti a rizikách v areáli",
+            "tags": []
+          },
+          {
+            "text": "Klub má napísaný postup pri úraze a vie, komu a dokedy hlási poistnú udalosť",
+            "tags": []
+          },
+          {
+            "text": "Každý úraz na tréningu alebo zápase sa zapíše do knihy úrazov, aj keď sa zdá drobný",
+            "tags": []
+          },
+          {
+            "text": "Klub má určenú osobu pre ochranu detí a deti aj rodičia vedia, kto to je",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub vie, čo urobiť pri úniku alebo zneužití osobných údajov a koho informovať",
+            "tags": []
+          },
+          {
+            "text": "Žiadne odmeny sa nevyplácajú na ruku bez zmluvy a dokladu",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 10,
+      "name": "Digitalizácia a dáta",
+      "shortName": "Dáta",
+      "band": 3,
+      "description": "Evidencia v Sportnete a práca s vlastnými dátami.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/5915b6ed-8a6e-47bb-ba0e-cc27b1cffef5",
+        "detail": "https://claude.ai/artifact/SPRup7UHNsTdGySUbwSMAJ"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Za evidenciu a Sportnet zodpovedá jeden menovaný človek a má zástupcu s prístupom",
+            "tags": []
+          },
+          {
+            "text": "Zoznam hráčov v Sportnete zodpovedá tomu, kto naozaj chodí — ukončené registrácie sú vyradené",
+            "tags": []
+          },
+          {
+            "text": "Klub má jeden klubový zoznam aj pre deti, ktoré ešte nie sú registrované",
+            "tags": []
+          },
+          {
+            "text": "Dochádzka sa vedie na každom tréningu vo všetkých kategóriách jedným spôsobom",
+            "tags": []
+          },
+          {
+            "text": "Žiadosti v ISSF sa kontrolujú aspoň mesačne, v prestupovom období týždenne",
+            "tags": []
+          },
+          {
+            "text": "Tréneri na súpiskách sú v ISSF zaregistrovaní ako tréneri pred začiatkom sezóny",
+            "tags": []
+          },
+          {
+            "text": "Raz mesačne prebehne kontrola evidencie podľa checklistu",
+            "tags": []
+          },
+          {
+            "text": "Pre každú kategóriu je jeden kanál komunikácie s rodičmi a spravujú ho aspoň dvaja dospelí z klubu",
+            "tags": []
+          },
+          {
+            "text": "Dokumenty a kontakty sú na klubovom úložisku so zálohou, nie v súkromnom telefóne",
+            "tags": []
+          },
+          {
+            "text": "Klub vie raz ročne bez prepisovania povedať počty aktívnych detí po kategóriách",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Klub sleduje tri čísla: aktívne deti, priemernú dochádzku a udržanie v sezóne",
+            "tags": []
+          },
+          {
+            "text": "Pri troch týždňoch neúčasti tréner zavolá rodičovi",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Pri odchode dieťaťa sa klub spýta na dôvod a odpovede raz ročne spočíta",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Ročný prehľad čísel prejde výbor a urobí podľa neho aspoň jedno rozhodnutie",
+            "tags": []
+          },
+          {
+            "text": "Klub má zoznam, kto má prístup kam, a odoberá prístupy v týždni, keď človek odíde",
+            "tags": []
+          },
+          {
+            "text": "Účty klubu majú dvojfaktorové overenie a sú naviazané na klubový e-mail",
+            "tags": []
+          },
+          {
+            "text": "Heslá sa nezdieľajú na lístku ani v skupine, ale cez správcu hesiel",
+            "tags": []
+          },
+          {
+            "text": "Do AI nástrojov a bezplatných online služieb sa nevkladajú osobné údaje detí",
+            "tags": []
+          },
+          {
+            "text": "Tréneri komunikujú s deťmi len cez skupiny, kde sú aj rodičia",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Rodič bez smartfónu alebo internetu dostane informácie iným spôsobom",
+            "tags": []
+          }
+        ]
+      }
+    },
+    {
+      "number": 11,
+      "name": "Prostredie klubu",
+      "shortName": "Prostredie",
+      "band": 3,
+      "description": "Zázemie, kultúra klubu, prvá pomoc a bezpečné prostredie.",
+      "sources": {
+        "overview": "https://claude.ai/code/artifact/dad55acb-06b7-4627-8a15-65177fbc82ff",
+        "detail": "https://claude.ai/artifact/JSbGcT6g2Np9GcChJPcqyu"
+      },
+      "questions": {
+        "i": [
+          {
+            "text": "Šatne, ihrisko a sklad sú v stave, za ktorý sa klub nemusí hanbiť pred rodičom, ktorý príde prvýkrát",
+            "tags": []
+          },
+          {
+            "text": "Prenosné bránky sú vždy ukotvené alebo zaistené proti prevráteniu",
+            "tags": []
+          },
+          {
+            "text": "Klub má plán obnovy zázemia na tri roky s prioritou a odhadom nákladov",
+            "tags": []
+          },
+          {
+            "text": "Areál sa pred sezónou kontroluje podľa zoznamu a každý nedostatok má meno a termín",
+            "tags": []
+          },
+          {
+            "text": "Každý nový hráč, rodič a tréner má niekoho, kto ho privíta a zorientuje",
+            "tags": []
+          },
+          {
+            "text": "Klub má aspoň jeden spoločný moment za sezónu pre všetky kategórie a rodiny",
+            "tags": []
+          },
+          {
+            "text": "Úspechy detí aj práca dobrovoľníkov sa v klube verejne oceňujú",
+            "tags": []
+          },
+          {
+            "text": "Nový tréner má počas prvého mesiaca skúsenejšieho mentora",
+            "tags": []
+          },
+          {
+            "text": "Materiály a skúsenosti klubu sú v zdieľanom priečinku, nie len v hlave jedného človeka",
+            "tags": []
+          },
+          {
+            "text": "Rodičia a deti majú raz za sezónu možnosť dať klubu spätnú väzbu",
+            "tags": []
+          }
+        ],
+        "s": [
+          {
+            "text": "Klub má napísaný kódex správania a podpísal ho každý dospelý, ktorý je pri deťoch",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub má osobu pre ochranu detí a deti aj rodičia vedia, kto to je a ako ju zastihnúť",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Dospelý nie je sám s dieťaťom v uzavretom priestore a tréneri nepíšu deťom súkromné správy",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub má dohodnutý postup, čo robiť pri podozrení na nevhodné správanie dospelého k dieťaťu",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Šikana sa rieši hneď podľa dohodnutého postupu a nikdy sa nezľahčuje",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Tréneri absolvovali kurz o ochrane detí a vedia, kam nasmerovať dieťa, ktoré nie je v poriadku",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Na každom tréningu a zápase je doplnená lekárnička a dospelý, ktorý vie poskytnúť prvú pomoc",
+            "tags": []
+          },
+          {
+            "text": "Postup pri úraze je vyvesený v šatni a tréneri ho poznajú",
+            "tags": []
+          },
+          {
+            "text": "Po údere do hlavy dieťa v ten deň nepokračuje a vracia sa postupne po vyjadrení lekára",
+            "tags": ["D", "Z", "DO"]
+          },
+          {
+            "text": "Klub sa ozve proti kriku a nadávkam na deti, rozhodcov aj súperov — od trénerov aj rodičov",
+            "tags": []
+          }
+        ]
+      }
+    }
+  ]
+}

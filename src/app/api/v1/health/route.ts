@@ -10,8 +10,15 @@ export const GET = apiHandler(async () => {
   const report = await getHealth({
     isDatabaseConfigured,
     pingDatabase: async () => {
-      const db = await getDb();
-      await db.command({ ping: 1 });
+      try {
+        const db = await getDb();
+        await db.command({ ping: 1 });
+      } catch (error) {
+        // Log only the error type/message – the driver never includes the password here.
+        const e = error as Error;
+        console.error(`[health] database ping failed: ${e.name}: ${e.message}`);
+        throw error;
+      }
     },
     version: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "local",
   });
