@@ -103,6 +103,15 @@ export async function listMyClubs(
     .sort((a, b) => a.name.localeCompare(b.name, "sk"));
 }
 
+/** Public list of clubs in the app (name and union only), e.g. for the trial Kompas (ADR 0011). */
+export async function listPublicClubs(
+  deps: Pick<ClubDeps, "clubs">,
+): Promise<{ clubId: string; name: string; union: string; region: string }[]> {
+  return (await deps.clubs.listClubs("all"))
+    .map((c) => ({ clubId: c.clubId, name: c.name, union: c.union, region: c.region }))
+    .sort((a, b) => a.name.localeCompare(b.name, "sk"));
+}
+
 export async function getClubOverview(
   deps: ClubDeps,
   actor: CurrentUser | null,

@@ -82,7 +82,7 @@ export async function listMethodology(
   actor: CurrentUser | null,
   area: number,
 ): Promise<SectionDto[]> {
-  requireUser(actor);
+  void actor; // public read, no sign-in needed (ADR 0011)
   return (await store.listSections(areaNumber(area), "methodology"))
     .sort((a, b) => a.order - b.order)
     .map(toDto);

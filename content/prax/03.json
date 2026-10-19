@@ -1,0 +1,1629 @@
+{
+  "area": 3,
+  "source": "https://claude.ai/code/artifact/a2883ec3-2a4e-4d9e-9356-a77279a2de88",
+  "validAsOf": null,
+  "reviewedAt": null,
+  "roles": [
+    {
+      "id": "v",
+      "label": "Vedenie a manažér",
+      "description": "rozhoduje, kto bude trénovať",
+      "who": "prezident, výbor, manažér klubu, koordinátor mládeže",
+      "does": "Spíšete prehľad trénerov, nájdete chýbajúcich alebo naplánujete vzdelávanie a s každým trénerom sa porozprávate.",
+      "gain": "Každá kategória má trénera aj náhradníka a nikoho neprekvapí koniec licencie.",
+      "responsibilities": [
+        "Každá kategória má trénera aj náhradníka",
+        "Nikomu nevyprší licencia nečakane",
+        "Raz za sezónu sa s každým trénerom porozprávate"
+      ],
+      "notThis": ["Obsah tréningov — to je práca trénera"],
+      "time": "2 h týždenne prvý mesiac, potom 1 h mesačne",
+      "withWhom": "tréneri, ekonóm klubu, mentor zväzu",
+      "library": [
+        "prehlad",
+        "nabor",
+        "dohoda",
+        "plan",
+        "zoznam",
+        "mesacna",
+        "zastupovanie",
+        "stretnutie",
+        "podakovanie",
+        "rozhovor3m"
+      ],
+      "indicators": [
+        "Kategórie bez trénera",
+        "Licencie, ktoré vypršia do roka a nemajú plán",
+        "Kategórie len s jedným menom"
+      ],
+      "pathTitle": "Každá kategória s trénerom aj náhradníkom",
+      "pathSubtitle": "Štyri kroky na mesiac. Pri každom si vyberte možnosť, ktorá sedí vášmu času a veľkosti klubu.",
+      "firstStep": {
+        "title": "Vyplňte prehľad trénerov",
+        "who": "vy",
+        "time": "45 min",
+        "result": "tabuľka kategória → tréner → licencia → platná do → náhradník",
+        "tasks": [
+          {
+            "id": "v1",
+            "title": "Vyplňte prehľad pre každú kategóriu",
+            "note": "na papieri alebo v tabuľke podľa vzoru"
+          },
+          {
+            "id": "v2",
+            "title": "Pri každom trénerovi zapíšte, dokedy platí licencia",
+            "note": "text pre trénerov je vpravo"
+          },
+          {
+            "id": "v3",
+            "title": "Označte kategórie bez trénera, s licenciou do roka a s jedným menom"
+          }
+        ],
+        "aside": {
+          "title": "Čo sa opýtať trénerov",
+          "text": "Ahoj, dávame dokopy prehľad trénerov na sezónu. Pošli mi prosím tri veci:\n\n1. Akú máš licenciu a dokedy platí? (vidíš to v ISSF)\n2. Máš kurz UEFA Ochrana detí vo futbale?\n3. Kto by ťa vedel zastúpiť, keď nemôžeš prísť?\n\nĎakujem, zaberie ti to minútu.",
+          "note": "Pošlite ako správu do skupiny trénerov alebo sa opýtajte po tréningu."
+        },
+        "template": "prehlad",
+        "myAcademy": "treneri"
+      },
+      "steps": [
+        {
+          "id": "vs1",
+          "label": "1. týždeň",
+          "title": "Spočítajte, koho treba",
+          "why": "Kluby väčšinou nezlyhajú na tom, že by nikoho nenašli, ale na tom, že nevedia, koľko ľudí potrebujú a dokedy.",
+          "links": [
+            {
+              "label": "Spočítať, koho treba",
+              "anchor": "Spočítať, koho a dokedy treba"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "20 min",
+              "what": "Kategórie na budúcu sezónu vynásobte dvoma (tréner a asistent) a porovnajte s prehľadom.",
+              "result": "číslo, koľko ľudí chýba",
+              "template": "prehlad"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a výbor",
+              "time": "1 h",
+              "what": "Prejdite prehľad na výbore a ku každej kategórii určte termín, dokedy musí mať trénera.",
+              "result": "zoznam s termínmi v zápisnici"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy a koordinátor mládeže",
+              "time": "2 h",
+              "what": "Plán obsadenia na dve sezóny dopredu vrátane toho, kto si urobí vyššiu licenciu.",
+              "result": "plán obsadenia trénerov",
+              "tag": "stredny+"
+            }
+          ],
+          "branchB": {
+            "title": "Zmapujte licencie a expirácie",
+            "why": "Prepadnutá licencia sa zistí pri súpiske a predĺženie je potom drahšie.",
+            "links": [
+              {
+                "label": "Zmapovať licencie",
+                "anchor": "Zmapovať licencie a expirácie"
+              },
+              {
+                "label": "Kontinuálne vzdelávanie",
+                "anchor": "Kontinuálne vzdelávanie"
+              }
+            ],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "20 min",
+                "what": "Zoraďte prehľad podľa dátumu platnosti a označte, komu licencia vyprší do roka.",
+                "result": "zoznam licencií na predĺženie",
+                "template": "prehlad",
+                "myAcademy": "treneri"
+              },
+              {
+                "name": "Bežná",
+                "who": "vy a tréneri",
+                "time": "1 h",
+                "what": "Ku každému, komu licencia vyprší, zapíšte, koľko hodín vzdelávania mu chýba.",
+                "result": "plán hodín na predĺženie"
+              },
+              {
+                "name": "Pre väčší klub",
+                "who": "vy a koordinátor",
+                "time": "2 h",
+                "what": "Ročný plán vzdelávania pre všetkých trénerov s menami a sumami.",
+                "result": "ročný plán vzdelávania",
+                "template": "plan",
+                "tag": "stredny+"
+              }
+            ]
+          }
+        },
+        {
+          "id": "vs2",
+          "label": "2. týždeň",
+          "title": "Mená, nie výzva",
+          "why": "Hromadná výzva „hľadáme trénerov“ funguje zriedka. Zoznam mien funguje takmer vždy.",
+          "links": [
+            {
+              "label": "Menný zoznam",
+              "anchor": "Napísať menný zoznam kandidátov"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Napíšte päť mien: rodičia pri ihrisku, bývalí hráči a hráčky, dorastenci. Aspoň jedna žena.",
+              "result": "menný zoznam kandidátov",
+              "template": "zoznam"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréneri",
+              "time": "45 min",
+              "what": "Opýtajte sa každého trénera na dve mená z rodičov jeho kategórie.",
+              "result": "zoznam 10 a viac mien s kategóriou"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy",
+              "time": "1 h a jedno stretnutie",
+              "what": "Dohodnite so strednou školou pomocných trénerov z radov študentov.",
+              "result": "dohoda so školou",
+              "tag": "stredny+"
+            }
+          ],
+          "branchB": {
+            "title": "Dve mená na kategóriu",
+            "why": "Dve mená na kategóriu vydržia dlhšie než jeden vyčerpaný tréner.",
+            "links": [
+              {
+                "label": "Dvojice a náhradníci",
+                "anchor": "Doplniť dvojice a náhradníkov"
+              }
+            ],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "15 min",
+                "what": "Vyberte kategóriu, ktorá stojí na jednom človeku, a nájdite k nej jedného asistenta.",
+                "result": "jedna kategória s dvoma menami"
+              },
+              {
+                "name": "Bežná",
+                "who": "vy a tréneri",
+                "time": "1 h",
+                "what": "Ku každej kategórii druhé meno: asistent, rodič na výpomoc alebo dorastenec.",
+                "result": "prehľad s náhradníkmi",
+                "template": "prehlad"
+              },
+              {
+                "name": "Pre väčší klub",
+                "who": "vy a koordinátor",
+                "time": "1 h",
+                "what": "Systém zastupovania: kto koho zastúpi a ako sa to včas dozvie.",
+                "result": "pravidlo zastupovania",
+                "template": "zastupovanie",
+                "tag": "stredny+"
+              }
+            ]
+          }
+        },
+        {
+          "id": "vs3",
+          "label": "3. týždeň",
+          "title": "Osloviť s konkrétnou ponukou",
+          "why": "Konkrétna ponuka s menom a časom sa ľahko prijme. „Nechcel by si trénovať?“ sa ľahko odmietne.",
+          "links": [
+            {
+              "label": "Ako obsadiť pozíciu",
+              "anchor": "Ako pozíciu obsadiť, keď sa nikto nehlási"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min na človeka",
+              "what": "Osobne oslovte prvého kandidáta textom zo vzoru.",
+              "result": "prvé „skúsim to“",
+              "template": "nabor",
+              "copyText": "Ahoj Peter, hľadáme niekoho k prípravke U9. Sú to dva tréningy v týždni, viedol by si ich s Marekom. Prvý mesiac si to len vyskúšaš ako asistent, nič nesľubuješ. Ak ťa to chytí, školenie zaplatí klub."
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréner kategórie",
+              "time": "1 tréning",
+              "what": "Pozvite dvoch alebo troch kandidátov na jeden tréning ako asistentov, bez záväzku.",
+              "result": "kandidáti na tréningu"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy a výbor",
+              "time": "30 min večer",
+              "what": "Krátky večer pre rodičov: čo klub ponúka trénerom a čo zaplatí.",
+              "result": "zoznam záujemcov",
+              "tag": "stredny+"
+            }
+          ],
+          "branchB": {
+            "title": "Bezpečné prostredie a jasné očakávania",
+            "why": "Kurz ochrany detí je povinný pre všetky licencie okrem UEFA PRO a rodičia sa naň pýtajú čoraz častejšie.",
+            "links": [
+              {
+                "label": "Ochrana detí",
+                "anchor": "Ochrana detí vo futbale pre všetkých"
+              }
+            ],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "10 min",
+                "what": "Trénerom bez kurzu Ochrana detí pošlite odkaz a termín.",
+                "result": "termíny kurzu",
+                "myAcademy": "treneri"
+              },
+              {
+                "name": "Bežná",
+                "who": "vy a každý tréner",
+                "time": "20 min na trénera",
+                "what": "S každým trénerom podpíšte jednostranovú dohodu o očakávaniach.",
+                "result": "podpísané dohody",
+                "template": "dohoda"
+              },
+              {
+                "name": "Pre väčší klub",
+                "who": "výbor",
+                "time": "1 h",
+                "what": "Určte v klube osobu pre ochranu detí a predstavte ju rodičom.",
+                "result": "kontaktná osoba pre ochranu detí",
+                "tag": "stredny+"
+              }
+            ]
+          }
+        },
+        {
+          "id": "vs4",
+          "label": "4. týždeň",
+          "title": "Udržať tých, ktorých máte",
+          "why": "Tréner odchádza zriedka kvôli výsledkom. Odchádza, keď sa ho nikto neopýta, čo potrebuje.",
+          "links": [
+            {
+              "label": "Ako trénera udržať",
+              "anchor": "Ako trénera či trénerku udržať"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Na konci sezóny poďakujte trénerom pred rodičmi a na sociálnych sieťach.",
+              "result": "verejné poďakovanie",
+              "template": "podakovanie",
+              "copyText": "Ďakujeme Lucii Bodnárovej, ktorá tento rok viedla prípravku U11. Z dvanástich detí ich jedenásť pokračuje aj v novej sezóne."
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréneri",
+              "time": "1 h",
+              "what": "Spoločné stretnutie trénerov raz za sezónu: čo im chýba a čo klub zlepší.",
+              "result": "zoznam, čo tréneri potrebujú",
+              "template": "stretnutie"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy a ekonóm",
+              "time": "1 h",
+              "what": "Položka na vzdelávanie v rozpočte a plán, kto ide na čo.",
+              "result": "rozpočtová položka a plán",
+              "template": "plan"
+            }
+          ],
+          "mentor": {
+            "id": "va4",
+            "title": "Hodnotiaci rozhovor s každým trénerom",
+            "practice": [
+              "Precvičíte na kohorte s mentorom zväzu.",
+              "Potom dvadsať minút s každým trénerom, dvakrát za sezónu."
+            ],
+            "template": "plan",
+            "modules": ["roz"]
+          }
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Otvorený tréning pre bývalých hráčov a hráčky",
+          "tag": "maly"
+        },
+        {
+          "text": "Dorastenci ako asistenti pri prípravke",
+          "tag": "DO"
+        },
+        {
+          "text": "Trénerka alebo asistentka pre dievčatá",
+          "tag": "zd"
+        },
+        {
+          "text": "Učiteľ telesnej výchovy ako tréner prípravky",
+          "tag": "maly"
+        },
+        {
+          "text": "Mentor v klube pre každého nového trénera",
+          "tag": "all"
+        },
+        {
+          "text": "Koordinátor mládeže pre všetky kategórie",
+          "tag": "stredny+"
+        },
+        {
+          "text": "Seminár pre trénerov klubu raz ročne",
+          "tag": "velky"
+        },
+        {
+          "text": "100 € na trénera a sezónu na vzdelávanie",
+          "tag": "all"
+        },
+        {
+          "text": "Poďakovanie trénerom na výročnej schôdzi",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 8,
+          "title": "Položka na vzdelávanie v rozpočte",
+          "why": "Vzdelávanie trénerov musí mať v rozpočte miesto, nie byť výnimkou."
+        },
+        {
+          "area": 11,
+          "title": "Kurz Ochrana detí a osoba pre ochranu detí",
+          "why": "Bezpečné prostredie je širšie než jeden kurz: pravidlá, kontakt, prvá pomoc."
+        },
+        {
+          "area": 4,
+          "title": "Menný zoznam kandidátov z rodičov",
+          "why": "Rodič, ktorý už klubu pomáha, je najčastejší budúci tréner."
+        },
+        {
+          "area": 10,
+          "title": "Licencie a ISSF kontá trénerov",
+          "why": "Bez poriadku v ISSF sa nedá sledovať platnosť licencií."
+        },
+        {
+          "area": 2,
+          "title": "Ročný plán vzdelávania",
+          "why": "Manažér má vzdelávanie trénerov v ročnom cykle klubu."
+        }
+      ],
+      "myAcademyRole": "vedenie"
+    },
+    {
+      "id": "t",
+      "label": "Tréner a trénerka",
+      "description": "vedie kategóriu",
+      "who": "hlavný tréner alebo trénerka, asistent, vedúci mužstva",
+      "does": "Skontrolujete licenciu a ochranu detí, naplánujete si vzdelávanie a nebudete na kategórii sami.",
+      "gain": "Licencia nevyprší nečakane a máte sa o koho oprieť.",
+      "responsibilities": [
+        "Vaša licencia a kurz ochrany detí sú platné",
+        "Na kategórii nie ste sami: máte dvojicu alebo náhradníka",
+        "Klubu poviete, čo potrebujete"
+      ],
+      "notThis": ["Hľadať trénerov pre celý klub — to robí vedenie"],
+      "time": "1 h mesačne popri tréningoch",
+      "withWhom": "manažér klubu, asistent, rodičia kategórie",
+      "library": ["plan", "dohoda", "zastupovanie", "stretnutie", "asistent", "zoznam"],
+      "indicators": [
+        "Hodiny vzdelávania, ktoré chýbajú do predĺženia",
+        "Tréningy za mesiac, ktoré ste viedli úplne sami"
+      ],
+      "pathTitle": "Licencia v poriadku a na kategórii nie ste sami",
+      "pathSubtitle": "Tri kroky na mesiac. Všetko robíte popri tréningoch, ktoré aj tak máte.",
+      "firstStep": {
+        "title": "Skontrolujte licenciu a kurz Ochrana detí",
+        "who": "vy",
+        "time": "15 min",
+        "result": "viete, dokedy môžete trénovať a čo vám chýba",
+        "tasks": [
+          {
+            "id": "t1",
+            "title": "Pozrite v ISSF, dokedy vám platí licencia"
+          },
+          {
+            "id": "t2",
+            "title": "Overte, či máte kurz UEFA Ochrana detí vo futbale"
+          },
+          {
+            "id": "t3",
+            "title": "Obe veci pošlite manažérovi",
+            "note": "zapíše ich do prehľadu trénerov"
+          }
+        ],
+        "aside": {
+          "title": "Tri otázky pre seba",
+          "text": "Tri otázky pre seba\n\n1. Prečo trénujem?\n2. Prečo trénujem práve takýmto spôsobom?\n3. Aké by to bolo, keby ma trénoval niekto ako ja?\n\nOdpovede nikam neposielate. Stačí, že si ich položíte.",
+          "note": "Otázky zazneli na 14. UEFA Grassroots Conference."
+        },
+        "myAcademy": "treneri"
+      },
+      "steps": [
+        {
+          "id": "ts1",
+          "label": "Krok 1 · do 14 dní",
+          "title": "Naplánujte si vzdelávanie",
+          "why": "Predĺženie po termíne je drahšie o päť hodín za každé zmeškané trojročné obdobie.",
+          "links": [
+            {
+              "label": "Kontinuálne vzdelávanie",
+              "anchor": "Kontinuálne vzdelávanie"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "V ISSF pozrite, koľko hodín aktivít máte nahraných a koľko chýba.",
+              "result": "počet chýbajúcich hodín"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a manažér",
+              "time": "30 min",
+              "what": "Vyberte seminár na túto sezónu a dohodnite, kto ho zaplatí.",
+              "result": "termín semináru",
+              "template": "plan"
+            },
+            {
+              "name": "Ďalší stupeň",
+              "who": "vy",
+              "time": "1 h",
+              "what": "Zistite podmienky vyššej licencie a termín najbližšieho kurzu.",
+              "result": "plán na vyššiu licenciu",
+              "links": [
+                {
+                  "label": "Licenčná cesta",
+                  "anchor": "Licenčná cesta v SFZ"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ts2",
+          "label": "Krok 2 · do 3 týždňov",
+          "title": "Pomôžte nájsť nového trénera",
+          "why": "Tréner pozná rodičov najlepšie. Manažér ich bez neho nenájde.",
+          "links": [
+            {
+              "label": "Menný zoznam",
+              "anchor": "Napísať menný zoznam kandidátov"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Pošlite manažérovi dve či tri mená rodičov, ktorí rozumejú futbalu.",
+              "result": "mená pre manažéra"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a rodič",
+              "time": "1 tréning",
+              "what": "Pozvite jedného rodiča, nech vám pomôže s jednou časťou tréningu.",
+              "result": "rodič na tréningu"
+            },
+            {
+              "name": "Na celú sezónu",
+              "who": "vy a dorastenec",
+              "time": "sezóna",
+              "what": "Vezmite si dorastenca alebo dorastenku ako asistenta.",
+              "result": "asistent na sezónu",
+              "tag": "DO"
+            }
+          ],
+          "branchB": {
+            "title": "Nájdite si dvojicu ku kategórii",
+            "why": "Dve mená na kategóriu vydržia dlhšie než jeden vyčerpaný tréner.",
+            "links": [
+              {
+                "label": "Dvojice a náhradníci",
+                "anchor": "Doplniť dvojice a náhradníkov"
+              }
+            ],
+            "options": [
+              {
+                "name": "Rýchla",
+                "who": "vy",
+                "time": "10 min",
+                "what": "Dohodnite si, kto vás zastúpi, keď nemôžete prísť.",
+                "result": "meno náhradníka",
+                "template": "zastupovanie"
+              },
+              {
+                "name": "Bežná",
+                "who": "vy a asistent",
+                "time": "2 tréningy",
+                "what": "Ukážte asistentovi jednu časť tréningu: ukážem, spolu, sám, povedz.",
+                "result": "asistent vedie časť tréningu",
+                "template": "asistent"
+              },
+              {
+                "name": "Na celú sezónu",
+                "who": "vy a asistent",
+                "time": "sezóna",
+                "what": "Rozdeľte si kategóriu: kto vedie ktorú časť a kto komunikuje s rodičmi.",
+                "result": "rozdelenie úloh"
+              }
+            ]
+          }
+        },
+        {
+          "id": "ts3",
+          "label": "Krok 3 · do mesiaca",
+          "title": "Povedzte klubu, čo potrebujete",
+          "why": "Povedať včas, čo vás oberá o energiu, je lepšie než odísť.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Pripravte si odpovede na päť otázok hodnotiaceho rozhovoru.",
+              "result": "odpovede pre manažéra",
+              "template": "plan"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréneri",
+              "time": "1 h",
+              "what": "Na stretnutí trénerov povedzte, čo vám najviac chýba.",
+              "result": "jedna vec, ktorú klub zlepší",
+              "template": "stretnutie"
+            },
+            {
+              "name": "Pre celý klub",
+              "who": "vy a tréneri",
+              "time": "1 h",
+              "what": "Prejdite si s trénermi päť zásad a vyberte jednu, ktorú spolu zlepšíte.",
+              "result": "spoločný cieľ trénerov",
+              "copyText": "Nech je to zábava · buduj priateľstvá medzi hráčmi · zabezpeč, aby sa hráči učili · buď flexibilný v prístupe · nech si každý zamiluje hru"
+            }
+          ],
+          "mentor": {
+            "id": "tc3",
+            "title": "Hodnotiaci rozhovor s manažérom",
+            "practice": [
+              "Rozhovor vedie manažér, ktorý si ho precvičil s mentorom zväzu.",
+              "Dvadsať minút, dvakrát za sezónu."
+            ],
+            "template": "plan",
+            "modules": ["roz"]
+          }
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Spätná väzba rodičovi raz za sezónu (oblasť 5)",
+          "tag": "all"
+        },
+        {
+          "text": "Stretnutie s rodičmi kategórie na začiatku sezóny",
+          "tag": "all"
+        },
+        {
+          "text": "Dorastenec ako asistent",
+          "tag": "DO"
+        },
+        {
+          "text": "Kurz prvej pomoci",
+          "tag": "all"
+        },
+        {
+          "text": "Návšteva tréningu v inom klube",
+          "tag": "all"
+        },
+        {
+          "text": "Krátke video jednej hry pre asistenta",
+          "tag": "all"
+        },
+        {
+          "text": "Trénerka alebo asistentka pre dievčatá",
+          "tag": "zd"
+        },
+        {
+          "text": "Turnaj prípraviek, kde vediete stanovište",
+          "tag": "D"
+        }
+      ],
+      "next": [
+        {
+          "area": 5,
+          "title": "Rozhovor s klubom a práca s kategóriou",
+          "why": "Uvítací rozhovor s rodičom a spätná väzba počas sezóny sú vaša každodenná práca."
+        },
+        {
+          "area": 11,
+          "title": "Kurz Ochrana detí",
+          "why": "Prvá pomoc a pravidlá správania na ihrisku patria k práci trénera."
+        },
+        {
+          "area": 4,
+          "title": "Dvojica alebo náhradník z rodičov",
+          "why": "Rodič pri kategórii odbremení vás aj klub."
+        },
+        {
+          "area": 6,
+          "title": "Dorastenec ako asistent, turnaj prípraviek",
+          "why": "Na podujatiach sa noví ľudia zapájajú najľahšie."
+        }
+      ],
+      "myAcademyRole": "trener"
+    },
+    {
+      "id": "n",
+      "label": "Nový tréner a trénerka",
+      "description": "zatiaľ netrénuje",
+      "who": "rodič pri ihrisku, bývalý hráč či hráčka, dorastenec alebo dorastenka, ktorých klub oslovil alebo o tom uvažujú",
+      "does": "Mesiac si to vyskúšate ako asistent, bez licencie a bez záväzku. Potom sa rozhodnete.",
+      "gain": "Viete, či vás to baví, skôr než sa k niečomu zaviažete.",
+      "responsibilities": [
+        "Mesiac si to vyskúšate bez záväzku",
+        "Rozhodnete sa vy, nie klub",
+        "Ak pokračujete, školenie zaplatí klub"
+      ],
+      "notThis": ["Hneď viesť družstvo sám"],
+      "time": "2 tréningy týždenne počas jedného mesiaca",
+      "withWhom": "tréner kategórie, manažér klubu",
+      "library": ["nabor", "mesacna", "dohoda", "asistent", "otazky3"],
+      "indicators": ["Tréningy, na ktorých ste boli", "Časti tréningu, ktoré ste viedli sami"],
+      "pathTitle": "Mesiac skúšky, potom sa rozhodnete",
+      "pathSubtitle": "Tri kroky. Licencia prichádza až po rozhodnutí, nie pred ním.",
+      "firstStep": {
+        "title": "Mesiac choďte na tréningy ako asistent",
+        "who": "vy a tréner kategórie",
+        "time": "1 mesiac, 2 tréningy týždenne",
+        "result": "viete, či vás to baví, a nič ste nesľúbili",
+        "tasks": [
+          {
+            "id": "n1",
+            "title": "Dohodnite s trénerom, na ktoré tréningy prídete"
+          },
+          {
+            "id": "n2",
+            "title": "Príďte na prvý tréning o 10 minút skôr"
+          },
+          {
+            "id": "n3",
+            "title": "Po tréningu si povedzte jednu vec, ktorá vás bavila"
+          }
+        ],
+        "aside": {
+          "title": "Pred prvým tréningom",
+          "text": "Štyri otázky pred prvým tréningom\n\n1. Kedy a kde presne mám byť?\n2. Kto tréning vedie?\n3. Čo budem robiť ja?\n4. Koho sa opýtam, keď nebudem vedieť?",
+          "note": "Odpovede vám dá tréner alebo manažér."
+        },
+        "template": "mesacna"
+      },
+      "steps": [
+        {
+          "id": "ns1",
+          "label": "Krok 1 · po mesiaci",
+          "title": "Rozhodnite sa",
+          "why": "Každá odpoveď je v poriadku. Klub vás nebude presviedčať.",
+          "links": [
+            {
+              "label": "Prvý mesiac ako asistent",
+              "anchor": "Prvý mesiac ako asistent"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "5 min",
+              "what": "Povedzte klubu jednu z troch odpovedí.",
+              "result": "klub vie, či s vami môže počítať",
+              "copyText": "Chcem pokračovať. / Chcem ešte mesiac skúšať. / Teraz radšej nie, ďakujem."
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréner",
+              "time": "15 min",
+              "what": "Porozprávajte sa s trénerom, čo vám išlo a čo nie.",
+              "result": "jasné ďalšie kroky",
+              "template": "otazky3"
+            },
+            {
+              "name": "Ešte skúšam",
+              "who": "vy a manažér",
+              "time": "1 mesiac",
+              "what": "Dohodnite si ďalší mesiac skúšky s inou kategóriou.",
+              "result": "skúsenosť s dvoma kategóriami"
+            }
+          ]
+        },
+        {
+          "id": "ns2",
+          "label": "Krok 2 · do 2 mesiacov",
+          "title": "Vstupná licencia",
+          "why": "Licencia až po rozhodnutí: klub neplatí školenie niekomu, kto po dvoch týždňoch odíde, a vy sa nezaväzujete naslepo.",
+          "links": [
+            {
+              "label": "Licenčná cesta",
+              "anchor": "Licenčná cesta v SFZ"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Zistite termín a podmienky SFZ Grassroots Leader: online, 20 vyučovacích hodín.",
+              "result": "termín školenia"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "30 min",
+              "what": "Založte si ISSF konto a prihláste sa cez SFZ Ticketing. Treba výpis z registra trestov a fotku.",
+              "result": "prihláška odoslaná",
+              "links": [
+                {
+                  "label": "ISSF konto a prihláška",
+                  "anchor": "ISSF konto a prihláška"
+                }
+              ]
+            },
+            {
+              "name": "S klubom",
+              "who": "vy a manažér",
+              "time": "15 min",
+              "what": "Dohodnite, že školenie zaplatí klub a dokedy ho dokončíte (do 60 dní od aktivácie).",
+              "result": "dohoda o platbe",
+              "template": "nabor"
+            }
+          ]
+        },
+        {
+          "id": "ns3",
+          "label": "Krok 3 · pred sezónou",
+          "title": "Dohoda a bezpečné prostredie",
+          "why": "Jasné očakávania na začiatku šetria spory v polovici sezóny.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "2 h online",
+              "what": "Absolvujte kurz UEFA Ochrana detí vo futbale.",
+              "result": "certifikát kurzu"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a manažér",
+              "time": "20 min",
+              "what": "Podpíšte s klubom jednostranovú dohodu.",
+              "result": "podpísaná dohoda",
+              "template": "dohoda"
+            },
+            {
+              "name": "S oporou",
+              "who": "vy a mentor v klube",
+              "time": "3 mesiace",
+              "what": "Dohodnite si mentora v klube na prvé tri mesiace.",
+              "result": "meno mentora",
+              "links": [
+                {
+                  "label": "Zaradiť s mentorom",
+                  "anchor": "Zaradiť ku kategórii s mentorom"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Ukážkový tréning grassroots v regióne",
+          "tag": "all"
+        },
+        {
+          "text": "Zápas vašej kategórie ako pozorovateľ",
+          "tag": "all"
+        },
+        {
+          "text": "Ako vyzerá tréning prípravky",
+          "tag": "D"
+        },
+        {
+          "text": "Online kurz UEFA Ochrana detí vo futbale",
+          "tag": "all"
+        },
+        {
+          "text": "Kurz prvej pomoci",
+          "tag": "all"
+        },
+        {
+          "text": "Rozhovor s trénerom inej kategórie v klube",
+          "tag": "all"
+        },
+        {
+          "text": "Pomoc na turnaji prípraviek",
+          "tag": "D"
+        },
+        {
+          "text": "Pomoc pri nábore detí v škole",
+          "tag": "D"
+        }
+      ],
+      "next": [
+        {
+          "area": 5,
+          "title": "Mesiac pri deťoch",
+          "why": "Ako vyzerá tréning a čo má klub pre dieťa robiť."
+        },
+        {
+          "area": 11,
+          "title": "Kurz Ochrana detí",
+          "why": "Bezpečné správanie k deťom je základ ešte pred licenciou."
+        },
+        {
+          "area": 4,
+          "title": "Mesiac skúšky bez záväzku",
+          "why": "Ak trénovanie nie je pre vás, klub vás potrebuje aj inak."
+        }
+      ]
+    },
+    {
+      "id": "nd",
+      "label": "Nový tréner a trénerka – dorastenec",
+      "parent": "n",
+      "description": "zatiaľ netrénuje",
+      "who": "rodič pri ihrisku, bývalý hráč či hráčka, dorastenec alebo dorastenka, ktorých klub oslovil alebo o tom uvažujú",
+      "does": "Mesiac si to vyskúšate ako asistent, bez licencie a bez záväzku. Potom sa rozhodnete.",
+      "gain": "Viete, či vás to baví, skôr než sa k niečomu zaviažete.",
+      "responsibilities": [
+        "Ste asistent pri dospelom trénerovi, nikdy sám s deťmi",
+        "Vlastný futbal a škola majú prednosť",
+        "Licenciu môžete robiť, keď budete mať pri ukončení školenia 18 rokov"
+      ],
+      "notThis": ["Viesť tréning bez dospelého"],
+      "time": "1 tréning prípravky týždenne",
+      "withWhom": "tréner prípravky, tréner dorastu",
+      "library": ["dorast", "asistent", "otazky3", "dohoda"],
+      "indicators": [
+        "Tréningy prípravky, na ktorých ste pomáhali",
+        "Časti tréningu, ktoré ste viedli"
+      ],
+      "pathTitle": "Od hráča k trénerovi",
+      "pathSubtitle": "Tri kroky. Ste asistent pri dospelom trénerovi. Licenciu môžete robiť, keď budete mať pri ukončení školenia 18 rokov.",
+      "firstStep": {
+        "title": "Choďte mesiac ako asistent k prípravke alebo žiakom",
+        "who": "vy a tréner prípravky",
+        "time": "1 tréning týždenne",
+        "result": "viete, či vás baví pracovať s deťmi",
+        "tasks": [
+          {
+            "id": "d1",
+            "title": "Dohodnite s trénerom, na ktoré tréningy prídete",
+            "note": "vždy s dospelým trénerom, nikdy sami s deťmi"
+          },
+          {
+            "id": "d2",
+            "title": "Pomáhajte s pomôckami a rozcvičkou"
+          },
+          {
+            "id": "d3",
+            "title": "Po tréningu sa trénera opýtajte, čo ste mohli urobiť inak"
+          }
+        ],
+        "aside": {
+          "title": "Pred prvým tréningom",
+          "text": "Štyri otázky pred prvým tréningom\n\n1. Kedy a kde presne mám byť?\n2. Kto tréning vedie?\n3. Čo budem robiť ja?\n4. Koho sa opýtam, keď nebudem vedieť?",
+          "note": "Asistencia nesmie brať čas z vašich vlastných tréningov a zo školy."
+        },
+        "template": "dorast"
+      },
+      "steps": [
+        {
+          "id": "ds1",
+          "label": "Krok 1 · do mesiaca",
+          "title": "Veďte jednu časť tréningu",
+          "why": "Ukážem, spolu, sám, povedz: najprv pozeráte, potom robíte s trénerom, potom sami pri ňom.",
+          "links": [
+            {
+              "label": "Špecifiká kategórií",
+              "anchor": "#kategorie"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a tréner",
+              "time": "10 min",
+              "what": "Veďte rozcvičku.",
+              "result": "prvá časť tréningu, ktorú ste viedli",
+              "template": "asistent"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a tréner",
+              "time": "20 min",
+              "what": "Veďte jedno stanovište.",
+              "result": "stanovište vedené vami"
+            },
+            {
+              "name": "Viac",
+              "who": "vy a tréner",
+              "time": "príprava 30 min",
+              "what": "S trénerom pripravte jednu hru na koniec tréningu.",
+              "result": "vlastná hra pre deti"
+            }
+          ]
+        },
+        {
+          "id": "ds2",
+          "label": "Krok 2 · do konca sezóny",
+          "title": "Spojte to s vlastným futbalom",
+          "why": "Kto zostane pri futbale v druhej role, z futbalu nezmizne, keď prestane hrať. Pomocný tréner je jedna z možností duálnej kariéry v oblasti 5.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a tréner dorastu",
+              "time": "5 min",
+              "what": "Dohodnite s trénerom dorastu, ktorý deň v týždni je váš.",
+              "result": "pravidelný deň"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "1 sobota mesačne",
+              "what": "Raz za mesiac pomôžte na turnaji prípravky.",
+              "result": "skúsenosť zo zápasov"
+            },
+            {
+              "name": "Viac",
+              "who": "vy",
+              "time": "30 min",
+              "what": "Prečítajte si o duálnej kariére v oblasti 5.",
+              "result": "viete, aké ďalšie roly vo futbale existujú"
+            }
+          ]
+        },
+        {
+          "id": "ds3",
+          "label": "Krok 3 · keď budete mať 18",
+          "title": "Vstupná licencia",
+          "why": "Klub, ktorý si vychová trénera z vlastného dorastu, ho spravidla udrží najdlhšie.",
+          "links": [
+            {
+              "label": "Licenčná cesta",
+              "anchor": "Licenčná cesta v SFZ"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "5 min",
+              "what": "Zistite, kedy budete môcť ísť na Grassroots Leader.",
+              "result": "dátum, odkedy môžete"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a manažér",
+              "time": "10 min",
+              "what": "Požiadajte klub, aby vás na školenie prihlásil a zaplatil ho.",
+              "result": "dohoda s klubom",
+              "template": "dohoda"
+            },
+            {
+              "name": "Hneď",
+              "who": "vy",
+              "time": "2 h online",
+              "what": "Absolvujte kurz Ochrana detí vo futbale už teraz.",
+              "result": "certifikát kurzu"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Asistent na letnom kempe klubu",
+          "tag": "all"
+        },
+        {
+          "text": "Pomoc pri turnaji prípraviek",
+          "tag": "D"
+        },
+        {
+          "text": "Rozhodovanie prípravkových zápasov",
+          "tag": "D"
+        },
+        {
+          "text": "Ukážka pre deti pri nábore v škole",
+          "tag": "D"
+        },
+        {
+          "text": "Pomoc pri tréningu dievčat",
+          "tag": "zd"
+        },
+        {
+          "text": "Krátke video z tréningu pre trénera",
+          "tag": "all"
+        },
+        {
+          "text": "Pomôcky na domácom zápase prípravky",
+          "tag": "D"
+        },
+        {
+          "text": "Rozhovor s trénerom o tom, čo ďalej",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 5,
+          "title": "Spojiť asistenciu s vlastným futbalom",
+          "why": "Pomocný tréner je jedna z ciest duálnej kariéry."
+        },
+        {
+          "area": 11,
+          "title": "Vždy pri dospelom trénerovi",
+          "why": "Pravidlá ochrany detí platia aj pre mladých asistentov."
+        },
+        {
+          "area": 6,
+          "title": "Turnaje a kemp prípraviek",
+          "why": "Najviac skúseností získate na podujatiach."
+        }
+      ]
+    },
+    {
+      "id": "k",
+      "label": "Mentor v klube",
+      "description": "má pri sebe nováčika",
+      "who": "skúsenejší tréner alebo trénerka, ktorý sprevádza nového",
+      "does": "Necháte nováčika viesť časť tréningu pri vás a po troch mesiacoch sa s ním porozprávate.",
+      "gain": "Nováčik zostane a klub má o trénera viac.",
+      "responsibilities": [
+        "Nováčik nie je na kategórii sám",
+        "Postupne mu odovzdáte viac",
+        "Po troch mesiacoch viete, či zostane"
+      ],
+      "notThis": ["Hodnotiť nováčika pred rodičmi"],
+      "time": "15 minút po tréningu raz týždenne",
+      "withWhom": "nováčik, manažér klubu",
+      "library": ["asistent", "otazky3", "rozhovor3m", "stretnutie", "dohoda", "plan"],
+      "indicators": [
+        "Časti tréningu, ktoré nováčik vedie sám",
+        "Tréningy, na ktoré nováčik prišiel"
+      ],
+      "pathTitle": "Nováčik, ktorý zostane",
+      "pathSubtitle": "Tri kroky počas prvých troch mesiacov nováčika.",
+      "firstStep": {
+        "title": "Dohodnite si s nováčikom prvý spoločný tréning",
+        "who": "vy a nováčik",
+        "time": "1 tréning",
+        "result": "nováčik vie, čo na tréningu robí, a nebojí sa spýtať",
+        "tasks": [
+          {
+            "id": "k1",
+            "title": "Povedzte mu vopred, čo bude na tréningu robiť"
+          },
+          {
+            "id": "k2",
+            "title": "Nechajte ho viesť jednu časť"
+          },
+          {
+            "id": "k3",
+            "title": "Po tréningu dve otázky: čo ti išlo, čo bolo ťažké"
+          }
+        ],
+        "aside": {
+          "title": "Ukážem, spolu, sám, povedz",
+          "text": "Ukážem: robíte vy, nováčik pozerá.\nSpolu: robíte to spolu.\nSám: nováčik robí, vy ste pri tom.\nPovedz: opýtajte sa, ako to šlo.\n\nNa každú časť tréningu stačia jeden či dva tréningy.",
+          "note": "Rovnaký postup ako pri zaškolení v oblasti 4."
+        },
+        "template": "otazky3"
+      },
+      "steps": [
+        {
+          "id": "ks1",
+          "label": "Krok 1 · do mesiaca",
+          "title": "Odovzdajte viac",
+          "why": "Nový tréner nikdy nezostáva na kategórii sám, ale ani len nepozerá.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a nováčik",
+              "time": "1 tréning",
+              "what": "Dnes mu dajte rozcvičku.",
+              "result": "nováčik vedie rozcvičku",
+              "template": "asistent"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a nováčik",
+              "time": "4 týždne",
+              "what": "Každý týždeň mu dajte o jednu časť tréningu viac.",
+              "result": "nováčik vedie väčšinu tréningu"
+            },
+            {
+              "name": "Viac",
+              "who": "vy a nováčik",
+              "time": "1 tréning",
+              "what": "Nechajte ho pripraviť celý tréning, vy ste pri tom.",
+              "result": "prvý tréning, ktorý pripravil sám"
+            }
+          ]
+        },
+        {
+          "id": "ks2",
+          "label": "Krok 2 · po troch mesiacoch",
+          "title": "Krátky rozhovor",
+          "why": "Rozhovor po troch mesiacoch zachytí odchod skôr, než sa stane.",
+          "links": [
+            {
+              "label": "Zaradiť s mentorom",
+              "anchor": "Zaradiť ku kategórii s mentorom"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a nováčik",
+              "time": "10 min",
+              "what": "Opýtajte sa tri veci.",
+              "result": "viete, či zostane",
+              "template": "rozhovor3m",
+              "copyText": "Čo ti ide? Čo ťa oberá o energiu? Čo potrebuješ od klubu?"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy, nováčik a manažér",
+              "time": "20 min",
+              "what": "Na posledných desať minút prizvite manažéra.",
+              "result": "klub vie, čo nováčik potrebuje"
+            },
+            {
+              "name": "Viac",
+              "who": "vy a nováčik",
+              "time": "30 min",
+              "what": "Spíšte spolu, čo sa naučil a čo ďalej.",
+              "result": "plán na ďalší polrok",
+              "template": "plan"
+            }
+          ]
+        },
+        {
+          "id": "ks3",
+          "label": "Krok 3 · raz za sezónu",
+          "title": "Spoločné stretnutie trénerov",
+          "why": "Kto pozná viac trénerov, má viac ľudí, koho sa opýtať.",
+          "links": [
+            {
+              "label": "Mentoring a stretnutie",
+              "anchor": "Mentoring a jedno spoločné"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a nováčik",
+              "time": "1 h",
+              "what": "Vezmite nováčika na stretnutie trénerov klubu.",
+              "result": "nováčik pozná ostatných"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Ak sa stretnutie nekoná, navrhnite ho manažérovi.",
+              "result": "termín stretnutia"
+            },
+            {
+              "name": "Viac",
+              "who": "nováčik",
+              "time": "15 min",
+              "what": "Nech nováčik na stretnutí ukáže jednu hru, ktorú vymyslel.",
+              "result": "nováčik prispel vlastným nápadom"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Nováčik pozoruje tréning skúsenejšieho trénera",
+          "tag": "all"
+        },
+        {
+          "text": "Spoločná príprava tréningu na papier",
+          "tag": "all"
+        },
+        {
+          "text": "Nováčik vedie zápas prípravky, vy ste na lavičke",
+          "tag": "D"
+        },
+        {
+          "text": "Nováčik absolvuje kurz Ochrana detí",
+          "tag": "all"
+        },
+        {
+          "text": "Spoločná návšteva tréningu v inom klube",
+          "tag": "all"
+        },
+        {
+          "text": "Nováčik vedie stanovište na turnaji",
+          "tag": "D"
+        },
+        {
+          "text": "Odporúčanie nováčika na ďalší kurz",
+          "tag": "all"
+        },
+        {
+          "text": "Nováčik pomáha pri turnaji klubu",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 5,
+          "title": "Nováčik vedie časť tréningu",
+          "why": "Čo deti na tréningu potrebujú, je jadro zaškolenia."
+        },
+        {
+          "area": 4,
+          "title": "Ukážem, spolu, sám, povedz",
+          "why": "Rovnaký spôsob zaškolenia funguje aj pre dobrovoľníkov klubu."
+        },
+        {
+          "area": 11,
+          "title": "Rozhovor po troch mesiacoch",
+          "why": "Nováčik musí vedieť, na koho sa obrátiť v ťažkej situácii."
+        }
+      ]
+    },
+    {
+      "id": "m",
+      "label": "Mentor zväzu",
+      "description": "sprevádza klub",
+      "who": "mentor ObFZ alebo krajského zväzu",
+      "does": "Zmeriate tri čísla, po 14 dňoch prvý posun a vediete kohortu Stupňa II.",
+      "gain": "Vidíte, kde klub stojí s trénermi, a viete, s čím pomôcť.",
+      "responsibilities": [
+        "Klub vie, kde stojí s trénermi",
+        "Kluby si hodnotiaci rozhovor precvičia",
+        "Po 30 dňoch overíte posun"
+      ],
+      "notThis": ["Robiť prácu za klub"],
+      "time": "3 telefonáty a jedna kohorta za mesiac",
+      "withWhom": "manažér klubu, ObFZ",
+      "library": ["telefon", "prehlad", "zoznam", "stretnutie", "plan"],
+      "indicators": [],
+      "pathTitle": "Klub, ktorý vie, kto mu bude trénovať",
+      "pathSubtitle": "Tri merania a jedna kohorta. Vidíte posun, nie len sľuby.",
+      "firstStep": {
+        "title": "Zavolajte manažérovi klubu a opýtajte sa na tri čísla",
+        "who": "vy",
+        "time": "10 min",
+        "result": "východiskový stav klubu",
+        "tasks": [
+          {
+            "id": "m1",
+            "title": "Dohodnite si s manažérom 10 minút"
+          },
+          {
+            "id": "m2",
+            "title": "Zapíšte tri čísla",
+            "note": "tabuľka nižšie"
+          },
+          {
+            "id": "m3",
+            "title": "Dohodnite druhý telefonát o 14 dní"
+          }
+        ],
+        "aside": {
+          "title": "Čo povedať do telefónu",
+          "text": "Dobrý deň, volám kvôli oblasti 3, tréneri. Mám tri otázky, zaberie to päť minút.\n\n1. Koľko kategórií nemá trénera?\n2. Koľkým trénerom vyprší licencia do roka?\n3. Koľko trénerov má kurz Ochrana detí vo futbale?\n\nO 14 dní sa opýtam znova a pozrieme sa, čo sa pohlo.",
+          "note": "Rovnaké tri otázky použijete aj o 14 dní."
+        },
+        "template": "telefon",
+        "myAcademy": "treneri"
+      },
+      "steps": [
+        {
+          "id": "ms1",
+          "label": "Krok 1 · deň 14",
+          "title": "Druhý telefonát: čo sa pohlo",
+          "why": "Porovnanie s východiskom ukáže posun aj vtedy, keď klub má pocit, že sa nič nedeje.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Opýtajte sa na tie isté tri čísla a zapíšte ich do tabuľky.",
+              "result": "posun oproti začiatku",
+              "template": "telefon"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a manažér",
+              "time": "30 min",
+              "what": "Pomôžte klubu vyplniť prehľad trénerov.",
+              "result": "prehľad trénerov klubu",
+              "template": "prehlad"
+            },
+            {
+              "name": "Osobne",
+              "who": "vy",
+              "time": "1 tréning",
+              "what": "Navštívte klub na tréningu a porozprávajte sa s trénermi.",
+              "result": "postreh z ihriska"
+            }
+          ]
+        },
+        {
+          "id": "ms2",
+          "label": "Krok 2 · kohorta ObFZ",
+          "title": "Hodnotiaci rozhovor na kohorte",
+          "why": "Kohorta šetrí čas mentora a kluby sa učia jeden od druhého.",
+          "links": [],
+          "options": [
+            {
+              "name": "Príprava",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Pozvite 8–12 klubov na 60 minút online.",
+              "result": "pozvánka na kohortu"
+            },
+            {
+              "name": "Na kohorte",
+              "who": "vy a kluby",
+              "time": "60 min",
+              "what": "Kluby si rozhovor precvičia vo dvojiciach: manažér a tréner.",
+              "result": "precvičený rozhovor",
+              "template": "plan"
+            },
+            {
+              "name": "Po kohorte",
+              "who": "vy",
+              "time": "30 min na klub",
+              "what": "Overenie: pozrite si zápis z jedného rozhovoru v každom klube.",
+              "result": "overené kluby"
+            }
+          ],
+          "mentor": {
+            "id": "mc2",
+            "title": "Veďte kohortu Stupňa II",
+            "practice": ["60 minút online pre 8–12 klubov.", "30 minút overenie pre každý klub."],
+            "template": "plan",
+            "modules": ["roz"]
+          }
+        },
+        {
+          "id": "ms3",
+          "label": "Krok 3 · deň 30",
+          "title": "Overte výsledok",
+          "why": "Overenie nie je kontrola. Je to chvíľa, keď klub uvidí vlastný pokrok.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Pozrite si prehľad trénerov: je pri každej kategórii meno?",
+              "result": "stav klubu po mesiaci",
+              "myAcademy": "treneri"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a manažér",
+              "time": "30 min",
+              "what": "Vyplňte s klubom oblasť 3 v Kompase znova.",
+              "result": "nové skóre oblasti 3"
+            },
+            {
+              "name": "Pre ObFZ",
+              "who": "vy",
+              "time": "20 min",
+              "what": "Napíšte do ObFZ, čo klubu pomohlo a čo mu chýba.",
+              "result": "podklad pre ObFZ"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Návšteva tréningu klubu",
+          "tag": "all"
+        },
+        {
+          "text": "Spojiť dva kluby na spoločný kurz trénerov",
+          "tag": "all"
+        },
+        {
+          "text": "Spoločný nábor trénerov pre viac malých klubov",
+          "tag": "maly"
+        },
+        {
+          "text": "Spojenie klubu so strednou školou kvôli asistentom",
+          "tag": "stredny+"
+        },
+        {
+          "text": "Prehľad licencií do roka v celom ObFZ",
+          "tag": "all"
+        },
+        {
+          "text": "Pripomienka expirácií licencií klubom raz za štvrťrok",
+          "tag": "all"
+        },
+        {
+          "text": "Pozvať trénera z väčšieho klubu na kohortu",
+          "tag": "all"
+        },
+        {
+          "text": "Dobrá prax klubu na najbližšej kohorte",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 2,
+          "title": "Prehľad trénerov klubu",
+          "why": "Manažér je váš hlavný partner a evidencia je jeho agenda."
+        },
+        {
+          "area": 10,
+          "title": "Licencie v ISSF",
+          "why": "Dáta zo Sportnetu ukážu posun bez telefonátu."
+        },
+        {
+          "area": 1,
+          "title": "Overenie po 30 dňoch",
+          "why": "Vedenie rozhoduje o rozpočte na vzdelávanie a o ľuďoch."
+        },
+        {
+          "area": 8,
+          "title": "Rozpočet na vzdelávanie",
+          "why": "Bez peňazí sa plán vzdelávania nezrealizuje."
+        }
+      ],
+      "myAcademyRole": "mentor",
+      "mentorNumbers": [
+        {
+          "key": "bez",
+          "label": "Kategórie bez trénera",
+          "lowerIsBetter": true
+        },
+        {
+          "key": "exp",
+          "label": "Licencie, ktoré vypršia do roka",
+          "lowerIsBetter": true
+        },
+        {
+          "key": "och",
+          "label": "Tréneri s kurzom ochrany detí",
+          "lowerIsBetter": false
+        }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "key": "prehlad",
+      "title": "Prehľad trénerov a licencií",
+      "description": "tabuľka kategória → tréner → licencia → dokedy platí → náhradník"
+    },
+    {
+      "key": "nabor",
+      "title": "Náborová ponuka pre nového trénera",
+      "description": "text osobného oslovenia s konkrétnou ponukou"
+    },
+    {
+      "key": "dohoda",
+      "title": "Dohoda a očakávania s trénerom",
+      "description": "jedna strana: rozsah, časy, čo dáva klub a čo čaká"
+    },
+    {
+      "key": "plan",
+      "title": "Ročný plán vzdelávania a hodnotiaci rozhovor",
+      "description": "plán vzdelávania na sezónu a kostra rozhovoru"
+    },
+    {
+      "key": "zoznam",
+      "title": "Menný zoznam kandidátov na trénera",
+      "description": "komu zavolať, s akou ponukou a dokedy",
+      "text": "MENNÝ ZOZNAM KANDIDÁTOV · sezóna ____\n\n1. Meno: ________\n   Kto to je: rodič / bývalý hráč / dorastenec / ________\n   Kategória, ktorá mu sadne: ________\n   Osloví: ________  do: ____   Odpoveď: ________\n2. Meno: ________\n   Kto to je: ________\n   Kategória: ________\n   Osloví: ________  do: ____   Odpoveď: ________\n3. – 5. rovnako\n\nKontrola: je na zozname aspoň jedna žena? Aspoň jeden dorastenec alebo dorastenka?"
+    },
+    {
+      "key": "mesacna",
+      "title": "Mesiac skúšky bez záväzku",
+      "description": "jednostranová dohoda pre nového asistenta",
+      "text": "MESIAC SKÚŠKY · bez záväzku\n\nKlub: ________   Kategória: ________\nAsistent/ka: ________   Tréner/ka kategórie: ________\nOd: ____  Do: ____  (4 týždne)\n\nČo budete robiť: pomáhať s pomôckami, rozcvičkou, jednou časťou tréningu.\nČo nebudete robiť: viesť tréning sami, byť s deťmi bez trénera.\nČo dáva klub: tričko, kontakt na trénera, po mesiaci rozhovor.\n\nPo mesiaci jedna z troch odpovedí:\n☐ Chcem pokračovať  ☐ Ešte mesiac skúšam  ☐ Teraz radšej nie\n\nNikto nič nepodpisuje. Ide len o to, aby obe strany vedeli, čo čakať."
+    },
+    {
+      "key": "stretnutie",
+      "title": "Program stretnutia trénerov (60 minút)",
+      "description": "jednoduchý program, ktorý sa dá zopakovať každú sezónu",
+      "text": "STRETNUTIE TRÉNEROV · 60 minút\n\n0–10 min  Každý jednou vetou: čo sa mi tento polrok podarilo.\n10–25 min Čo nám chýba (pomôcky, ihrisko, ľudia, vzdelávanie). Manažér zapisuje.\n25–40 min Päť zásad: ktorú robíme najhoršie? Vyberieme jednu.\n40–50 min Licencie a kurzy: kto čo potrebuje do konca sezóny.\n50–60 min Dohoda: jedna vec, ktorú klub zlepší, kto a dokedy.\n\nZápis: 5 riadkov, pošle manažér do 2 dní."
+    },
+    {
+      "key": "zastupovanie",
+      "title": "Pravidlo zastupovania v kategórii",
+      "description": "kto koho zastúpi a ako sa to včas dozvie",
+      "text": "PRAVIDLO ZASTUPOVANIA · kategória ________\n\nHlavný tréner/ka: ________  telefón: ________\nZastupuje 1: ________  telefón: ________\nZastupuje 2: ________  telefón: ________\n\nKeď tréner nemôže prísť:\n1. Dá vedieť zástupcovi najneskôr ____ hodín pred tréningom.\n2. Ak zástupca nemôže, volá manažérovi: ________.\n3. Tréning sa ruší len vtedy, keď nikto z troch nemôže. Rodičom to oznámi ________.\n\nZástupca vie, kde sú pomôcky a kľúče: ☐ áno"
+    },
+    {
+      "key": "podakovanie",
+      "title": "Poďakovanie trénerovi",
+      "description": "text pre rodičov a sociálne siete klubu",
+      "text": "Ďakujeme [meno], ktorý/á tento rok viedol/viedla [kategória].\n[Jedna konkrétna vec: koľko detí pokračuje, čo sa podarilo na turnaji, koľko tréningov odviedol/a.]\nBez ľudí ako [meno] by naše deti nemali kde hrať. Ďakujeme!\n\nTip: poďakovanie zverejnite aj s fotkou a povedzte ho nahlas na poslednom tréningu pred rodičmi."
+    },
+    {
+      "key": "rozhovor3m",
+      "title": "Rozhovor s nováčikom po troch mesiacoch",
+      "description": "desať minút, tri otázky a jeden záver",
+      "text": "ROZHOVOR PO TROCH MESIACOCH · 10 minút\n\nNováčik/čka: ________  Mentor: ________  Dátum: ____\n\n1. Čo ti ide?  ________\n2. Čo ťa oberá o energiu?  ________\n3. Čo potrebuješ od klubu?  ________\n\nZáver (zakrúžkujte):  pokračuje sám  ·  pokračuje s mentorom ešte 3 mesiace  ·  končí, ďakujeme\nČo pošleme manažérovi: ________"
+    },
+    {
+      "key": "asistent",
+      "title": "Karta asistenta: čo robím na tréningu",
+      "description": "pre nového asistenta, dorastenca aj rodiča na výpomoc",
+      "text": "KARTA ASISTENTA\n\nPred tréningom (10 min): pripravím pomôcky podľa pokynu trénera, privítam deti.\nRozcvička: vediem ju, keď mi to tréner povie; inak pomáham.\nStanovište: mám na starosti jedno, tréner ma vystrieda po ____ minútach.\nZápas na konci: rozhodujem alebo počítam góly.\nPo tréningu: zbalím pomôcky, opýtam sa trénera: čo som mohol urobiť inak?\n\nNikdy: nie som s deťmi sám, nekričím, neriešim konflikt s rodičom — volám trénera."
+    },
+    {
+      "key": "otazky3",
+      "title": "Tri otázky po tréningu",
+      "description": "krátka spätná väzba medzi trénerom a nováčikom",
+      "text": "TRI OTÁZKY PO TRÉNINGU · 3 minúty\n\n1. Čo ti dnes išlo?\n2. Čo bolo ťažké?\n3. Čo skúsiš nabudúce inak?\n\nTréner odpovie jednou vetou na každú a jednou vecou, ktorú nováčikovi nabudúce odovzdá."
+    },
+    {
+      "key": "dorast",
+      "title": "Dohoda s dorastencom a rodičom o asistencii",
+      "description": "jasné pravidlá, aby asistencia nebrala čas z vlastného futbalu",
+      "text": "DOHODA O ASISTENCII · dorastenec/dorastenka\n\nMeno: ________  Vek: ____  Zákonný zástupca: ________\nKategória, kde pomáha: ________  Tréner/ka: ________\nDeň v týždni: ________  (najviac 1 tréning týždenne)\n\nPravidlá:\n• Vlastné tréningy a škola majú prednosť.\n• Nikdy nie je s deťmi sám, vždy pri dospelom trénerovi.\n• Klub mu zaplatí kurz Ochrana detí a po 18. roku Grassroots Leader.\n\nSúhlas zákonného zástupcu: ________   Dátum: ____"
+    },
+    {
+      "key": "telefon",
+      "title": "Záznam z telefonátu mentora",
+      "description": "tri čísla na začiatku a po 14 dňoch",
+      "text": "ZÁZNAM MENTORA · oblasť 3 Tréneri\n\nKlub: ________\nManažér: ________  telefón: ________\n\nKategórie bez trénera\n  začiatok (____): ____   deň 14 (____): ____\nLicencie, ktoré vypršia do roka\n  začiatok: ____   deň 14: ____\nTréneri s kurzom ochrany detí\n  začiatok: ____   deň 14: ____\n\nČo klub urobil: ________\nS čím pomôžem: ________\nĎalší kontakt: ____"
+    }
+  ],
+  "mentorModules": [
+    {
+      "key": "roz",
+      "title": "Hodnotiaci rozhovor s trénerom",
+      "meta": ["60 min kohorta", "30 min overenie", "2× za sezónu v klube"],
+      "text": "Dvadsať minút, dvakrát za sezónu. Na kohorte si ho precvičíte vo dvojiciach s iným klubom, jeden je manažér, druhý tréner.",
+      "steps": [
+        "Čo ti ide?",
+        "Čo ťa oberá o energiu?",
+        "Čo potrebuješ od klubu?",
+        "Koľko detí ti odišlo a prečo?",
+        "Chceš ísť na vyšší stupeň licencie?"
+      ],
+      "lock": "Kostru rozhovoru dostanete na kohorte. Mentor si potom pozrie zápis z jedného rozhovoru."
+    }
+  ]
+}
