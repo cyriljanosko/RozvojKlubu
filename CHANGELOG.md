@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Úvod pre prvú návštevu: nový opis platformy, „Čo tu nájdete“ (11 oblastí, Metodika, Prax, Kompas, Vizitka s výberom klubu, Moja Akadémia po prihlásení), „Čo z toho má klub“ a „Prvý krok bez registrácie“ (Kompas na vyskúšanie); nahrádza blok „Ako Akadémia funguje“ a opakované „Čo je Kompas klubu“.
 - Jedenástka na „O Akadémii“ v novej podobe: ihrisko v perspektíve s pruhovaným trávnikom (na mobile vyššia varianta), ikony oblastí namiesto čísel v pinoch vo farbe línie (brankár fialová s kapitánskou páskou, stred modrá, obrana sivá, útok oranžová), skrátené názvy oblastí, hráči bližšie k stredu ihriska; ikona oblasti aj v okne.
 - „Prečo 11 oblastí“ na stránke „O Akadémii“: Akadémia ako futbalová jedenástka 1-4-3-3 (brankár Vedenie; obrana Financie, Právo, Dáta, Prostredie; stred Manažér, Tréneri, Dobrovoľníci; útok Hráč, Aktivity, Marketing) s textom o úlohe každej línie; ihrisko s 11 hráčmi, každý otvorí okno s opisom oblasti z obsahu a odkazom na detail (natívny popover, bez JavaScriptu).
 - Ukotvená hlavička: pri posune stránky ostáva hore (mobil aj počítač); skok na kotvu (výsledok hľadania, sekcia Metodiky, krok Praxe) sa zastaví pod hlavičkou.

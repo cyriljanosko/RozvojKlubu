@@ -679,7 +679,7 @@
   "hub": {
     "eyebrow": "Slovenský futbalový zväz",
     "title": "Akadémia rozvoja klubov",
-    "lead": "Program SFZ pre amatérske futbalové kluby: jedenásť oblastí so vzormi, krokmi a sebahodnotením Kompas. Pre vedenie, trénerov, rodičov, dobrovoľníkov aj hráčov – každý v klube tu nájde, čím môže pomôcť.",
+    "lead": "Platforma Slovenského futbalového zväzu pre amatérske futbalové kluby. Na jednom mieste nájdete, ako viesť a rozvíjať klub: od výboru a trénerov cez hráčov a dobrovoľníkov až po financie a zázemie.",
     "track": "Dráha",
     "preparing": "pripravujeme",
     "roleTitle": "Kto ste v klube?",
@@ -726,15 +726,10 @@
       "academyText": "Ste vo vedení klubu, tréner alebo mentor? Po prihlásení vidíte úlohy, Kompas a licenčné hodnotenie svojho klubu.",
       "signIn": "Prihlásiť sa"
     },
-    "roleLead": "Vyberte svoju rolu a ukážeme vám, čím začať. Obsah zostane rovnaký, zmení sa poradie.",
+    "roleLead": "Vyberte svoju rolu a Akadémia vám ukáže tri oblasti, ktorými začať, s prvým krokom na tento týždeň.",
     "noRole": "Bez roly – zobraziť všetkých 11 oblastí",
     "preparingTrack": "pripravujeme. Oblasti a roly ukazujeme ako náhľad.",
     "backTo": "Späť na {track}",
-    "kompasInfo": {
-      "title": "Čo je Kompas klubu",
-      "text": "Sebahodnotenie klubu v 11 oblastiach. Zaškrtnete, čo v klube naozaj platí, a uvidíte, kde klub stojí a kde začať. Vyskúšať ho môže ktokoľvek, uložiť a odoslať mentorovi ho môže vedenie klubu po prihlásení.",
-      "link": "Pozrieť Kompas klubu →"
-    },
     "priorityTitle": "{role}: začnite týmito tromi oblasťami",
     "nextTitle": "Ďalšie kroky",
     "nextText": "Keď zvládnete prvé tri, pokračujte týmito oblasťami.",
@@ -757,26 +752,50 @@
       "mentorSummary": "{count, plural, one {# klub} few {# kluby} other {# klubov}}, Kompas odoslaný {sent}",
       "practice": "Pokračujte v Praxi"
     },
-    "how": {
-      "title": "Ako Akadémia funguje",
-      "vizitka": {
-        "title": "Vizitka klubu",
-        "text": "Každý klub tu má svoju Vizitku: profil zo Sportnetu (družstvá, hráči, tréneri), výsledok Kompasu v 11 oblastiach a licenčné hodnotenie za sezónu. Vizitku si môže pozrieť ktokoľvek.",
-        "find": "Nájsť Vizitku klubu"
+    "aboutLink": "Viac o Akadémii",
+    "intro": {
+      "findTitle": "Čo tu nájdete",
+      "find": {
+        "areas": {
+          "title": "11 oblastí rozvoja",
+          "text": "Klub ako futbalová jedenástka – každá oblasť má v tíme svoju úlohu."
+        },
+        "methodology": {
+          "title": "Metodika",
+          "text": "Čo oblasť znamená, prečo na nej záleží a ako to kluby robia."
+        },
+        "practice": {
+          "title": "Prax",
+          "text": "Konkrétne kroky na týždne s variantmi pre malý, stredný aj veľký klub a hotové vzory na skopírovanie."
+        },
+        "kompas": {
+          "title": "Kompas klubu",
+          "text": "Sebahodnotenie, ktoré ukáže, kde klub stojí a kde začať."
+        },
+        "vizitka": {
+          "title": "Vizitka klubu",
+          "text": "Kompas a licenčné hodnotenie za sezónu vedľa seba.",
+          "find": "Nájsť Vizitku klubu"
+        },
+        "academy": {
+          "title": "Moja Akadémia",
+          "badge": "po prihlásení",
+          "text": "Úlohy pre vašu rolu, postup klubu a mentor zväzu, ktorý klub sprevádza.",
+          "communication": "Komunikácia s ľuďmi klubu"
+        }
       },
-      "level1": {
-        "badge": "1. úroveň · bez prihlásenia",
-        "title": "Samoštúdium",
-        "text": "Jedenásť oblastí, ktoré klub robia klubom: od vedenia a trénerov cez hráčov a dobrovoľníkov až po financie a zázemie. Každá oblasť je podrobne opísaná: čo to je, prečo na tom záleží, ako to kluby reálne robia, vzory a prvé kroky. K tomu Kompas klubu na vyskúšanie, ktorý ukáže, kde klub stojí."
-      },
-      "level2": {
-        "badge": "2. úroveň · po prihlásení",
-        "title": "Klub v Akadémii",
-        "text": "Vedenie, tréneri a ďalší ľudia klubu pracujú spolu: Kompas a licenčné hodnotenie sa ukladajú za sezónu a klub ich odošle mentorovi zväzu. Každý vidí svoje úlohy a klub sa vzdeláva s mentorom zväzu, ktorý ho sprevádza.",
-        "communication": "Klub komunikuje so svojimi ľuďmi – rodičmi, dobrovoľníkmi a hráčmi."
-      }
-    },
-    "aboutLink": "Viac o Akadémii"
+      "benefitsTitle": "Čo z toho má klub",
+      "benefits": [
+        "Vie, kde stojí, a nemusí riešiť všetko naraz – vyberie si jednu-dve oblasti na sezónu.",
+        "Nezačína od nuly – vzory, texty a postupy sú pripravené.",
+        "Každý v klube vidí, čo sa týka práve jeho: vedenie, tréner, rodič, dobrovoľník aj hráč.",
+        "Nie je sám – mentor zväzu ho sprevádza a vidí, ako postupuje.",
+        "Vizitka ukáže rozvoj klubu obci, partnerom aj rodičom."
+      ],
+      "tryTitle": "Prvý krok bez registrácie",
+      "tryText": "Vyskúšajte Kompas klubu bez prihlásenia: za jedno posedenie uvidíte, kde váš klub stojí v 11 oblastiach a čo urobiť najbližšie. Nič sa neukladá, kým sa nerozhodnete.",
+      "tryButton": "Vyskúšať Kompas klubu"
+    }
   },
   "search": {
     "title": "Hľadať v Akadémii",

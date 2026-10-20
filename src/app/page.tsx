@@ -3,6 +3,16 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import {
+  BookOpen,
+  Check,
+  Compass,
+  IdCard,
+  LayoutDashboard,
+  ListChecks,
+  Shirt,
+  type LucideIcon,
+} from "lucide-react";
 
 import { HubIllustration } from "@/components/hub/hub-illustration";
 import { HubMemory } from "@/components/hub/hub-memory";
@@ -24,6 +34,16 @@ const BAND_RING: Record<number, string> = {
   2: "border-amber-600",
   3: "border-zinc-500",
 };
+
+/** "Čo tu nájdete" for first-time visitors; texts in hub.intro.find.<key>. */
+const FIND: [string, LucideIcon][] = [
+  ["areas", Shirt],
+  ["methodology", BookOpen],
+  ["practice", ListChecks],
+  ["kompas", Compass],
+  ["vizitka", IdCard],
+  ["academy", LayoutDashboard],
+];
 
 type Props = PageProps<"/">;
 
@@ -154,57 +174,94 @@ async function Hub({ searchParams }: Props) {
       )}
 
       {!user && (
-        <section aria-labelledby="hub-how" className="flex flex-col gap-3">
-          <h2 id="hub-how" className="text-xl font-semibold">
-            {t("how.title")}
+        <section aria-labelledby="hub-find" className="flex flex-col gap-3">
+          <h2 id="hub-find" className="text-xl font-semibold">
+            {t("intro.findTitle")}
           </h2>
-          <ul className="grid gap-3 sm:grid-cols-3">
-            <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
-              <p className="font-semibold">{t("how.vizitka.title")}</p>
-              <p className="text-muted-foreground">{t("how.vizitka.text")}</p>
-              {approved && hub.clubs.length > 0 && (
-                <details className="mt-auto">
-                  <summary className="cursor-pointer font-medium underline underline-offset-4">
-                    {t("how.vizitka.find")}
-                  </summary>
-                  <ul className="mt-2 flex flex-col gap-1">
-                    {hub.clubs.map((c) => (
-                      <li key={c.clubId}>
-                        <Link
-                          href={`/vizitka/${encodeURIComponent(c.clubId)}`}
-                          className="hover:bg-muted/50 flex flex-col rounded-md px-2 py-1"
-                        >
-                          <span className="font-medium break-words">{c.name}</span>
-                          <span className="text-muted-foreground text-xs">{c.union}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              )}
-            </li>
-            <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
-              <p className="text-primary text-xs font-semibold tracking-wide uppercase">
-                {t("how.level1.badge")}
-              </p>
-              <p className="font-semibold">{t("how.level1.title")}</p>
-              <p className="text-muted-foreground">{t("how.level1.text")}</p>
-            </li>
-            <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
-              <p className="text-primary text-xs font-semibold tracking-wide uppercase">
-                {t("how.level2.badge")}
-              </p>
-              <p className="font-semibold">{t("how.level2.title")}</p>
-              <p className="text-muted-foreground">{t("how.level2.text")}</p>
-              <p className="text-muted-foreground">
-                {t("how.level2.communication")}{" "}
-                <span className="rounded-full border px-2 py-0.5 text-xs">{t("preparing")}</span>
-              </p>
-              <Button asChild size="sm" className="mt-auto self-start">
-                <Link href="/prihlasenie">{t("about.signIn")}</Link>
-              </Button>
-            </li>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {FIND.map(([key, Icon]) => (
+              <li key={key} className="flex gap-3 rounded-xl border p-4 text-sm">
+                <span className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-full">
+                  <Icon aria-hidden className="size-5" />
+                </span>
+                <span className="flex min-w-0 flex-col gap-1">
+                  <span className="font-semibold">
+                    {t(`intro.find.${key}.title`)}
+                    {key === "academy" && (
+                      <span className="text-muted-foreground ml-1.5 rounded-full border px-2 py-0.5 text-xs font-normal">
+                        {t("intro.find.academy.badge")}
+                      </span>
+                    )}
+                  </span>
+                  <span className="text-muted-foreground">{t(`intro.find.${key}.text`)}</span>
+                  {key === "vizitka" && approved && hub.clubs.length > 0 && (
+                    <details>
+                      <summary className="cursor-pointer font-medium underline underline-offset-4">
+                        {t("intro.find.vizitka.find")}
+                      </summary>
+                      <ul className="mt-2 flex flex-col gap-1">
+                        {hub.clubs.map((c) => (
+                          <li key={c.clubId}>
+                            <Link
+                              href={`/vizitka/${encodeURIComponent(c.clubId)}`}
+                              className="hover:bg-muted/50 flex flex-col rounded-md px-2 py-1"
+                            >
+                              <span className="font-medium break-words">{c.name}</span>
+                              <span className="text-muted-foreground text-xs">{c.union}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
+                  {key === "academy" && (
+                    <>
+                      <span className="text-muted-foreground">
+                        {t("intro.find.academy.communication")}{" "}
+                        <span className="rounded-full border px-2 py-0.5 text-xs">
+                          {t("preparing")}
+                        </span>
+                      </span>
+                      <Button asChild size="sm" className="mt-1 self-start">
+                        <Link href="/prihlasenie">{t("about.signIn")}</Link>
+                      </Button>
+                    </>
+                  )}
+                </span>
+              </li>
+            ))}
           </ul>
+        </section>
+      )}
+
+      {!user && (
+        <section aria-labelledby="hub-benefits" className="flex flex-col gap-3">
+          <h2 id="hub-benefits" className="text-xl font-semibold">
+            {t("intro.benefitsTitle")}
+          </h2>
+          <ul className="flex flex-col gap-2">
+            {(t.raw("intro.benefits") as string[]).map((b) => (
+              <li key={b} className="flex gap-2">
+                <Check aria-hidden className="text-primary mt-0.5 size-5 shrink-0" />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {!user && approved && (
+        <section
+          aria-labelledby="hub-try"
+          className="flex flex-col gap-2 rounded-xl border-l-4 border-l-amber-600 bg-amber-50 p-4 dark:bg-amber-950/30"
+        >
+          <h2 id="hub-try" className="font-semibold">
+            {t("intro.tryTitle")}
+          </h2>
+          <p className="text-muted-foreground text-sm">{t("intro.tryText")}</p>
+          <Button asChild className="self-start bg-amber-600 hover:bg-amber-700">
+            <Link href={kompasHref}>{t("intro.tryButton")}</Link>
+          </Button>
         </section>
       )}
 
@@ -268,23 +325,6 @@ async function Hub({ searchParams }: Props) {
             className="self-start text-sm underline underline-offset-4"
           >
             {t("noRole")}
-          </Link>
-        )}
-      </section>
-
-      <section
-        aria-labelledby="hub-kompas-info"
-        className="flex flex-col gap-1 rounded-xl border-l-4 border-l-amber-600 bg-amber-50 p-4 text-sm dark:bg-amber-950/30"
-      >
-        <h2 id="hub-kompas-info" className="font-semibold">
-          {t("kompasInfo.title")}
-        </h2>
-        <p className="text-muted-foreground">
-          {approved ? t("kompasInfo.text") : t("kompas.preparing")}
-        </p>
-        {approved && (
-          <Link href={kompasHref} className="self-start font-medium underline underline-offset-4">
-            {t("kompasInfo.link")}
           </Link>
         )}
       </section>
