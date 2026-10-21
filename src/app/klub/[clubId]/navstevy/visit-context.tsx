@@ -11,6 +11,7 @@ export async function VisitContext({
   areaName: (n: number) => string;
 }) {
   const t = await getTranslations("visits.context");
+  const tPlan = await getTranslations("plan");
   const format = await getFormatter();
   const date = (iso: string) =>
     format.dateTime(new Date(`${iso}T12:00:00Z`), { dateStyle: "medium" });
@@ -38,6 +39,19 @@ export async function VisitContext({
         </>
       ) : (
         <p className="font-semibold">{t("first")}</p>
+      )}
+      {data.planGoals.length > 0 && (
+        <div className="flex flex-col gap-0.5">
+          <p className="font-semibold">{t("plan")}</p>
+          <ul className="flex flex-col gap-0.5">
+            {data.planGoals.map((g, i) => (
+              <li key={i}>
+                {g.status === "done" ? "✓" : "○"} {g.area} · {g.title}{" "}
+                <span className="text-muted-foreground">· {tPlan(`status.${g.status}`)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
       <p className="text-muted-foreground text-xs">
         {data.weakest.length > 0

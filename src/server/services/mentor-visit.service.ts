@@ -11,6 +11,7 @@ import {
   isValidSubmission,
   type SubmissionStore,
 } from "@/server/services/kompas-submission.service";
+import type { PlanStore } from "@/server/services/club-plan.service";
 import { currentSeason } from "@/server/services/season";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
@@ -42,6 +43,8 @@ export interface MentorVisitStore {
 export interface MentorVisitDeps extends ClubDeps {
   visits: MentorVisitStore;
   submissions: Pick<SubmissionStore, "listSubmissions">;
+  /** the season's plan, shown in the reminder above the form (CP-b) */
+  plans?: Pick<PlanStore, "findPlan">;
 }
 
 export type VisitAccess = "write" | "club";
@@ -465,6 +468,8 @@ export interface VisitFormData {
   } | null;
   /** the 3 weakest areas of the latest submitted Kompas (mentors see only submitted ones) */
   weakest: { area: number; points: number }[];
+  /** goals of the season's plan (CP-b) */
+  planGoals: { area: number; title: string; status: string }[];
 }
 
 /** Data the mentor's form needs: who can be ticked as present, the last visit and weak areas. */
@@ -479,10 +484,11 @@ export async function getVisitFormData(
   }
   await requireClub(deps, clubId);
   const season = currentSeason(deps.now?.() ?? new Date());
-  const [members, visits, submissions] = await Promise.all([
+  const [members, visits, submissions, plan] = await Promise.all([
     clubMembers(deps, clubId),
     deps.visits.listVisits(clubId),
     deps.submissions.listSubmissions(clubId, season),
+    deps.plans?.findPlan(clubId, season) ?? null,
   ]);
   const last = visits
     .filter((v) => v.status === "sent")
@@ -505,5 +511,6 @@ export async function getVisitFormData(
         }
       : null,
     weakest: (result?.next ?? []).map((n) => ({ area: n.area, points: n.points })),
+    planGoals: (plan?.goals ?? []).map((g) => ({ area: g.area, title: g.title, status: g.status })),
   };
 }

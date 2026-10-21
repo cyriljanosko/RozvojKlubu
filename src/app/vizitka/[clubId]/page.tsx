@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { PublicPlan } from "@/components/vizitka/public-plan";
 import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
@@ -31,7 +32,12 @@ async function PublicVizitkaPage({ params, searchParams }: Props) {
     throw error;
   }
   const base = `/vizitka/${encodeURIComponent(clubId)}`;
-  return <VizitkaView vizitka={vizitka} seasonHref={(s) => `${base}?season=${seasonToSlug(s)}`} />;
+  return (
+    <div className="flex flex-col gap-6">
+      <VizitkaView vizitka={vizitka} seasonHref={(s) => `${base}?season=${seasonToSlug(s)}`} />
+      <PublicPlan clubId={clubId} season={vizitka.season} />
+    </div>
+  );
 }
 
 export default function Page(props: Props) {

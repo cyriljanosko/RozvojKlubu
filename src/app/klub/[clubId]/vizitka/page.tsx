@@ -9,7 +9,9 @@ import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { visitDeps, vizitkaDeps } from "@/server/clubs/deps";
+import { planDeps, visitDeps, vizitkaDeps } from "@/server/clubs/deps";
+import { getClubPlan, summarizePlan } from "@/server/services/club-plan.service";
+import { PublicPlan } from "@/components/vizitka/public-plan";
 import { seasonFromSlug, seasonToSlug } from "@/server/services/season";
 import { getClubVizitka } from "@/server/services/vizitka.service";
 import {
@@ -65,8 +67,35 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
         club={vizitka}
         seasonHref={(s) => `${base}?season=${seasonToSlug(s)}`}
       />
+      <PlanLine clubId={clubId} season={vizitka.season} />
       <VisitLine clubId={clubId} season={vizitka.season} />
+      <PublicPlan clubId={clubId} season={vizitka.season} />
     </div>
+  );
+}
+
+/** The season's plan – only in the Vizitka for club roles (CP-b). */
+async function PlanLine({ clubId, season }: { clubId: string; season: string }) {
+  const user = await getCurrentUser(await headers());
+  const t = await getTranslations("plan.vizitka");
+  let view;
+  try {
+    view = await getClubPlan(planDeps, user, clubId);
+  } catch {
+    return null; // no access to the plan
+  }
+  if (view.season !== season) return null;
+  const s = summarizePlan(view.plan);
+  return (
+    <Link
+      href={`/klub/${encodeURIComponent(clubId)}/plan`}
+      className="hover:bg-muted/50 flex flex-wrap items-center gap-x-2 rounded-xl border p-3 text-sm"
+    >
+      <span className="font-medium">
+        {s.goals > 0 ? t("line", { done: s.done, goals: s.goals }) : t("none")}
+      </span>
+      {s.confirmed && <span className="text-muted-foreground">· {t("confirmed")}</span>}
+    </Link>
   );
 }
 

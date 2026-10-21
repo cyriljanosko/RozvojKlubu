@@ -219,6 +219,11 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
                       : tA("mentor.noVisit")}
                     {r.visits.overdue > 0 &&
                       ` · ${tA("mentor.overdue", { count: r.visits.overdue })}`}
+                    {` · ${
+                      r.plan.goals > 0
+                        ? tA("mentor.planLine", { done: r.plan.done, goals: r.plan.goals })
+                        : tA("mentor.noPlan")
+                    }`}
                   </span>
                 </Link>
               </li>

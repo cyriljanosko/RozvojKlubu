@@ -32,7 +32,10 @@ export interface PlanStore {
     clubId: string,
     season: string,
     expectedVersion: number,
-    changes: Pick<ClubPlanDoc, "goals" | "confirmedAt" | "confirmedBy" | "updatedAt" | "updatedBy">,
+    changes: Pick<
+      ClubPlanDoc,
+      "goals" | "confirmedAt" | "confirmedBy" | "editedAt" | "updatedAt" | "updatedBy"
+    >,
   ) => Promise<ClubPlanDoc | null>;
 }
 
@@ -148,13 +151,18 @@ export function planTasksFor(
 }
 
 /** Pure: how far the plan is – for the Vizitka and the mentor overview. */
-export function summarizePlan(plan: Pick<ClubPlanDoc, "goals" | "confirmedAt"> | null) {
+export function summarizePlan(
+  plan: (Pick<ClubPlanDoc, "goals" | "confirmedAt"> & { editedAt?: Date | null }) | null,
+) {
   const goals = plan?.goals ?? [];
   return {
     goals: goals.length,
     done: goals.filter((g) => g.status === "done").length,
     doing: goals.filter((g) => g.status === "doing").length,
     confirmed: plan?.confirmedAt != null,
+    /** the goals were changed after the mentor confirmed the plan (decision 21. 10. 2026) */
+    editedAfterConfirm:
+      plan?.confirmedAt != null && plan.editedAt != null && +plan.editedAt > +plan.confirmedAt,
   };
 }
 
@@ -249,6 +257,7 @@ export async function saveClubPlan(
     goals: buildGoals(data.goals, previous?.goals ?? [], now),
     confirmedAt: previous?.confirmedAt ?? null,
     confirmedBy: previous?.confirmedBy ?? null,
+    editedAt: now,
     updatedAt: now,
     updatedBy: user.id,
   });
@@ -293,6 +302,7 @@ export async function setGoalStatus(
     ),
     confirmedAt: plan.confirmedAt,
     confirmedBy: plan.confirmedBy,
+    editedAt: plan.editedAt ?? null,
     updatedAt: now,
     updatedBy: user.id,
   });
@@ -324,6 +334,7 @@ export async function confirmClubPlan(
     goals: view.plan.goals,
     confirmedAt: data.confirmed ? now : null,
     confirmedBy: data.confirmed ? user.id : null,
+    editedAt: view.plan.editedAt ?? null,
     updatedAt: now,
     updatedBy: user.id,
   });
