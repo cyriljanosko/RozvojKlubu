@@ -2,10 +2,12 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { A, B, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import { addClubMember } from "./clubs.service";
+import { memorySubmissionStore } from "./kompas.fixture";
 import { memoryVisitStore } from "./mentor-visit.fixture";
 import {
   buildVisitContent,
   createMentorVisit,
+  getVisitFormData,
   getMentorVisit,
   listMentorVisits,
   openActions,
@@ -109,7 +111,7 @@ describe("mentor visits – service", () => {
   let deps: MentorVisitDeps & { visits: ReturnType<typeof memoryVisitStore> };
   beforeEach(async () => {
     const base = memoryDeps();
-    deps = { ...base, visits: memoryVisitStore() };
+    deps = { ...base, visits: memoryVisitStore(), submissions: memorySubmissionStore() };
     await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
     await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     base.memberDocs.push({
@@ -190,5 +192,31 @@ describe("mentor visits – service", () => {
     await expect(
       updateMentorVisit(deps, mona, A, v.id, { ...input, expectedVersion: 3 }),
     ).rejects.toMatchObject({ code: "CONFLICT" });
+  });
+
+  it("ticks present club members, refuses strangers and prepares the form data", async () => {
+    const v = await createMentorVisit(deps, mona, A, {
+      ...input,
+      participantIds: [alice.id, alice.id],
+    });
+    expect(v.participantIds).toEqual([alice.id]);
+    await expect(
+      createMentorVisit(deps, mona, A, { ...input, participantIds: ["stranger"] }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+
+    const empty = await getVisitFormData(deps, mona, A);
+    expect(empty.members.map((m) => m.userId).sort()).toEqual(["alice", "bob", "mona"]);
+    expect(empty.members.find((m) => m.userId === "alice")?.roles).toEqual(["management"]);
+    expect(empty).toMatchObject({ previous: null, weakest: [] });
+
+    await sendMentorVisit(deps, mona, A, v.id, { expectedVersion: 1 });
+    await setVisitActionDone(deps, alice, A, v.id, v.actions[1].id, {
+      done: true,
+      expectedVersion: 2,
+    });
+    const form = await getVisitFormData(deps, mona, A);
+    expect(form.previous).toMatchObject({ id: v.id, done: 1, total: 2 });
+    expect(form.previous?.open.map((a) => a.text)).toEqual([input.actions[0].text]);
+    await expect(getVisitFormData(deps, alice, A)).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 });

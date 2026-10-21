@@ -322,7 +322,9 @@ export interface MentorVisitDoc {
   /** ISO date "YYYY-MM-DD" */
   date: string;
   form: MentorVisitForm;
-  /** people present – names, free text (visible to the club, its mentor and admin_sfz only) */
+  /** people with a role in the club who were present (user ids, decision 21. 10. 2026) */
+  participantIds: string[];
+  /** other people present – names, free text (visible to the club, its mentor and admin_sfz only) */
   participants: string;
   summary: string;
   findings: { area: number; text: string }[];

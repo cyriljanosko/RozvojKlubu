@@ -54,6 +54,7 @@ async function ClubDetail({ params, searchParams }: Props) {
   const tKompas = await getTranslations("kompas");
   const tLicensing = await getTranslations("licensing");
   const tVizitka = await getTranslations("vizitka");
+  const tVisits = await getTranslations("visits");
 
   if (result === "forbidden" || result === "notFound") {
     return (
@@ -103,6 +104,14 @@ async function ClubDetail({ params, searchParams }: Props) {
                   className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
                 >
                   {tLicensing("open")}
+                </Link>
+              )}
+              {result.canLicensing && (
+                <Link
+                  href={`/klub/${encodeURIComponent(club.clubId)}/navstevy`}
+                  className="rounded-md border px-3 py-2 text-sm font-medium"
+                >
+                  {tVisits("open")}
                 </Link>
               )}
             </div>

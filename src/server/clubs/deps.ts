@@ -85,4 +85,8 @@ export const searchDeps: SearchDeps = {
   roleCatalog: mongoRoleCatalogStore,
 };
 
-export const visitDeps: MentorVisitDeps = { ...clubDeps, visits: mongoVisitStore };
+export const visitDeps: MentorVisitDeps = {
+  ...clubDeps,
+  visits: mongoVisitStore,
+  submissions: mongoSubmissionStore,
+};

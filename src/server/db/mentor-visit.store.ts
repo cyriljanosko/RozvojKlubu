@@ -20,7 +20,11 @@ function ensureIndexes(db: Db): Promise<unknown> {
   return indexes;
 }
 
-const toStored = ({ _id, ...rest }: MentorVisitDoc): StoredVisit => ({ ...rest, id: String(_id) });
+const toStored = ({ _id, ...rest }: MentorVisitDoc): StoredVisit => ({
+  ...rest,
+  participantIds: rest.participantIds ?? [], // visits recorded before 21. 10. 2026
+  id: String(_id),
+});
 
 export const mongoVisitStore: MentorVisitStore = {
   async insertVisit(doc) {
