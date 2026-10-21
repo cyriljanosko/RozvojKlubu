@@ -12,11 +12,13 @@ import { mongoAssessmentStore, mongoSubmissionStore } from "@/server/db/kompas.s
 import { mongoEvaluationStore, mongoLicensingSubmissionStore } from "@/server/db/licensing.store";
 import { mongoPracticeStore } from "@/server/db/content.store";
 import { mongoProgressStore } from "@/server/db/practice-progress.store";
+import { mongoVisitStore } from "@/server/db/mentor-visit.store";
 import type { AcademyDeps } from "@/server/services/academy.service";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { HubDeps } from "@/server/services/hub.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
+import type { MentorVisitDeps } from "@/server/services/mentor-visit.service";
 import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
 import type { SearchDeps } from "@/server/services/search.service";
 import type { VizitkaDeps } from "@/server/services/vizitka.service";
@@ -82,3 +84,5 @@ export const searchDeps: SearchDeps = {
   practice: mongoPracticeStore,
   roleCatalog: mongoRoleCatalogStore,
 };
+
+export const visitDeps: MentorVisitDeps = { ...clubDeps, visits: mongoVisitStore };

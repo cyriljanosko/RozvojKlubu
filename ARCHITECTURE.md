@@ -80,6 +80,12 @@ MCP server (F5, plánovaný)        ─┘        │
 2. `PUT` uloží postup s verziou (súbežná úprava → 409); id úloh, krokov a možností sa overia proti obsahu Praxe, dátum „hotové“ sa pri ďalšom uložení zachová
 3. Jeden spoločný záznam na klub, oblasť a sezónu (každá rola má vlastné kroky); bez prihlásenia sa nič neukladá, vo Vizitke sa neukazuje (rozhodnutie 17. 10. 2026)
 
+### Návšteva mentora (MV)
+
+1. `GET|POST /api/v1/clubs/:clubId/mentor-visits`, `GET|PATCH .../:visitId`, `POST .../:visitId/send`, `POST .../:visitId/withdraw`, `PATCH .../:visitId/actions/:actionId` – služba `mentor-visit.service.ts`
+2. Záznam: dátum, forma (osobne / online / telefonicky), prítomní (mená, len pre klub, jeho mentora a admina SFZ), zhrnutie, zistenia pri vybraných oblastiach, dohodnuté kroky (čo, oblasť, kto, do kedy, splnené)
+3. Stav rozpracovaná → odoslaná klubu → zrušená (nič sa nemaže); zapisuje mentor klubu v sezóne a admin SFZ, vedenie a tréner vidia len odoslané a odškrtávajú kroky; verzia (súbežná úprava → 409)
+
 ### Vyhľadávanie (H6)
 
 1. `GET /api/v1/search?q=` a stránka `/hladat` volajú `search.service.ts`: oblasti, sekcie Metodiky, Prax (prvý krok, kroky, vzory) a kluby; otázky Kompasu nie (rozhodnutie 17. 10. 2026)
@@ -120,6 +126,7 @@ MCP server (F5, plánovaný)        ─┘        │
 | `licensing_evaluations` | aplikácia (tenant) | licenčné hodnotenie – pracovná verzia na sezónu (ADR 0006)  |
 | `licensing_submissions` | aplikácia (tenant) | uzavreté (zmrazené) licenčné hodnotenie sezóny              |
 | `practice_progress`     | aplikácia (tenant) | postup klubu v Praxi oblasti na sezónu, verzia (F6d)        |
+| `mentor_visits`         | aplikácia (tenant) | návštevy mentora s dohodnutými krokmi, stav, verzia (MV)    |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -142,3 +149,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
   len pre platné uzavretia (`club_season_closed`, `partialFilterExpression: { status: "closed" }`, ADR 0008)
   – jedno platné uzavretie na sezónu, znovu otvorené zostávajú v histórii (zakladá `src/server/db/licensing.store.ts`, súhlas 16. 10. 2026)
 - `practice_progress`: `{ clubId: 1, season: 1, area: 1 }` unikátny (zakladá `src/server/db/practice-progress.store.ts`, súhlas 17. 10. 2026; dotaz overený cez `explain` – IXSCAN)
+- `mentor_visits`: `{ clubId: 1, season: 1, date: -1 }` (zakladá `src/server/db/mentor-visit.store.ts`, súhlas 21. 10. 2026; dotaz overený cez `explain` – IXSCAN)
