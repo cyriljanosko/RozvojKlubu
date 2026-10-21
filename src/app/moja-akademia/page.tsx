@@ -22,6 +22,9 @@ const SEVERITY: Record<AcademyTask["severity"], string> = {
   info: "border-l-blue-600",
 };
 
+const isoDate = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("sk", { timeZone: "Europe/Bratislava" });
+
 const date = (d: Date) =>
   d.toLocaleDateString("sk", { dateStyle: "medium", timeZone: "Europe/Bratislava" });
 
@@ -46,6 +49,8 @@ async function TaskList({ tasks }: { tasks: AcademyTask[] }) {
               })}
               {task.practice &&
                 ` · ${t("practiceProgress", { done: task.practice.stepsDone, total: task.practice.stepsTotal })}`}
+              {task.due?.date &&
+                ` · ${t(task.due.overdue ? "overdue" : "dueBy", { date: isoDate(task.due.date) })}`}
             </span>
             <span className="text-muted-foreground shrink-0 text-xs">{t("open")} →</span>
           </Link>
@@ -194,6 +199,19 @@ async function Academy() {
                       })
                     : t("mentor.none")}{" "}
                   · {r.licensingClosed ? t("mentor.licensingClosed") : t("mentor.licensingOpen")}
+                </span>
+                <span className="text-muted-foreground text-xs">
+                  {r.visits.lastDate
+                    ? t("mentor.visitLine", {
+                        date: isoDate(r.visits.lastDate),
+                        open: r.visits.open,
+                      })
+                    : t("mentor.noVisit")}
+                  {r.visits.overdue > 0 && (
+                    <span className="text-destructive ml-1.5 rounded-full border px-1.5">
+                      {t("mentor.overdue", { count: r.visits.overdue })}
+                    </span>
+                  )}
                 </span>
                 <span className="flex flex-wrap gap-x-3 text-xs">
                   <Link

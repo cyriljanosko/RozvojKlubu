@@ -22,11 +22,16 @@ export interface VisitFormValue {
     text: string;
     area: number | null;
     owner: string;
+    /** a club member picked as responsible; null = someone else, by name */
+    ownerId: string | null;
+    /** client only: "someone else" was chosen and the name is typed */
+    ownerOther?: boolean;
     dueDate: string | null;
   }[];
 }
 
 const FORMS: MentorVisitForm[] = ["onsite", "online", "phone"];
+const OTHER = "__other";
 const field =
   "border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none";
 
@@ -75,7 +80,14 @@ export function VisitForm({
       setMessage(null);
       const input = {
         ...v,
-        actions: v.actions.map((a) => ({ ...a, dueDate: a.dueDate || null })),
+        actions: v.actions.map((a) => ({
+          id: a.id,
+          text: a.text,
+          area: a.area,
+          owner: a.owner,
+          ownerId: a.ownerId,
+          dueDate: a.dueDate || null,
+        })),
       };
       const saved = await saveVisitAction(clubId, visitId, input, version);
       if (saved.status === "error") return setMessage(t(`errors.${saved.code}`));
@@ -263,11 +275,6 @@ export function VisitForm({
 
       <section className="flex flex-col gap-3 rounded-xl border p-4">
         <h2 className="text-sm font-semibold">{t("actions")}</h2>
-        <datalist id="visit-owners">
-          {members.map((m) => (
-            <option key={m.userId} value={m.name} />
-          ))}
-        </datalist>
         {v.actions.map((a, i) => {
           const update = (patch: Partial<VisitFormValue["actions"][number]>) =>
             set(
@@ -317,16 +324,37 @@ export function VisitForm({
                     </option>
                   ))}
                 </select>
+                <select
+                  value={a.ownerId ?? (a.ownerOther || a.owner ? OTHER : "")}
+                  aria-label={t("owner")}
+                  onChange={(e) => {
+                    const m = members.find((x) => x.userId === e.target.value);
+                    if (m) update({ ownerId: m.userId, owner: m.name, ownerOther: false });
+                    else if (e.target.value === OTHER)
+                      update({ ownerId: null, owner: "", ownerOther: true });
+                    else update({ ownerId: null, owner: "", ownerOther: false });
+                  }}
+                  className={field}
+                >
+                  <option value="">{t("owner")}</option>
+                  {members.map((m) => (
+                    <option key={m.userId} value={m.userId}>
+                      {m.name}
+                    </option>
+                  ))}
+                  <option value={OTHER}>{t("ownerOther")}</option>
+                </select>
+              </div>
+              {a.ownerId === null && (a.ownerOther || a.owner) && (
                 <input
                   value={a.owner}
-                  list="visit-owners"
                   onChange={(e) => update({ owner: e.target.value })}
-                  placeholder={t("owner")}
-                  aria-label={t("owner")}
+                  placeholder={t("ownerName")}
+                  aria-label={t("ownerName")}
                   maxLength={120}
                   className={field}
                 />
-              </div>
+              )}
               <label className="flex items-center gap-2 text-sm">
                 <span className="text-muted-foreground shrink-0">{t("due")}</span>
                 <input
@@ -345,7 +373,10 @@ export function VisitForm({
           size="sm"
           className="self-start"
           onClick={() =>
-            set("actions", [...v.actions, { text: "", area: null, owner: "", dueDate: null }])
+            set("actions", [
+              ...v.actions,
+              { text: "", area: null, owner: "", ownerId: null, dueDate: null },
+            ])
           }
         >
           <Plus aria-hidden /> {t("addAction")}

@@ -63,6 +63,7 @@ export const academyDeps: AcademyDeps = {
   choices: mongoAreaRoleChoiceStore,
   practice: mongoPracticeStore,
   progress: mongoProgressStore,
+  visits: mongoVisitStore,
 };
 
 export const hubDeps: HubDeps = {

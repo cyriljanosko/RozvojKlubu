@@ -22,6 +22,14 @@ import {
   type PracticeProgressStore,
 } from "@/server/services/practice-progress.service";
 import { getPractice, type PracticeStore } from "@/server/services/practice.service";
+import {
+  isoToday,
+  summarizeVisits,
+  visitTasksFor,
+  type MentorVisitStore,
+  type VisitSummary,
+  type VisitTask,
+} from "@/server/services/mentor-visit.service";
 import type { PracticeContent } from "@/server/services/practice.schema";
 import type { RoleCatalog } from "@/server/services/role-catalog.schema";
 import { getRoleCatalog, type RoleCatalogStore } from "@/server/services/role-catalog.service";
@@ -46,6 +54,7 @@ export interface AcademyDeps extends SubmissionDeps {
   roleCatalog: Pick<RoleCatalogStore, "findCatalog">;
   choices: AreaRoleChoiceStore;
   practice: Pick<PracticeStore, "findPractice" | "listPracticeAreas">;
+  visits: Pick<MentorVisitStore, "listVisits">;
   progress: Pick<PracticeProgressStore, "findProgress">;
 }
 
@@ -61,7 +70,9 @@ export interface AcademyTask {
     | "club_kompas_missing"
     | "club_licensing_open"
     | "practice_first"
-    | "practice_next";
+    | "practice_next"
+    | "visit_action"
+    | "club_no_visit";
   severity: TaskSeverity;
   /** relative link inside the app */
   href: string;
@@ -73,6 +84,8 @@ export interface AcademyTask {
   step?: string;
   /** Prax progress of the user's role in the area (weak areas, F6d) */
   practice?: { stepsDone: number; stepsTotal: number };
+  /** agreed action of a mentor visit: due date (ISO) and whether it is overdue (MV-c) */
+  due?: { date: string | null; overdue: boolean };
 }
 
 /** Prax progress of the user's role in one area of a club (F6d). */
@@ -98,6 +111,8 @@ export interface TaskInput {
   teamsWithoutCoach: number;
   /** Prax progress per area with practice (F6d) */
   practice?: PracticeTaskInput[];
+  /** open agreed actions of mentor visits the user should see (MV-c) */
+  visitTasks?: VisitTask[];
 }
 
 const ORDER: Record<TaskSeverity, number> = { crit: 0, warn: 1, info: 2 };
@@ -172,6 +187,16 @@ export function clubTasks(i: TaskInput): AcademyTask[] {
       ...(p ? { practice: { stepsDone: p.stepsDone, stepsTotal: p.stepsTotal } } : {}),
     });
   }
+  // agreed with the mentor: overdue ones are urgent (decision 21. 10. 2026)
+  for (const v of i.visitTasks ?? []) {
+    tasks.push({
+      key: "visit_action",
+      severity: v.overdue ? "crit" : "warn",
+      href: `/klub/${encodeURIComponent(i.clubId)}/navstevy/${v.visitId}`,
+      step: v.text,
+      due: { date: v.dueDate, overdue: v.overdue },
+    });
+  }
   return tasks.sort((a, b) => ORDER[a.severity] - ORDER[b.severity]);
 }
 
@@ -192,9 +217,13 @@ export function splitTasks(
 
 /** Pure: tasks of a mentor over the clubs of the cohort, one summary task per kind. */
 export function mentorTasks(
-  rows: (Pick<MentorClubRow, "clubId" | "name" | "latest"> & { licensingClosed: boolean })[],
+  rows: (Pick<MentorClubRow, "clubId" | "name" | "latest"> & {
+    licensingClosed: boolean;
+    visits?: VisitSummary;
+  })[],
 ): AcademyTask[] {
   const missing = rows.filter((r) => !r.latest).map((r) => r.name);
+  const unvisited = rows.filter((r) => r.visits && !r.visits.lastDate).map((r) => r.name);
   const open = rows.filter((r) => !r.licensingClosed).map((r) => r.name);
   const tasks: AcademyTask[] = [];
   if (missing.length > 0) {
@@ -213,6 +242,15 @@ export function mentorTasks(
       href: "#mentor-clubs",
       count: open.length,
       clubName: open.join(", "),
+    });
+  }
+  if (unvisited.length > 0) {
+    tasks.push({
+      key: "club_no_visit",
+      severity: "info",
+      href: "#mentor-clubs",
+      count: unvisited.length,
+      clubName: unvisited.join(", "),
     });
   }
   return tasks;
@@ -297,7 +335,10 @@ export interface AcademyView {
   season: string;
   clubs: AcademyClub[];
   /** clubs of the mentor's cohort; null when the user is no mentor */
-  mentor: { rows: (MentorClubRow & { licensingClosed: boolean })[]; tasks: AcademyTask[] } | null;
+  mentor: {
+    rows: (MentorClubRow & { licensingClosed: boolean; visits: VisitSummary })[];
+    tasks: AcademyTask[];
+  } | null;
 }
 
 export async function getMyAcademy(
@@ -306,6 +347,7 @@ export async function getMyAcademy(
 ): Promise<AcademyView> {
   const user = requireUser(actor);
   const season = currentSeason(deps.now?.() ?? new Date());
+  const today = isoToday(deps.now?.() ?? new Date());
   const memberships = await deps.memberships.listByUser(user.id);
   const catalogDto = await getRoleCatalog(deps.roleCatalog, user);
   const catalog = catalogDto?.content ?? null;
@@ -353,6 +395,11 @@ export async function getMyAcademy(
       )
     ).filter((p): p is PracticeTaskInput => p !== null);
     const unsent = !latest || (view.updatedAt !== null && +view.updatedAt > +latest.submittedAt);
+    const visitTasks = visitTasksFor(
+      await deps.visits.listVisits(club.clubId),
+      { userId: user.id, management: roles.includes("management") },
+      today,
+    );
     own.push({
       clubId: club.clubId,
       name: club.name,
@@ -379,6 +426,7 @@ export async function getMyAcademy(
         licensingClosed: closed !== null,
         teamsWithoutCoach: seasonData ? profileFromSeason(seasonData).teamsWithoutCoach : 0,
         practice,
+        visitTasks,
       }),
       chosenRoles: choice?.roles ?? [],
       roleOptions: catalog ? roleOptions(catalog, roles) : [],
@@ -395,6 +443,7 @@ export async function getMyAcademy(
           ...r,
           licensingClosed:
             (await deps.licensingSubmissions.findSubmission(r.clubId, season)) !== null,
+          visits: summarizeVisits(await deps.visits.listVisits(r.clubId), season, today),
         })),
     );
     mentor = { rows, tasks: mentorTasks(rows) };

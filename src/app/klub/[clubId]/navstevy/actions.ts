@@ -9,6 +9,7 @@ import { visitDeps } from "@/server/clubs/deps";
 import {
   createMentorVisit,
   sendMentorVisit,
+  setVisitActionDone,
   updateMentorVisit,
   withdrawMentorVisit,
   type VisitInput,
@@ -74,5 +75,21 @@ export async function withdrawVisitAction(
 ): Promise<VisitActionResult> {
   return run(async () =>
     withdrawMentorVisit(visitDeps, await user(), clubId, visitId, { expectedVersion }),
+  );
+}
+
+/** Tick an agreed action as done or not (the club, its mentor, admin_sfz). */
+export async function toggleVisitActionAction(
+  clubId: string,
+  visitId: string,
+  actionId: string,
+  done: boolean,
+  expectedVersion: number,
+): Promise<VisitActionResult> {
+  return run(async () =>
+    setVisitActionDone(visitDeps, await user(), clubId, visitId, actionId, {
+      done,
+      expectedVersion,
+    }),
   );
 }

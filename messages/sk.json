@@ -637,7 +637,11 @@
       "open": "Otvoriť",
       "practice_first": "Prax oblasti {area}: dokončite prvý krok – {step}",
       "practice_next": "Prax oblasti {area}: pokračujte – {step}",
-      "practiceProgress": "Prax: {done} z {total} krokov"
+      "practiceProgress": "Prax: {done} z {total} krokov",
+      "visit_action": "Dohodnuté s mentorom: {step}",
+      "club_no_visit": "Bez návštevy v tejto sezóne: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
+      "dueBy": "do {date}",
+      "overdue": "termín uplynul {date}"
     },
     "roles": {
       "title": "Moje roly v oblastiach",
@@ -656,7 +660,10 @@
       "licensingClosed": "licenčné uzavreté",
       "licensingOpen": "licenčné neuzavreté",
       "newVisit": "Zapísať návštevu",
-      "visits": "Návštevy"
+      "visits": "Návštevy",
+      "visitLine": "posledná návšteva {date} · otvorené kroky {open}",
+      "noVisit": "bez návštevy v tejto sezóne",
+      "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}"
     },
     "sees": {
       "title": "Čo táto rola vidí",
@@ -991,13 +998,28 @@
       "errors": {
         "date": "Vyplňte dátum.",
         "finding": "Doplňte text zistenia alebo ho odstráňte.",
-        "action": "Pri každom kroku vyplňte, čo sa urobí a kto zodpovedá.",
+        "action": "Pri každom kroku vyplňte, čo sa urobí, a vyberte, kto zodpovedá.",
         "CONFLICT": "Návštevu medzitým zmenil niekto iný. Obnovte stránku.",
         "FORBIDDEN": "Na túto zmenu nemáte oprávnenie.",
         "BAD_REQUEST": "Niektorý údaj nie je správny.",
         "NOT_FOUND": "Návšteva sa nenašla.",
         "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova."
-      }
+      },
+      "ownerOther": "Iná osoba…",
+      "ownerName": "Meno zodpovednej osoby"
+    },
+    "club": {
+      "actions": "Dohodnuté kroky · splnené {done} z {total}",
+      "overdue": "termín uplynul",
+      "doneOn": "splnené {date}",
+      "conflict": "Kroky medzitým zmenil niekto iný. Obnovte stránku.",
+      "error": "Uloženie sa nepodarilo. Skúste to znova."
+    },
+    "vizitka": {
+      "title": "Návšteva mentora",
+      "line": "{date} · otvorené kroky {open}",
+      "none": "v tejto sezóne zatiaľ nebola",
+      "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}"
     }
   }
 }

@@ -11,6 +11,8 @@ import {
   getMentorVisit,
   listMentorVisits,
   openActions,
+  summarizeVisits,
+  visitTasksFor,
   sendMentorVisit,
   setVisitActionDone,
   updateMentorVisit,
@@ -79,6 +81,7 @@ describe("mentor visits – pure", () => {
       id,
       text: id,
       area: null,
+      ownerId: null,
       owner: "x",
       dueDate,
       done,
@@ -218,5 +221,90 @@ describe("mentor visits – service", () => {
     expect(form.previous).toMatchObject({ id: v.id, done: 1, total: 2 });
     expect(form.previous?.open.map((a) => a.text)).toEqual([input.actions[0].text]);
     await expect(getVisitFormData(deps, alice, A)).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  it("picks a club member as responsible and refuses strangers", async () => {
+    const v = await createMentorVisit(deps, mona, A, {
+      ...input,
+      actions: [{ ...input.actions[0], owner: "Bob", ownerId: bob.id }],
+    });
+    expect(v.actions[0]).toMatchObject({ owner: "Bob", ownerId: "bob" });
+    await expect(
+      createMentorVisit(deps, mona, A, {
+        ...input,
+        actions: [{ ...input.actions[0], ownerId: "stranger" }],
+      }),
+    ).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+});
+
+describe("mentor visits – tasks and summary (MV-c)", () => {
+  const act = (id: string, ownerId: string | null, dueDate: string | null, done = false) => ({
+    id,
+    text: id,
+    area: null,
+    owner: ownerId ?? "Niekto",
+    ownerId,
+    dueDate,
+    done,
+    doneAt: null,
+    doneBy: null,
+  });
+  const visits = [
+    {
+      id: "v1",
+      date: "2026-10-01",
+      season: "2026/2027",
+      status: "sent" as const,
+      actions: [
+        act("bob-late", "bob", "2026-10-10"),
+        act("alice", "alice", null),
+        act("text", null, "2026-12-01"),
+      ],
+    },
+    {
+      id: "v2",
+      date: "2026-10-15",
+      season: "2026/2027",
+      status: "draft" as const,
+      actions: [act("draft", "bob", null)],
+    },
+    {
+      id: "v0",
+      date: "2026-05-01",
+      season: "2025/2026",
+      status: "sent" as const,
+      actions: [act("old-done", "bob", null, true)],
+    },
+  ];
+
+  it("shows a task to the responsible member and to management, overdue by date", () => {
+    const today = "2026-10-21";
+    expect(visitTasksFor(visits, { userId: "bob", management: false }, today)).toEqual([
+      {
+        visitId: "v1",
+        actionId: "bob-late",
+        text: "bob-late",
+        dueDate: "2026-10-10",
+        overdue: true,
+      },
+    ]);
+    expect(
+      visitTasksFor(visits, { userId: "carol", management: true }, today).map((t) => t.actionId),
+    ).toEqual(["bob-late", "text", "alice"]);
+    expect(visitTasksFor(visits, { userId: "carol", management: false }, today)).toEqual([]);
+  });
+
+  it("summarizes the season: last sent visit, open and overdue actions", () => {
+    expect(summarizeVisits(visits, "2026/2027", "2026-10-21")).toEqual({
+      lastDate: "2026-10-01",
+      open: 3,
+      overdue: 1,
+    });
+    expect(summarizeVisits(visits, "2027/2028", "2026-10-21")).toEqual({
+      lastDate: null,
+      open: 0,
+      overdue: 0,
+    });
   });
 });

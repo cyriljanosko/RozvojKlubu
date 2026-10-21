@@ -12,7 +12,11 @@ import { visitDeps } from "@/server/clubs/deps";
 import { mongoContentStore } from "@/server/db/content.store";
 import { getClubOverview } from "@/server/services/clubs.service";
 import { listAreas } from "@/server/services/content.service";
-import { getVisitFormData, listMentorVisits } from "@/server/services/mentor-visit.service";
+import {
+  getVisitFormData,
+  isoToday,
+  listMentorVisits,
+} from "@/server/services/mentor-visit.service";
 
 import { VisitContext } from "../visit-context";
 import { VisitForm } from "../visit-form";
@@ -90,11 +94,12 @@ async function Visit({ params }: Props) {
               participants: visit.participants,
               summary: visit.summary,
               findings: visit.findings,
-              actions: visit.actions.map(({ id, text, area, owner, dueDate }) => ({
+              actions: visit.actions.map(({ id, text, area, owner, ownerId, dueDate }) => ({
                 id,
                 text,
                 area,
                 owner,
+                ownerId,
                 dueDate,
               })),
             }}
@@ -107,6 +112,9 @@ async function Visit({ params }: Props) {
           visit={visit}
           members={new Map(list.members.map((m) => [m.userId, m.name]))}
           areaName={areaName}
+          clubId={clubId}
+          canTick={list.access === "club"}
+          today={isoToday()}
         />
       )}
     </div>
