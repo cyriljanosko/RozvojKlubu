@@ -91,6 +91,64 @@ export function visibleTo(access: VisitAccess, visit: Pick<MentorVisitDoc, "stat
   return access === "write" || visit.status === "sent";
 }
 
+export interface VisitTask {
+  visitId: string;
+  actionId: string;
+  text: string;
+  dueDate: string | null;
+  overdue: boolean;
+}
+
+/**
+ * Pure: open agreed actions a club member should see as tasks (decision 21. 10. 2026) –
+ * the responsible member, and management of the club to keep an eye on them.
+ */
+export function visitTasksFor(
+  visits: readonly Pick<StoredVisit, "id" | "date" | "status" | "actions">[],
+  viewer: { userId: string; management: boolean },
+  today: string,
+): VisitTask[] {
+  return openActions(visits)
+    .filter((a) => a.ownerId === viewer.userId || viewer.management)
+    .map((a) => ({
+      visitId: a.visitId,
+      actionId: a.id,
+      text: a.text,
+      dueDate: a.dueDate,
+      overdue: a.dueDate !== null && a.dueDate < today,
+    }));
+}
+
+export interface VisitSummary {
+  /** date of the latest sent visit in the season, null when none */
+  lastDate: string | null;
+  open: number;
+  overdue: number;
+}
+
+/** Pure: the club's visits in a season for the mentor overview and the Vizitka. */
+export function summarizeVisits(
+  visits: readonly Pick<StoredVisit, "id" | "date" | "season" | "status" | "actions">[],
+  season: string,
+  today: string,
+): VisitSummary {
+  const sent = visits.filter((v) => v.status === "sent" && v.season === season);
+  const open = openActions(sent);
+  return {
+    lastDate:
+      sent
+        .map((v) => v.date)
+        .sort()
+        .at(-1) ?? null,
+    open: open.length,
+    overdue: open.filter((a) => a.dueDate !== null && a.dueDate < today).length,
+  };
+}
+
+/** Today as ISO date in Slovakia ("YYYY-MM-DD") – due dates are compared as dates. */
+export const isoToday = (now: Date = new Date()) =>
+  now.toLocaleDateString("sv-SE", { timeZone: "Europe/Bratislava" });
+
 /** Pure: open agreed actions of sent visits, earliest due date first (tasks in Moja Akadémia). */
 export function openActions(
   visits: readonly Pick<StoredVisit, "id" | "date" | "status" | "actions">[],
@@ -123,6 +181,7 @@ export const visitInputSchema = z.object({
         text: text(500).min(1),
         area: z.number().int().min(1).max(11).nullable(),
         owner: text(120).min(1),
+        ownerId: z.string().min(1).max(64).nullable().default(null),
         dueDate: isoDate.nullable(),
       }),
     )
@@ -166,6 +225,7 @@ export function buildVisitContent(
         text: a.text,
         area: a.area,
         owner: a.owner,
+        ownerId: a.ownerId ?? null,
         dueDate: a.dueDate,
         done: before?.done ?? false,
         doneAt: before?.doneAt ?? null,
@@ -231,7 +291,10 @@ export async function createMentorVisit(
   await requireClub(deps, clubId);
   const now = deps.now?.() ?? new Date();
   const content = buildVisitContent(visitInputSchema.parse(input), []);
-  await requireMembers(deps, clubId, content.participantIds);
+  await requireMembers(deps, clubId, [
+    ...content.participantIds,
+    ...content.actions.flatMap((a) => (a.ownerId ? [a.ownerId] : [])),
+  ]);
   return deps.visits.insertVisit({
     clubId,
     ...content,
@@ -289,7 +352,12 @@ export async function updateMentorVisit(
   input: unknown,
 ): Promise<StoredVisit> {
   const data = visitInputSchema.merge(versioned).parse(input);
-  await requireMembers(deps, clubId, [...new Set(data.participantIds)]);
+  await requireMembers(deps, clubId, [
+    ...new Set([
+      ...data.participantIds,
+      ...data.actions.flatMap((a) => (a.ownerId ? [a.ownerId] : [])),
+    ]),
+  ]);
   return writeVisit(deps, actor, clubId, visitId, data.expectedVersion, (visit) =>
     buildVisitContent(data, visit.actions),
   );

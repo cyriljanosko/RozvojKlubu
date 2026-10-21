@@ -13,6 +13,9 @@ const SEVERITY: Record<AcademyTask["severity"], string> = {
   info: "border-l-blue-600",
 };
 
+const isoDate = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("sk", { timeZone: "Europe/Bratislava" });
+
 const date = (d: Date) =>
   d.toLocaleDateString("sk", { dateStyle: "medium", timeZone: "Europe/Bratislava" });
 
@@ -34,7 +37,10 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
       points: task.points ?? 0,
       club: task.clubName ?? "",
       step: task.step ?? "",
-    });
+    }) +
+    (task.due?.date
+      ? ` · ${tTask(task.due.overdue ? "overdue" : "dueBy", { date: isoDate(task.due.date) })}`
+      : "");
 
   return (
     <section
@@ -203,7 +209,16 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
                         })
                       : tA("mentor.none")}{" "}
                     ·{" "}
-                    {r.licensingClosed ? tA("mentor.licensingClosed") : tA("mentor.licensingOpen")}
+                    {r.licensingClosed ? tA("mentor.licensingClosed") : tA("mentor.licensingOpen")}{" "}
+                    ·{" "}
+                    {r.visits.lastDate
+                      ? tA("mentor.visitLine", {
+                          date: isoDate(r.visits.lastDate),
+                          open: r.visits.open,
+                        })
+                      : tA("mentor.noVisit")}
+                    {r.visits.overdue > 0 &&
+                      ` · ${tA("mentor.overdue", { count: r.visits.overdue })}`}
                   </span>
                 </Link>
               </li>

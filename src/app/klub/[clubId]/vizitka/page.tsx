@@ -9,9 +9,14 @@ import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { vizitkaDeps } from "@/server/clubs/deps";
+import { visitDeps, vizitkaDeps } from "@/server/clubs/deps";
 import { seasonFromSlug, seasonToSlug } from "@/server/services/season";
 import { getClubVizitka } from "@/server/services/vizitka.service";
+import {
+  isoToday,
+  listMentorVisits,
+  summarizeVisits,
+} from "@/server/services/mentor-visit.service";
 
 export const metadata: Metadata = { title: defaultMessages.vizitka.title };
 
@@ -60,7 +65,37 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
         club={vizitka}
         seasonHref={(s) => `${base}?season=${seasonToSlug(s)}`}
       />
+      <VisitLine clubId={clubId} season={vizitka.season} />
     </div>
+  );
+}
+
+/** Mentor visits of the season – only in the Vizitka for club roles, never public (MV-c). */
+async function VisitLine({ clubId, season }: { clubId: string; season: string }) {
+  const user = await getCurrentUser(await headers());
+  const t = await getTranslations("visits.vizitka");
+  let list;
+  try {
+    list = await listMentorVisits(visitDeps, user, clubId);
+  } catch {
+    return null; // no access to visits (e.g. no role in the club this season)
+  }
+  const s = summarizeVisits(list.visits, season, isoToday());
+  const date = (iso: string) =>
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString("sk", { timeZone: "Europe/Bratislava" });
+  return (
+    <Link
+      href={`/klub/${encodeURIComponent(clubId)}/navstevy`}
+      className="hover:bg-muted/50 flex flex-wrap items-center gap-x-2 rounded-xl border p-3 text-sm"
+    >
+      <span className="font-medium">{t("title")}</span>
+      <span className="text-muted-foreground">
+        {s.lastDate ? t("line", { date: date(s.lastDate), open: s.open }) : t("none")}
+      </span>
+      {s.overdue > 0 && (
+        <span className="text-destructive text-xs">· {t("overdue", { count: s.overdue })}</span>
+      )}
+    </Link>
   );
 }
 

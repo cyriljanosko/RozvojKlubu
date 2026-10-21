@@ -18,6 +18,7 @@ import {
 import { A, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import { addClubMember } from "./clubs.service";
 import { memoryContentStore, memoryPracticeStore, memoryRoleCatalogStore } from "./content.fixture";
+import { memoryVisitStore } from "./mentor-visit.fixture";
 import { memoryProgressStore } from "./practice-progress.fixture";
 import { savePracticeProgress } from "./practice-progress.service";
 import { seedPractice } from "./practice.service";
@@ -121,6 +122,7 @@ async function setup(): Promise<AcademyDeps> {
     choices: memoryChoiceStore(),
     practice: memoryPracticeStore(memoryContentStore()),
     progress: memoryProgressStore(),
+    visits: memoryVisitStore(),
   };
   await seedPractice(deps.practice as ReturnType<typeof memoryPracticeStore>, admin, [prax3]);
   await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
@@ -181,10 +183,73 @@ describe("getMyAcademy", () => {
     const view = await getMyAcademy(deps, mona);
     expect(view.clubs).toHaveLength(0);
     expect(view.mentor?.rows.map((r) => r.clubId)).toEqual([A]);
+    expect(view.mentor?.rows[0].visits).toEqual({ lastDate: null, open: 0, overdue: 0 });
     expect(view.mentor?.tasks.map((t) => t.key)).toEqual([
       "club_kompas_missing",
       "club_licensing_open",
+      "club_no_visit",
     ]);
+  });
+
+  it("shows agreed actions to the responsible member and to management (MV-c)", async () => {
+    const visit = await (deps.visits as ReturnType<typeof memoryVisitStore>).insertVisit({
+      clubId: A,
+      season: "2026/2027",
+      date: "2026-10-01",
+      form: "onsite",
+      participantIds: [],
+      participants: "",
+      summary: "",
+      findings: [],
+      actions: [
+        {
+          id: "a1",
+          text: "Osloviť rodičov",
+          area: 3,
+          owner: "Bob",
+          ownerId: "bob",
+          dueDate: "2026-10-10",
+          done: false,
+          doneAt: null,
+          doneBy: null,
+        },
+        {
+          id: "a2",
+          text: "Poďakovať",
+          area: null,
+          owner: "Výbor",
+          ownerId: null,
+          dueDate: null,
+          done: false,
+          doneAt: null,
+          doneBy: null,
+        },
+      ],
+      status: "sent",
+      sentAt: new Date(),
+      withdrawnAt: null,
+      withdrawnBy: null,
+      version: 2,
+      createdBy: "mona",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      updatedBy: "mona",
+    });
+    const tasks = async (u: typeof alice) =>
+      (await getMyAcademy(deps, u)).clubs[0].tasks.filter((t) => t.key === "visit_action");
+    // memoryDeps "now" is 2026-10-16 → a1 is overdue
+    expect(await tasks(bob)).toEqual([
+      expect.objectContaining({
+        step: "Osloviť rodičov",
+        severity: "crit",
+        due: { date: "2026-10-10", overdue: true },
+        href: `/klub/${encodeURIComponent(A)}/navstevy/${visit.id}`,
+      }),
+    ]);
+    expect((await tasks(alice)).map((t) => t.step)).toEqual(["Osloviť rodičov", "Poďakovať"]);
+    const mentor = (await getMyAcademy(deps, mona)).mentor!;
+    expect(mentor.rows[0].visits).toEqual({ lastDate: "2026-10-01", open: 2, overdue: 1 });
+    expect(mentor.tasks.map((t) => t.key)).not.toContain("club_no_visit");
   });
 
   it("saves own roles in the areas and uses them for the Prax default", async () => {

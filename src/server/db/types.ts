@@ -306,8 +306,10 @@ export interface MentorVisitAction {
   text: string;
   /** area 1–11 the action belongs to, if any */
   area: number | null;
-  /** who is responsible – a name or a role, free text */
+  /** who is responsible – a name or a role, free text (shown) */
   owner: string;
+  /** the responsible club member, when picked from the club's people (sees the task) */
+  ownerId: string | null;
   /** ISO date "YYYY-MM-DD" */
   dueDate: string | null;
   done: boolean;
