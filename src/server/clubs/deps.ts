@@ -13,11 +13,13 @@ import { mongoEvaluationStore, mongoLicensingSubmissionStore } from "@/server/db
 import { mongoPracticeStore } from "@/server/db/content.store";
 import { mongoProgressStore } from "@/server/db/practice-progress.store";
 import { mongoVisitStore } from "@/server/db/mentor-visit.store";
+import { mongoPlanStore } from "@/server/db/club-plan.store";
 import type { AcademyDeps } from "@/server/services/academy.service";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { HubDeps } from "@/server/services/hub.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
+import type { ClubPlanDeps } from "@/server/services/club-plan.service";
 import type { MentorVisitDeps } from "@/server/services/mentor-visit.service";
 import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
 import type { SearchDeps } from "@/server/services/search.service";
@@ -90,4 +92,11 @@ export const visitDeps: MentorVisitDeps = {
   ...clubDeps,
   visits: mongoVisitStore,
   submissions: mongoSubmissionStore,
+};
+
+export const planDeps: ClubPlanDeps = {
+  ...clubDeps,
+  plans: mongoPlanStore,
+  submissions: mongoSubmissionStore,
+  kompas: kompasDeps,
 };

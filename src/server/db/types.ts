@@ -341,3 +341,37 @@ export interface MentorVisitDoc {
   updatedAt: Date;
   updatedBy: string;
 }
+
+/** Collection `club_plans` – the club's plan for a season: goals per area (21. 10. 2026). */
+export type PlanGoalStatus = "todo" | "doing" | "done";
+
+export interface PlanGoal {
+  id: string;
+  area: number;
+  /** the goal in one sentence (internal) */
+  title: string;
+  /** shown on the public Vizitka – no names, plain words for parents and the municipality */
+  publicText: string;
+  /** how the club will know the goal is met (optional) */
+  indicator: string;
+  owner: string;
+  ownerId: string | null;
+  /** ISO date "YYYY-MM-DD" */
+  dueDate: string | null;
+  status: PlanGoalStatus;
+  doneAt: Date | null;
+}
+
+export interface ClubPlanDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  goals: PlanGoal[];
+  /** confirmed by the club's mentor or admin_sfz (optional) */
+  confirmedAt: Date | null;
+  confirmedBy: string | null;
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}

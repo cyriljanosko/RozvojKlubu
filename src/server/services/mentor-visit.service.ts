@@ -63,8 +63,11 @@ async function requireClub(deps: MentorVisitDeps, clubId: string) {
   if (!(await deps.clubs.findClub(clubId))) throw new ApiError("NOT_FOUND", "Club not found");
 }
 
-/** People with a role in the club this season (the list to tick who was present). */
-async function clubMembers(deps: MentorVisitDeps, clubId: string) {
+/** People with a role in the club this season (who was present, who is responsible). */
+export async function clubMembers(
+  deps: Pick<ClubDeps, "memberships" | "users" | "now">,
+  clubId: string,
+) {
   const season = currentSeason(deps.now?.() ?? new Date());
   const memberships = await deps.memberships.listByClub(clubId, season);
   const ids = [...new Set(memberships.map((m) => m.userId))];
