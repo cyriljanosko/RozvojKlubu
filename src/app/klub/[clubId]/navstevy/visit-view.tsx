@@ -53,6 +53,7 @@ export async function VisitView({
       )}
       {canTick && visit.status === "sent" && visit.actions.length > 0 ? (
         <ActionChecklist
+          key={visit.version}
           clubId={clubId}
           visitId={visit.id}
           version={visit.version}

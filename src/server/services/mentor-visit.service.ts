@@ -86,6 +86,21 @@ async function requireMembers(deps: MentorVisitDeps, clubId: string, ids: readon
   }
 }
 
+/**
+ * Pure: what the visit detail shows. Anyone who sees a sent visit can tick its actions – the
+ * responsible person may also be the club's mentor or admin_sfz (bug 21. 10. 2026); the mentor
+ * and admin_sfz also edit until the visit is withdrawn.
+ */
+export function visitViewMode(
+  access: VisitAccess,
+  status: MentorVisitDoc["status"],
+): { checklist: boolean; form: boolean } {
+  return {
+    checklist: status === "sent",
+    form: access === "write" && status !== "withdrawn",
+  };
+}
+
 /** Pure: the club sees only sent visits; the mentor and admin also drafts and withdrawn ones. */
 export function visibleTo(access: VisitAccess, visit: Pick<MentorVisitDoc, "status">): boolean {
   return access === "write" || visit.status === "sent";
