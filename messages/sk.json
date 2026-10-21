@@ -654,7 +654,9 @@
       "latest": "{date} · {total} z 220 · vyplnené {filled} z 11",
       "none": "Kompas zatiaľ neodoslaný",
       "licensingClosed": "licenčné uzavreté",
-      "licensingOpen": "licenčné neuzavreté"
+      "licensingOpen": "licenčné neuzavreté",
+      "newVisit": "Zapísať návštevu",
+      "visits": "Návštevy"
     },
     "sees": {
       "title": "Čo táto rola vidí",
@@ -919,6 +921,83 @@
       },
       "detail": "Detail oblasti",
       "close": "Zavrieť"
+    }
+  },
+  "visits": {
+    "title": "Návštevy mentora",
+    "newTitle": "Nová návšteva",
+    "open": "Návštevy mentora",
+    "season": "Sezóna {season}",
+    "introMentor": "Záznam stretnutí s klubom a dohodnuté kroky. Klub vidí návštevu až po odoslaní.",
+    "introClub": "Návštevy mentora zväzu a kroky, na ktorých ste sa dohodli.",
+    "new": "Nová návšteva",
+    "empty": "Zatiaľ žiadna návšteva.",
+    "notFound": "Návšteva sa nenašla.",
+    "visitOn": "Návšteva {date}",
+    "present": "Prítomní",
+    "actionsCount": "{total, plural, =0 {Bez dohodnutých krokov} one {# krok} few {# kroky} other {# krokov}}{open, plural, =0 {} other { · otvorené #}}",
+    "status": {
+      "draft": "rozpracovaná",
+      "sent": "odoslaná klubu",
+      "withdrawn": "zrušená"
+    },
+    "context": {
+      "previous": "Z minulej návštevy ({date}) · splnené {done} z {total}",
+      "first": "Prvá návšteva klubu",
+      "due": "do {date}",
+      "weakest": "Najslabšie podľa Kompasu: {areas}",
+      "noKompas": "Klub ešte neodoslal Kompas."
+    },
+    "form": {
+      "date": "Dátum",
+      "form": "Forma",
+      "forms": {
+        "onsite": "Osobne",
+        "online": "Online",
+        "phone": "Telefonicky"
+      },
+      "present": "Prítomní",
+      "noMembers": "V klube zatiaľ nie sú ľudia s rolou.",
+      "others": "Ďalší prítomní",
+      "othersPlaceholder": "Ďalší prítomní – mená a funkcie",
+      "summary": "Zhrnutie",
+      "summaryPlaceholder": "Čo ste spolu prebrali a na čom ste sa zhodli",
+      "findings": "Zistenia k oblastiam",
+      "optional": "nepovinné",
+      "area": "Oblasť",
+      "findingText": "Zistenie",
+      "addFinding": "Pridať zistenie k oblasti",
+      "remove": "Odstrániť",
+      "actions": "Dohodnuté kroky",
+      "actionText": "Čo sa urobí",
+      "noArea": "Bez oblasti",
+      "owner": "Kto zodpovedá",
+      "due": "Do kedy",
+      "addAction": "Pridať krok",
+      "saveDraft": "Uložiť rozpracovanú",
+      "saveChanges": "Uložiť zmeny",
+      "send": "Odoslať klubu",
+      "withdraw": "Zrušiť návštevu",
+      "confirmSend": "Odoslať návštevu klubu? Vedenie a tréneri ju uvidia aj s dohodnutými krokmi.",
+      "yesSend": "Áno, odoslať",
+      "confirmWithdraw": "Zrušiť návštevu? Ostane v histórii, klub ju už neuvidí.",
+      "yesWithdraw": "Áno, zrušiť",
+      "no": "Nie",
+      "draftHint": "Klub uvidí návštevu až po odoslaní.",
+      "sentHint": "Klub vidí aktuálnu verziu; splnené kroky ostanú splnené.",
+      "saved": "Uložené.",
+      "sent": "Odoslané klubu.",
+      "withdrawn": "Návšteva je zrušená.",
+      "errors": {
+        "date": "Vyplňte dátum.",
+        "finding": "Doplňte text zistenia alebo ho odstráňte.",
+        "action": "Pri každom kroku vyplňte, čo sa urobí a kto zodpovedá.",
+        "CONFLICT": "Návštevu medzitým zmenil niekto iný. Obnovte stránku.",
+        "FORBIDDEN": "Na túto zmenu nemáte oprávnenie.",
+        "BAD_REQUEST": "Niektorý údaj nie je správny.",
+        "NOT_FOUND": "Návšteva sa nenašla.",
+        "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova."
+      }
     }
   }
 }

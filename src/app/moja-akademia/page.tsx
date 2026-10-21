@@ -195,6 +195,20 @@ async function Academy() {
                     : t("mentor.none")}{" "}
                   · {r.licensingClosed ? t("mentor.licensingClosed") : t("mentor.licensingOpen")}
                 </span>
+                <span className="flex flex-wrap gap-x-3 text-xs">
+                  <Link
+                    href={`/klub/${encodeURIComponent(r.clubId)}/navstevy/nova`}
+                    className="font-medium underline underline-offset-4"
+                  >
+                    {t("mentor.newVisit")}
+                  </Link>
+                  <Link
+                    href={`/klub/${encodeURIComponent(r.clubId)}/navstevy`}
+                    className="underline underline-offset-4"
+                  >
+                    {t("mentor.visits")}
+                  </Link>
+                </span>
               </li>
             ))}
           </ul>

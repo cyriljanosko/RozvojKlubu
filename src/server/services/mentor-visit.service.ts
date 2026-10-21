@@ -6,6 +6,11 @@ import { ApiError } from "@/server/api/errors";
 import type { MentorVisitAction, MentorVisitDoc } from "@/server/db/types";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
+import type { KompasResult } from "@/server/services/kompas-scoring";
+import {
+  isValidSubmission,
+  type SubmissionStore,
+} from "@/server/services/kompas-submission.service";
 import { currentSeason } from "@/server/services/season";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
@@ -36,6 +41,7 @@ export interface MentorVisitStore {
 
 export interface MentorVisitDeps extends ClubDeps {
   visits: MentorVisitStore;
+  submissions: Pick<SubmissionStore, "listSubmissions">;
 }
 
 export type VisitAccess = "write" | "club";
@@ -55,6 +61,29 @@ async function accessFor(
 
 async function requireClub(deps: MentorVisitDeps, clubId: string) {
   if (!(await deps.clubs.findClub(clubId))) throw new ApiError("NOT_FOUND", "Club not found");
+}
+
+/** People with a role in the club this season (the list to tick who was present). */
+async function clubMembers(deps: MentorVisitDeps, clubId: string) {
+  const season = currentSeason(deps.now?.() ?? new Date());
+  const memberships = await deps.memberships.listByClub(clubId, season);
+  const ids = [...new Set(memberships.map((m) => m.userId))];
+  const people = await Promise.all(ids.map((id) => deps.users.findById(id)));
+  return ids
+    .map((userId, i) => ({
+      userId,
+      name: people[i]?.name || people[i]?.email || userId,
+      roles: [...new Set(memberships.filter((m) => m.userId === userId).map((m) => m.role))],
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name, "sk"));
+}
+
+async function requireMembers(deps: MentorVisitDeps, clubId: string, ids: readonly string[]) {
+  if (ids.length === 0) return;
+  const known = new Set((await clubMembers(deps, clubId)).map((m) => m.userId));
+  if (ids.some((id) => !known.has(id))) {
+    throw new ApiError("BAD_REQUEST", "Participant is not a member of the club");
+  }
 }
 
 /** Pure: the club sees only sent visits; the mentor and admin also drafts and withdrawn ones. */
@@ -80,6 +109,7 @@ const text = (max: number) => z.string().trim().max(max);
 export const visitInputSchema = z.object({
   date: isoDate,
   form: z.enum(["onsite", "online", "phone"]),
+  participantIds: z.array(z.string().min(1).max(64)).max(40).default([]),
   participants: text(500),
   summary: text(5000),
   findings: z
@@ -108,7 +138,14 @@ export function buildVisitContent(
   newId: () => string = randomUUID,
 ): Pick<
   MentorVisitDoc,
-  "date" | "season" | "form" | "participants" | "summary" | "findings" | "actions"
+  | "date"
+  | "season"
+  | "form"
+  | "participantIds"
+  | "participants"
+  | "summary"
+  | "findings"
+  | "actions"
 > {
   const areas = input.findings.map((f) => f.area);
   if (new Set(areas).size !== areas.length) {
@@ -118,6 +155,7 @@ export function buildVisitContent(
     date: input.date,
     season: currentSeason(new Date(`${input.date}T12:00:00Z`)),
     form: input.form,
+    participantIds: [...new Set(input.participantIds)],
     participants: input.participants,
     summary: input.summary,
     findings: [...input.findings].sort((a, b) => a.area - b.area),
@@ -141,6 +179,8 @@ export interface VisitList {
   clubId: string;
   access: VisitAccess;
   visits: StoredVisit[];
+  /** names of the club's people, to show who was present */
+  members: { userId: string; name: string; roles: string[] }[];
 }
 
 export async function listMentorVisits(
@@ -154,7 +194,7 @@ export async function listMentorVisits(
   const visits = (await deps.visits.listVisits(clubId))
     .filter((v) => visibleTo(access, v))
     .sort((a, b) => b.date.localeCompare(a.date) || +b.createdAt - +a.createdAt);
-  return { clubId, access, visits };
+  return { clubId, access, visits, members: await clubMembers(deps, clubId) };
 }
 
 async function loadVisit(
@@ -191,6 +231,7 @@ export async function createMentorVisit(
   await requireClub(deps, clubId);
   const now = deps.now?.() ?? new Date();
   const content = buildVisitContent(visitInputSchema.parse(input), []);
+  await requireMembers(deps, clubId, content.participantIds);
   return deps.visits.insertVisit({
     clubId,
     ...content,
@@ -248,6 +289,7 @@ export async function updateMentorVisit(
   input: unknown,
 ): Promise<StoredVisit> {
   const data = visitInputSchema.merge(versioned).parse(input);
+  await requireMembers(deps, clubId, [...new Set(data.participantIds)]);
   return writeVisit(deps, actor, clubId, visitId, data.expectedVersion, (visit) =>
     buildVisitContent(data, visit.actions),
   );
@@ -321,4 +363,61 @@ export async function setVisitActionDone(
   });
   if (!updated) throw new ApiError("CONFLICT", "Visit was changed by someone else");
   return updated;
+}
+
+export interface VisitFormData {
+  clubId: string;
+  season: string;
+  members: { userId: string; name: string; roles: string[] }[];
+  /** the latest sent visit: when, how many actions are done, which are open */
+  previous: {
+    id: string;
+    date: string;
+    done: number;
+    total: number;
+    open: MentorVisitAction[];
+  } | null;
+  /** the 3 weakest areas of the latest submitted Kompas (mentors see only submitted ones) */
+  weakest: { area: number; points: number }[];
+}
+
+/** Data the mentor's form needs: who can be ticked as present, the last visit and weak areas. */
+export async function getVisitFormData(
+  deps: MentorVisitDeps,
+  actor: CurrentUser | null,
+  clubId: string,
+): Promise<VisitFormData> {
+  const user = requireUser(actor);
+  if ((await accessFor(deps, user, clubId)) !== "write") {
+    throw new ApiError("FORBIDDEN", "Only the club's mentor or admin_sfz can record a visit");
+  }
+  await requireClub(deps, clubId);
+  const season = currentSeason(deps.now?.() ?? new Date());
+  const [members, visits, submissions] = await Promise.all([
+    clubMembers(deps, clubId),
+    deps.visits.listVisits(clubId),
+    deps.submissions.listSubmissions(clubId, season),
+  ]);
+  const last = visits
+    .filter((v) => v.status === "sent")
+    .sort((a, b) => b.date.localeCompare(a.date))[0];
+  const latest = submissions
+    .filter(isValidSubmission)
+    .sort((a, b) => +b.submittedAt - +a.submittedAt)[0];
+  const result = latest ? (latest.result as unknown as KompasResult) : null;
+  return {
+    clubId,
+    season,
+    members,
+    previous: last
+      ? {
+          id: last.id,
+          date: last.date,
+          done: last.actions.filter((a) => a.done).length,
+          total: last.actions.length,
+          open: last.actions.filter((a) => !a.done),
+        }
+      : null,
+    weakest: (result?.next ?? []).map((n) => ({ area: n.area, points: n.points })),
+  };
 }

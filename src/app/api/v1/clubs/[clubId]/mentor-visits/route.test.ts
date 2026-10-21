@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { A, B, admin, alice, memoryDeps } from "@/server/services/clubs.fixture";
 import { addClubMember } from "@/server/services/clubs.service";
+import { memorySubmissionStore } from "@/server/services/kompas.fixture";
 import { memoryVisitStore } from "@/server/services/mentor-visit.fixture";
 import type { MentorVisitDeps } from "@/server/services/mentor-visit.service";
 
@@ -39,7 +40,11 @@ const visit = {
 
 describe("/api/v1/clubs/:clubId/mentor-visits", () => {
   beforeEach(async () => {
-    holder.deps = { ...memoryDeps(), visits: memoryVisitStore() };
+    holder.deps = {
+      ...memoryDeps(),
+      visits: memoryVisitStore(),
+      submissions: memorySubmissionStore(),
+    };
     await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
     getCurrentUser.mockReset();
   });
