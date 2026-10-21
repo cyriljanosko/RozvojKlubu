@@ -14,7 +14,6 @@ export async function VisitContext({
   const format = await getFormatter();
   const date = (iso: string) =>
     format.dateTime(new Date(`${iso}T12:00:00Z`), { dateStyle: "medium" });
-  if (!data.previous && data.weakest.length === 0) return null;
   return (
     <aside className="flex flex-col gap-2 rounded-xl border-l-4 border-l-amber-600 bg-amber-50 p-4 text-sm dark:bg-amber-950/30">
       {data.previous ? (
