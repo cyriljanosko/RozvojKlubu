@@ -296,3 +296,44 @@ export interface PracticeProgressDoc {
   updatedAt: Date;
   updatedBy: string;
 }
+
+/** Collection `mentor_visits` – a union mentor's visit to a club with agreed actions (21. 10. 2026). */
+export type MentorVisitForm = "onsite" | "online" | "phone";
+export type MentorVisitStatus = "draft" | "sent" | "withdrawn";
+
+export interface MentorVisitAction {
+  id: string;
+  text: string;
+  /** area 1–11 the action belongs to, if any */
+  area: number | null;
+  /** who is responsible – a name or a role, free text */
+  owner: string;
+  /** ISO date "YYYY-MM-DD" */
+  dueDate: string | null;
+  done: boolean;
+  doneAt: Date | null;
+  doneBy: string | null;
+}
+
+export interface MentorVisitDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  /** ISO date "YYYY-MM-DD" */
+  date: string;
+  form: MentorVisitForm;
+  /** people present – names, free text (visible to the club, its mentor and admin_sfz only) */
+  participants: string;
+  summary: string;
+  findings: { area: number; text: string }[];
+  actions: MentorVisitAction[];
+  status: MentorVisitStatus;
+  sentAt: Date | null;
+  withdrawnAt: Date | null;
+  withdrawnBy: string | null;
+  version: number;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}

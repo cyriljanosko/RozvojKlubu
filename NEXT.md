@@ -52,6 +52,10 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] Neskôr: knižnica vzorov s dokumentmi (PDF, Word, Excel, obrázky) – úložisko súborov rozhodnúť.
     - [x] H6 – vyhľadávanie – PR #42 (zlúčený 17. 10., tipy schválené): pole na úvodnej stránke pod blokom „Ako Akadémia funguje“ a v hlavičke; prehľadáva oblasti, Metodiku, Prax a vzory a kluby (Vizitka), bez otázok Kompasu; bez diakritiky a so skloňovaním; výsledky na `/hladat`, `GET /api/v1/search`; rýchle tipy pod poľom (návrh, schváli Cyril); mentorská Prax len pre mentorov.
     - [ ] Neskôr: hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
+  - [ ] Návšteva mentora (rozhodnuté 21. 10., z analýzy FAF/DFB): mentor zväzu a admin SFZ zapisujú návštevu (dátum, forma, prítomní menom, zhrnutie, zistenia pri vybraných oblastiach, dohodnuté kroky – čo, oblasť, kto, do kedy); rozpracovaná → odoslaná klubu → zrušená (nič sa nemaže); vedenie a tréner čítajú odoslané a odškrtávajú kroky; kroky ako úlohy v Moja Akadémia; v neverejnej Vizitke posledná návšteva a otvorené kroky; bez e-mailu zatiaľ.
+    - [ ] MV-a – kolekcia `mentor_visits` (index `clubId + season + date`), služba, API (vetva `feat/mentor-visits`): hotové, kolekcia a index v `rozvojklubu_dev`, skúšobná návšteva Žipova zrušená (ostáva v histórii), PR na review.
+    - [ ] MV-b – formulár mentora (založiť, upraviť, odoslať, zrušiť).
+    - [ ] MV-c – pohľad klubu, kroky v Moja Akadémia, prehľad mentora (posledná návšteva, otvorené kroky), riadok v neverejnej Vizitke.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).
