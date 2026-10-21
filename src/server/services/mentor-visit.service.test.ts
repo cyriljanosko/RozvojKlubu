@@ -17,6 +17,7 @@ import {
   setVisitActionDone,
   updateMentorVisit,
   visibleTo,
+  visitViewMode,
   withdrawMentorVisit,
   type MentorVisitDeps,
 } from "./mentor-visit.service";
@@ -306,5 +307,15 @@ describe("mentor visits – tasks and summary (MV-c)", () => {
       open: 0,
       overdue: 0,
     });
+  });
+});
+
+describe("visit detail view mode (bug 21. 10. 2026)", () => {
+  it("lets everyone who sees a sent visit tick its actions, the mentor also edits", () => {
+    // the responsible person may be the mentor or admin_sfz too – they must be able to tick
+    expect(visitViewMode("write", "sent")).toEqual({ checklist: true, form: true });
+    expect(visitViewMode("club", "sent")).toEqual({ checklist: true, form: false });
+    expect(visitViewMode("write", "draft")).toEqual({ checklist: false, form: true });
+    expect(visitViewMode("write", "withdrawn")).toEqual({ checklist: false, form: false });
   });
 });

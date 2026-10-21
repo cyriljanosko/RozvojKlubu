@@ -1020,6 +1020,7 @@
       "line": "{date} · otvorené kroky {open}",
       "none": "v tejto sezóne zatiaľ nebola",
       "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}"
-    }
+    },
+    "edit": "Upraviť návštevu"
   }
 }

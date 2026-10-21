@@ -16,6 +16,7 @@ import {
   getVisitFormData,
   isoToday,
   listMentorVisits,
+  visitViewMode,
 } from "@/server/services/mentor-visit.service";
 
 import { VisitContext } from "../visit-context";
@@ -54,8 +55,8 @@ async function Visit({ params }: Props) {
     listAreas(mongoContentStore, user),
   ]);
   const areaName = (n: number) => areas.find((a) => a.number === n)?.name ?? "";
-  const editable = list.access === "write" && visit.status !== "withdrawn";
-  const data = editable ? await getVisitFormData(visitDeps, user, clubId) : null;
+  const mode = visitViewMode(list.access, visit.status);
+  const data = mode.form ? await getVisitFormData(visitDeps, user, clubId) : null;
   // the reminder shows the visit before this one, not this one itself
   const context = data && data.previous?.id === visit.id ? { ...data, previous: null } : data;
 
@@ -79,8 +80,18 @@ async function Visit({ params }: Props) {
           </span>
         </p>
       </header>
-      {editable && data ? (
-        <>
+      {(mode.checklist || !mode.form) && (
+        <VisitView
+          visit={visit}
+          members={new Map(list.members.map((m) => [m.userId, m.name]))}
+          areaName={areaName}
+          clubId={clubId}
+          canTick={mode.checklist}
+          today={isoToday()}
+        />
+      )}
+      {mode.form && data && (
+        <EditSection collapsed={mode.checklist} label={t("edit")}>
           {context && <VisitContext data={context} areaName={areaName} />}
           <VisitForm
             clubId={clubId}
@@ -106,18 +117,28 @@ async function Visit({ params }: Props) {
             members={data.members}
             areas={areas.map((a) => ({ number: a.number, name: a.name }))}
           />
-        </>
-      ) : (
-        <VisitView
-          visit={visit}
-          members={new Map(list.members.map((m) => [m.userId, m.name]))}
-          areaName={areaName}
-          clubId={clubId}
-          canTick={list.access === "club"}
-          today={isoToday()}
-        />
+        </EditSection>
       )}
     </div>
+  );
+}
+
+/** The mentor's form: open for a draft, folded under the checklist once the visit is sent. */
+function EditSection({
+  collapsed,
+  label,
+  children,
+}: {
+  collapsed: boolean;
+  label: string;
+  children: React.ReactNode;
+}) {
+  if (!collapsed) return <>{children}</>;
+  return (
+    <details className="rounded-xl border p-4">
+      <summary className="cursor-pointer font-semibold">{label}</summary>
+      <div className="mt-4 flex flex-col gap-5">{children}</div>
+    </details>
   );
 }
 
