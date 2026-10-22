@@ -1,3 +1,4 @@
+import { ChevronDown } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { SFZ_HUB, SFZ_LINKS } from "@/lib/sfz-links";
@@ -34,24 +35,13 @@ function External({
  */
 export async function CoachEducation({ compact = false }: { compact?: boolean }) {
   const t = await getTranslations("coachEducation");
-  return (
-    <section
-      aria-labelledby={compact ? undefined : "coach-education"}
-      className={compact ? "flex flex-col gap-3" : "flex flex-col gap-3 rounded-xl border p-4"}
-    >
-      {!compact && (
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="coach-education" className="font-semibold">
-            {t("title")}
-          </h2>
-          <External href={coaches.url} className="text-xs">
-            futbalsfz.sk
-          </External>
-        </div>
-      )}
-      <p className="text-muted-foreground text-xs">
-        {t("intro")} <span className="sr-only">({t("external")})</span>
-      </p>
+  const intro = (
+    <p className="text-muted-foreground text-xs">
+      {t("intro")} <span className="sr-only">({t("external")})</span>
+    </p>
+  );
+  const body = (
+    <>
       <div className={`grid gap-3 ${compact ? "" : "sm:grid-cols-2"}`}>
         {SFZ_HUB.map((group) => (
           <div key={group.key} className="bg-muted/40 flex flex-col gap-1 rounded-lg p-3 text-sm">
@@ -75,6 +65,31 @@ export async function CoachEducation({ compact = false }: { compact?: boolean })
         </External>
         <External href={coaches.url}>{t("all")}</External>
       </p>
-    </section>
+    </>
+  );
+
+  // the dashboard tile has its own title; on the area page the block folds (decision 22. 10. 2026)
+  if (compact) {
+    return (
+      <div className="flex flex-col gap-3">
+        {intro}
+        {body}
+      </div>
+    );
+  }
+  return (
+    <details className="group rounded-xl border">
+      <summary className="flex cursor-pointer list-none items-start gap-3 p-4 [&::-webkit-details-marker]:hidden">
+        <span className="flex min-w-0 flex-1 flex-col gap-1">
+          <span className="font-semibold">{t("title")}</span>
+          {intro}
+        </span>
+        <ChevronDown
+          aria-hidden
+          className="text-muted-foreground mt-0.5 size-5 shrink-0 transition-transform group-open:rotate-180"
+        />
+      </summary>
+      <div className="flex flex-col gap-3 px-4 pb-4">{body}</div>
+    </details>
   );
 }
