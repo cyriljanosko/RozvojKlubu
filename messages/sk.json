@@ -12,7 +12,8 @@
     "content": "Obsah Akadémie",
     "academy": "Moja Akadémia",
     "search": "Hľadať",
-    "about": "O Akadémii"
+    "about": "O Akadémii",
+    "analytics": "Analýza"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -679,7 +680,8 @@
       "management": "Manažér a výbor vidí o klube všetko: Kompas aj s rozpracovanou verziou, licenčné hodnotenie a Vizitku. Upravuje Kompas a licenčné hodnotenie.",
       "coach": "Tréner a trénerka vidí výsledky klubu (Kompas, licenčné hodnotenie, Vizitku) len na čítanie a pracuje hlavne s oblasťami 3 a 5.",
       "mentor": "Mentor zväzu vidí kluby svojej kohorty: odoslaný Kompas a licenčné hodnotenie, ktoré môže pri návšteve doplniť. Rozpracovaný Kompas nevidí."
-    }
+    },
+    "analytics": "Analýza klubu a porovnanie"
   },
   "trialKompas": {
     "title": "Kompas klubu – vyskúšajte",
@@ -1088,6 +1090,64 @@
       "line": "Plán sezóny: splnené {done} z {goals}",
       "confirmed": "dohodnuté s mentorom",
       "none": "Plán sezóny zatiaľ nie je"
+    }
+  },
+  "analytics": {
+    "title": "Analýza",
+    "open": "Analýza",
+    "forbidden": "Analýza je pre vedenie a trénerov klubu, mentorov zväzu a admina SFZ.",
+    "scope": {
+      "all": "Všetky pilotné kluby · {count, plural, one {# klub} few {# kluby} other {# klubov}}",
+      "mentor": "Vaše kluby v kohorte · {count, plural, one {# klub} few {# kluby} other {# klubov}}",
+      "club": "Váš klub a porovnanie s podobnými klubmi"
+    },
+    "filters": {
+      "season": "Sezóna",
+      "union": "Zväz (ObFZ)",
+      "size": "Veľkosť klubu",
+      "all": "Všetky",
+      "apply": "Použiť"
+    },
+    "sizes": {
+      "small": "malý",
+      "medium": "stredný",
+      "large": "veľký"
+    },
+    "empty": "Pre zvolené filtre nie sú žiadne kluby.",
+    "kompas": {
+      "title": "Kompas po oblastiach",
+      "club": "Klub",
+      "average": "Priemer",
+      "cell": "Oblasť {area}: {points} z 20",
+      "legend": "Body 0–20 v 11 oblastiach; farba podľa pásma od Začiatku po Vzor. Pomlčka = oblasť nevyplnená.",
+      "benchmark": "Porovnanie s anonymným priemerom {count} klubov ({size} klub) z odoslaných Kompasov.",
+      "noBenchmark": "Priemer podobných klubov sa ukáže, keď Kompas odošlú aspoň 3 kluby rovnakej veľkosti.",
+      "submittedOnly": "Len odoslané Kompasy.",
+      "similar": "Podobné kluby (priemer)"
+    },
+    "licensing": {
+      "title": "Licenčné hodnotenie",
+      "note": "Priemer bodov uzavretých hodnotení · {count, plural, =0 {žiadne} one {# klub} few {# kluby} other {# klubov}}",
+      "none": "Zatiaľ žiadne uzavreté licenčné hodnotenie v tejto sezóne.",
+      "points": "Body"
+    },
+    "activity": {
+      "title": "Aktivita v Akadémii",
+      "visits": "Návštevy mentora",
+      "actions": "Splnené kroky",
+      "goals": "Splnené ciele",
+      "kompasSubmitted": "Kompas odoslaný",
+      "licensingClosed": "Licenčné uzavreté",
+      "withPlan": "S plánom sezóny",
+      "clubs": "Kluby (z {count})"
+    },
+    "sportnet": {
+      "title": "Sportnet po sezónach",
+      "note": "Súčet za zobrazené kluby. Hráči na pravej osi.",
+      "none": "Zo Sportnetu zatiaľ nie sú dáta.",
+      "players": "Hráči",
+      "coachesWithLicence": "Tréneri s licenciou",
+      "teamsWithoutCoach": "Družstvá bez trénera"
     }
   }
 }

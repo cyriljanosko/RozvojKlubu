@@ -79,6 +79,14 @@ async function Academy() {
           {[user.name, t("season", { season: view.season })].filter(Boolean).join(" · ")}
         </p>
         <p className="text-sm">{t("intro")}</p>
+        {(view.clubs.length > 0 || view.mentor) && (
+          <Link
+            href="/analyza"
+            className="self-start text-sm font-medium underline underline-offset-4"
+          >
+            {t("analytics")} →
+          </Link>
+        )}
       </header>
 
       {view.clubs.length === 0 && !view.mentor && (

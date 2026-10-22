@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Suspense } from "react";
-import { Info, Search, UserRound } from "lucide-react";
+import { ChartColumn, Info, Search, UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { SearchForm } from "@/components/search/search-form";
 import { Button } from "@/components/ui/button";
 import { isDatabaseConfigured } from "@/server/db/mongo";
 import { getCurrentUser } from "@/server/auth/session";
+import { isAdmin } from "@/server/services/club-access";
 
 async function AccountLink() {
   const t = await getTranslations("header");
@@ -30,6 +31,13 @@ async function AccountLink() {
   }
   return (
     <div className="flex min-w-0 items-center gap-1">
+      {isAdmin(user) && (
+        <Button asChild size="icon" variant="ghost" className="hidden sm:inline-flex">
+          <Link href="/analyza" aria-label={t("analytics")} title={t("analytics")}>
+            <ChartColumn aria-hidden />
+          </Link>
+        </Button>
+      )}
       <Button asChild size="sm" variant="ghost">
         <Link href="/moja-akademia">{t("academy")}</Link>
       </Button>

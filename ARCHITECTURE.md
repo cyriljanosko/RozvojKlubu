@@ -96,7 +96,8 @@ MCP server (F5, plánovaný)        ─┘        │
 
 1. `GET /api/v1/analytics?season=&union=&size=&clubs=a,b` – služba `analytics.service.ts`, bez novej kolekcie: Kompas po oblastiach, licenčné hodnotenie (uzavreté), aktivita (odoslaný Kompas, uzavreté licenčné, návštevy a kroky, plán), Sportnet po sezónach
 2. Rozsah podľa roly: admin SFZ všetky kluby (pracovný Kompas), mentor svoju kohortu (len odoslaný Kompas), vedenie a tréner vlastný klub (pracovný Kompas) a anonymný priemer klubov rovnakej veľkosti z odoslaných Kompasov – len ak sú aspoň 3 (`MIN_BENCHMARK`), bez mien
-3. Výpočet ide po kluboch (N dotazov) – pri 10 pilotných kluboch ~1,5 s v dev režime; pri väčšom počte prerobiť na agregáciu alebo cache
+3. Stránka `/analyza` volá službu priamo (Server Component), filtre sú GET formulár; grafy sú klientske obaly Recharts v `src/components/analytics/`, teplotná mapa Kompasu je serverová tabuľka
+4. Výpočet ide po kluboch (N dotazov) – pri 10 pilotných kluboch ~1,5 s v dev režime; pri väčšom počte prerobiť na agregáciu alebo cache
 
 ### Vyhľadávanie (H6)
 
