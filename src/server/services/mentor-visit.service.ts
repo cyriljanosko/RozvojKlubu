@@ -3,7 +3,12 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
-import type { MentorVisitAction, MentorVisitDoc } from "@/server/db/types";
+import type {
+  MentorPrepTask,
+  MentorRating,
+  MentorVisitAction,
+  MentorVisitDoc,
+} from "@/server/db/types";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { KompasResult } from "@/server/services/kompas-scoring";
@@ -18,6 +23,8 @@ import { requireUser, type CurrentUser } from "@/server/services/users.service";
 /**
  * Mentor visits (decision 21. 10. 2026, after the FAF/DFB analysis): the union mentor records a
  * visit to a club with agreed actions. Draft → sent to the club → withdrawn (nothing is deleted).
+ * Mentoring cycle (MC, 22. 10. 2026): a visit may be planned ahead – the club sees its date, topics
+ * and the task to prepare; the mentor assesses it in four fields and rates the task and the steps.
  * - the club's mentor of the season and admin_sfz write;
  * - management and coaches read sent visits and tick the agreed actions;
  * - names of people are visible only to the club, its mentor and admin_sfz (never public).
@@ -107,9 +114,9 @@ export function visitViewMode(
   };
 }
 
-/** Pure: the club sees only sent visits; the mentor and admin also drafts and withdrawn ones. */
+/** Pure: the club sees sent and planned visits; the mentor and admin also drafts and withdrawn ones. */
 export function visibleTo(access: VisitAccess, visit: Pick<MentorVisitDoc, "status">): boolean {
-  return access === "write" || visit.status === "sent";
+  return access === "write" || visit.status === "sent" || visit.status === "planned";
 }
 
 export interface VisitTask {
@@ -145,6 +152,8 @@ export interface VisitSummary {
   lastDate: string | null;
   open: number;
   overdue: number;
+  /** the next planned visit from today on (MC), null when none */
+  nextPlanned: string | null;
 }
 
 /** Pure: the club's visits in a season for the mentor overview and the Vizitka. */
@@ -163,6 +172,11 @@ export function summarizeVisits(
         .at(-1) ?? null,
     open: open.length,
     overdue: open.filter((a) => a.dueDate !== null && a.dueDate < today).length,
+    nextPlanned:
+      visits
+        .filter((v) => v.status === "planned" && v.season === season && v.date >= today)
+        .map((v) => v.date)
+        .sort()[0] ?? null,
   };
 }
 
@@ -185,12 +199,28 @@ export function openActions(
 const isoDate = z.iso.date();
 const text = (max: number) => z.string().trim().max(max);
 
+const assessmentSchema = z.object({
+  strengths: text(3000),
+  weaknesses: text(3000),
+  recommendations: text(3000),
+  overall: text(3000),
+});
+
+export const ratingSchema = z.enum(["done", "partial", "not"]);
+
 export const visitInputSchema = z.object({
   date: isoDate,
   form: z.enum(["onsite", "online", "phone"]),
   participantIds: z.array(z.string().min(1).max(64)).max(40).default([]),
-  participants: text(500),
-  summary: text(5000),
+  participants: text(500).default(""),
+  /** kept for visits recorded before the mentoring cycle; new visits use `assessment` */
+  summary: text(5000).default(""),
+  topics: z.array(z.number().int().min(1).max(11)).max(3).default([]),
+  assessment: assessmentSchema.nullable().default(null),
+  prepTask: z
+    .object({ text: text(1000).min(1), dueDate: isoDate.nullable().default(null) })
+    .nullable()
+    .default(null),
   findings: z
     .array(z.object({ area: z.number().int().min(1).max(11), text: text(2000).min(1) }))
     .max(11),
@@ -209,12 +239,17 @@ export const visitInputSchema = z.object({
     .max(30),
 });
 
-export type VisitInput = z.infer<typeof visitInputSchema>;
+/** what callers send (defaults may be omitted) */
+export type VisitInput = z.input<typeof visitInputSchema>;
+type ParsedVisitInput = z.output<typeof visitInputSchema>;
 
-/** Pure: validated content of a visit; actions keep id and done state when they already existed. */
+/**
+ * Pure: validated content of a visit; actions keep id, done state and rating when they already
+ * existed, the task before the visit keeps whether the club did it and its rating.
+ */
 export function buildVisitContent(
-  input: VisitInput,
-  previous: readonly MentorVisitAction[],
+  input: ParsedVisitInput,
+  previous: { actions: readonly MentorVisitAction[]; prepTask?: MentorPrepTask | null },
   newId: () => string = randomUUID,
 ): Pick<
   MentorVisitDoc,
@@ -224,6 +259,9 @@ export function buildVisitContent(
   | "participantIds"
   | "participants"
   | "summary"
+  | "topics"
+  | "assessment"
+  | "prepTask"
   | "findings"
   | "actions"
 > {
@@ -238,9 +276,21 @@ export function buildVisitContent(
     participantIds: [...new Set(input.participantIds)],
     participants: input.participants,
     summary: input.summary,
+    topics: [...new Set(input.topics)].sort((a, b) => a - b),
+    assessment: input.assessment,
+    prepTask: input.prepTask
+      ? {
+          text: input.prepTask.text,
+          dueDate: input.prepTask.dueDate,
+          done: previous.prepTask?.done ?? false,
+          doneAt: previous.prepTask?.doneAt ?? null,
+          doneBy: previous.prepTask?.doneBy ?? null,
+          rating: previous.prepTask?.rating ?? null,
+        }
+      : null,
     findings: [...input.findings].sort((a, b) => a.area - b.area),
     actions: input.actions.map((a) => {
-      const before = a.id ? previous.find((p) => p.id === a.id) : undefined;
+      const before = a.id ? previous.actions.find((p) => p.id === a.id) : undefined;
       return {
         id: before?.id ?? newId(),
         text: a.text,
@@ -251,6 +301,7 @@ export function buildVisitContent(
         done: before?.done ?? false,
         doneAt: before?.doneAt ?? null,
         doneBy: before?.doneBy ?? null,
+        rating: before?.rating ?? null,
       };
     }),
   };
@@ -311,7 +362,8 @@ export async function createMentorVisit(
   }
   await requireClub(deps, clubId);
   const now = deps.now?.() ?? new Date();
-  const content = buildVisitContent(visitInputSchema.parse(input), []);
+  const { planned } = z.object({ planned: z.boolean().default(false) }).parse(input ?? {});
+  const content = buildVisitContent(visitInputSchema.parse(input), { actions: [] });
   await requireMembers(deps, clubId, [
     ...content.participantIds,
     ...content.actions.flatMap((a) => (a.ownerId ? [a.ownerId] : [])),
@@ -319,7 +371,8 @@ export async function createMentorVisit(
   return deps.visits.insertVisit({
     clubId,
     ...content,
-    status: "draft",
+    // planned: the club sees the date, topics and the task before the visit (MC)
+    status: planned ? "planned" : "draft",
     sentAt: null,
     withdrawnAt: null,
     withdrawnBy: null,
@@ -380,11 +433,11 @@ export async function updateMentorVisit(
     ]),
   ]);
   return writeVisit(deps, actor, clubId, visitId, data.expectedVersion, (visit) =>
-    buildVisitContent(data, visit.actions),
+    buildVisitContent(data, visit),
   );
 }
 
-/** Send a draft to the club: management and coaches see it from now on. */
+/** Send a draft or a planned visit to the club: its record and agreed steps count from now on. */
 export async function sendMentorVisit(
   deps: MentorVisitDeps,
   actor: CurrentUser | null,
@@ -394,7 +447,9 @@ export async function sendMentorVisit(
 ): Promise<StoredVisit> {
   const { expectedVersion } = versioned.parse(input);
   return writeVisit(deps, actor, clubId, visitId, expectedVersion, (visit, _user, now) => {
-    if (visit.status !== "draft") throw new ApiError("CONFLICT", "Visit was already sent");
+    if (visit.status !== "draft" && visit.status !== "planned") {
+      throw new ApiError("CONFLICT", "Visit was already sent");
+    }
     return { status: "sent", sentAt: now };
   });
 }
@@ -452,6 +507,87 @@ export async function setVisitActionDone(
   });
   if (!updated) throw new ApiError("CONFLICT", "Visit was changed by someone else");
   return updated;
+}
+
+/** The club ticks the task before the visit as prepared (or not) – planned and sent visits (MC). */
+export async function setPrepTaskDone(
+  deps: MentorVisitDeps,
+  actor: CurrentUser | null,
+  clubId: string,
+  visitId: string,
+  input: unknown,
+): Promise<StoredVisit> {
+  const user = requireUser(actor);
+  const data = versioned.extend({ done: z.boolean() }).parse(input);
+  const { visit } = await loadVisit(deps, user, clubId, visitId);
+  if (visit.status !== "planned" && visit.status !== "sent") {
+    throw new ApiError("CONFLICT", "Only a planned or sent visit");
+  }
+  if (!visit.prepTask) throw new ApiError("NOT_FOUND", "The visit has no task before it");
+  if (visit.version !== data.expectedVersion) {
+    throw new ApiError("CONFLICT", "Visit was changed by someone else");
+  }
+  const now = deps.now?.() ?? new Date();
+  const before = visit.prepTask;
+  const updated = await deps.visits.updateVisit(clubId, visitId, data.expectedVersion, {
+    prepTask: {
+      ...before,
+      done: data.done,
+      doneAt: data.done ? (before.done ? before.doneAt : now) : null,
+      doneBy: data.done ? (before.done ? before.doneBy : user.id) : null,
+    },
+    updatedAt: now,
+    updatedBy: user.id,
+  });
+  if (!updated) throw new ApiError("CONFLICT", "Visit was changed by someone else");
+  return updated;
+}
+
+export const rateVisitSchema = versioned.extend({
+  /** rating of the task before the visit; omitted = unchanged, null = clear */
+  prep: ratingSchema.nullable().optional(),
+  actions: z
+    .array(z.object({ id: z.string().min(1).max(64), rating: ratingSchema.nullable() }))
+    .max(30)
+    .default([]),
+});
+
+/** Pure: applies the mentor's ratings; an unknown action is an error (no silent typos). */
+export function applyRatings(
+  visit: Pick<StoredVisit, "prepTask" | "actions">,
+  ratings: { prep?: MentorRating | null; actions: { id: string; rating: MentorRating | null }[] },
+): Pick<StoredVisit, "prepTask" | "actions"> {
+  if (ratings.prep !== undefined && !visit.prepTask) {
+    throw new ApiError("BAD_REQUEST", "The visit has no task before it");
+  }
+  const byId = new Map(ratings.actions.map((r) => [r.id, r.rating]));
+  if ([...byId.keys()].some((id) => !visit.actions.some((a) => a.id === id))) {
+    throw new ApiError("NOT_FOUND", "Action not found");
+  }
+  return {
+    prepTask:
+      visit.prepTask && ratings.prep !== undefined
+        ? { ...visit.prepTask, rating: ratings.prep }
+        : visit.prepTask,
+    actions: visit.actions.map((a) => (byId.has(a.id) ? { ...a, rating: byId.get(a.id)! } : a)),
+  };
+}
+
+/**
+ * The mentor rates how the task before the visit and the agreed steps turned out: done, partly,
+ * not done (MC, like "úloha vopred / po – hodnotenie" in the EYA mentoring).
+ */
+export async function rateMentorVisit(
+  deps: MentorVisitDeps,
+  actor: CurrentUser | null,
+  clubId: string,
+  visitId: string,
+  input: unknown,
+): Promise<StoredVisit> {
+  const data = rateVisitSchema.parse(input);
+  return writeVisit(deps, actor, clubId, visitId, data.expectedVersion, (visit) =>
+    applyRatings(visit, data),
+  );
 }
 
 export interface VisitFormData {

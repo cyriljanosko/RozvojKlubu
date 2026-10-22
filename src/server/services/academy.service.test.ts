@@ -167,7 +167,7 @@ describe("getMyAcademy", () => {
     const club = (await getMyAcademy(deps, alice)).clubs[0];
     expect(club.kompas?.areas).toHaveLength(11);
     expect(club.kompas?.areas[2]).toBeGreaterThan(0);
-    expect(club.visits).toEqual({ lastDate: null, open: 0, overdue: 0 });
+    expect(club.visits).toEqual({ lastDate: null, open: 0, overdue: 0, nextPlanned: null });
     expect(club.plan).toMatchObject({ goals: 0, done: 0 });
     expect(club.planGoals).toEqual([]);
     expect((await getMyAcademy(deps, alice)).admin).toBeNull();
@@ -199,7 +199,12 @@ describe("getMyAcademy", () => {
     const view = await getMyAcademy(deps, mona);
     expect(view.clubs).toHaveLength(0);
     expect(view.mentor?.rows.map((r) => r.clubId)).toEqual([A]);
-    expect(view.mentor?.rows[0].visits).toEqual({ lastDate: null, open: 0, overdue: 0 });
+    expect(view.mentor?.rows[0].visits).toEqual({
+      lastDate: null,
+      open: 0,
+      overdue: 0,
+      nextPlanned: null,
+    });
     expect(view.mentor?.tasks.map((t) => t.key)).toEqual([
       "club_kompas_missing",
       "club_licensing_open",
@@ -217,6 +222,9 @@ describe("getMyAcademy", () => {
       participantIds: [],
       participants: "",
       summary: "",
+      topics: [],
+      assessment: null,
+      prepTask: null,
       findings: [],
       actions: [
         {
@@ -229,6 +237,7 @@ describe("getMyAcademy", () => {
           done: false,
           doneAt: null,
           doneBy: null,
+          rating: null,
         },
         {
           id: "a2",
@@ -240,6 +249,7 @@ describe("getMyAcademy", () => {
           done: false,
           doneAt: null,
           doneBy: null,
+          rating: null,
         },
       ],
       status: "sent",
@@ -265,7 +275,12 @@ describe("getMyAcademy", () => {
     ]);
     expect((await tasks(alice)).map((t) => t.step)).toEqual(["Osloviť rodičov", "Poďakovať"]);
     const mentor = (await getMyAcademy(deps, mona)).mentor!;
-    expect(mentor.rows[0].visits).toEqual({ lastDate: "2026-10-01", open: 2, overdue: 1 });
+    expect(mentor.rows[0].visits).toEqual({
+      lastDate: "2026-10-01",
+      open: 2,
+      overdue: 1,
+      nextPlanned: null,
+    });
     expect(mentor.tasks.map((t) => t.key)).not.toContain("club_no_visit");
   });
 

@@ -34,6 +34,7 @@ const action = (o: Partial<MentorVisitAction>): MentorVisitAction => ({
   done: false,
   doneAt: null,
   doneBy: null,
+  rating: null,
   ...o,
 });
 const visit = (o: Partial<StoredVisit>): StoredVisit => ({
@@ -45,6 +46,9 @@ const visit = (o: Partial<StoredVisit>): StoredVisit => ({
   participantIds: [],
   participants: "",
   summary: "",
+  topics: [],
+  assessment: null,
+  prepTask: null,
   findings: [],
   actions: [],
   status: "sent",
