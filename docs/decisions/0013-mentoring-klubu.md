@@ -3,6 +3,7 @@
 - Stav: prijaté
 - Dátum: 2026-10-22
 - Rozhodol: Cyril Janoško
+- Nahradené: 0014 (bod 4 – hodnotenie návštevy podľa tém)
 
 ## Kontext
 

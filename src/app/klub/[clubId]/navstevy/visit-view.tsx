@@ -5,12 +5,12 @@ import type { StoredVisit } from "@/server/services/mentor-visit.service";
 import { ActionChecklist } from "./action-checklist";
 import { PrepCheck } from "./prep-check";
 
-const ASSESSMENT = ["strengths", "weaknesses", "recommendations", "overall"] as const;
+const BLOCK = ["strengths", "weaknesses", "recommendations"] as const;
 
 /**
  * Read-only visit: the club's view of a sent or planned visit, the mentor's view of a planned or
- * withdrawn one. Topic, the task before the visit (the club ticks it), the assessment in four
- * fields (or the summary of older visits), findings and agreed steps with their ratings (MC-b).
+ * withdrawn one. Topic, the task before the visit (the club ticks it), the assessment per topic
+ * and overall (or the summary and findings of older visits) and agreed steps with ratings (MC-b).
  */
 export async function VisitView({
   visit,
@@ -87,16 +87,31 @@ export async function VisitView({
         </section>
       )}
       {visit.assessment && (
-        <section className="flex flex-col gap-2">
+        <section className="flex flex-col gap-3">
           <h2 className="font-semibold">{t("form.assessment")}</h2>
-          <dl className="grid gap-2 sm:grid-cols-2">
-            {ASSESSMENT.filter((k) => visit.assessment![k].trim()).map((k) => (
-              <div key={k} className="rounded-lg border p-3">
-                <dt className="text-muted-foreground text-xs">{t(`form.assessmentFields.${k}`)}</dt>
-                <dd className="whitespace-pre-wrap">{visit.assessment![k]}</dd>
-              </div>
-            ))}
-          </dl>
+          {visit.assessment.topics.map((b) => (
+            <div key={b.area ?? "general"} className="flex flex-col gap-2 rounded-lg border p-3">
+              <h3 className="text-sm font-semibold">
+                {b.area === null ? t("form.generalBlock") : `${b.area} · ${areaName(b.area)}`}
+              </h3>
+              <dl className="grid gap-2 sm:grid-cols-3">
+                {BLOCK.filter((k) => b[k].trim()).map((k) => (
+                  <div key={k}>
+                    <dt className="text-muted-foreground text-xs">
+                      {t(`form.assessmentFields.${k}`)}
+                    </dt>
+                    <dd className="whitespace-pre-wrap">{b[k]}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))}
+          {visit.assessment.overall.trim() && (
+            <div className="bg-muted/40 rounded-lg p-3">
+              <p className="text-muted-foreground text-xs">{t("form.overallTitle")}</p>
+              <p className="whitespace-pre-wrap">{visit.assessment.overall}</p>
+            </div>
+          )}
         </section>
       )}
       {visit.summary && <p className="whitespace-pre-wrap">{visit.summary}</p>}

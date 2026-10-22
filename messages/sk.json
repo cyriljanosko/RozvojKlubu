@@ -1039,7 +1039,7 @@
       "othersPlaceholder": "Ďalší prítomní – mená a funkcie",
       "summary": "Zhrnutie",
       "summaryPlaceholder": "Čo ste spolu prebrali a na čom ste sa zhodli",
-      "findings": "Zistenia k oblastiam",
+      "findings": "Zistenia k oblastiam (staršie návštevy)",
       "optional": "nepovinné",
       "area": "Oblasť",
       "findingText": "Zistenie",
@@ -1088,7 +1088,7 @@
       "prepTask": "Úloha vopred",
       "prepTaskPlaceholder": "Čo má klub pripraviť pred stretnutím",
       "prepDue": "Do kedy",
-      "assessment": "Hodnotenie stretnutia",
+      "assessment": "Hodnotenie stretnutia podľa tém",
       "assessmentFields": {
         "strengths": "Silné stránky",
         "weaknesses": "Slabé stránky",
@@ -1105,7 +1105,12 @@
       "savePlanned": "Naplánovať",
       "sendAfter": "Odoslať záznam klubu",
       "plannedHint": "Klub vidí dátum, tému a úlohu vopred. Po stretnutí doplňte záznam a odošlite ho.",
-      "planned": "Stretnutie je naplánované."
+      "planned": "Stretnutie je naplánované.",
+      "generalBlock": "Všeobecné hodnotenie (stretnutie bez témy)",
+      "overallTitle": "Celkové hodnotenie stretnutia",
+      "removeTopicConfirm": "Téma {area} má vyplnené hodnotenie. Odstrániť tému aj s hodnotením?",
+      "removeTopic": "Odstrániť",
+      "keepTopic": "Ponechať"
     },
     "club": {
       "actions": "Dohodnuté kroky · splnené {done} z {total}",

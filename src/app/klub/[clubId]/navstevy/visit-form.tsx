@@ -6,7 +6,12 @@ import { useState, useTransition } from "react";
 import { Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import type { MentorAssessment, MentorVisitForm, MentorVisitStatus } from "@/server/db/types";
+import type {
+  MentorAssessment,
+  MentorTopicAssessment,
+  MentorVisitForm,
+  MentorVisitStatus,
+} from "@/server/db/types";
 
 import { saveVisitAction, sendVisitAction, withdrawVisitAction } from "./actions";
 
@@ -35,12 +40,20 @@ export interface VisitFormValue {
 }
 
 const FORMS: MentorVisitForm[] = ["onsite", "online", "phone"];
-const ASSESSMENT: (keyof MentorAssessment)[] = [
+/** fields of a topic block; the overall assessment is one for the whole meeting (22. 10. 2026) */
+const BLOCK: ("strengths" | "weaknesses" | "recommendations")[] = [
   "strengths",
   "weaknesses",
   "recommendations",
-  "overall",
 ];
+const emptyBlock = (area: number | null): MentorTopicAssessment => ({
+  area,
+  strengths: "",
+  weaknesses: "",
+  recommendations: "",
+});
+const hasText = (b: MentorTopicAssessment | undefined) =>
+  Boolean(b && (b.strengths.trim() || b.weaknesses.trim() || b.recommendations.trim()));
 const MAX_TOPICS = 3;
 const OTHER = "__other";
 const field =
@@ -78,6 +91,54 @@ export function VisitForm({
   // a new visit is planned ahead or recorded after the meeting; a planned visit gets its record
   const [planning, setPlanning] = useState(false);
   const legacySummary = initial.summary.trim().length > 0;
+  // findings per area belong to visits before the assessment per topic (decision 22. 10. 2026)
+  const legacyFindings = initial.findings.length > 0;
+  // a topic with a written assessment is removed only after a confirmation
+  const [removing, setRemoving] = useState<number | null>(null);
+  const blockAreas: (number | null)[] =
+    v.topics.length > 0 ? [...v.topics].sort((a, b) => a - b) : [null];
+  const blockFor = (area: number | null) =>
+    v.assessment.topics.find((b) => b.area === area) ?? emptyBlock(area);
+  const setBlock = (area: number | null, patch: Partial<MentorTopicAssessment>) =>
+    set("assessment", {
+      ...v.assessment,
+      topics: [
+        ...v.assessment.topics.filter((b) => b.area !== area),
+        { ...blockFor(area), ...patch },
+      ],
+    });
+  const toggleTopic = (area: number) => {
+    if (v.topics.includes(area)) {
+      const block = v.assessment.topics.find((b) => b.area === area);
+      if (hasText(block) && removing !== area) return setRemoving(area);
+      setRemoving(null);
+      setV((s) => ({
+        ...s,
+        topics: s.topics.filter((x) => x !== area),
+        assessment: {
+          ...s.assessment,
+          topics: s.assessment.topics.filter((b) => b.area !== area),
+        },
+      }));
+      return;
+    }
+    setV((s) => {
+      // the first topic takes over what was written in the general block
+      const general =
+        s.topics.length === 0 ? s.assessment.topics.find((b) => b.area === null) : undefined;
+      return {
+        ...s,
+        topics: [...s.topics, area],
+        assessment: {
+          ...s.assessment,
+          topics: [
+            ...s.assessment.topics.filter((b) => b.area !== null),
+            ...(general && hasText(general) ? [{ ...general, area }] : []),
+          ],
+        },
+      };
+    });
+  };
 
   const set = <K extends keyof VisitFormValue>(key: K, value: VisitFormValue[K]) =>
     setV((s) => ({ ...s, [key]: value }));
@@ -96,7 +157,11 @@ export function VisitForm({
       const problem = invalid();
       if (problem) return setMessage(problem);
       setMessage(null);
-      const assessment = ASSESSMENT.some((k) => v.assessment[k].trim()) ? v.assessment : null;
+      const blocks = blockAreas.map(blockFor).filter(hasText);
+      const assessment =
+        blocks.length > 0 || v.assessment.overall.trim()
+          ? { topics: blocks, overall: v.assessment.overall }
+          : null;
       const input = {
         ...v,
         assessment: planning ? null : assessment,
@@ -204,12 +269,7 @@ export function VisitForm({
                 type="button"
                 aria-pressed={on}
                 disabled={!on && v.topics.length >= MAX_TOPICS}
-                onClick={() =>
-                  set(
-                    "topics",
-                    on ? v.topics.filter((x) => x !== a.number) : [...v.topics, a.number],
-                  )
-                }
+                onClick={() => toggleTopic(a.number)}
                 className="aria-pressed:bg-primary aria-pressed:text-primary-foreground rounded-full border px-3 py-1 text-xs disabled:opacity-40"
               >
                 {a.number} · {a.name}
@@ -217,6 +277,19 @@ export function VisitForm({
             );
           })}
         </div>
+        {removing !== null && (
+          <div className="flex flex-col gap-2 rounded-md border border-amber-500 p-3" role="alert">
+            <p>{t("removeTopicConfirm", { area: removing })}</p>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" size="sm" onClick={() => toggleTopic(removing)}>
+                {t("removeTopic")}
+              </Button>
+              <Button type="button" size="sm" variant="outline" onClick={() => setRemoving(null)}>
+                {t("keepTopic")}
+              </Button>
+            </div>
+          </div>
+        )}
       </fieldset>
 
       <section className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
@@ -289,21 +362,44 @@ export function VisitForm({
             />
           </fieldset>
 
-          <section className="flex flex-col gap-3 rounded-xl border p-4">
+          <section className="flex flex-col gap-4 rounded-xl border p-4">
             <h2 className="text-sm font-semibold">{t("assessment")}</h2>
-            {ASSESSMENT.map((k) => (
-              <label key={k} className="flex flex-col gap-1 text-sm">
-                <span className="font-medium">{t(`assessmentFields.${k}`)}</span>
-                <textarea
-                  value={v.assessment[k]}
-                  onChange={(e) => set("assessment", { ...v.assessment, [k]: e.target.value })}
-                  placeholder={t(`assessmentPlaceholders.${k}`)}
-                  rows={3}
-                  maxLength={3000}
-                  className={field}
-                />
-              </label>
-            ))}
+            {blockAreas.map((area) => {
+              const block = blockFor(area);
+              return (
+                <fieldset key={area ?? "general"} className="flex flex-col gap-2">
+                  <legend className="mb-1 text-sm font-semibold">
+                    {area === null
+                      ? t("generalBlock")
+                      : `${area} · ${areas.find((a) => a.number === area)?.name ?? ""}`}
+                  </legend>
+                  {BLOCK.map((k) => (
+                    <label key={k} className="flex flex-col gap-1 text-sm">
+                      <span className="font-medium">{t(`assessmentFields.${k}`)}</span>
+                      <textarea
+                        value={block[k]}
+                        onChange={(e) => setBlock(area, { [k]: e.target.value })}
+                        placeholder={t(`assessmentPlaceholders.${k}`)}
+                        rows={2}
+                        maxLength={3000}
+                        className={field}
+                      />
+                    </label>
+                  ))}
+                </fieldset>
+              );
+            })}
+            <label className="flex flex-col gap-1 border-t pt-3 text-sm">
+              <span className="font-semibold">{t("overallTitle")}</span>
+              <textarea
+                value={v.assessment.overall}
+                onChange={(e) => set("assessment", { ...v.assessment, overall: e.target.value })}
+                placeholder={t("assessmentPlaceholders.overall")}
+                rows={3}
+                maxLength={3000}
+                className={field}
+              />
+            </label>
           </section>
 
           {legacySummary && (
@@ -319,79 +415,81 @@ export function VisitForm({
             </label>
           )}
 
-          <section className="flex flex-col gap-3 rounded-xl border p-4">
-            <h2 className="text-sm font-semibold">
-              {t("findings")}{" "}
-              <span className="text-muted-foreground font-normal">· {t("optional")}</span>
-            </h2>
-            {v.findings.map((f, i) => (
-              <div key={i} className="flex flex-col gap-2">
-                <div className="flex gap-2">
-                  <select
-                    value={f.area}
-                    aria-label={t("area")}
+          {legacyFindings && (
+            <section className="flex flex-col gap-3 rounded-xl border p-4">
+              <h2 className="text-sm font-semibold">
+                {t("findings")}{" "}
+                <span className="text-muted-foreground font-normal">· {t("optional")}</span>
+              </h2>
+              {v.findings.map((f, i) => (
+                <div key={i} className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <select
+                      value={f.area}
+                      aria-label={t("area")}
+                      onChange={(e) =>
+                        set(
+                          "findings",
+                          v.findings.map((x, j) =>
+                            j === i ? { ...x, area: Number(e.target.value) } : x,
+                          ),
+                        )
+                      }
+                      className={field}
+                    >
+                      {areas
+                        .filter((a) => a.number === f.area || !usedAreas.has(a.number))
+                        .map((a) => (
+                          <option key={a.number} value={a.number}>
+                            {a.number} · {a.name}
+                          </option>
+                        ))}
+                    </select>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("remove")}
+                      onClick={() =>
+                        set(
+                          "findings",
+                          v.findings.filter((_, j) => j !== i),
+                        )
+                      }
+                    >
+                      <Trash2 aria-hidden />
+                    </Button>
+                  </div>
+                  <textarea
+                    value={f.text}
+                    aria-label={t("findingText")}
                     onChange={(e) =>
                       set(
                         "findings",
-                        v.findings.map((x, j) =>
-                          j === i ? { ...x, area: Number(e.target.value) } : x,
-                        ),
+                        v.findings.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)),
                       )
                     }
+                    rows={2}
+                    maxLength={2000}
                     className={field}
-                  >
-                    {areas
-                      .filter((a) => a.number === f.area || !usedAreas.has(a.number))
-                      .map((a) => (
-                        <option key={a.number} value={a.number}>
-                          {a.number} · {a.name}
-                        </option>
-                      ))}
-                  </select>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    aria-label={t("remove")}
-                    onClick={() =>
-                      set(
-                        "findings",
-                        v.findings.filter((_, j) => j !== i),
-                      )
-                    }
-                  >
-                    <Trash2 aria-hidden />
-                  </Button>
+                  />
                 </div>
-                <textarea
-                  value={f.text}
-                  aria-label={t("findingText")}
-                  onChange={(e) =>
-                    set(
-                      "findings",
-                      v.findings.map((x, j) => (j === i ? { ...x, text: e.target.value } : x)),
-                    )
+              ))}
+              {freeArea && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="self-start"
+                  onClick={() =>
+                    set("findings", [...v.findings, { area: freeArea.number, text: "" }])
                   }
-                  rows={2}
-                  maxLength={2000}
-                  className={field}
-                />
-              </div>
-            ))}
-            {freeArea && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="self-start"
-                onClick={() =>
-                  set("findings", [...v.findings, { area: freeArea.number, text: "" }])
-                }
-              >
-                <Plus aria-hidden /> {t("addFinding")}
-              </Button>
-            )}
-          </section>
+                >
+                  <Plus aria-hidden /> {t("addFinding")}
+                </Button>
+              )}
+            </section>
+          )}
 
           <section className="flex flex-col gap-3 rounded-xl border p-4">
             <h2 className="text-sm font-semibold">{t("actions")}</h2>

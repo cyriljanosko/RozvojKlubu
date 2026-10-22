@@ -6,6 +6,7 @@ import { memorySubmissionStore } from "./kompas.fixture";
 import { memoryVisitStore } from "./mentor-visit.fixture";
 import {
   applyRatings,
+  assessmentForTopics,
   buildVisitContent,
   createMentorVisit,
   getVisitFormData,
@@ -200,11 +201,16 @@ describe("mentor visits – service", () => {
     });
     expect(prepared.prepTask).toMatchObject({ done: true, doneBy: "alice" });
 
-    // the mentor records the meeting in four fields; the club's tick and the rating survive edits
+    // the mentor assesses the meeting per topic plus overall; the club's tick survives edits
     const assessment = {
-      strengths: "Vedenie má prehľad.",
-      weaknesses: "U9 bez trénera.",
-      recommendations: "Osloviť rodičov.",
+      topics: [
+        {
+          area: 3,
+          strengths: "Vedenie má prehľad.",
+          weaknesses: "U9 bez trénera.",
+          recommendations: "Osloviť rodičov.",
+        },
+      ],
       overall: "Dobrý začiatok.",
     };
     const filled = await updateMentorVisit(deps, mona, A, planned.id, {
@@ -238,6 +244,27 @@ describe("mentor visits – service", () => {
     await expect(
       setPrepTaskDone(deps, alice, A, plain.id, { done: true, expectedVersion: 2 }),
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("keeps one assessment block per topic in the topics' order, or one general block (pure)", () => {
+    const block = (area: number | null, text = "x") => ({
+      area,
+      strengths: text,
+      weaknesses: "",
+      recommendations: "",
+    });
+    expect(
+      assessmentForTopics({ topics: [block(5), block(3), block(9, "")], overall: "o" }, [3, 5, 9]),
+    ).toEqual({ topics: [block(3), block(5)], overall: "o" }); // ordered, empty block dropped
+    expect(assessmentForTopics({ topics: [block(null)], overall: "" }, [])).toEqual({
+      topics: [block(null)],
+      overall: "",
+    });
+    expect(assessmentForTopics({ topics: [block(null, "")], overall: " " }, [])).toBeNull();
+    // a block of an area that is not a topic, a general block next to topics, duplicates
+    expect(() => assessmentForTopics({ topics: [block(4)], overall: "" }, [3])).toThrow();
+    expect(() => assessmentForTopics({ topics: [block(null)], overall: "" }, [3])).toThrow();
+    expect(() => assessmentForTopics({ topics: [block(3), block(3)], overall: "" }, [3])).toThrow();
   });
 
   it("rates only existing steps and the task before the visit (pure)", () => {

@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
 import type {
+  MentorAssessment,
   MentorPrepTask,
   MentorRating,
   MentorVisitAction,
@@ -200,9 +201,16 @@ const isoDate = z.iso.date();
 const text = (max: number) => z.string().trim().max(max);
 
 const assessmentSchema = z.object({
-  strengths: text(3000),
-  weaknesses: text(3000),
-  recommendations: text(3000),
+  topics: z
+    .array(
+      z.object({
+        area: z.number().int().min(1).max(11).nullable(),
+        strengths: text(3000),
+        weaknesses: text(3000),
+        recommendations: text(3000),
+      }),
+    )
+    .max(3),
   overall: text(3000),
 });
 
@@ -269,6 +277,7 @@ export function buildVisitContent(
   if (new Set(areas).size !== areas.length) {
     throw new ApiError("BAD_REQUEST", "One finding per area");
   }
+  const topics = [...new Set(input.topics)].sort((a, b) => a - b);
   return {
     date: input.date,
     season: currentSeason(new Date(`${input.date}T12:00:00Z`)),
@@ -276,8 +285,8 @@ export function buildVisitContent(
     participantIds: [...new Set(input.participantIds)],
     participants: input.participants,
     summary: input.summary,
-    topics: [...new Set(input.topics)].sort((a, b) => a - b),
-    assessment: input.assessment,
+    topics,
+    assessment: input.assessment ? assessmentForTopics(input.assessment, topics) : null,
     prepTask: input.prepTask
       ? {
           text: input.prepTask.text,
@@ -305,6 +314,32 @@ export function buildVisitContent(
       };
     }),
   };
+}
+
+/**
+ * Pure: the assessment follows the topics (decision 22. 10. 2026) – one block per topic in the
+ * topics' order, or one general block when the visit has no topic; blocks of other areas are
+ * refused, empty ones dropped; null when nothing is written at all.
+ */
+export function assessmentForTopics(
+  assessment: MentorAssessment,
+  topics: readonly number[],
+): MentorAssessment | null {
+  const allowed: (number | null)[] = topics.length > 0 ? [...topics] : [null];
+  if (assessment.topics.some((b) => !allowed.includes(b.area))) {
+    throw new ApiError("BAD_REQUEST", "Assessment block does not match the topics");
+  }
+  const areas = assessment.topics.map((b) => b.area);
+  if (new Set(areas).size !== areas.length) {
+    throw new ApiError("BAD_REQUEST", "One assessment block per topic");
+  }
+  const filled = (b: MentorAssessment["topics"][number]) =>
+    Boolean(b.strengths.trim() || b.weaknesses.trim() || b.recommendations.trim());
+  const blocks = allowed
+    .map((area) => assessment.topics.find((b) => b.area === area))
+    .filter((b): b is MentorAssessment["topics"][number] => b !== undefined && filled(b));
+  if (blocks.length === 0 && !assessment.overall.trim()) return null;
+  return { topics: blocks, overall: assessment.overall };
 }
 
 export interface VisitList {

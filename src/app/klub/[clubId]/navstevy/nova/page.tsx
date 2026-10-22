@@ -70,7 +70,7 @@ async function NewVisit({ params }: PageProps<"/klub/[clubId]/navstevy/nova">) {
           participants: "",
           summary: "",
           topics: [],
-          assessment: { strengths: "", weaknesses: "", recommendations: "", overall: "" },
+          assessment: { topics: [], overall: "" },
           prepTask: { text: "", dueDate: null },
           findings: [],
           actions: [],

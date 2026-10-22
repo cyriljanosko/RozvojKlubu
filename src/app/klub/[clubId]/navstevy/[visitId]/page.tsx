@@ -118,12 +118,7 @@ async function Visit({ params }: Props) {
               participants: visit.participants,
               summary: visit.summary,
               topics: visit.topics,
-              assessment: visit.assessment ?? {
-                strengths: "",
-                weaknesses: "",
-                recommendations: "",
-                overall: "",
-              },
+              assessment: visit.assessment ?? { topics: [], overall: "" },
               prepTask: {
                 text: visit.prepTask?.text ?? "",
                 dueDate: visit.prepTask?.dueDate ?? null,
