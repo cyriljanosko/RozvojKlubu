@@ -1148,6 +1148,67 @@
       "players": "Hráči",
       "coachesWithLicence": "Tréneri s licenciou",
       "teamsWithoutCoach": "Družstvá bez trénera"
+    },
+    "compare": {
+      "pick": "Porovnať kluby",
+      "pickHint": "Vyberte 2 až 4 kluby.",
+      "submit": "Porovnať",
+      "picked": "{count, plural, =0 {nič nevybrané} one {# vybraný} few {# vybrané} other {# vybraných}}",
+      "tooMany": "Porovnať sa dá najviac 4 kluby – použili sme prvé 4.",
+      "clear": "Zrušiť porovnanie",
+      "title": "Porovnanie klubov",
+      "note": "Kompas po oblastiach (body 0–20) a hlavné čísla sezóny.",
+      "metric": "Ukazovateľ",
+      "kompasTotal": "Kompas spolu",
+      "licensingPoints": "Licenčné body",
+      "visits": "Návštevy mentora",
+      "actions": "Splnené kroky",
+      "goals": "Splnené ciele",
+      "players": "Hráči",
+      "coachesWithLicence": "Tréneri s licenciou",
+      "teamsWithoutCoach": "Družstvá bez trénera"
+    },
+    "layout": {
+      "up": "Posunúť panel {title} vyššie",
+      "down": "Posunúť panel {title} nižšie",
+      "hide": "Skryť panel {title}",
+      "hidden": "Skryté panely:",
+      "show": "Zobraziť {title}",
+      "reset": "Pôvodné rozloženie"
+    },
+    "export": {
+      "csv": "Stiahnuť CSV",
+      "print": "Tlačiť / PDF",
+      "printed": "Vytlačené {date} · sezóna {season}",
+      "filterUnion": "zväz {union}",
+      "filterSize": "veľkosť {size}"
+    },
+    "csv": {
+      "club": "Klub",
+      "clubId": "Sportnet ID",
+      "union": "Zväz",
+      "size": "Veľkosť",
+      "kompasSource": "Kompas",
+      "sources": {
+        "submitted": "odoslaný",
+        "working": "rozpracovaný"
+      },
+      "area": "Oblasť",
+      "kompasTotal": "Kompas spolu",
+      "licensingPoints": "Licenčné body spolu",
+      "visits": "Návštevy mentora",
+      "actionsDone": "Kroky splnené",
+      "actionsTotal": "Kroky spolu",
+      "goalsDone": "Ciele splnené",
+      "goalsTotal": "Ciele spolu",
+      "players": "Hráči",
+      "teams": "Družstvá",
+      "coaches": "Tréneri",
+      "coachesWithLicence": "Tréneri s licenciou",
+      "teamsWithoutCoach": "Družstvá bez trénera",
+      "average": "Priemer zobrazených klubov",
+      "benchmark": "Priemer podobných klubov",
+      "file": "analyza"
     }
   }
 }

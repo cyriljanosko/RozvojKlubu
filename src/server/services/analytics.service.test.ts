@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import {
   activityTotals,
+  analyticsCsv,
   averageAreas,
   benchmarkAllowed,
   getAnalytics,
@@ -126,6 +127,88 @@ describe("analytics – panel shaping", () => {
   });
 });
 
+describe("analytics – CSV", () => {
+  const labels = {
+    club: "Klub",
+    clubId: "ID",
+    union: "Zväz",
+    size: "Veľkosť",
+    sizes: { small: "malý", medium: "stredný", large: "veľký" },
+    kompasSource: "Kompas",
+    sources: { submitted: "odoslaný", working: "rozpracovaný" },
+    area: "Oblasť",
+    kompasTotal: "Spolu",
+    licensingPoints: "Lic",
+    visits: "V",
+    actionsDone: "KS",
+    actionsTotal: "K",
+    goalsDone: "CS",
+    goalsTotal: "C",
+    players: "H",
+    teams: "D",
+    coaches: "T",
+    coachesWithLicence: "TL",
+    teamsWithoutCoach: "DB",
+    average: "Priemer",
+    benchmark: "Podobné",
+  };
+  it("writes one row per club, decimal comma, quoted names and the average row", () => {
+    const csv = analyticsCsv(
+      {
+        scope: "all",
+        season: "2026/2027",
+        unions: [],
+        options: [],
+        clubs: [
+          {
+            clubId: "x1",
+            name: 'FK "Sever"; B',
+            union: "ObFZ X",
+            size: "small",
+            kompas: {
+              areas: [7.5, ...Array(10).fill(null)],
+              total: 7.5,
+              filledAreas: 1,
+              source: "working",
+            },
+            licensing: [{ key: "teams", area: 2, points: 40, band: null }],
+            activity: {
+              kompasSubmitted: false,
+              licensingClosed: true,
+              visits: 1,
+              actionsDone: 1,
+              actionsTotal: 2,
+              planGoals: 0,
+              planDone: 0,
+            },
+            sportnet: [
+              {
+                season: "2026/2027",
+                players: 30,
+                teams: 2,
+                coaches: 2,
+                coachesWithLicence: 1,
+                teamsWithoutCoach: 0,
+              },
+            ],
+          },
+        ],
+        average: { kompas: [7.5, ...Array(10).fill(null)] },
+        benchmark: null,
+      },
+      labels,
+    );
+    const lines = csv.trimEnd().split("\r\n");
+    expect(lines).toHaveLength(3);
+    const header = lines[0].split(";");
+    expect(header).toHaveLength(28);
+    expect(lines[1].startsWith('"FK ""Sever""; B";x1;ObFZ X;malý;rozpracovaný;7,5;')).toBe(true);
+    expect(lines[1].endsWith(";40;1;1;2;0;0;30;2;2;1;0")).toBe(true);
+    expect(lines[2].split(";")).toHaveLength(28);
+    expect(lines[2].startsWith("Priemer;;;;;7,5;")).toBe(true);
+  });
+});
+
 describe("analytics – scope by role", () => {
   let deps: AnalyticsDeps;
   beforeEach(async () => {
@@ -165,6 +248,7 @@ describe("analytics – scope by role", () => {
     const view = await getAnalytics(deps, admin);
     expect(view.scope).toBe("all");
     expect(view.clubs.map((c) => c.clubId).sort()).toEqual([A, B].sort());
+    expect(view.options.map((c) => c.clubId).sort()).toEqual([A, B].sort());
     const a = view.clubs.find((c) => c.clubId === A)!;
     expect(a.kompas.source).toBe("working");
     expect(a.sportnet.length).toBeGreaterThan(0);
@@ -193,6 +277,7 @@ describe("analytics – scope by role", () => {
     const view = await getAnalytics(deps, bob);
     expect(view).toMatchObject({ scope: "club", average: null, benchmark: null });
     expect(view.clubs.map((c) => c.clubId)).toEqual([A]);
+    expect(view.options.map((c) => c.clubId)).toEqual([A]);
     expect(view.clubs[0].kompas.source).toBe("working");
     const nobody: CurrentUser = { id: "x", email: "x@x.sk", name: "X", role: "public" };
     await expect(getAnalytics(deps, nobody)).rejects.toMatchObject({ code: "FORBIDDEN" });
