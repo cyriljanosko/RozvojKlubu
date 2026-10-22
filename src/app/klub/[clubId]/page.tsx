@@ -55,6 +55,7 @@ async function ClubDetail({ params, searchParams }: Props) {
   const tLicensing = await getTranslations("licensing");
   const tVizitka = await getTranslations("vizitka");
   const tVisits = await getTranslations("visits");
+  const tPlan = await getTranslations("plan");
 
   if (result === "forbidden" || result === "notFound") {
     return (
@@ -112,6 +113,14 @@ async function ClubDetail({ params, searchParams }: Props) {
                   className="rounded-md border px-3 py-2 text-sm font-medium"
                 >
                   {tVisits("open")}
+                </Link>
+              )}
+              {result.canLicensing && (
+                <Link
+                  href={`/klub/${encodeURIComponent(club.clubId)}/plan`}
+                  className="rounded-md border px-3 py-2 text-sm font-medium"
+                >
+                  {tPlan("open")}
                 </Link>
               )}
             </div>

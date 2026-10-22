@@ -66,6 +66,7 @@ export const academyDeps: AcademyDeps = {
   practice: mongoPracticeStore,
   progress: mongoProgressStore,
   visits: mongoVisitStore,
+  plans: mongoPlanStore,
 };
 
 export const hubDeps: HubDeps = {
@@ -92,6 +93,7 @@ export const visitDeps: MentorVisitDeps = {
   ...clubDeps,
   visits: mongoVisitStore,
   submissions: mongoSubmissionStore,
+  plans: mongoPlanStore,
 };
 
 export const planDeps: ClubPlanDeps = {

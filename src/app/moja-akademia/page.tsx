@@ -127,9 +127,14 @@ async function Academy() {
                   ? t("standing.licensingClosed", { date: date(club.licensingClosedAt) })
                   : t("standing.licensingOpen")}
               </p>
-              <Link href={`${base}/vizitka`} className="self-start underline underline-offset-4">
-                {t("standing.vizitka")}
-              </Link>
+              <span className="flex flex-wrap gap-x-4">
+                <Link href={`${base}/vizitka`} className="underline underline-offset-4">
+                  {t("standing.vizitka")}
+                </Link>
+                <Link href={`${base}/plan`} className="underline underline-offset-4">
+                  {t("standing.plan")}
+                </Link>
+              </span>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -213,7 +218,21 @@ async function Academy() {
                     </span>
                   )}
                 </span>
+                <span className="text-muted-foreground text-xs">
+                  {r.plan.goals > 0
+                    ? t("mentor.planLine", { done: r.plan.done, goals: r.plan.goals }) +
+                      (r.plan.confirmed
+                        ? ` · ${t("mentor.planConfirmed")}`
+                        : ` · ${t("mentor.planUnconfirmed")}`)
+                    : t("mentor.noPlan")}
+                </span>
                 <span className="flex flex-wrap gap-x-3 text-xs">
+                  <Link
+                    href={`/klub/${encodeURIComponent(r.clubId)}/plan`}
+                    className="underline underline-offset-4"
+                  >
+                    {t("mentor.plan")}
+                  </Link>
                   <Link
                     href={`/klub/${encodeURIComponent(r.clubId)}/navstevy/nova`}
                     className="font-medium underline underline-offset-4"

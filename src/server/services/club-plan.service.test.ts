@@ -85,6 +85,7 @@ describe("club plan – pure", () => {
       done: 1,
       doing: 0,
       confirmed: false,
+      editedAfterConfirm: false,
     });
   });
 });
@@ -147,16 +148,28 @@ describe("club plan – service", () => {
     await saveClubPlan(deps, mona, A, { goals: [goal()], expectedVersion: 0 });
     const confirmed = await confirmClubPlan(deps, mona, A, { confirmed: true, expectedVersion: 1 });
     expect(confirmed.plan).toMatchObject({ confirmedBy: "mona" });
+    expect(summarizePlan(confirmed.plan).editedAfterConfirm).toBe(false);
+    // a status change is not an edit; a change of the goals is
+    const id = confirmed.plan!.goals[0].id;
+    const status = await setGoalStatus(deps, alice, A, id, { status: "doing", expectedVersion: 2 });
+    expect(summarizePlan(status.plan).editedAfterConfirm).toBe(false);
+    deps.now = () => new Date("2026-10-17T12:00:00Z");
+    const edited = await saveClubPlan(deps, alice, A, {
+      goals: [{ ...goal({ title: "Upravený cieľ", status: "doing" }), id }],
+      expectedVersion: 3,
+    });
+    expect(edited.plan).toMatchObject({ confirmedBy: "mona" });
+    expect(summarizePlan(edited.plan).editedAfterConfirm).toBe(true);
     await expect(
-      confirmClubPlan(deps, alice, A, { confirmed: false, expectedVersion: 2 }),
+      confirmClubPlan(deps, alice, A, { confirmed: false, expectedVersion: 4 }),
     ).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(
-      saveClubPlan(deps, mona, A, { goals: [goal({ ownerId: "stranger" })], expectedVersion: 2 }),
+      saveClubPlan(deps, mona, A, { goals: [goal({ ownerId: "stranger" })], expectedVersion: 4 }),
     ).rejects.toMatchObject({ code: "BAD_REQUEST" });
     await expect(getClubPlan(deps, alice, B)).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(getClubPlan(deps, null, A)).rejects.toMatchObject({ code: "UNAUTHORIZED" });
     await expect(
-      saveClubPlan(deps, mona, A, { goals: Array(11).fill(goal()), expectedVersion: 2 }),
+      saveClubPlan(deps, mona, A, { goals: Array(11).fill(goal()), expectedVersion: 4 }),
     ).rejects.toThrow();
   });
 

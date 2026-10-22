@@ -18,6 +18,7 @@ import {
 import { A, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import { addClubMember } from "./clubs.service";
 import { memoryContentStore, memoryPracticeStore, memoryRoleCatalogStore } from "./content.fixture";
+import { memoryPlanStore } from "./club-plan.fixture";
 import { memoryVisitStore } from "./mentor-visit.fixture";
 import { memoryProgressStore } from "./practice-progress.fixture";
 import { savePracticeProgress } from "./practice-progress.service";
@@ -123,6 +124,7 @@ async function setup(): Promise<AcademyDeps> {
     practice: memoryPracticeStore(memoryContentStore()),
     progress: memoryProgressStore(),
     visits: memoryVisitStore(),
+    plans: memoryPlanStore(),
   };
   await seedPractice(deps.practice as ReturnType<typeof memoryPracticeStore>, admin, [prax3]);
   await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
@@ -187,6 +189,7 @@ describe("getMyAcademy", () => {
     expect(view.mentor?.tasks.map((t) => t.key)).toEqual([
       "club_kompas_missing",
       "club_licensing_open",
+      "club_no_plan",
       "club_no_visit",
     ]);
   });
@@ -356,5 +359,50 @@ describe("splitTasks", () => {
     ]);
     expect(withPrax.practice.map((t) => t.key)).toEqual(["practice_next"]);
     expect(withPrax.todo).toEqual([]);
+  });
+});
+
+describe("plan tasks (CP-b)", () => {
+  it("asks management for a plan once the Kompas is filled, then shows goals near the due date", async () => {
+    const deps = await setup();
+    const keys = async (u: typeof alice) =>
+      (await getMyAcademy(deps, u)).clubs[0].tasks.map((t) => t.key);
+    expect(await keys(alice)).not.toContain("plan_missing");
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    expect(await keys(alice)).toContain("plan_missing");
+    expect(await keys(bob)).not.toContain("plan_missing");
+    await (deps.plans as ReturnType<typeof memoryPlanStore>).savePlan(A, "2026/2027", 0, {
+      goals: [
+        {
+          id: "g1",
+          area: 3,
+          title: "Náhradník v každej kategórii",
+          publicText: "Každý tím má trénera aj zástupcu.",
+          indicator: "",
+          owner: "Bob",
+          ownerId: "bob",
+          dueDate: "2026-10-20",
+          status: "doing",
+          doneAt: null,
+        },
+      ],
+      confirmedAt: null,
+      confirmedBy: null,
+      editedAt: null,
+      updatedAt: new Date(),
+      updatedBy: "alice",
+    });
+    expect(await keys(alice)).not.toContain("plan_missing");
+    const bobTask = (await getMyAcademy(deps, bob)).clubs[0].tasks.find(
+      (t) => t.key === "plan_goal",
+    );
+    expect(bobTask).toMatchObject({
+      step: "Náhradník v každej kategórii",
+      area: 3,
+      due: { overdue: false },
+    });
+    const mentor = (await getMyAcademy(deps, mona)).mentor!;
+    expect(mentor.rows[0].plan).toMatchObject({ goals: 1, done: 0 });
+    expect(mentor.tasks.map((t) => t.key)).not.toContain("club_no_plan");
   });
 });

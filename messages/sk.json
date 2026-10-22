@@ -622,7 +622,8 @@
       "kompasNotSent": "zatiaľ neodoslané mentorovi",
       "licensingClosed": "Licenčné hodnotenie uzavreté {date}",
       "licensingOpen": "Licenčné hodnotenie zatiaľ neuzavreté",
-      "vizitka": "Vizitka klubu"
+      "vizitka": "Vizitka klubu",
+      "plan": "Plán sezóny"
     },
     "tasks": {
       "title": "Čo mám urobiť ja",
@@ -641,7 +642,10 @@
       "visit_action": "Dohodnuté s mentorom: {step}",
       "club_no_visit": "Bez návštevy v tejto sezóne: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
       "dueBy": "do {date}",
-      "overdue": "termín uplynul {date}"
+      "overdue": "termín uplynul {date}",
+      "plan_goal": "Cieľ sezóny: {step}",
+      "plan_missing": "Zostaviť plán klubu na sezónu",
+      "club_no_plan": "Bez plánu sezóny: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}"
     },
     "roles": {
       "title": "Moje roly v oblastiach",
@@ -663,7 +667,12 @@
       "visits": "Návštevy",
       "visitLine": "posledná návšteva {date} · otvorené kroky {open}",
       "noVisit": "bez návštevy v tejto sezóne",
-      "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}"
+      "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}",
+      "planLine": "plán: splnené {done} z {goals}",
+      "planConfirmed": "potvrdený",
+      "planUnconfirmed": "nepotvrdený",
+      "noPlan": "bez plánu sezóny",
+      "plan": "Plán"
     },
     "sees": {
       "title": "Čo táto rola vidí",
@@ -953,7 +962,8 @@
       "first": "Prvá návšteva klubu",
       "due": "do {date}",
       "weakest": "Najslabšie podľa Kompasu: {areas}",
-      "noKompas": "Klub ešte neodoslal Kompas."
+      "noKompas": "Klub ešte neodoslal Kompas.",
+      "plan": "Plán sezóny"
     },
     "form": {
       "date": "Dátum",
@@ -1022,5 +1032,62 @@
       "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}"
     },
     "edit": "Upraviť návštevu"
+  },
+  "plan": {
+    "pageTitle": "Plán klubu na sezónu",
+    "heading": "Plán klubu na sezónu {season}",
+    "open": "Plán sezóny",
+    "summary": "Splnené {done} z {goals}",
+    "confirmedOn": "✓ dohodnuté s mentorom {date}",
+    "editedAfter": "upravené po potvrdení {date}",
+    "introNew": "Vyberte 1–3 oblasti, na ktorých bude klub túto sezónu naozaj pracovať. Ponúkame dve najslabšie podľa Kompasu, ďalší cieľ pridáte tlačidlom.",
+    "introEdit": "Upravte ciele plánu. Stav cieľa môže meniť aj ten, kto zaň zodpovedá.",
+    "suggested": "Najslabšie podľa Kompasu: {areas}",
+    "empty": "Klub zatiaľ nemá plán na túto sezónu.",
+    "goalN": "Cieľ {n}",
+    "area": "Oblasť",
+    "remove": "Odstrániť cieľ",
+    "title": "Cieľ",
+    "titlePlaceholder": "Napr. Každá kategória má trénera aj náhradníka",
+    "publicText": "Text pre verejnú Vizitku",
+    "publicPlaceholder": "Napr. Chceme, aby mal každý tím svojho trénera aj zástupcu.",
+    "publicHint": "Zobrazí sa verejne vo Vizitke klubu. Napíšte jednu vetu bez mien a interných detailov – tak, aby jej rozumel rodič aj starosta.",
+    "publicShort": "Verejne",
+    "owner": "Kto zodpovedá",
+    "ownerPick": "Vyberte osobu",
+    "ownerOther": "Iná osoba…",
+    "ownerName": "Meno zodpovednej osoby",
+    "due": "Do kedy",
+    "dueOn": "do {date}",
+    "doneOn": "splnené {date}",
+    "indicator": "Podľa čoho poznáme splnenie",
+    "indicatorPlaceholder": "Napr. v každej kategórii sú dve mená",
+    "optional": "nepovinné",
+    "statusLabel": "Stav",
+    "status": {
+      "todo": "Nezačatý",
+      "doing": "Rozbehnutý",
+      "done": "Splnený"
+    },
+    "addGoal": "Pridať ďalší cieľ",
+    "save": "Uložiť plán",
+    "cancel": "Zrušiť úpravy",
+    "edit": "Upraviť plán",
+    "confirm": "Potvrdiť plán",
+    "unconfirm": "Zrušiť potvrdenie",
+    "errors": {
+      "required": "Pri každom cieli vyplňte cieľ, text pre verejnú Vizitku a kto zodpovedá.",
+      "CONFLICT": "Plán medzitým zmenil niekto iný. Obnovte stránku.",
+      "FORBIDDEN": "Na túto zmenu nemáte oprávnenie.",
+      "BAD_REQUEST": "Niektorý údaj nie je správny.",
+      "NOT_FOUND": "Cieľ sa nenašiel.",
+      "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova."
+    },
+    "vizitka": {
+      "title": "Na čom klub tento rok pracuje",
+      "line": "Plán sezóny: splnené {done} z {goals}",
+      "confirmed": "dohodnuté s mentorom",
+      "none": "Plán sezóny zatiaľ nie je"
+    }
   }
 }

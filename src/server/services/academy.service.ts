@@ -23,6 +23,12 @@ import {
 } from "@/server/services/practice-progress.service";
 import { getPractice, type PracticeStore } from "@/server/services/practice.service";
 import {
+  planTasksFor,
+  summarizePlan,
+  type PlanStore,
+  type PlanTask,
+} from "@/server/services/club-plan.service";
+import {
   isoToday,
   summarizeVisits,
   visitTasksFor,
@@ -55,6 +61,7 @@ export interface AcademyDeps extends SubmissionDeps {
   choices: AreaRoleChoiceStore;
   practice: Pick<PracticeStore, "findPractice" | "listPracticeAreas">;
   visits: Pick<MentorVisitStore, "listVisits">;
+  plans: Pick<PlanStore, "findPlan">;
   progress: Pick<PracticeProgressStore, "findProgress">;
 }
 
@@ -72,7 +79,10 @@ export interface AcademyTask {
     | "practice_first"
     | "practice_next"
     | "visit_action"
-    | "club_no_visit";
+    | "club_no_visit"
+    | "plan_goal"
+    | "plan_missing"
+    | "club_no_plan";
   severity: TaskSeverity;
   /** relative link inside the app */
   href: string;
@@ -113,6 +123,10 @@ export interface TaskInput {
   practice?: PracticeTaskInput[];
   /** open agreed actions of mentor visits the user should see (MV-c) */
   visitTasks?: VisitTask[];
+  /** goals of the season's plan due soon or overdue (CP-b) */
+  planTasks?: PlanTask[];
+  /** the club has a Kompas but no plan for the season yet (management) */
+  planMissing?: boolean;
 }
 
 const ORDER: Record<TaskSeverity, number> = { crit: 0, warn: 1, info: 2 };
@@ -187,6 +201,20 @@ export function clubTasks(i: TaskInput): AcademyTask[] {
       ...(p ? { practice: { stepsDone: p.stepsDone, stepsTotal: p.stepsTotal } } : {}),
     });
   }
+  const planHref = `/klub/${encodeURIComponent(i.clubId)}/plan`;
+  if (i.planMissing && i.roles.includes("management")) {
+    tasks.push({ key: "plan_missing", severity: "info", href: planHref });
+  }
+  for (const g of i.planTasks ?? []) {
+    tasks.push({
+      key: "plan_goal",
+      severity: g.overdue ? "crit" : "warn",
+      href: planHref,
+      area: g.area,
+      step: g.title,
+      due: { date: g.dueDate, overdue: g.overdue },
+    });
+  }
   // agreed with the mentor: overdue ones are urgent (decision 21. 10. 2026)
   for (const v of i.visitTasks ?? []) {
     tasks.push({
@@ -220,10 +248,12 @@ export function mentorTasks(
   rows: (Pick<MentorClubRow, "clubId" | "name" | "latest"> & {
     licensingClosed: boolean;
     visits?: VisitSummary;
+    plan?: PlanSummary;
   })[],
 ): AcademyTask[] {
   const missing = rows.filter((r) => !r.latest).map((r) => r.name);
   const unvisited = rows.filter((r) => r.visits && !r.visits.lastDate).map((r) => r.name);
+  const unplanned = rows.filter((r) => r.plan && r.plan.goals === 0).map((r) => r.name);
   const open = rows.filter((r) => !r.licensingClosed).map((r) => r.name);
   const tasks: AcademyTask[] = [];
   if (missing.length > 0) {
@@ -242,6 +272,15 @@ export function mentorTasks(
       href: "#mentor-clubs",
       count: open.length,
       clubName: open.join(", "),
+    });
+  }
+  if (unplanned.length > 0) {
+    tasks.push({
+      key: "club_no_plan",
+      severity: "info",
+      href: "#mentor-clubs",
+      count: unplanned.length,
+      clubName: unplanned.join(", "),
     });
   }
   if (unvisited.length > 0) {
@@ -316,6 +355,9 @@ export function roleOptions(catalog: RoleCatalog, roles: readonly ClubRole[]): A
   );
 }
 
+/** how far a club plan is (mentor overview) */
+export type PlanSummary = ReturnType<typeof summarizePlan>;
+
 export interface AcademyClub {
   clubId: string;
   name: string;
@@ -336,7 +378,11 @@ export interface AcademyView {
   clubs: AcademyClub[];
   /** clubs of the mentor's cohort; null when the user is no mentor */
   mentor: {
-    rows: (MentorClubRow & { licensingClosed: boolean; visits: VisitSummary })[];
+    rows: (MentorClubRow & {
+      licensingClosed: boolean;
+      visits: VisitSummary;
+      plan: PlanSummary;
+    })[];
     tasks: AcademyTask[];
   } | null;
 }
@@ -395,6 +441,12 @@ export async function getMyAcademy(
       )
     ).filter((p): p is PracticeTaskInput => p !== null);
     const unsent = !latest || (view.updatedAt !== null && +view.updatedAt > +latest.submittedAt);
+    const plan = await deps.plans.findPlan(club.clubId, season);
+    const planTasks = planTasksFor(
+      plan,
+      { userId: user.id, management: roles.includes("management") },
+      today,
+    );
     const visitTasks = visitTasksFor(
       await deps.visits.listVisits(club.clubId),
       { userId: user.id, management: roles.includes("management") },
@@ -427,6 +479,8 @@ export async function getMyAcademy(
         teamsWithoutCoach: seasonData ? profileFromSeason(seasonData).teamsWithoutCoach : 0,
         practice,
         visitTasks,
+        planTasks,
+        planMissing: view.result.filledAreas > 0 && (plan?.goals.length ?? 0) === 0,
       }),
       chosenRoles: choice?.roles ?? [],
       roleOptions: catalog ? roleOptions(catalog, roles) : [],
@@ -444,6 +498,7 @@ export async function getMyAcademy(
           licensingClosed:
             (await deps.licensingSubmissions.findSubmission(r.clubId, season)) !== null,
           visits: summarizeVisits(await deps.visits.listVisits(r.clubId), season, today),
+          plan: summarizePlan(await deps.plans.findPlan(r.clubId, season)),
         })),
     );
     mentor = { rows, tasks: mentorTasks(rows) };

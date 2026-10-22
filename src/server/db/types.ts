@@ -370,6 +370,8 @@ export interface ClubPlanDoc {
   /** confirmed by the club's mentor or admin_sfz (optional) */
   confirmedAt: Date | null;
   confirmedBy: string | null;
+  /** last change of the goals' content (not of a status) – "edited after confirmation" */
+  editedAt: Date | null;
   version: number;
   createdAt: Date;
   updatedAt: Date;
