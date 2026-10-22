@@ -64,6 +64,7 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] DA-b – stránka `/analyza`, 4 panely, filtre, mobil (PR #60).
     - [x] DA-c – porovnanie klubov, usporiadanie panelov, export (PR #62).
     - [x] DA-d – sieťový graf (PR #63). Ťuknutie prstom na skutočnom telefóne overí Cyril.
+    - [ ] Sieťový graf: Cytoscape odmieta farbu menoviek `lab(…)` z CSS (menovky môžu mať náhradnú farbu) a hlási vlastnú citlivosť kolieska – opraviť (navrhnuté ako samostatná úloha).
   - [x] Moja Akadémia ako nástenka (rozhodnuté 22. 10., ADR 0012): dlaždice s posúvaním a skrytím, pripínanie obľúbených hviezdičkou (oblasť, sekcia Metodiky, krok a vzor Praxe, Vizitka, plán a návštevy klubu), prepínač klubu pri viacerých kluboch, malý graf Kompasu, vlastné dlaždice pre admina a mentora; uložené v účte (kolekcia `user_preferences`, súhlas).
     - [x] MD-a – kolekcia `user_preferences`, služba, API (PR #64).
     - [x] MD-b – nástenka v Moja Akadémia (PR #65). Dva stĺpce od 1024 px overiť na počítači.
@@ -75,7 +76,7 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] MC-d – úlohy, nástenka, Vizitka a prehľady (PR #70, v produkcii `aca4c0b`).
     - [ ] Po prvom skutočnom uložení mentoringu overiť index `club_mentoring` cez `explain`; úlohy záveru sezóny skontrolovať v máji.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
-  - [ ] Prepojenie na web SFZ (rozhodnuté 22. 10.): v oblasti 3 odkaz na futbalsfz.sk pri prvej zmienke školenia, licencie a kontinuálneho vzdelávania v každej sekcii Metodiky a v každom kroku Praxe; rozcestník „Vzdelávanie trénera“ v oblasti 3 a dlaždica v Moja Akadémia; zoznam odkazov v `content/odkazy-sfz.json` (zmena cez PR); termíny len odkazom na SFZ Ticketing (nemá verejné API) – vetva `feat/sfz-links`, PR na review.
+  - [x] Prepojenie na web SFZ (rozhodnuté 22. 10.): v oblasti 3 odkaz na futbalsfz.sk pri prvej zmienke školenia, licencie a kontinuálneho vzdelávania v Metodike a Praxi, rozbaľovací rozcestník „Vzdelávanie trénera“ a dlaždica v Moja Akadémia – PR #72 (v produkcii `4265fc6`, 38 odkazov v oblasti 3).
     - [ ] Neskôr: rozšíriť automatické odkazy na ďalšie oblasti (napr. Ochrana detí v oblasti 11, ISSF v oblasti 10) – stačí doplniť `areas` v súbore.
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).
