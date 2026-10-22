@@ -62,10 +62,12 @@ describe("preferences", () => {
     expect(again.favorites.map((f) => f.id)).toEqual(["f1", "f2"]);
     expect(again.dashboard.order).toEqual(["tasks"]);
 
-    const ordered = await orderFavorites(deps, alice, {
-      ids: ["f2", "f1"],
+    // the dashboard layout saved meanwhile (shared document) must not break the arrows
+    await saveDashboard(deps, alice, {
+      dashboard: { order: ["favorites"], hidden: [] },
       expectedVersion: again.version,
     });
+    const ordered = await orderFavorites(deps, alice, { ids: ["f2", "f1"] });
     expect(ordered.favorites.map((f) => f.label)).toEqual(["FK X", "Tréneri"]);
 
     expect((await removeFavorite(deps, alice, { href: "/oblasti/3" })).favorites).toHaveLength(1);

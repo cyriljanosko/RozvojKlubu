@@ -7,6 +7,7 @@ import { Suspense } from "react";
 
 import { GroupedBars } from "@/components/analytics/charts";
 import type { BoardPanel } from "@/components/analytics/panel-board";
+import { FavoritesList } from "@/components/favorites/favorites-list";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { academyDeps, analyticsDeps, preferencesDeps } from "@/server/clubs/deps";
@@ -206,7 +207,23 @@ async function Academy({ searchParams }: Props) {
   const club = view.clubs.find((c) => c.clubId === q.klub) ?? view.clubs[0] ?? null;
   const base = club ? `/klub/${encodeURIComponent(club.clubId)}` : "";
 
-  const panels: BoardPanel[] = [];
+  const panels: BoardPanel[] = [
+    {
+      id: "favorites",
+      title: t("favorites"),
+      content: (
+        <FavoritesList
+          key={prefs.version}
+          favorites={prefs.favorites.map(({ id, kind, href, label }) => ({
+            id,
+            kind,
+            href,
+            label,
+          }))}
+        />
+      ),
+    },
+  ];
   if (club) {
     const weak = (club.kompas?.areas ?? [])
       .map((points, i) => ({ area: i + 1, points }))

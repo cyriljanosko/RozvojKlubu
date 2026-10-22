@@ -72,7 +72,6 @@ export const addFavoriteSchema = z.object({
 
 export const orderFavoritesSchema = z.object({
   ids: z.array(z.string().min(1).max(64)).max(MAX_FAVORITES),
-  expectedVersion: z.number().int().min(1),
 });
 
 const toDto = (doc: UserPreferencesDoc | null): PreferencesDto => ({
@@ -174,21 +173,23 @@ export async function removeFavorite(
   );
 }
 
-/** Reorders favourites (arrows in the Obľúbené tile); ids not listed keep their place at the end. */
+/**
+ * Reorders favourites (arrows in the Obľúbené tile); ids not listed keep their place at the end.
+ * Applied to the latest list like pinning (no version) – the dashboard layout shares the document
+ * and its saves must not make the arrows fail.
+ */
 export async function orderFavorites(
   deps: PreferencesDeps,
   actor: CurrentUser | null,
   input: unknown,
 ): Promise<PreferencesDto> {
   const user = requireUser(actor);
-  const { ids, expectedVersion } = orderFavoritesSchema.parse(input);
-  const current = toDto(await deps.preferences.findPreferences(user.id));
-  const rank = (f: Favorite) => {
-    const i = ids.indexOf(f.id);
-    return i === -1 ? ids.length + current.favorites.indexOf(f) : i;
-  };
-  return save(deps, user.id, expectedVersion, {
-    dashboard: current.dashboard,
-    favorites: [...current.favorites].sort((a, b) => rank(a) - rank(b)),
+  const { ids } = orderFavoritesSchema.parse(input);
+  return changeFavorites(deps, user.id, (list) => {
+    const rank = (f: Favorite) => {
+      const i = ids.indexOf(f.id);
+      return i === -1 ? ids.length + list.indexOf(f) : i;
+    };
+    return [...list].sort((a, b) => rank(a) - rank(b));
   });
 }

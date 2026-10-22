@@ -6,6 +6,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Plus } from "lucide-react";
 
+import { ClubPin } from "@/components/favorites/club-pin";
 import { Button } from "@/components/ui/button";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
@@ -50,7 +51,10 @@ async function Visits({ params }: Props) {
         >
           {club.club.name}
         </Link>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <div className="flex items-start gap-1">
+          <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+          <ClubPin user={user} kind="visits" clubId={clubId} clubName={club.club.name} />
+        </div>
         <p className="text-muted-foreground text-sm">
           {list.access === "write" ? t("introMentor") : t("introClub")}
         </p>

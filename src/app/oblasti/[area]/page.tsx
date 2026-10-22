@@ -8,6 +8,8 @@ import { Suspense } from "react";
 import { MarkdownContent } from "@/components/content/markdown";
 import { PracticeView } from "@/components/content/practice-view";
 import { ScrollToHash } from "@/components/content/scroll-to-hash";
+import { PinButton } from "@/components/favorites/pin-button";
+import { pinnedHrefs } from "@/components/favorites/pins";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { academyDeps, clubDeps, kompasDeps, progressDeps } from "@/server/clubs/deps";
@@ -49,6 +51,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   // public page (ADR 0011); club blocks and the role default only for signed-in users
   const t = await getTranslations("areas");
   const tKompas = await getTranslations("kompas");
+  const tFav = await getTranslations("favorites.labels");
   const format = await getFormatter();
   const number = Number((await params).area);
   const area = Number.isInteger(number)
@@ -140,6 +143,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
       ? await getPracticeProgress(progressDeps, user, progressClub.clubId, number).catch(() => null)
       : null;
   const base = `/oblasti/${area.number}`;
+  const pins = await pinnedHrefs(user);
   const clubQuery = progressClub && clubParam ? `&club=${encodeURIComponent(clubParam)}` : "";
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "long" });
 
@@ -156,9 +160,20 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
         <p className="text-muted-foreground text-sm">
           {area.number} / 11 · {t(`bands.${area.band}`)}
         </p>
-        <h1 className="text-2xl font-semibold tracking-tight break-words sm:text-3xl">
-          {area.name}
-        </h1>
+        <div className="flex items-start gap-1">
+          <h1 className="text-2xl font-semibold tracking-tight break-words sm:text-3xl">
+            {area.name}
+          </h1>
+          {pins && (
+            <PinButton
+              kind="area"
+              href={`/oblasti/${area.number}`}
+              label={tFav("area", { area: area.number, name: area.name })}
+              pinned={pins.has(`/oblasti/${area.number}`)}
+              className="mt-0.5"
+            />
+          )}
+        </div>
         <p className="text-muted-foreground max-w-2xl">{area.description}</p>
         {user && isAdmin(user) && (
           <Link
@@ -236,6 +251,11 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
           practice={practice.content}
           roleId={roleId ?? practice.content.roles[0].id}
           hrefForRole={(id) => `${base}?tab=prax&role=${id}${clubQuery}`}
+          pins={
+            pins
+              ? { hrefs: [...pins], base: `/oblasti/${area.number}?tab=prax`, area: area.number }
+              : null
+          }
           signedIn={Boolean(user)}
           openKey={openKey}
           progress={
@@ -312,6 +332,16 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
             >
               <summary className="flex cursor-pointer flex-wrap items-center gap-x-2 gap-y-1 p-4 sm:px-6">
                 <span className="text-lg font-semibold break-words">{s.title}</span>
+                {pins && (
+                  <PinButton
+                    kind="section"
+                    href={`/oblasti/${area.number}?open=${encodeURIComponent(s.key)}#${s.key}`}
+                    label={tFav("section", { area: area.number, title: s.title })}
+                    pinned={pins.has(
+                      `/oblasti/${area.number}?open=${encodeURIComponent(s.key)}#${s.key}`,
+                    )}
+                  />
+                )}
                 {s.forRole && (
                   <span className="bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
                     {t("forYourRole")}
