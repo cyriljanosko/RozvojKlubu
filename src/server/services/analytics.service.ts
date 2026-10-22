@@ -262,3 +262,60 @@ export async function getAnalytics(
     benchmark,
   };
 }
+
+/** Pure: average points per licensing area over clubs with a closed evaluation (panel). */
+export function licensingAverages(clubs: readonly Pick<ClubAnalytics, "licensing">[]) {
+  const closed = clubs.filter((c) => c.licensing !== null);
+  const keys = [...new Set(closed.flatMap((c) => c.licensing!.map((a) => a.key)))];
+  return {
+    clubs: closed.length,
+    areas: keys.map((key) => {
+      const points = closed.map((c) => c.licensing!.find((a) => a.key === key)?.points ?? 0);
+      return {
+        key,
+        points: Math.round((points.reduce((s, p) => s + p, 0) / points.length) * 10) / 10,
+      };
+    }),
+  };
+}
+
+/** Pure: totals of the activity panel over the clubs shown. */
+export function activityTotals(clubs: readonly Pick<ClubAnalytics, "activity">[]) {
+  const sum = (f: (a: ClubAnalytics["activity"]) => number) =>
+    clubs.reduce((s, c) => s + f(c.activity), 0);
+  return {
+    clubs: clubs.length,
+    kompasSubmitted: sum((a) => (a.kompasSubmitted ? 1 : 0)),
+    licensingClosed: sum((a) => (a.licensingClosed ? 1 : 0)),
+    withPlan: sum((a) => (a.planGoals > 0 ? 1 : 0)),
+    visits: sum((a) => a.visits),
+    actionsDone: sum((a) => a.actionsDone),
+    actionsTotal: sum((a) => a.actionsTotal),
+    planDone: sum((a) => a.planDone),
+    planGoals: sum((a) => a.planGoals),
+  };
+}
+
+/** Pure: Sportnet numbers summed per season over the clubs shown, oldest first. */
+export function sportnetTrend(clubs: readonly Pick<ClubAnalytics, "sportnet">[]) {
+  const bySeason = new Map<string, Omit<ClubAnalytics["sportnet"][number], "season">>();
+  for (const row of clubs.flatMap((c) => c.sportnet)) {
+    const t = bySeason.get(row.season) ?? {
+      players: 0,
+      teams: 0,
+      coaches: 0,
+      coachesWithLicence: 0,
+      teamsWithoutCoach: 0,
+    };
+    bySeason.set(row.season, {
+      players: t.players + row.players,
+      teams: t.teams + row.teams,
+      coaches: t.coaches + row.coaches,
+      coachesWithLicence: t.coachesWithLicence + row.coachesWithLicence,
+      teamsWithoutCoach: t.teamsWithoutCoach + row.teamsWithoutCoach,
+    });
+  }
+  return [...bySeason.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([season, t]) => ({ season, ...t }));
+}

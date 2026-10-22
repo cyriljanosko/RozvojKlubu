@@ -60,8 +60,8 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] CP-a – kolekcia `club_plans`, služba, API – PR #57 (zlúčený 21. 10.).
     - [x] CP-b – PR #58 (zlúčený 22. 10.): stránka plánu (zostavenie, stavy, potvrdenie); verejná Vizitka „Na čom klub tento rok pracuje“ s oblasťou, verejným textom a stavom; úloha 14 dní pred termínom a po ňom; „Zostaviť plán sezóny“ až po vyplnení Kompasu; potvrdenie ostáva pri úprave s poznámkou „upravené po potvrdení“; prehľad mentora a súhrn „bez plánu“; ciele v pripomienke pri návšteve.
   - [ ] Analýza – pracovná plocha s panelmi (rozhodnuté 22. 10.): pre admina SFZ (celý pilot), mentora (svoje kluby, Kompas len odoslaný) a vedenie klubu (vlastný klub + anonymný priemer klubov rovnakej veľkosti, len ak sú aspoň 3); dáta Kompas, licenčné hodnotenie, aktivita v Akadémii, Sportnet v čase; filtre sezóna / ObFZ / veľkosť, porovnanie klubov, usporiadanie panelov (v prehliadači), export CSV a PDF cez tlač (Excel zatiaľ nie); odkaz v Moja Akadémia a pre admina v hlavičke; grafy Recharts, sieťový graf Cytoscape.js (súhlas s oboma závislosťami) – uzly oblasti, roly, úlohy klubu, ľudia (ľudia len pre vedenie, mentora, admina), prepínač mapa Akadémie / mapa klubu.
-    - [ ] DA-a – výpočty a API podľa roly, bez novej kolekcie (vetva `feat/analytics`): hotové, overené na dátach pilotu (10 klubov), PR na review.
-    - [ ] DA-b – stránka `/analyza`, 4 panely, filtre, mobil.
+    - [x] DA-a – výpočty a API podľa roly, bez novej kolekcie (PR #59).
+    - [ ] DA-b – stránka `/analyza`, 4 panely, filtre, mobil (vetva `feat/analytics-ui`): hotové, overené na 375 px aj na počítači, PR na review.
     - [ ] DA-c – porovnanie klubov, usporiadanie panelov, export.
     - [ ] DA-d – sieťový graf (mapa Akadémie / mapa klubu).
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).

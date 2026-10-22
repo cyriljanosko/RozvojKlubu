@@ -1,10 +1,13 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import {
+  activityTotals,
   averageAreas,
   benchmarkAllowed,
   getAnalytics,
   kompasAreas,
+  licensingAverages,
+  sportnetTrend,
   type AnalyticsDeps,
 } from "./analytics.service";
 import { memoryPlanStore } from "./club-plan.fixture";
@@ -53,6 +56,73 @@ describe("analytics – pure", () => {
     expect(areas[10]).toBe(4);
     expect(areas[0]).toBeNull();
     expect(kompasAreas(null).every((a) => a === null)).toBe(true);
+  });
+});
+
+describe("analytics – panel shaping", () => {
+  const sp = (season: string, players: number) => ({
+    season,
+    players,
+    teams: 2,
+    coaches: 1,
+    coachesWithLicence: 1,
+    teamsWithoutCoach: 0,
+  });
+  it("averages licensing over closed evaluations and sums Sportnet per season", () => {
+    const lic = licensingAverages([
+      { licensing: [{ key: "teams", area: 2, points: 40, band: null }] },
+      { licensing: [{ key: "teams", area: 2, points: 20, band: null }] },
+      { licensing: null },
+    ]);
+    expect(lic).toEqual({ clubs: 2, areas: [{ key: "teams", points: 30 }] });
+    expect(
+      sportnetTrend([
+        { sportnet: [sp("2025/2026", 30), sp("2026/2027", 40)] },
+        { sportnet: [sp("2026/2027", 10)] },
+      ]),
+    ).toEqual([
+      {
+        season: "2025/2026",
+        players: 30,
+        teams: 2,
+        coaches: 1,
+        coachesWithLicence: 1,
+        teamsWithoutCoach: 0,
+      },
+      {
+        season: "2026/2027",
+        players: 50,
+        teams: 4,
+        coaches: 2,
+        coachesWithLicence: 2,
+        teamsWithoutCoach: 0,
+      },
+    ]);
+    const act = (o: object) => ({
+      activity: {
+        kompasSubmitted: false,
+        licensingClosed: false,
+        visits: 0,
+        actionsDone: 0,
+        actionsTotal: 0,
+        planGoals: 0,
+        planDone: 0,
+        ...o,
+      },
+    });
+    expect(
+      activityTotals([
+        act({ kompasSubmitted: true, visits: 2, planGoals: 2 }),
+        act({ actionsTotal: 3, actionsDone: 1 }),
+      ]),
+    ).toMatchObject({
+      clubs: 2,
+      kompasSubmitted: 1,
+      withPlan: 1,
+      visits: 2,
+      actionsDone: 1,
+      actionsTotal: 3,
+    });
   });
 });
 
