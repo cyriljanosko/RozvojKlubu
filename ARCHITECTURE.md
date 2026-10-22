@@ -143,6 +143,7 @@ MCP server (F5, plánovaný)        ─┘        │
 | `practice_progress`     | aplikácia (tenant) | postup klubu v Praxi oblasti na sezónu, verzia (F6d)        |
 | `mentor_visits`         | aplikácia (tenant) | návštevy mentora s dohodnutými krokmi, stav, verzia (MV)    |
 | `club_plans`            | aplikácia (tenant) | plán klubu na sezónu – ciele, stav, potvrdenie, verzia (CP) |
+| `user_preferences`      | aplikácia (osobné) | nástenka a obľúbené používateľa, verzia (MD, ADR 0012)      |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -167,3 +168,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `practice_progress`: `{ clubId: 1, season: 1, area: 1 }` unikátny (zakladá `src/server/db/practice-progress.store.ts`, súhlas 17. 10. 2026; dotaz overený cez `explain` – IXSCAN)
 - `mentor_visits`: `{ clubId: 1, season: 1, date: -1 }` (zakladá `src/server/db/mentor-visit.store.ts`, súhlas 21. 10. 2026; dotaz overený cez `explain` – IXSCAN)
 - `club_plans`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/club-plan.store.ts`, súhlas 21. 10. 2026; dotaz overený cez `explain` – IXSCAN)
+- `user_preferences`: `{ userId: 1 }` unikátny (zakladá `src/server/db/preferences.store.ts` pri prvom uložení, súhlas 22. 10. 2026; osobné dáta mimo tenanta – ADR 0012)

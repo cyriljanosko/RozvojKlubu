@@ -14,6 +14,7 @@ import { mongoPracticeStore } from "@/server/db/content.store";
 import { mongoProgressStore } from "@/server/db/practice-progress.store";
 import { mongoVisitStore } from "@/server/db/mentor-visit.store";
 import { mongoPlanStore } from "@/server/db/club-plan.store";
+import { mongoPreferencesStore } from "@/server/db/preferences.store";
 import type { AcademyDeps } from "@/server/services/academy.service";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { HubDeps } from "@/server/services/hub.service";
@@ -23,6 +24,7 @@ import type { AnalyticsDeps } from "@/server/services/analytics.service";
 import type { ClubPlanDeps } from "@/server/services/club-plan.service";
 import type { MentorVisitDeps } from "@/server/services/mentor-visit.service";
 import type { NetworkDeps } from "@/server/services/network.service";
+import type { PreferencesDeps } from "@/server/services/preferences.service";
 import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
 import type { SearchDeps } from "@/server/services/search.service";
 import type { VizitkaDeps } from "@/server/services/vizitka.service";
@@ -119,3 +121,5 @@ export const networkDeps: NetworkDeps = {
   content: mongoContentStore,
   roleCatalog: mongoRoleCatalogStore,
 };
+
+export const preferencesDeps: PreferencesDeps = { preferences: mongoPreferencesStore };
