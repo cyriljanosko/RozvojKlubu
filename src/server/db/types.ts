@@ -377,3 +377,29 @@ export interface ClubPlanDoc {
   updatedAt: Date;
   updatedBy: string;
 }
+
+/** Collection `user_preferences` – a user's own dashboard and favourites (MD, 22. 10. 2026). */
+export type FavoriteKind =
+  "area" | "section" | "practice" | "pattern" | "vizitka" | "plan" | "visits";
+
+export interface Favorite {
+  id: string;
+  kind: FavoriteKind;
+  /** internal path of the pinned page (always starts with a single "/") */
+  href: string;
+  /** label as shown when pinned (area name, section title, club name …) */
+  label: string;
+  addedAt: Date;
+}
+
+export interface UserPreferencesDoc {
+  _id?: ObjectId;
+  /** Better Auth user id – one document per user, not club data (no clubId) */
+  userId: string;
+  /** Moja Akadémia tiles: order and hidden ones (tile ids) */
+  dashboard: { order: string[]; hidden: string[] };
+  favorites: Favorite[];
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
