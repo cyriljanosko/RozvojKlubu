@@ -1003,7 +1003,7 @@
     "newTitle": "Nová návšteva",
     "open": "Návštevy mentora",
     "season": "Sezóna {season}",
-    "introMentor": "Záznam stretnutí s klubom a dohodnuté kroky. Klub vidí návštevu až po odoslaní.",
+    "introMentor": "Plán a záznam stretnutí s klubom a dohodnuté kroky. Klub vidí naplánované stretnutie s úlohou vopred a záznam po odoslaní.",
     "introClub": "Návštevy mentora zväzu a kroky, na ktorých ste sa dohodli.",
     "new": "Nová návšteva",
     "empty": "Zatiaľ žiadna návšteva.",
@@ -1012,6 +1012,7 @@
     "present": "Prítomní",
     "actionsCount": "{total, plural, =0 {Bez dohodnutých krokov} one {# krok} few {# kroky} other {# krokov}}{open, plural, =0 {} other { · otvorené #}}",
     "status": {
+      "planned": "naplánovaná",
       "draft": "rozpracovaná",
       "sent": "odoslaná klubu",
       "withdrawn": "zrušená"
@@ -1054,7 +1055,7 @@
       "saveChanges": "Uložiť zmeny",
       "send": "Odoslať klubu",
       "withdraw": "Zrušiť návštevu",
-      "confirmSend": "Odoslať návštevu klubu? Vedenie a tréneri ju uvidia aj s dohodnutými krokmi.",
+      "confirmSend": "Odoslať záznam klubu? Vedenie a tréneri ho uvidia aj s hodnotením a dohodnutými krokmi.",
       "yesSend": "Áno, odoslať",
       "confirmWithdraw": "Zrušiť návštevu? Ostane v histórii, klub ju už neuvidí.",
       "yesWithdraw": "Áno, zrušiť",
@@ -1075,7 +1076,36 @@
         "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova."
       },
       "ownerOther": "Iná osoba…",
-      "ownerName": "Meno zodpovednej osoby"
+      "ownerName": "Meno zodpovednej osoby",
+      "mode": "Čo chcete urobiť",
+      "modes": {
+        "plan": "Naplánovať stretnutie",
+        "record": "Zapísať stretnutie"
+      },
+      "planHint": "Klub uvidí dátum, tému a úlohu vopred hneď po uložení. Záznam zo stretnutia doplníte po ňom.",
+      "topics": "Téma stretnutia",
+      "topicsHint": "Najviac 3 oblasti.",
+      "prepTask": "Úloha vopred",
+      "prepTaskPlaceholder": "Čo má klub pripraviť pred stretnutím",
+      "prepDue": "Do kedy",
+      "assessment": "Hodnotenie stretnutia",
+      "assessmentFields": {
+        "strengths": "Silné stránky",
+        "weaknesses": "Slabé stránky",
+        "recommendations": "Odporúčania / možnosti zlepšenia",
+        "overall": "Celkové hodnotenie"
+      },
+      "assessmentPlaceholders": {
+        "strengths": "V čom je klub dobrý, na čom sa dá stavať",
+        "weaknesses": "Čo klub brzdí",
+        "recommendations": "Čo konkrétne odporúčate",
+        "overall": "Krátke zhrnutie a charakteristika"
+      },
+      "legacySummary": "Zhrnutie (staršie návštevy)",
+      "savePlanned": "Naplánovať",
+      "sendAfter": "Odoslať záznam klubu",
+      "plannedHint": "Klub vidí dátum, tému a úlohu vopred. Po stretnutí doplňte záznam a odošlite ho.",
+      "planned": "Stretnutie je naplánované."
     },
     "club": {
       "actions": "Dohodnuté kroky · splnené {done} z {total}",
@@ -1090,7 +1120,30 @@
       "none": "v tejto sezóne zatiaľ nebola",
       "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}"
     },
-    "edit": "Upraviť návštevu"
+    "edit": "Upraviť návštevu",
+    "topics": "Téma: {areas}",
+    "prep": {
+      "title": "Úloha vopred",
+      "due": "do {date}",
+      "tick": "Pripravené",
+      "done": "Klub označil ako pripravené {date}",
+      "notDone": "Klub zatiaľ neoznačil ako pripravené",
+      "error": "Uloženie sa nepodarilo. Obnovte stránku a skúste znova."
+    },
+    "ratings": {
+      "title": "Hodnotenie úlohy a krokov",
+      "hint": "Ako dopadla úloha vopred a dohodnuté kroky – vyplníte napríklad na ďalšom stretnutí.",
+      "values": {
+        "done": "splnené",
+        "partial": "čiastočne",
+        "not": "nesplnené"
+      },
+      "none": "neohodnotené",
+      "prep": "Úloha vopred",
+      "save": "Uložiť hodnotenie",
+      "saved": "Hodnotenie uložené.",
+      "error": "Uloženie sa nepodarilo. Obnovte stránku a skúste znova."
+    }
   },
   "plan": {
     "pageTitle": "Plán klubu na sezónu",

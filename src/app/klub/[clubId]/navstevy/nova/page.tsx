@@ -69,6 +69,9 @@ async function NewVisit({ params }: PageProps<"/klub/[clubId]/navstevy/nova">) {
           participantIds: [],
           participants: "",
           summary: "",
+          topics: [],
+          assessment: { strengths: "", weaknesses: "", recommendations: "", overall: "" },
+          prepTask: { text: "", dueDate: null },
           findings: [],
           actions: [],
         }}

@@ -89,8 +89,13 @@ async function Visits({ params }: Props) {
                       {t(`status.${v.status}`)}
                     </span>
                   </span>
-                  {v.summary && (
-                    <span className="text-muted-foreground line-clamp-2">{v.summary}</span>
+                  {v.topics.length > 0 && (
+                    <span className="text-xs">{t("topics", { areas: v.topics.join(", ") })}</span>
+                  )}
+                  {(v.assessment?.overall || v.summary || v.prepTask?.text) && (
+                    <span className="text-muted-foreground line-clamp-2">
+                      {v.assessment?.overall || v.summary || v.prepTask?.text}
+                    </span>
                   )}
                   <span className="text-xs">
                     {t("actionsCount", { total: v.actions.length, open })}
