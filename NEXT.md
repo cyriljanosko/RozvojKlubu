@@ -1,6 +1,6 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
@@ -15,7 +15,7 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] F3b – Metodika 11 oblastí (106 sekcií v `rozvojklubu_dev`) – PR #16.
   - [x] F3c – Prax oblastí 3 a 4 (`area_practice` naplnené) – PR #17.
   - [ ] Prax pre ďalšie oblasti – keď vznikne obsah (model je spoločný).
-  - [ ] Ukladanie postupu klubu v Praxi (odškrtnuté kroky, zvolený variant, ukazovatele) – F6d.
+  - [x] Ukladanie postupu klubu v Praxi – F6d (PR #39–#41); ukazovatele neskôr.
 - [x] F4 – Kompas klubu v aplikácii (rozhodnuté 16. 10.: vypĺňa vedenie, tréner číta, mentor vidí len odoslané; kategórie len zo Sportnetu; bez ručného režimu; pri odoslaní zmrazená kópia; Vizitka pre obec neskôr).
   - [x] F4a – výpočet, model, API – PR #18 (zlúčený 16. 10.).
   - [x] F4b – vyplnenie a výsledok v UI – PR #19 (zlúčený 16. 10.).
@@ -59,21 +59,22 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] Plán klubu na sezónu (rozhodnuté 21. 10., z analýzy FAF/DFB – EFQM „smer“): zostavuje vedenie a mentor, tréner číta; ponuka 2 cieľov z najslabších oblastí Kompasu + tlačidlo na ďalšie (najviac 10); oblasť povinná; stav nezačatý / rozbehnutý / splnený (mení aj zodpovedný); mentor môže plán potvrdiť (nepovinné); pri každom cieli povinný „text pre verejnú Vizitku“ s vysvetlením, ako ho písať – verejná Vizitka ukáže oblasť, tento text a stav, bez mien; úlohy pri termíne zodpovednému a vedeniu; neverejná Vizitka a prehľad mentora.
     - [x] CP-a – kolekcia `club_plans`, služba, API – PR #57 (zlúčený 21. 10.).
     - [x] CP-b – PR #58 (zlúčený 22. 10.): stránka plánu (zostavenie, stavy, potvrdenie); verejná Vizitka „Na čom klub tento rok pracuje“ s oblasťou, verejným textom a stavom; úloha 14 dní pred termínom a po ňom; „Zostaviť plán sezóny“ až po vyplnení Kompasu; potvrdenie ostáva pri úprave s poznámkou „upravené po potvrdení“; prehľad mentora a súhrn „bez plánu“; ciele v pripomienke pri návšteve.
-  - [ ] Analýza – pracovná plocha s panelmi (rozhodnuté 22. 10.): pre admina SFZ (celý pilot), mentora (svoje kluby, Kompas len odoslaný) a vedenie klubu (vlastný klub + anonymný priemer klubov rovnakej veľkosti, len ak sú aspoň 3); dáta Kompas, licenčné hodnotenie, aktivita v Akadémii, Sportnet v čase; filtre sezóna / ObFZ / veľkosť, porovnanie klubov, usporiadanie panelov (v prehliadači), export CSV a PDF cez tlač (Excel zatiaľ nie); odkaz v Moja Akadémia a pre admina v hlavičke; grafy Recharts, sieťový graf Cytoscape.js (súhlas s oboma závislosťami) – uzly oblasti, roly, úlohy klubu, ľudia (ľudia len pre vedenie, mentora, admina), prepínač mapa Akadémie / mapa klubu.
+  - [x] Analýza – pracovná plocha s panelmi (rozhodnuté 22. 10.): pre admina SFZ (celý pilot), mentora (svoje kluby, Kompas len odoslaný) a vedenie klubu (vlastný klub + anonymný priemer klubov rovnakej veľkosti, len ak sú aspoň 3); dáta Kompas, licenčné hodnotenie, aktivita v Akadémii, Sportnet v čase; filtre sezóna / ObFZ / veľkosť, porovnanie klubov, usporiadanie panelov (v prehliadači), export CSV a PDF cez tlač (Excel zatiaľ nie); odkaz v Moja Akadémia a pre admina v hlavičke; grafy Recharts, sieťový graf Cytoscape.js (súhlas s oboma závislosťami) – uzly oblasti, roly, úlohy klubu, ľudia (ľudia len pre vedenie, mentora, admina), prepínač mapa Akadémie / mapa klubu.
     - [x] DA-a – výpočty a API podľa roly, bez novej kolekcie (PR #59).
     - [x] DA-b – stránka `/analyza`, 4 panely, filtre, mobil (PR #60).
     - [x] DA-c – porovnanie klubov, usporiadanie panelov, export (PR #62).
     - [x] DA-d – sieťový graf (PR #63). Ťuknutie prstom na skutočnom telefóne overí Cyril.
-  - [ ] Moja Akadémia ako nástenka (rozhodnuté 22. 10., ADR 0012): dlaždice s posúvaním a skrytím, pripínanie obľúbených hviezdičkou (oblasť, sekcia Metodiky, krok a vzor Praxe, Vizitka, plán a návštevy klubu), prepínač klubu pri viacerých kluboch, malý graf Kompasu, vlastné dlaždice pre admina a mentora; uložené v účte (kolekcia `user_preferences`, súhlas).
+  - [x] Moja Akadémia ako nástenka (rozhodnuté 22. 10., ADR 0012): dlaždice s posúvaním a skrytím, pripínanie obľúbených hviezdičkou (oblasť, sekcia Metodiky, krok a vzor Praxe, Vizitka, plán a návštevy klubu), prepínač klubu pri viacerých kluboch, malý graf Kompasu, vlastné dlaždice pre admina a mentora; uložené v účte (kolekcia `user_preferences`, súhlas).
     - [x] MD-a – kolekcia `user_preferences`, služba, API (PR #64).
     - [x] MD-b – nástenka v Moja Akadémia (PR #65). Dva stĺpce od 1024 px overiť na počítači.
     - [x] MD-c – hviezdička „Pripnúť“ a dlaždica Obľúbené (PR #66).
-  - [ ] Mentoring klubu (rozhodnuté 22. 10., ADR 0013, podľa vzoru mentoringu EYA): sezónny cyklus – úvodné sebahodnotenie klubu (vedenie), zameranie rozvoja od mentora (1–3 prioritné oblasti), stretnutia (návštevy s témou, naplánovaním, úlohou vopred, hodnotením v štyroch poliach a hodnotením krokov), záver klubu a mentora s plánom na ďalšiu sezónu; pripomienky klubu k mentoringu vidí mentor a admin SFZ; kolekcia `club_mentoring` a nové polia v `mentor_visits` (súhlas).
+  - [x] Mentoring klubu (rozhodnuté 22. 10., ADR 0013, podľa vzoru mentoringu EYA): sezónny cyklus – úvodné sebahodnotenie klubu (vedenie), zameranie rozvoja od mentora (1–3 prioritné oblasti), stretnutia (návštevy s témou, naplánovaním, úlohou vopred, hodnotením v štyroch poliach a hodnotením krokov), záver klubu a mentora s plánom na ďalšiu sezónu; pripomienky klubu k mentoringu vidí mentor a admin SFZ; kolekcia `club_mentoring` a nové polia v `mentor_visits` (súhlas).
     - [x] MC-a – model a API (PR #67).
     - [x] MC-b – rozšírená návšteva v UI vrátane hodnotenia podľa tém (PR #68, ADR 0014).
-    - [x] MC-c – stránka Mentoring klubu (PR #69). Po prvom skutočnom uložení overiť index `club_mentoring` cez `explain`.
-    - [ ] MC-d – úlohy, nástenka, Vizitka a prehľady (vetva `feat/mentoring-tasks`): hotové, overené na 375 px, PR na review.
-  - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
+    - [x] MC-c – stránka Mentoring klubu (PR #69).
+    - [x] MC-d – úlohy, nástenka, Vizitka a prehľady (PR #70, v produkcii `aca4c0b`).
+    - [ ] Po prvom skutočnom uložení mentoringu overiť index `club_mentoring` cez `explain`; úlohy záveru sezóny skontrolovať v máji.
+  - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Ďalší navrhovaný krok (22. 10.); treba rozhodnúť zdroj licencií.
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).
     - [x] F6d-b – UI v Praxi: úlohy prvého kroku, výber možnosti a „hotové“ pri kroku, priebeh roly, výber klubu – PR #40 (zlúčený 17. 10.).
@@ -94,7 +95,7 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Pred prvými ostrými dátami
 
-- [ ] Samostatná databáza pre Preview (vlastný DB používateľ, iné `MONGODB_URI`/`MONGODB_DB` pre Preview vo Verceli).
+- [ ] Samostatná databáza pre Preview (vlastný DB používateľ, iné `MONGODB_URI`/`MONGODB_DB` pre Preview vo Verceli). Naliehavejšie: skúšky (návštevy, mentoring, obľúbené) dnes zapisujú do tej istej databázy ako produkcia – mentoring sa preto nedal vyskúšať uložením.
 - [ ] Atlas: upgrade z M0 a obmedzenie DB používateľa len na svoju databázu.
 
 ## Čaká na niekoho iného
