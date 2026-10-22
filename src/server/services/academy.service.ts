@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
-import type { AreaRoleChoiceDoc, ClubRole } from "@/server/db/types";
-import { clubRolesFor } from "@/server/services/club-access";
+import type { AreaRoleChoiceDoc, ClubRole, PlanGoalStatus } from "@/server/db/types";
+import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ContentStore } from "@/server/services/content.service";
 import { profileFromSeason } from "@/server/services/kompas-export";
 import type { KompasResult } from "@/server/services/kompas-scoring";
@@ -12,6 +12,7 @@ import {
   type MentorClubRow,
   type SubmissionDeps,
 } from "@/server/services/kompas-submission.service";
+import { kompasAreas } from "@/server/services/analytics.service";
 import { getKompas } from "@/server/services/kompas.service";
 import type {
   EvaluationStore,
@@ -365,8 +366,26 @@ export interface AcademyClub {
   roles: ClubRole[];
   /** base role names of the catalog for the user's club roles */
   baseRoleNames: string[];
-  kompas: { version: number; total: number; filledAreas: number; submittedAt: Date | null } | null;
+  kompas: {
+    version: number;
+    total: number;
+    filledAreas: number;
+    submittedAt: Date | null;
+    /** points of areas 1–11 (index 0 = area 1), null when not scored – dashboard chart */
+    areas: (number | null)[];
+  } | null;
   licensingClosedAt: Date | null;
+  /** mentor visits of the season (dashboard tile) */
+  visits: VisitSummary;
+  /** plan of the season (dashboard tile) */
+  plan: PlanSummary;
+  planGoals: {
+    id: string;
+    area: number;
+    title: string;
+    status: PlanGoalStatus;
+    dueDate: string | null;
+  }[];
   tasks: AcademyTask[];
   /** chosen roles as "area.key" */
   chosenRoles: string[];
@@ -384,6 +403,10 @@ export interface AcademyView {
       plan: PlanSummary;
     })[];
     tasks: AcademyTask[];
+  } | null;
+  /** admin_sfz: all pilot clubs with the latest Kompas and visits (dashboard tiles) */
+  admin: {
+    rows: (MentorClubRow & { visits: VisitSummary })[];
   } | null;
 }
 
@@ -442,13 +465,14 @@ export async function getMyAcademy(
     ).filter((p): p is PracticeTaskInput => p !== null);
     const unsent = !latest || (view.updatedAt !== null && +view.updatedAt > +latest.submittedAt);
     const plan = await deps.plans.findPlan(club.clubId, season);
+    const visits = await deps.visits.listVisits(club.clubId);
     const planTasks = planTasksFor(
       plan,
       { userId: user.id, management: roles.includes("management") },
       today,
     );
     const visitTasks = visitTasksFor(
-      await deps.visits.listVisits(club.clubId),
+      visits,
       { userId: user.id, management: roles.includes("management") },
       today,
     );
@@ -467,8 +491,18 @@ export async function getMyAcademy(
         total: view.result.total,
         filledAreas: view.result.filledAreas,
         submittedAt: latest?.submittedAt ?? null,
+        areas: kompasAreas(view.result),
       },
       licensingClosedAt: closed?.closedAt ?? null,
+      visits: summarizeVisits(visits, season, today),
+      plan: summarizePlan(plan),
+      planGoals: (plan?.goals ?? []).map((g) => ({
+        id: g.id,
+        area: g.area,
+        title: g.title,
+        status: g.status,
+        dueDate: g.dueDate,
+      })),
       tasks: clubTasks({
         clubId: club.clubId,
         roles,
@@ -503,7 +537,19 @@ export async function getMyAcademy(
     );
     mentor = { rows, tasks: mentorTasks(rows) };
   }
-  return { season, clubs: own, mentor };
+  let admin: AcademyView["admin"] = null;
+  if (isAdmin(user)) {
+    const rows = await listMentorClubs(deps, user);
+    admin = {
+      rows: await Promise.all(
+        rows.map(async (r) => ({
+          ...r,
+          visits: summarizeVisits(await deps.visits.listVisits(r.clubId), season, today),
+        })),
+      ),
+    };
+  }
+  return { season, clubs: own, mentor, admin };
 }
 
 export const saveChoiceSchema = z.object({
