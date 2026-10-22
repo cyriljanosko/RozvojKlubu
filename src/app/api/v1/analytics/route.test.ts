@@ -49,11 +49,25 @@ describe("/api/v1/analytics", () => {
     expect(own).toMatchObject({ scope: "club", average: null });
   });
 
+  it("exports CSV with the same scope", async () => {
+    getCurrentUser.mockResolvedValue(alice);
+    const res = await get("?format=csv");
+    expect(res.headers.get("content-type")).toContain("text/csv");
+    expect(res.headers.get("content-disposition")).toMatch(/analyza-\d{4}-\d{4}\.csv/);
+    const lines = (await res.text()).replace("\uFEFF", "").trim().split("\r\n");
+    expect(lines[0].split(";")[0]).toBe("Klub");
+    expect(lines).toHaveLength(2); // header + own club only
+    expect(lines[1]).toContain(A);
+    getCurrentUser.mockResolvedValue(null);
+    expect((await get("?format=csv")).status).toBe(401);
+  });
+
   it("refuses anonymous (401) and bad filters (400)", async () => {
     getCurrentUser.mockResolvedValue(null);
     expect((await get()).status).toBe(401);
     getCurrentUser.mockResolvedValue(admin);
     expect((await get("?size=huge")).status).toBe(400);
     expect((await get("?season=2026")).status).toBe(400);
+    expect((await get("?format=xlsx")).status).toBe(400);
   });
 });

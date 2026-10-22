@@ -86,6 +86,8 @@ export interface AnalyticsView {
   season: string;
   /** unions of the clubs in scope – for the filter */
   unions: string[];
+  /** every club in scope (before filters) – for the comparison picker */
+  options: { clubId: string; name: string; union: string }[];
   clubs: ClubAnalytics[];
   /** average over the clubs shown (admin, mentor) */
   average: { kompas: (number | null)[] } | null;
@@ -219,6 +221,9 @@ export async function getAnalytics(
       ? await deps.clubs.listClubs("all")
       : await deps.clubs.listClubs([...new Set([...mentorIds, ...ownIds])]);
   const unions = [...new Set(allowed.map((c) => c.union))].sort((a, b) => a.localeCompare(b, "sk"));
+  const options = allowed
+    .map((c) => ({ clubId: c.clubId, name: c.name, union: c.union }))
+    .sort((a, b) => a.name.localeCompare(b.name, "sk"));
 
   const picked = allowed
     .filter((c) => !filter.union || c.union === filter.union)
@@ -257,6 +262,7 @@ export async function getAnalytics(
     scope,
     season,
     unions,
+    options,
     clubs,
     average: scope === "club" ? null : { kompas: averageAreas(clubs.map((c) => c.kompas.areas)) },
     benchmark,
@@ -318,4 +324,99 @@ export function sportnetTrend(clubs: readonly Pick<ClubAnalytics, "sportnet">[])
   return [...bySeason.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([season, t]) => ({ season, ...t }));
+}
+
+/** Header labels and size names of the CSV export (Slovak, from messages). */
+export interface CsvLabels {
+  club: string;
+  clubId: string;
+  union: string;
+  size: string;
+  sizes: Record<ClubSize, string>;
+  kompasSource: string;
+  sources: Record<"submitted" | "working", string>;
+  area: string;
+  kompasTotal: string;
+  licensingPoints: string;
+  visits: string;
+  actionsDone: string;
+  actionsTotal: string;
+  goalsDone: string;
+  goalsTotal: string;
+  players: string;
+  teams: string;
+  coaches: string;
+  coachesWithLicence: string;
+  teamsWithoutCoach: string;
+  average: string;
+  benchmark: string;
+}
+
+/** Pure: one row per club for spreadsheets – ";" separated, decimal comma, CRLF (Slovak Excel). */
+export function analyticsCsv(view: AnalyticsView, labels: CsvLabels): string {
+  const cell = (v: string | number | null | undefined) => {
+    if (v === null || v === undefined) return "";
+    const text = typeof v === "number" ? String(v).replace(".", ",") : v;
+    return /[";\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+  };
+  const areas = Array.from({ length: 11 }, (_, i) => `${labels.area} ${i + 1}`);
+  const header = [
+    labels.club,
+    labels.clubId,
+    labels.union,
+    labels.size,
+    labels.kompasSource,
+    ...areas,
+    labels.kompasTotal,
+    labels.licensingPoints,
+    labels.visits,
+    labels.actionsDone,
+    labels.actionsTotal,
+    labels.goalsDone,
+    labels.goalsTotal,
+    labels.players,
+    labels.teams,
+    labels.coaches,
+    labels.coachesWithLicence,
+    labels.teamsWithoutCoach,
+  ];
+  const rows = view.clubs.map((c) => {
+    const sp = c.sportnet.find((s) => s.season === view.season);
+    return [
+      c.name,
+      c.clubId,
+      c.union,
+      c.size ? labels.sizes[c.size] : null,
+      c.kompas.source && c.kompas.filledAreas > 0 ? labels.sources[c.kompas.source] : null,
+      ...c.kompas.areas,
+      c.kompas.filledAreas > 0 ? c.kompas.total : null,
+      c.licensing ? c.licensing.reduce((s, a) => s + a.points, 0) : null,
+      c.activity.visits,
+      c.activity.actionsDone,
+      c.activity.actionsTotal,
+      c.activity.planDone,
+      c.activity.planGoals,
+      sp?.players,
+      sp?.teams,
+      sp?.coaches,
+      sp?.coachesWithLicence,
+      sp?.teamsWithoutCoach,
+    ];
+  });
+  const pad = header.length - 16;
+  if (view.average) {
+    rows.push([labels.average, null, null, null, null, ...view.average.kompas, ...Array(pad)]);
+  }
+  if (view.benchmark) {
+    rows.push([
+      `${labels.benchmark} (${view.benchmark.clubs})`,
+      null,
+      null,
+      labels.sizes[view.benchmark.size],
+      null,
+      ...view.benchmark.kompas,
+      ...Array(pad),
+    ]);
+  }
+  return [header, ...rows].map((r) => r.map(cell).join(";")).join("\r\n") + "\r\n";
 }
