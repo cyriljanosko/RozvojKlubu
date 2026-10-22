@@ -14,6 +14,7 @@ import { mongoPracticeStore } from "@/server/db/content.store";
 import { mongoProgressStore } from "@/server/db/practice-progress.store";
 import { mongoVisitStore } from "@/server/db/mentor-visit.store";
 import { mongoPlanStore } from "@/server/db/club-plan.store";
+import { mongoMentoringStore } from "@/server/db/club-mentoring.store";
 import { mongoPreferencesStore } from "@/server/db/preferences.store";
 import type { AcademyDeps } from "@/server/services/academy.service";
 import type { ClubDeps } from "@/server/services/clubs.service";
@@ -22,6 +23,7 @@ import type { SubmissionDeps } from "@/server/services/kompas-submission.service
 import type { LicensingDeps } from "@/server/services/licensing.service";
 import type { AnalyticsDeps } from "@/server/services/analytics.service";
 import type { ClubPlanDeps } from "@/server/services/club-plan.service";
+import type { MentoringDeps } from "@/server/services/club-mentoring.service";
 import type { MentorVisitDeps } from "@/server/services/mentor-visit.service";
 import type { NetworkDeps } from "@/server/services/network.service";
 import type { PreferencesDeps } from "@/server/services/preferences.service";
@@ -123,3 +125,5 @@ export const networkDeps: NetworkDeps = {
 };
 
 export const preferencesDeps: PreferencesDeps = { preferences: mongoPreferencesStore };
+
+export const mentoringDeps: MentoringDeps = { ...clubDeps, mentoring: mongoMentoringStore };

@@ -299,7 +299,19 @@ export interface PracticeProgressDoc {
 
 /** Collection `mentor_visits` – a union mentor's visit to a club with agreed actions (21. 10. 2026). */
 export type MentorVisitForm = "onsite" | "online" | "phone";
-export type MentorVisitStatus = "draft" | "sent" | "withdrawn";
+/** planned: date and topics known in advance, the club sees it and prepares (MC, 22. 10. 2026) */
+export type MentorVisitStatus = "planned" | "draft" | "sent" | "withdrawn";
+
+/** How an agreed step or a task before the visit turned out (mentor's rating, MC). */
+export type MentorRating = "done" | "partial" | "not";
+
+/** Mentor's assessment of a visit in four fields, like the EYA coach mentoring (MC). */
+export interface MentorAssessment {
+  strengths: string;
+  weaknesses: string;
+  recommendations: string;
+  overall: string;
+}
 
 export interface MentorVisitAction {
   id: string;
@@ -315,6 +327,19 @@ export interface MentorVisitAction {
   done: boolean;
   doneAt: Date | null;
   doneBy: string | null;
+  /** mentor's rating at a later meeting (MC); null = not rated yet */
+  rating: MentorRating | null;
+}
+
+/** A task the club prepares before the visit (MC). */
+export interface MentorPrepTask {
+  text: string;
+  /** ISO date "YYYY-MM-DD" */
+  dueDate: string | null;
+  done: boolean;
+  doneAt: Date | null;
+  doneBy: string | null;
+  rating: MentorRating | null;
 }
 
 export interface MentorVisitDoc {
@@ -328,7 +353,12 @@ export interface MentorVisitDoc {
   participantIds: string[];
   /** other people present – names, free text (visible to the club, its mentor and admin_sfz only) */
   participants: string;
+  /** free summary – visits before 22. 10. 2026; new visits use `assessment` (MC) */
   summary: string;
+  /** areas the visit is about, 0–3 (MC) */
+  topics: number[];
+  assessment: MentorAssessment | null;
+  prepTask: MentorPrepTask | null;
   findings: { area: number; text: string }[];
   actions: MentorVisitAction[];
   status: MentorVisitStatus;
@@ -402,4 +432,64 @@ export interface UserPreferencesDoc {
   version: number;
   createdAt: Date;
   updatedAt: Date;
+}
+
+/**
+ * Collection `club_mentoring` – the club's mentoring cycle of a season, like the EYA coach
+ * mentoring (MC, 22. 10. 2026): the club's opening self-assessment, the mentor's development focus
+ * and the closing of the season by the club and by the mentor. Visits stay in `mentor_visits`.
+ */
+export interface MentoringIntro {
+  strengths: string;
+  weaknesses: string;
+  /** what the club wants to improve this season */
+  improve: string;
+  /** what the club expects from the mentor */
+  expectations: string;
+  savedAt: Date;
+  savedBy: string;
+}
+
+export interface MentoringFocus {
+  strengths: string;
+  weaknesses: string;
+  recommendations: string;
+  /** the mentor's characterisation of the club */
+  assessment: string;
+  /** priority areas for the season, 1–3 */
+  areas: number[];
+  savedAt: Date;
+  savedBy: string;
+}
+
+export interface MentoringClosingClub {
+  /** how the club sees the agreed steps */
+  stepsReview: string;
+  /** remarks on the mentoring – only the mentor and admin_sfz (and its author) read it */
+  feedback: string;
+  selfAssessment: string;
+  savedAt: Date;
+  savedBy: string;
+}
+
+export interface MentoringClosingMentor {
+  assessment: string;
+  /** development plan for the next season */
+  nextPlan: string;
+  savedAt: Date;
+  savedBy: string;
+}
+
+export interface ClubMentoringDoc {
+  _id?: ObjectId;
+  clubId: string;
+  season: string;
+  intro: MentoringIntro | null;
+  focus: MentoringFocus | null;
+  closingClub: MentoringClosingClub | null;
+  closingMentor: MentoringClosingMentor | null;
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
 }

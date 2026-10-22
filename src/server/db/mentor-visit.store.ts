@@ -23,7 +23,15 @@ function ensureIndexes(db: Db): Promise<unknown> {
 const toStored = ({ _id, ...rest }: MentorVisitDoc): StoredVisit => ({
   ...rest,
   participantIds: rest.participantIds ?? [], // visits recorded before 21. 10. 2026
-  actions: rest.actions.map((a) => ({ ...a, ownerId: a.ownerId ?? null })),
+  // visits recorded before the mentoring cycle (22. 10. 2026)
+  topics: rest.topics ?? [],
+  assessment: rest.assessment ?? null,
+  prepTask: rest.prepTask ?? null,
+  actions: rest.actions.map((a) => ({
+    ...a,
+    ownerId: a.ownerId ?? null,
+    rating: a.rating ?? null,
+  })),
   id: String(_id),
 });
 

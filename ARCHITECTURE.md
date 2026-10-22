@@ -85,6 +85,12 @@ MCP server (F5, plánovaný)        ─┘        │
 1. `GET|POST /api/v1/clubs/:clubId/mentor-visits`, `GET|PATCH .../:visitId`, `POST .../:visitId/send`, `POST .../:visitId/withdraw`, `PATCH .../:visitId/actions/:actionId` – služba `mentor-visit.service.ts`
 2. Záznam: dátum, forma (osobne / online / telefonicky), prítomní (mená, len pre klub, jeho mentora a admina SFZ), zhrnutie, zistenia pri vybraných oblastiach, dohodnuté kroky (čo, oblasť, kto, do kedy, splnené)
 3. Stav rozpracovaná → odoslaná klubu → zrušená (nič sa nemaže); zapisuje mentor klubu v sezóne a admin SFZ, vedenie a tréner vidia len odoslané a odškrtávajú kroky; verzia (súbežná úprava → 409)
+4. Mentoring (MC, ADR 0013): stav aj **naplánovaná** (klub ju vidí), téma 0–3 oblasti, úloha vopred (`PATCH .../:visitId/prep` – klub odškrtne), hodnotenie v štyroch poliach namiesto zhrnutia, hodnotenia úlohy a krokov mentorom (`PATCH .../:visitId/ratings`); staré záznamy dostanú prázdne nové polia pri čítaní
+
+### Mentoring klubu (MC)
+
+1. `GET /api/v1/clubs/:clubId/mentoring?season=`, `PUT .../mentoring/:part` (`intro`, `focus`, `closing-club`, `closing-mentor`) – služba `club-mentoring.service.ts`, jeden dokument na klub a sezónu, verzia (súbežná úprava → 409)
+2. Úvod a záver klubu píše vedenie, zameranie a záver mentora mentor klubu, admin SFZ všetko; tréner číta bez pripomienok k mentoringu; zapisuje sa len aktuálna sezóna
 
 ### Plán klubu na sezónu (CP)
 
@@ -144,6 +150,7 @@ MCP server (F5, plánovaný)        ─┘        │
 | `licensing_submissions` | aplikácia (tenant) | uzavreté (zmrazené) licenčné hodnotenie sezóny              |
 | `practice_progress`     | aplikácia (tenant) | postup klubu v Praxi oblasti na sezónu, verzia (F6d)        |
 | `mentor_visits`         | aplikácia (tenant) | návštevy mentora s dohodnutými krokmi, stav, verzia (MV)    |
+| `club_mentoring`        | aplikácia (tenant) | mentoring klubu na sezónu – úvod, zameranie, záver (MC)     |
 | `club_plans`            | aplikácia (tenant) | plán klubu na sezónu – ciele, stav, potvrdenie, verzia (CP) |
 | `user_preferences`      | aplikácia (osobné) | nástenka a obľúbené používateľa, verzia (MD, ADR 0012)      |
 
@@ -170,4 +177,5 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `practice_progress`: `{ clubId: 1, season: 1, area: 1 }` unikátny (zakladá `src/server/db/practice-progress.store.ts`, súhlas 17. 10. 2026; dotaz overený cez `explain` – IXSCAN)
 - `mentor_visits`: `{ clubId: 1, season: 1, date: -1 }` (zakladá `src/server/db/mentor-visit.store.ts`, súhlas 21. 10. 2026; dotaz overený cez `explain` – IXSCAN)
 - `club_plans`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/club-plan.store.ts`, súhlas 21. 10. 2026; dotaz overený cez `explain` – IXSCAN)
+- `club_mentoring`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/club-mentoring.store.ts` pri prvom uložení, súhlas 22. 10. 2026; ADR 0013)
 - `user_preferences`: `{ userId: 1 }` unikátny (zakladá `src/server/db/preferences.store.ts` pri prvom uložení, súhlas 22. 10. 2026; osobné dáta mimo tenanta – ADR 0012)

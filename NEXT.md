@@ -67,7 +67,12 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Moja Akadémia ako nástenka (rozhodnuté 22. 10., ADR 0012): dlaždice s posúvaním a skrytím, pripínanie obľúbených hviezdičkou (oblasť, sekcia Metodiky, krok a vzor Praxe, Vizitka, plán a návštevy klubu), prepínač klubu pri viacerých kluboch, malý graf Kompasu, vlastné dlaždice pre admina a mentora; uložené v účte (kolekcia `user_preferences`, súhlas).
     - [x] MD-a – kolekcia `user_preferences`, služba, API (PR #64).
     - [x] MD-b – nástenka v Moja Akadémia (PR #65). Dva stĺpce od 1024 px overiť na počítači.
-    - [ ] MD-c – hviezdička „Pripnúť“ a dlaždica Obľúbené (vetva `feat/favorites`): hotové, overené na 375 px, PR na review.
+    - [x] MD-c – hviezdička „Pripnúť“ a dlaždica Obľúbené (PR #66).
+  - [ ] Mentoring klubu (rozhodnuté 22. 10., ADR 0013, podľa vzoru mentoringu EYA): sezónny cyklus – úvodné sebahodnotenie klubu (vedenie), zameranie rozvoja od mentora (1–3 prioritné oblasti), stretnutia (návštevy s témou, naplánovaním, úlohou vopred, hodnotením v štyroch poliach a hodnotením krokov), záver klubu a mentora s plánom na ďalšiu sezónu; pripomienky klubu k mentoringu vidí mentor a admin SFZ; kolekcia `club_mentoring` a nové polia v `mentor_visits` (súhlas).
+    - [ ] MC-a – model a API (vetva `feat/club-mentoring`): hotové, PR na review.
+    - [ ] MC-b – rozšírená návšteva v UI: naplánovať, téma, úloha vopred (klub odškrtne), štyri polia namiesto zhrnutia, hodnotenie úlohy a krokov.
+    - [ ] MC-c – stránka Mentoring klubu (`/klub/[clubId]/mentoring`): časová os ①–④, formuláre úvodu, zamerania a záverov, tlač/PDF; prioritné oblasti → návrh cieľov plánu.
+    - [ ] MC-d – úlohy („Pripravte sa na stretnutie“, „Vyplniť úvod / záver“), dlaždica na nástenke, riadok vo Vizitke, prehľad mentora a admina.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).

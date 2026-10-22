@@ -22,6 +22,8 @@ const one = await import("./[visitId]/route");
 const send = await import("./[visitId]/send/route");
 const withdraw = await import("./[visitId]/withdraw/route");
 const action = await import("./[visitId]/actions/[actionId]/route");
+const prep = await import("./[visitId]/prep/route");
+const ratings = await import("./[visitId]/ratings/route");
 
 const ctx = (params: Record<string, string>) => ({ params: Promise.resolve(params) }) as never;
 const req = (method: string, body?: unknown) =>
@@ -81,6 +83,41 @@ describe("/api/v1/clubs/:clubId/mentor-visits", () => {
       (await withdraw.POST(req("POST", { expectedVersion: 3 }), ctx({ clubId: A, visitId: v.id })))
         .status,
     ).toBe(403);
+  });
+
+  it("plans a visit; the club ticks the task before it, only the mentor side rates (MC)", async () => {
+    getCurrentUser.mockResolvedValue(admin);
+    const created = await list.POST(
+      req("POST", {
+        ...visit,
+        planned: true,
+        topics: [3],
+        prepTask: { text: "Spočítať trénerov", dueDate: null },
+      }),
+      ctx({ clubId: A }),
+    );
+    const { data: v } = await created.json();
+    expect(v).toMatchObject({ status: "planned", topics: [3] });
+    getCurrentUser.mockResolvedValue(alice);
+    const ticked = await prep.PATCH(
+      req("PATCH", { done: true, expectedVersion: 1 }),
+      ctx({ clubId: A, visitId: v.id }),
+    );
+    expect((await ticked.json()).data.prepTask.done).toBe(true);
+    expect(
+      (
+        await ratings.PATCH(
+          req("PATCH", { prep: "done", expectedVersion: 2 }),
+          ctx({ clubId: A, visitId: v.id }),
+        )
+      ).status,
+    ).toBe(403);
+    getCurrentUser.mockResolvedValue(admin);
+    const rated = await ratings.PATCH(
+      req("PATCH", { prep: "partial", expectedVersion: 2 }),
+      ctx({ clubId: A, visitId: v.id }),
+    );
+    expect((await rated.json()).data.prepTask.rating).toBe("partial");
   });
 
   it("refuses the club to record (403), other clubs (403), anonymous (401) and bad input (400)", async () => {

@@ -5,12 +5,15 @@ import { addClubMember } from "./clubs.service";
 import { memorySubmissionStore } from "./kompas.fixture";
 import { memoryVisitStore } from "./mentor-visit.fixture";
 import {
+  applyRatings,
   buildVisitContent,
   createMentorVisit,
   getVisitFormData,
   getMentorVisit,
   listMentorVisits,
   openActions,
+  rateMentorVisit,
+  setPrepTaskDone,
   summarizeVisits,
   visitTasksFor,
   sendMentorVisit,
@@ -40,7 +43,7 @@ describe("mentor visits – pure", () => {
   it("builds the content, derives the season and keeps done state of existing actions", () => {
     let n = 0;
     const id = () => `a${++n}`;
-    const first = buildVisitContent(input as never, [], id);
+    const first = buildVisitContent(input as never, { actions: [] }, id);
     expect(first).toMatchObject({ season: "2026/2027", findings: [{ area: 3 }] });
     expect(first.actions.map((a) => [a.id, a.done])).toEqual([
       ["a1", false],
@@ -49,7 +52,7 @@ describe("mentor visits – pure", () => {
     const doneAt = new Date("2026-10-20T00:00:00Z");
     const again = buildVisitContent(
       { ...input, actions: [{ ...input.actions[0], id: "a1" }] } as never,
-      [{ ...first.actions[0], done: true, doneAt, doneBy: "bob" }],
+      { actions: [{ ...first.actions[0], done: true, doneAt, doneBy: "bob" }] },
       id,
     );
     expect(again.actions).toEqual([expect.objectContaining({ id: "a1", done: true, doneAt })]);
@@ -62,15 +65,15 @@ describe("mentor visits – pure", () => {
             { area: 3, text: "y" },
           ],
         } as never,
-        [],
+        { actions: [] },
       ),
     ).toThrow("One finding per area");
-    expect(buildVisitContent({ ...input, date: "2027-05-01" } as never, []).season).toBe(
-      "2026/2027",
-    );
-    expect(buildVisitContent({ ...input, date: "2027-07-01" } as never, []).season).toBe(
-      "2027/2028",
-    );
+    expect(
+      buildVisitContent({ ...input, date: "2027-05-01" } as never, { actions: [] }).season,
+    ).toBe("2026/2027");
+    expect(
+      buildVisitContent({ ...input, date: "2027-07-01" } as never, { actions: [] }).season,
+    ).toBe("2027/2028");
   });
 
   it("shows only sent visits to the club and lists open actions by due date", () => {
@@ -88,6 +91,7 @@ describe("mentor visits – pure", () => {
       done,
       doneAt: null,
       doneBy: null,
+      rating: null,
     });
     const open = openActions([
       {
@@ -172,6 +176,96 @@ describe("mentor visits – service", () => {
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
+  it("plans a visit with topics and a task before it; the club prepares, the mentor rates (MC)", async () => {
+    const planned = await createMentorVisit(deps, mona, A, {
+      date: "2026-11-05",
+      form: "onsite",
+      planned: true,
+      topics: [3, 3, 1],
+      prepTask: { text: "Spočítať trénerov po kategóriách", dueDate: "2026-11-01" },
+      findings: [],
+      actions: [],
+    });
+    expect(planned).toMatchObject({
+      status: "planned",
+      topics: [1, 3],
+      assessment: null,
+      prepTask: { done: false, rating: null },
+    });
+    // the club sees a planned visit and ticks the task before it
+    expect((await listMentorVisits(deps, bob, A)).visits.map((v) => v.status)).toEqual(["planned"]);
+    const prepared = await setPrepTaskDone(deps, alice, A, planned.id, {
+      done: true,
+      expectedVersion: 1,
+    });
+    expect(prepared.prepTask).toMatchObject({ done: true, doneBy: "alice" });
+
+    // the mentor records the meeting in four fields; the club's tick and the rating survive edits
+    const assessment = {
+      strengths: "Vedenie má prehľad.",
+      weaknesses: "U9 bez trénera.",
+      recommendations: "Osloviť rodičov.",
+      overall: "Dobrý začiatok.",
+    };
+    const filled = await updateMentorVisit(deps, mona, A, planned.id, {
+      date: "2026-11-05",
+      form: "onsite",
+      topics: [3],
+      assessment,
+      prepTask: { text: "Spočítať trénerov po kategóriách", dueDate: "2026-11-01" },
+      findings: [],
+      actions: [{ text: "Osloviť dvoch rodičov", area: 3, owner: "Bob", dueDate: null }],
+      expectedVersion: 2,
+    });
+    expect(filled).toMatchObject({ assessment, summary: "", prepTask: { done: true } });
+    const sent = await sendMentorVisit(deps, mona, A, planned.id, { expectedVersion: 3 });
+    expect(sent.status).toBe("sent");
+
+    const rated = await rateMentorVisit(deps, mona, A, planned.id, {
+      prep: "done",
+      actions: [{ id: sent.actions[0].id, rating: "partial" }],
+      expectedVersion: 4,
+    });
+    expect(rated.prepTask?.rating).toBe("done");
+    expect(rated.actions[0].rating).toBe("partial");
+    // the club cannot rate
+    await expect(
+      rateMentorVisit(deps, alice, A, planned.id, { prep: "not", expectedVersion: 5 }),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
+    // a visit without a task before it has nothing to tick
+    const plain = await createMentorVisit(deps, mona, A, input);
+    await sendMentorVisit(deps, mona, A, plain.id, { expectedVersion: 1 });
+    await expect(
+      setPrepTaskDone(deps, alice, A, plain.id, { done: true, expectedVersion: 2 }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("rates only existing steps and the task before the visit (pure)", () => {
+    const visit = {
+      prepTask: null,
+      actions: [
+        {
+          id: "a1",
+          text: "x",
+          area: null,
+          owner: "x",
+          ownerId: null,
+          dueDate: null,
+          done: true,
+          doneAt: null,
+          doneBy: null,
+          rating: null,
+        },
+      ],
+    };
+    expect(applyRatings(visit, { actions: [{ id: "a1", rating: "not" }] }).actions[0].rating).toBe(
+      "not",
+    );
+    expect(() => applyRatings(visit, { actions: [{ id: "zz", rating: "done" }] })).toThrow();
+    expect(() => applyRatings(visit, { prep: "done", actions: [] })).toThrow();
+    expect(visibleTo("club", { status: "planned" })).toBe(true);
+  });
+
   it("only the club's mentor and admin write; the club cannot edit; other clubs are refused", async () => {
     await expect(createMentorVisit(deps, alice, A, input)).rejects.toMatchObject({
       code: "FORBIDDEN",
@@ -250,6 +344,7 @@ describe("mentor visits – tasks and summary (MV-c)", () => {
     done,
     doneAt: null,
     doneBy: null,
+    rating: null,
   });
   const visits = [
     {
@@ -301,12 +396,34 @@ describe("mentor visits – tasks and summary (MV-c)", () => {
       lastDate: "2026-10-01",
       open: 3,
       overdue: 1,
+      nextPlanned: null,
     });
     expect(summarizeVisits(visits, "2027/2028", "2026-10-21")).toEqual({
       lastDate: null,
       open: 0,
       overdue: 0,
+      nextPlanned: null,
     });
+    // planned visits: the next one from today on; past planned ones do not count
+    const planned = (id: string, date: string) => ({
+      id,
+      date,
+      season: "2026/2027",
+      status: "planned" as const,
+      actions: [],
+    });
+    expect(
+      summarizeVisits(
+        [
+          ...visits,
+          planned("p1", "2026-10-01"),
+          planned("p2", "2026-11-20"),
+          planned("p3", "2026-11-05"),
+        ],
+        "2026/2027",
+        "2026-10-21",
+      ).nextPlanned,
+    ).toBe("2026-11-05");
   });
 });
 
