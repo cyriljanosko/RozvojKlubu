@@ -4,6 +4,9 @@ import { join } from "node:path";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { memoryChoiceStore } from "./academy.fixture";
+import { memoryMentoringStore } from "./club-mentoring.fixture";
+import { closingDue, saveMentoringPart } from "./club-mentoring.service";
+import { createMentorVisit } from "./mentor-visit.service";
 import {
   clubTasks,
   getMyAcademy,
@@ -77,6 +80,64 @@ describe("clubTasks", () => {
   });
 });
 
+describe("mentoring tasks (MC-d)", () => {
+  const status = { intro: false, focus: false, closingClub: false, closingMentor: false };
+  const base = {
+    clubId: A,
+    kompasVersion: 3,
+    kompasResult: { filledAreas: 11, next: [], areas: [] } as never,
+    kompasUnsent: false,
+    licensingClosed: true,
+    teamsWithoutCoach: 0,
+  };
+  it("asks management for the opening, to prepare for a meeting and – in May and June – the closing", () => {
+    const keys = (
+      mentoring: Parameters<typeof clubTasks>[0]["mentoring"],
+      roles = ["management"],
+    ) => clubTasks({ ...base, roles: roles as never, mentoring }).map((t) => [t.key, t.severity]);
+    expect(keys(null)).toEqual([]);
+    expect(keys({ status, closingDue: false, prep: null })).toEqual([["mentoring_intro", "warn"]]);
+    expect(
+      keys({
+        status: { ...status, intro: true, focus: true },
+        closingDue: true,
+        prep: { visitId: "v1", text: "Spočítať trénerov", dueDate: "2026-11-01", overdue: true },
+      }),
+    ).toEqual([
+      ["mentoring_prep", "crit"],
+      ["mentoring_closing", "info"],
+    ]);
+    // coaches do not get the mentoring tasks
+    expect(keys({ status, closingDue: true, prep: null }, ["coach"])).toEqual([]);
+  });
+
+  it("tells the mentor which clubs lack the focus and – at the end – the closing", () => {
+    const row = (name: string, m: Partial<typeof status>) => ({
+      clubId: name,
+      name,
+      latest: {} as never,
+      licensingClosed: true,
+      mentoring: { ...status, ...m },
+    });
+    const rows = [
+      row("X", {}),
+      row("Y", { focus: true }),
+      row("Z", { focus: true, closingMentor: true }),
+    ];
+    expect(mentorTasks(rows).map((t) => [t.key, t.clubName])).toEqual([["club_no_focus", "X"]]);
+    expect(mentorTasks(rows, { closingDue: true }).map((t) => [t.key, t.clubName])).toEqual([
+      ["club_no_focus", "X"],
+      ["club_no_closing", "X, Y"],
+    ]);
+  });
+
+  it("closing is due in May and June only", () => {
+    expect(closingDue(new Date("2027-05-02T10:00:00Z"))).toBe(true);
+    expect(closingDue(new Date("2027-06-30T10:00:00Z"))).toBe(true);
+    expect(closingDue(new Date("2026-10-22T10:00:00Z"))).toBe(false);
+  });
+});
+
 describe("mentorTasks", () => {
   it("summarises clubs without a submitted Kompas or a closed season", () => {
     const tasks = mentorTasks([
@@ -125,6 +186,7 @@ async function setup(): Promise<AcademyDeps> {
     progress: memoryProgressStore(),
     visits: memoryVisitStore(),
     plans: memoryPlanStore(),
+    mentoring: memoryMentoringStore(),
   };
   await seedPractice(deps.practice as ReturnType<typeof memoryPracticeStore>, admin, [prax3]);
   await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
@@ -176,6 +238,40 @@ describe("getMyAcademy", () => {
     expect(all.admin?.rows[0].visits).toMatchObject({ open: 0 });
   });
 
+  it("adds the mentoring tasks of a club with a mentor and its cycle status (MC-d)", async () => {
+    const keys = async () => (await getMyAcademy(deps, alice)).clubs[0].tasks.map((t) => t.key);
+    expect(await keys()).toContain("mentoring_intro");
+    const future = new Date(Date.now() + 10 * 86_400_000).toISOString().slice(0, 10);
+    await createMentorVisit(deps as never, mona, A, {
+      date: future,
+      form: "onsite",
+      planned: true,
+      prepTask: { text: "Spočítať trénerov", dueDate: null },
+      findings: [],
+      actions: [],
+    });
+    await saveMentoringPart(deps as never, alice, A, "intro", {
+      strengths: "a",
+      weaknesses: "b",
+      improve: "c",
+      expectations: "d",
+      expectedVersion: 0,
+    });
+    const view = await getMyAcademy(deps, alice);
+    const tasks = view.clubs[0].tasks.map((t) => t.key);
+    expect(tasks).toContain("mentoring_prep");
+    expect(tasks).not.toContain("mentoring_intro");
+    expect(view.clubs[0].mentoring).toMatchObject({
+      intro: true,
+      focus: false,
+      nextPlanned: future,
+    });
+    // the coach sees the status, not the tasks
+    expect((await getMyAcademy(deps, bob)).clubs[0].tasks.map((t) => t.key)).not.toContain(
+      "mentoring_prep",
+    );
+  });
+
   it("adds the Prax task of the user's role once the club has started (F6d)", async () => {
     const keys = async (u: typeof alice) =>
       (await getMyAcademy(deps, u)).clubs[0].tasks.map((t) => t.key);
@@ -210,6 +306,7 @@ describe("getMyAcademy", () => {
       "club_licensing_open",
       "club_no_plan",
       "club_no_visit",
+      "club_no_focus",
     ]);
   });
 

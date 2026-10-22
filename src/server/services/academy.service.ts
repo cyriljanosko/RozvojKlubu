@@ -13,6 +13,12 @@ import {
   type SubmissionDeps,
 } from "@/server/services/kompas-submission.service";
 import { kompasAreas } from "@/server/services/analytics.service";
+import {
+  closingDue,
+  mentoringStatus,
+  type MentoringStatus,
+  type MentoringStore,
+} from "@/server/services/club-mentoring.service";
 import { getKompas } from "@/server/services/kompas.service";
 import type {
   EvaluationStore,
@@ -64,6 +70,8 @@ export interface AcademyDeps extends SubmissionDeps {
   visits: Pick<MentorVisitStore, "listVisits">;
   plans: Pick<PlanStore, "findPlan">;
   progress: Pick<PracticeProgressStore, "findProgress">;
+  /** the club's mentoring cycle (MC-d); absent in older test setups */
+  mentoring?: Pick<MentoringStore, "findMentoring">;
 }
 
 export type TaskSeverity = "crit" | "warn" | "info";
@@ -83,7 +91,12 @@ export interface AcademyTask {
     | "club_no_visit"
     | "plan_goal"
     | "plan_missing"
-    | "club_no_plan";
+    | "club_no_plan"
+    | "mentoring_intro"
+    | "mentoring_prep"
+    | "mentoring_closing"
+    | "club_no_focus"
+    | "club_no_closing";
   severity: TaskSeverity;
   /** relative link inside the app */
   href: string;
@@ -128,6 +141,13 @@ export interface TaskInput {
   planTasks?: PlanTask[];
   /** the club has a Kompas but no plan for the season yet (management) */
   planMissing?: boolean;
+  /** the club's mentoring cycle (MC-d): only when the club has a mentor this season */
+  mentoring?: {
+    status: MentoringStatus;
+    closingDue: boolean;
+    /** the next planned meeting whose task before it the club has not ticked yet */
+    prep: { visitId: string; text: string; dueDate: string | null; overdue: boolean } | null;
+  } | null;
 }
 
 const ORDER: Record<TaskSeverity, number> = { crit: 0, warn: 1, info: 2 };
@@ -216,6 +236,26 @@ export function clubTasks(i: TaskInput): AcademyTask[] {
       due: { date: g.dueDate, overdue: g.overdue },
     });
   }
+  // the mentoring cycle (MC-d): opening, preparing for a meeting, closing – management only
+  const m = i.mentoring;
+  if (m && management) {
+    const mentoringHref = `/klub/${encodeURIComponent(i.clubId)}/mentoring`;
+    if (!m.status.intro) {
+      tasks.push({ key: "mentoring_intro", severity: "warn", href: mentoringHref });
+    }
+    if (m.prep) {
+      tasks.push({
+        key: "mentoring_prep",
+        severity: m.prep.overdue ? "crit" : "warn",
+        href: `/klub/${encodeURIComponent(i.clubId)}/navstevy/${m.prep.visitId}`,
+        step: m.prep.text,
+        due: { date: m.prep.dueDate, overdue: m.prep.overdue },
+      });
+    }
+    if (m.closingDue && !m.status.closingClub) {
+      tasks.push({ key: "mentoring_closing", severity: "info", href: mentoringHref });
+    }
+  }
   // agreed with the mentor: overdue ones are urgent (decision 21. 10. 2026)
   for (const v of i.visitTasks ?? []) {
     tasks.push({
@@ -250,8 +290,14 @@ export function mentorTasks(
     licensingClosed: boolean;
     visits?: VisitSummary;
     plan?: PlanSummary;
+    mentoring?: MentoringStatus;
   })[],
+  opts: { closingDue?: boolean } = {},
 ): AcademyTask[] {
+  const noFocus = rows.filter((r) => r.mentoring && !r.mentoring.focus).map((r) => r.name);
+  const noClosing = opts.closingDue
+    ? rows.filter((r) => r.mentoring && !r.mentoring.closingMentor).map((r) => r.name)
+    : [];
   const missing = rows.filter((r) => !r.latest).map((r) => r.name);
   const unvisited = rows.filter((r) => r.visits && !r.visits.lastDate).map((r) => r.name);
   const unplanned = rows.filter((r) => r.plan && r.plan.goals === 0).map((r) => r.name);
@@ -291,6 +337,24 @@ export function mentorTasks(
       href: "#mentor-clubs",
       count: unvisited.length,
       clubName: unvisited.join(", "),
+    });
+  }
+  if (noFocus.length > 0) {
+    tasks.push({
+      key: "club_no_focus",
+      severity: "info",
+      href: "#mentor-clubs",
+      count: noFocus.length,
+      clubName: noFocus.join(", "),
+    });
+  }
+  if (noClosing.length > 0) {
+    tasks.push({
+      key: "club_no_closing",
+      severity: "warn",
+      href: "#mentor-clubs",
+      count: noClosing.length,
+      clubName: noClosing.join(", "),
     });
   }
   return tasks;
@@ -387,6 +451,8 @@ export interface AcademyClub {
     dueDate: string | null;
   }[];
   tasks: AcademyTask[];
+  /** the season's mentoring cycle; null when the club has no mentor this season (MC-d) */
+  mentoring: (MentoringStatus & { nextPlanned: string | null }) | null;
   /** chosen roles as "area.key" */
   chosenRoles: string[];
   roleOptions: AreaRoleOption[];
@@ -401,12 +467,13 @@ export interface AcademyView {
       licensingClosed: boolean;
       visits: VisitSummary;
       plan: PlanSummary;
+      mentoring: MentoringStatus;
     })[];
     tasks: AcademyTask[];
   } | null;
   /** admin_sfz: all pilot clubs with the latest Kompas and visits (dashboard tiles) */
   admin: {
-    rows: (MentorClubRow & { visits: VisitSummary })[];
+    rows: (MentorClubRow & { visits: VisitSummary; mentoring: MentoringStatus })[];
   } | null;
 }
 
@@ -416,7 +483,8 @@ export async function getMyAcademy(
 ): Promise<AcademyView> {
   const user = requireUser(actor);
   const season = currentSeason(deps.now?.() ?? new Date());
-  const today = isoToday(deps.now?.() ?? new Date());
+  const now = deps.now?.() ?? new Date();
+  const today = isoToday(now);
   const memberships = await deps.memberships.listByUser(user.id);
   const catalogDto = await getRoleCatalog(deps.roleCatalog, user);
   const catalog = catalogDto?.content ?? null;
@@ -466,6 +534,22 @@ export async function getMyAcademy(
     const unsent = !latest || (view.updatedAt !== null && +view.updatedAt > +latest.submittedAt);
     const plan = await deps.plans.findPlan(club.clubId, season);
     const visits = await deps.visits.listVisits(club.clubId);
+    const hasMentor = (await deps.memberships.listByClub(club.clubId, season)).some(
+      (m) => m.role === "mentor",
+    );
+    const mentoringDoc = hasMentor
+      ? ((await deps.mentoring?.findMentoring(club.clubId, season)) ?? null)
+      : null;
+    const prepVisit = visits
+      .filter(
+        (v) =>
+          v.status === "planned" &&
+          v.season === season &&
+          v.date >= today &&
+          v.prepTask &&
+          !v.prepTask.done,
+      )
+      .sort((a, b) => a.date.localeCompare(b.date))[0];
     const planTasks = planTasksFor(
       plan,
       { userId: user.id, management: roles.includes("management") },
@@ -496,6 +580,12 @@ export async function getMyAcademy(
       licensingClosedAt: closed?.closedAt ?? null,
       visits: summarizeVisits(visits, season, today),
       plan: summarizePlan(plan),
+      mentoring: hasMentor
+        ? {
+            ...mentoringStatus(mentoringDoc),
+            nextPlanned: summarizeVisits(visits, season, today).nextPlanned,
+          }
+        : null,
       planGoals: (plan?.goals ?? []).map((g) => ({
         id: g.id,
         area: g.area,
@@ -515,6 +605,21 @@ export async function getMyAcademy(
         visitTasks,
         planTasks,
         planMissing: view.result.filledAreas > 0 && (plan?.goals.length ?? 0) === 0,
+        mentoring: hasMentor
+          ? {
+              status: mentoringStatus(mentoringDoc),
+              closingDue: closingDue(now),
+              prep: prepVisit?.prepTask
+                ? {
+                    visitId: prepVisit.id,
+                    text: prepVisit.prepTask.text,
+                    dueDate: prepVisit.prepTask.dueDate,
+                    overdue:
+                      prepVisit.prepTask.dueDate !== null && prepVisit.prepTask.dueDate < today,
+                  }
+                : null,
+            }
+          : null,
       }),
       chosenRoles: choice?.roles ?? [],
       roleOptions: catalog ? roleOptions(catalog, roles) : [],
@@ -533,9 +638,12 @@ export async function getMyAcademy(
             (await deps.licensingSubmissions.findSubmission(r.clubId, season)) !== null,
           visits: summarizeVisits(await deps.visits.listVisits(r.clubId), season, today),
           plan: summarizePlan(await deps.plans.findPlan(r.clubId, season)),
+          mentoring: mentoringStatus(
+            (await deps.mentoring?.findMentoring(r.clubId, season)) ?? null,
+          ),
         })),
     );
-    mentor = { rows, tasks: mentorTasks(rows) };
+    mentor = { rows, tasks: mentorTasks(rows, { closingDue: closingDue(now) }) };
   }
   let admin: AcademyView["admin"] = null;
   if (isAdmin(user)) {
@@ -545,6 +653,9 @@ export async function getMyAcademy(
         rows.map(async (r) => ({
           ...r,
           visits: summarizeVisits(await deps.visits.listVisits(r.clubId), season, today),
+          mentoring: mentoringStatus(
+            (await deps.mentoring?.findMentoring(r.clubId, season)) ?? null,
+          ),
         })),
       ),
     };

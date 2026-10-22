@@ -79,6 +79,7 @@ async function MentorClubs({
   rows: NonNullable<Awaited<ReturnType<typeof getMyAcademy>>["mentor"]>["rows"];
 }) {
   const t = await getTranslations("academy");
+  const tM = await getTranslations("academy.dashboard.mentoring");
   return (
     <ul id="mentor-clubs" className="scroll-mt-4 divide-y rounded-md border">
       {rows.map((r) => (
@@ -121,7 +122,20 @@ async function MentorClubs({
                   : ` · ${t("mentor.planUnconfirmed")}`)
               : t("mentor.noPlan")}
           </span>
+          <span className="text-muted-foreground text-xs">
+            {t("mentor.mentoringLine", {
+              parts: (["intro", "focus", "closingClub", "closingMentor"] as const)
+                .map((k) => `${tM(k)} ${r.mentoring[k] ? "✓" : "–"}`)
+                .join(" · "),
+            })}
+          </span>
           <span className="flex flex-wrap gap-x-3 text-xs">
+            <Link
+              href={`/klub/${encodeURIComponent(r.clubId)}/mentoring`}
+              className="underline underline-offset-4"
+            >
+              {tM("title")}
+            </Link>
             <Link
               href={`/klub/${encodeURIComponent(r.clubId)}/plan`}
               className="underline underline-offset-4"
@@ -366,6 +380,34 @@ async function Academy({ searchParams }: Props) {
           </>
         ),
       },
+      ...(club.mentoring
+        ? [
+            {
+              id: "mentoring",
+              title: tD("mentoring.title"),
+              content: (
+                <>
+                  <ul className="grid grid-cols-2 gap-1.5 text-sm">
+                    {(["intro", "focus", "closingClub", "closingMentor"] as const).map((k) => (
+                      <li key={k} className="flex items-center gap-1.5">
+                        <span aria-hidden>{club.mentoring![k] ? "✓" : "○"}</span>
+                        {tD(`mentoring.${k}`)}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-sm">
+                    {club.mentoring.nextPlanned
+                      ? tD("mentoring.next", { date: isoDate(club.mentoring.nextPlanned) })
+                      : tD("mentoring.noNext")}
+                  </p>
+                  <Link href={`${base}/mentoring`} className={link}>
+                    {tD("mentoring.open")}
+                  </Link>
+                </>
+              ),
+            },
+          ]
+        : []),
       {
         id: "practice",
         title: tD("practice.title"),
@@ -456,6 +498,32 @@ async function Academy({ searchParams }: Props) {
               ))}
             </ul>
           ),
+      },
+      {
+        id: "admin-mentoring",
+        title: tD("adminMentoring.title"),
+        note: tD("adminMentoring.note"),
+        content: (
+          <ul className="flex flex-col gap-1 text-sm">
+            <li>
+              {tD("adminMentoring.noIntro", {
+                count: view.admin.rows.filter((r) => !r.mentoring.intro).length,
+              })}
+            </li>
+            <li>
+              {tD("adminMentoring.noFocus", {
+                count: view.admin.rows.filter((r) => !r.mentoring.focus).length,
+              })}
+            </li>
+            <li>
+              {tD("adminMentoring.closed", {
+                count: view.admin.rows.filter(
+                  (r) => r.mentoring.closingClub && r.mentoring.closingMentor,
+                ).length,
+              })}
+            </li>
+          </ul>
+        ),
       },
       {
         id: "admin-overdue",

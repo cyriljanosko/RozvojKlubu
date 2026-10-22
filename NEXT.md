@@ -71,8 +71,8 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Mentoring klubu (rozhodnuté 22. 10., ADR 0013, podľa vzoru mentoringu EYA): sezónny cyklus – úvodné sebahodnotenie klubu (vedenie), zameranie rozvoja od mentora (1–3 prioritné oblasti), stretnutia (návštevy s témou, naplánovaním, úlohou vopred, hodnotením v štyroch poliach a hodnotením krokov), záver klubu a mentora s plánom na ďalšiu sezónu; pripomienky klubu k mentoringu vidí mentor a admin SFZ; kolekcia `club_mentoring` a nové polia v `mentor_visits` (súhlas).
     - [x] MC-a – model a API (PR #67).
     - [x] MC-b – rozšírená návšteva v UI vrátane hodnotenia podľa tém (PR #68, ADR 0014).
-    - [ ] MC-c – stránka Mentoring klubu (vetva `feat/mentoring-page`): hotové, overené na 375 px bez ukladania (skúšobný zápis by v `club_mentoring` ostal natrvalo), PR na review. Prvé uloženie urobí vedenie alebo mentor – potom overiť index cez `explain`.
-    - [ ] MC-d – úlohy („Pripravte sa na stretnutie“, „Vyplniť úvod / záver“), dlaždica na nástenke, riadok vo Vizitke, prehľad mentora a admina.
+    - [x] MC-c – stránka Mentoring klubu (PR #69). Po prvom skutočnom uložení overiť index `club_mentoring` cez `explain`.
+    - [ ] MC-d – úlohy, nástenka, Vizitka a prehľady (vetva `feat/mentoring-tasks`): hotové, overené na 375 px, PR na review.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).

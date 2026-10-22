@@ -647,7 +647,12 @@
       "overdue": "termín uplynul {date}",
       "plan_goal": "Cieľ sezóny: {step}",
       "plan_missing": "Zostaviť plán klubu na sezónu",
-      "club_no_plan": "Bez plánu sezóny: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}"
+      "club_no_plan": "Bez plánu sezóny: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
+      "mentoring_intro": "Mentoring: vyplniť úvodné sebahodnotenie klubu",
+      "mentoring_prep": "Pripravte sa na stretnutie s mentorom: {step}",
+      "mentoring_closing": "Mentoring: vyplniť záver sezóny za klub",
+      "club_no_focus": "Bez zamerania rozvoja: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
+      "club_no_closing": "Bez záveru mentoringu: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}"
     },
     "roles": {
       "title": "Moje roly v oblastiach",
@@ -674,7 +679,8 @@
       "planConfirmed": "potvrdený",
       "planUnconfirmed": "nepotvrdený",
       "noPlan": "bez plánu sezóny",
-      "plan": "Plán"
+      "plan": "Plán",
+      "mentoringLine": "mentoring: {parts}"
     },
     "sees": {
       "title": "Čo táto rola vidí",
@@ -737,6 +743,23 @@
         "note": "Dohodnuté kroky z návštev mentora, ktorým uplynul termín.",
         "none": "Žiadny klub nemá krok po termíne.",
         "noVisit": "Bez návštevy v sezóne: {count, plural, one {# klub} few {# kluby} other {# klubov}}"
+      },
+      "mentoring": {
+        "title": "Mentoring klubu",
+        "intro": "① Úvod",
+        "focus": "② Zameranie",
+        "closingClub": "④ Záver klubu",
+        "closingMentor": "④ Záver mentora",
+        "next": "Najbližšie stretnutie {date}",
+        "noNext": "Žiadne naplánované stretnutie.",
+        "open": "Otvoriť mentoring →"
+      },
+      "adminMentoring": {
+        "title": "Mentoring klubov",
+        "note": "Kde sú kluby v cykle sezóny.",
+        "noIntro": "Bez úvodu: {count}",
+        "noFocus": "Bez zamerania: {count}",
+        "closed": "Uzavreté: {count}"
       }
     },
     "favorites": "★ Obľúbené"
@@ -1487,6 +1510,11 @@
       "steps": "kroky {done}/{total}",
       "prep": "úloha vopred: {rating}",
       "rated": "hodnotenie krokov: {done} splnené, {partial} čiastočne, {not} nesplnené"
+    },
+    "vizitka": {
+      "title": "Mentoring klubu",
+      "line": "{done} z 4 častí cyklu",
+      "none": "cyklus sezóny zatiaľ nezačal"
     }
   }
 }
