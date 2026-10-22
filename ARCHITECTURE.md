@@ -92,6 +92,12 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Jeden plán na klub a sezónu: ciele (oblasť, cieľ, text pre verejnú Vizitku, ukazovateľ, zodpovedný, termín, stav nezačatý / rozbehnutý / splnený), potvrdenie mentorom (nepovinné), verzia (súbežná úprava → 409)
 3. Zapisuje vedenie, mentor klubu a admin SFZ, tréner číta; stav cieľa mení aj jeho zodpovedný; prázdny plán ponúkne 2 najslabšie oblasti Kompasu (odoslaného, inak pracovného – ak ho čitateľ smie vidieť); verejne len oblasť, verejný text a stav, bez mien
 
+### Analýza (DA)
+
+1. `GET /api/v1/analytics?season=&union=&size=&clubs=a,b` – služba `analytics.service.ts`, bez novej kolekcie: Kompas po oblastiach, licenčné hodnotenie (uzavreté), aktivita (odoslaný Kompas, uzavreté licenčné, návštevy a kroky, plán), Sportnet po sezónach
+2. Rozsah podľa roly: admin SFZ všetky kluby (pracovný Kompas), mentor svoju kohortu (len odoslaný Kompas), vedenie a tréner vlastný klub (pracovný Kompas) a anonymný priemer klubov rovnakej veľkosti z odoslaných Kompasov – len ak sú aspoň 3 (`MIN_BENCHMARK`), bez mien
+3. Výpočet ide po kluboch (N dotazov) – pri 10 pilotných kluboch ~1,5 s v dev režime; pri väčšom počte prerobiť na agregáciu alebo cache
+
 ### Vyhľadávanie (H6)
 
 1. `GET /api/v1/search?q=` a stránka `/hladat` volajú `search.service.ts`: oblasti, sekcie Metodiky, Prax (prvý krok, kroky, vzory) a kluby; otázky Kompasu nie (rozhodnutie 17. 10. 2026)

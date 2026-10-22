@@ -19,6 +19,7 @@ import type { ClubDeps } from "@/server/services/clubs.service";
 import type { HubDeps } from "@/server/services/hub.service";
 import type { SubmissionDeps } from "@/server/services/kompas-submission.service";
 import type { LicensingDeps } from "@/server/services/licensing.service";
+import type { AnalyticsDeps } from "@/server/services/analytics.service";
 import type { ClubPlanDeps } from "@/server/services/club-plan.service";
 import type { MentorVisitDeps } from "@/server/services/mentor-visit.service";
 import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
@@ -101,4 +102,13 @@ export const planDeps: ClubPlanDeps = {
   plans: mongoPlanStore,
   submissions: mongoSubmissionStore,
   kompas: kompasDeps,
+};
+
+export const analyticsDeps: AnalyticsDeps = {
+  ...clubDeps,
+  kompas: kompasDeps,
+  submissions: mongoSubmissionStore,
+  licensingSubmissions: mongoLicensingSubmissionStore,
+  visits: mongoVisitStore,
+  plans: mongoPlanStore,
 };
