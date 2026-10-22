@@ -10,7 +10,9 @@ import {
   TaskCheck,
   type ProgressStep,
 } from "@/components/content/practice-progress";
+import { LinkedText } from "@/components/content/linked-text";
 import { PinButton } from "@/components/favorites/pin-button";
+import type { SfzLink } from "@/lib/sfz-links";
 import type { PracticeContent } from "@/server/services/practice.schema";
 
 type Role = PracticeContent["roles"][number];
@@ -37,6 +39,7 @@ export async function PracticeView({
   signedIn,
   openKey = null,
   pins = null,
+  links = [],
 }: {
   practice: PracticeContent;
   roleId: string;
@@ -47,6 +50,8 @@ export async function PracticeView({
   openKey?: string | null;
   /** signed-in users: pinned paths and the Prax link base (MD-c) */
   pins?: { hrefs: string[]; base: string; area: number } | null;
+  /** SFZ pages linked at their first mention in each step (area 3, 22. 10. 2026) */
+  links?: readonly SfzLink[];
 }) {
   const t = await getTranslations("practice");
   const tFav = await getTranslations("favorites.labels");
@@ -59,19 +64,28 @@ export async function PracticeView({
       <span className="bg-muted rounded px-1.5 py-0.5 text-[11px]">{t(`tags.${value}`)}</span>
     ) : null;
   const tplTitle = (key?: string) => (key ? (templates.get(key)?.title ?? key) : null);
+  // one set per step: an SFZ page is linked once in a step (why, options, branch B)
+  const scopes = new Map<string, Set<string>>();
+  const scope = (id: string) => {
+    if (!scopes.has(id)) scopes.set(id, new Set());
+    return scopes.get(id)!;
+  };
+  const linked = (text: string, scopeId: string) => (
+    <LinkedText text={text} links={links} used={scope(scopeId)} />
+  );
 
-  const OptionCard = ({ o, pick }: { o: Option; pick?: ReactNode }) => (
+  const OptionCard = ({ o, pick, at }: { o: Option; pick?: ReactNode; at: string }) => (
     <li className="flex flex-col gap-1.5 rounded-lg border p-3 text-sm">
       <span className="flex flex-wrap items-center gap-2 font-semibold">
         {o.name} {tag(o.tag)}
       </span>
-      <span>{o.what}</span>
+      <span>{linked(o.what, at)}</span>
       <span className="text-muted-foreground text-xs">
         {t("byWhom")}: {o.who} · {t("time")}: {o.time}
       </span>
       <span className="text-xs">
         <span className="text-muted-foreground">{t("result")}: </span>
-        {o.result}
+        {linked(o.result, at)}
       </span>
       {o.template && (
         <span className="text-xs">
@@ -152,7 +166,7 @@ export async function PracticeView({
         <p className="font-medium">{role.firstStep.title}</p>
         <p className="text-muted-foreground text-xs">
           {t("byWhom")}: {role.firstStep.who} · {t("time")}: {role.firstStep.time} · {t("result")}:{" "}
-          {role.firstStep.result}
+          {linked(role.firstStep.result, "first")}
         </p>
         {progress ? (
           <ul className="space-y-1.5 text-sm">
@@ -181,7 +195,7 @@ export async function PracticeView({
         <div className="bg-muted/50 rounded-md p-3 text-sm">
           <p className="font-semibold">{role.firstStep.aside.title}</p>
           <pre className="mt-2 font-sans text-sm whitespace-pre-wrap">
-            {role.firstStep.aside.text}
+            {linked(role.firstStep.aside.text, "first")}
           </pre>
           <p className="text-muted-foreground mt-2 text-xs">{role.firstStep.aside.note}</p>
         </div>
@@ -222,13 +236,14 @@ export async function PracticeView({
               </div>
               <p className="text-sm">
                 <span className="text-muted-foreground">{t("why")}: </span>
-                {step.why}
+                {linked(step.why, step.id)}
               </p>
               <ul className="grid gap-2 lg:grid-cols-3">
                 {step.options.map((o, i) => (
                   <OptionCard
                     key={o.name}
                     o={o}
+                    at={step.id}
                     pick={progress ? <OptionPick stepId={step.id} option={i} /> : undefined}
                   />
                 ))}
@@ -238,10 +253,10 @@ export async function PracticeView({
                   <summary className="cursor-pointer text-sm font-semibold">
                     {t("branchB")}: {step.branchB.title}
                   </summary>
-                  <p className="mt-2 text-sm">{step.branchB.why}</p>
+                  <p className="mt-2 text-sm">{linked(step.branchB.why, step.id)}</p>
                   <ul className="mt-2 grid gap-2 lg:grid-cols-3">
                     {step.branchB.options.map((o) => (
-                      <OptionCard key={o.name} o={o} />
+                      <OptionCard key={o.name} o={o} at={step.id} />
                     ))}
                   </ul>
                 </details>

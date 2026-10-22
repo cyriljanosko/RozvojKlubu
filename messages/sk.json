@@ -760,7 +760,8 @@
         "noIntro": "Bez úvodu: {count}",
         "noFocus": "Bez zamerania: {count}",
         "closed": "Uzavreté: {count}"
-      }
+      },
+      "coachEducation": "Vzdelávanie trénera"
     },
     "favorites": "★ Obľúbené"
   },
@@ -1516,5 +1517,30 @@
       "line": "{done} z 4 častí cyklu",
       "none": "cyklus sezóny zatiaľ nezačal"
     }
+  },
+  "coachEducation": {
+    "title": "Vzdelávanie trénera",
+    "intro": "Školenia, predĺženie licencie a prihlásenie – všetko na webe SFZ.",
+    "groups": {
+      "start": {
+        "title": "Začínam trénovať",
+        "hint": "Vstupná licencia online, oprávňuje viesť U7–U11."
+      },
+      "higher": {
+        "title": "Chcem vyššiu licenciu",
+        "hint": "Prezenčné školenia s praxou, termíny a mestá na stránke školenia."
+      },
+      "renew": {
+        "title": "Predĺženie licencie",
+        "hint": "Kontinuálne vzdelávanie: semináre, konferencie, online kurzy, ochrana detí."
+      },
+      "signup": {
+        "title": "Prihlásenie a kontakty",
+        "hint": "Prihláška cez SFZ Ticketing a ISSF konto trénera."
+      }
+    },
+    "dates": "Najbližšie termíny a prihlásenie",
+    "all": "Všetko o vzdelávaní trénerov na futbalsfz.sk",
+    "external": "otvorí sa web SFZ v novom okne"
   }
 }

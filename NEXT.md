@@ -74,7 +74,9 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] MC-c – stránka Mentoring klubu (PR #69).
     - [x] MC-d – úlohy, nástenka, Vizitka a prehľady (PR #70, v produkcii `aca4c0b`).
     - [ ] Po prvom skutočnom uložení mentoringu overiť index `club_mentoring` cez `explain`; úlohy záveru sezóny skontrolovať v máji.
-  - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Ďalší navrhovaný krok (22. 10.); treba rozhodnúť zdroj licencií.
+  - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
+  - [ ] Prepojenie na web SFZ (rozhodnuté 22. 10.): v oblasti 3 odkaz na futbalsfz.sk pri prvej zmienke školenia, licencie a kontinuálneho vzdelávania v každej sekcii Metodiky a v každom kroku Praxe; rozcestník „Vzdelávanie trénera“ v oblasti 3 a dlaždica v Moja Akadémia; zoznam odkazov v `content/odkazy-sfz.json` (zmena cez PR); termíny len odkazom na SFZ Ticketing (nemá verejné API) – vetva `feat/sfz-links`, PR na review.
+    - [ ] Neskôr: rozšíriť automatické odkazy na ďalšie oblasti (napr. Ochrana detí v oblasti 11, ISSF v oblasti 10) – stačí doplniť `areas` v súbore.
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).
     - [x] F6d-b – UI v Praxi: úlohy prvého kroku, výber možnosti a „hotové“ pri kroku, priebeh roly, výber klubu – PR #40 (zlúčený 17. 10.).
