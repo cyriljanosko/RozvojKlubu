@@ -110,7 +110,8 @@
       "M": "mužské",
       "F": "ženské"
     },
-    "back": "Späť na môj účet"
+    "back": "Späť na môj účet",
+    "mentoring": "Mentoring klubu"
   },
   "admin": {
     "title": "Administrácia",
@@ -1400,6 +1401,92 @@
         "plan": "plán",
         "visits": "návštevy"
       }
+    }
+  },
+  "mentoring": {
+    "title": "Mentoring klubu",
+    "open": "Mentoring klubu",
+    "heading": "Mentoring klubu {season}",
+    "intro": "Cyklus sezóny ako pri mentoringu trénerov: úvodné sebahodnotenie klubu, zameranie od mentora, stretnutia a záver.",
+    "mentor": "Mentor: {names}",
+    "noMentor": "Klub zatiaľ nemá mentora na túto sezónu.",
+    "pastSeason": "Minulá sezóna – len na čítanie.",
+    "print": "Tlačiť / PDF",
+    "printed": "Vytlačené {date}",
+    "forbidden": "Mentoring vidí vedenie a tréneri klubu, jeho mentor a admin SFZ.",
+    "savedOn": "Vyplnené {date}",
+    "waitsClub": "Čaká na vedenie klubu.",
+    "waitsMentor": "Čaká na mentora.",
+    "edit": "Upraviť",
+    "fill": "Vyplniť",
+    "save": "Uložiť",
+    "cancel": "Zrušiť",
+    "saved": "Uložené.",
+    "errors": {
+      "CONFLICT": "Mentoring medzitým zmenil niekto iný. Obnovte stránku.",
+      "FORBIDDEN": "Túto časť vypĺňa niekto iný.",
+      "BAD_REQUEST": "Niektorý údaj nie je správny.",
+      "areas": "Vyberte 1 až 3 prioritné oblasti.",
+      "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova."
+    },
+    "parts": {
+      "intro": {
+        "title": "① Úvodné sebahodnotenie klubu",
+        "who": "Vypĺňa vedenie klubu na začiatku sezóny."
+      },
+      "focus": {
+        "title": "② Zameranie rozvoja",
+        "who": "Vypĺňa mentor po úvodnom stretnutí."
+      },
+      "visits": {
+        "title": "③ Stretnutia",
+        "who": "Návštevy mentora v tejto sezóne."
+      },
+      "closingClub": {
+        "title": "④ Záver sezóny – klub",
+        "who": "Vypĺňa vedenie klubu na konci sezóny."
+      },
+      "closingMentor": {
+        "title": "④ Záver sezóny – mentor",
+        "who": "Vypĺňa mentor na konci sezóny."
+      }
+    },
+    "fields": {
+      "strengths": "Silné stránky",
+      "weaknesses": "Slabé stránky",
+      "improve": "Čo chceme v sezóne zlepšiť",
+      "expectations": "Čo čakáme od mentora",
+      "recommendations": "Odporúčania / možnosti zlepšenia",
+      "assessment": "Charakteristika klubu",
+      "areas": "Prioritné oblasti (1–3)",
+      "stepsReview": "Hodnotenie dohodnutých krokov",
+      "feedback": "Pripomienky k mentoringu",
+      "feedbackHint": "Vidí ich len mentor a admin SFZ.",
+      "selfAssessment": "Výstupné sebahodnotenie",
+      "closingAssessment": "Záverečné hodnotenie klubu",
+      "nextPlan": "Plán rozvoja na ďalšiu sezónu"
+    },
+    "placeholders": {
+      "strengths": "Na čom vie klub stavať",
+      "weaknesses": "Čo klub brzdí",
+      "improve": "Jedna až tri veci, ktoré chceme do konca sezóny posunúť",
+      "expectations": "S čím nám má mentor pomôcť",
+      "recommendations": "Čo konkrétne odporúčate",
+      "assessment": "Krátka charakteristika klubu",
+      "stepsReview": "Čo sa z dohodnutých krokov podarilo a čo nie",
+      "feedback": "Čo na mentoringu pomohlo, čo by ste zmenili",
+      "selfAssessment": "Kde je klub na konci sezóny",
+      "closingAssessment": "Ako sa klub v sezóne posunul",
+      "nextPlan": "Na čo sa zamerať budúcu sezónu"
+    },
+    "toPlan": "Zostaviť plán sezóny z prioritných oblastí →",
+    "visits": {
+      "none": "V tejto sezóne zatiaľ žiadne stretnutie.",
+      "plan": "Naplánovať stretnutie",
+      "all": "Všetky návštevy →",
+      "steps": "kroky {done}/{total}",
+      "prep": "úloha vopred: {rating}",
+      "rated": "hodnotenie krokov: {done} splnené, {partial} čiastočne, {not} nesplnené"
     }
   }
 }

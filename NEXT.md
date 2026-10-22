@@ -70,8 +70,8 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] MD-c – hviezdička „Pripnúť“ a dlaždica Obľúbené (PR #66).
   - [ ] Mentoring klubu (rozhodnuté 22. 10., ADR 0013, podľa vzoru mentoringu EYA): sezónny cyklus – úvodné sebahodnotenie klubu (vedenie), zameranie rozvoja od mentora (1–3 prioritné oblasti), stretnutia (návštevy s témou, naplánovaním, úlohou vopred, hodnotením v štyroch poliach a hodnotením krokov), záver klubu a mentora s plánom na ďalšiu sezónu; pripomienky klubu k mentoringu vidí mentor a admin SFZ; kolekcia `club_mentoring` a nové polia v `mentor_visits` (súhlas).
     - [x] MC-a – model a API (PR #67).
-    - [ ] MC-b – rozšírená návšteva v UI (vetva `feat/mentoring-visits-ui`): hotové vrátane hodnotenia podľa tém (ADR 0014), overené na 375 px so skúšobnými návštevami Žipova (zrušené), PR #68 na review.
-    - [ ] MC-c – stránka Mentoring klubu (`/klub/[clubId]/mentoring`): časová os ①–④, formuláre úvodu, zamerania a záverov, tlač/PDF; prioritné oblasti → návrh cieľov plánu.
+    - [x] MC-b – rozšírená návšteva v UI vrátane hodnotenia podľa tém (PR #68, ADR 0014).
+    - [ ] MC-c – stránka Mentoring klubu (vetva `feat/mentoring-page`): hotové, overené na 375 px bez ukladania (skúšobný zápis by v `club_mentoring` ostal natrvalo), PR na review. Prvé uloženie urobí vedenie alebo mentor – potom overiť index cez `explain`.
     - [ ] MC-d – úlohy („Pripravte sa na stretnutie“, „Vyplniť úvod / záver“), dlaždica na nástenke, riadok vo Vizitke, prehľad mentora a admina.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.

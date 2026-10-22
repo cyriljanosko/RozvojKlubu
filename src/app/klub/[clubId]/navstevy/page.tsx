@@ -24,6 +24,7 @@ async function Visits({ params }: Props) {
   if (!user) redirect("/prihlasenie");
   const clubId = decodeURIComponent((await params).clubId);
   const t = await getTranslations("visits");
+  const tMentoring = await getTranslations("mentoring");
   const tClub = await getTranslations("club");
   const format = await getFormatter();
   let list;
@@ -58,6 +59,12 @@ async function Visits({ params }: Props) {
         <p className="text-muted-foreground text-sm">
           {list.access === "write" ? t("introMentor") : t("introClub")}
         </p>
+        <Link
+          href={`/klub/${encodeURIComponent(clubId)}/mentoring`}
+          className="self-start text-sm underline underline-offset-4"
+        >
+          {tMentoring("open")} →
+        </Link>
         {list.access === "write" && (
           <Button asChild className="self-start">
             <Link href={`${base}/nova`}>
