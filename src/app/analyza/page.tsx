@@ -6,12 +6,13 @@ import { Suspense } from "react";
 
 import { GroupedBars, TrendLines } from "@/components/analytics/charts";
 import { KompasHeatmap } from "@/components/analytics/kompas-heatmap";
+import { NetworkGraph } from "@/components/analytics/network-graph";
 import { PanelBoard, PrintButton, type BoardPanel } from "@/components/analytics/panel-board";
 import { Button } from "@/components/ui/button";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { analyticsDeps } from "@/server/clubs/deps";
+import { analyticsDeps, networkDeps } from "@/server/clubs/deps";
 import {
   activityTotals,
   getAnalytics,
@@ -19,6 +20,7 @@ import {
   sportnetTrend,
   type ClubSize,
 } from "@/server/services/analytics.service";
+import { getNetwork, type NetworkView } from "@/server/services/network.service";
 import { currentSeason } from "@/server/services/season";
 
 export const metadata: Metadata = { title: defaultMessages.analytics.title };
@@ -93,6 +95,34 @@ async function Analysis({ searchParams }: Props) {
   ]
     .filter(Boolean)
     .join(" · ");
+
+  // network graph (DA-d): the club map by default for club roles, the Academy map otherwise
+  const map = str(q.mapa) === "klub" || (own && str(q.mapa) !== "akademia") ? "club" : "academy";
+  const networkClub = own
+    ? null
+    : (view.options.find((c) => c.clubId === str(q.klub)) ??
+      view.options.find((c) => c.clubId === compare[0]) ??
+      view.options[0] ??
+      null);
+  let network: NetworkView | null = null;
+  try {
+    network = await getNetwork(networkDeps, user, {
+      map,
+      clubId: networkClub?.clubId ?? null,
+    });
+  } catch (error) {
+    if (!(error instanceof ApiError)) throw error;
+  }
+  const keep = (extra: Record<string, string>) => {
+    const p = new URLSearchParams();
+    for (const [k, v] of Object.entries(q)) {
+      for (const x of Array.isArray(v) ? v : v ? [v] : [])
+        if (k !== "mapa" && k !== "klub") p.append(k, x);
+    }
+    for (const [k, v] of Object.entries(extra)) p.set(k, v);
+    return `/analyza?${p}`;
+  };
+  const tNet = await getTranslations("analytics.network");
 
   const compared = comparing && view.clubs.length > 1 ? view.clubs : [];
   const seasonRow = (c: (typeof view.clubs)[number]) =>
@@ -245,6 +275,74 @@ async function Analysis({ searchParams }: Props) {
             ]}
             series={[{ key: "value", label: t("activity.clubs", { count: act.clubs }) }]}
           />
+        </>
+      ),
+    },
+    {
+      id: "network",
+      title: tNet("title"),
+      note:
+        map === "academy"
+          ? tNet("noteAcademy")
+          : network?.people
+            ? tNet("noteClub")
+            : tNet("noteClubNoPeople"),
+      content: (
+        <>
+          <div className="flex flex-wrap items-end gap-2 text-sm print:hidden">
+            <div className="grid grid-cols-2 overflow-hidden rounded-md border text-xs">
+              {(["academy", "club"] as const).map((m) => (
+                <a
+                  key={m}
+                  href={keep({
+                    mapa: m === "club" ? "klub" : "akademia",
+                    ...(m === "club" && networkClub ? { klub: networkClub.clubId } : {}),
+                  })}
+                  aria-current={map === m ? "true" : undefined}
+                  className="aria-[current]:bg-primary aria-[current]:text-primary-foreground px-3 py-1.5 text-center"
+                >
+                  {tNet(m)}
+                </a>
+              ))}
+            </div>
+            {map === "club" && !own && view.options.length > 1 && (
+              <form method="get" action="/analyza" className="flex items-end gap-2">
+                {Object.entries(q).flatMap(([k, v]) =>
+                  k === "mapa" || k === "klub"
+                    ? []
+                    : (Array.isArray(v) ? v : v ? [v] : []).map((x, i) => (
+                        <input key={`${k}-${i}`} type="hidden" name={k} value={x} />
+                      )),
+                )}
+                <input type="hidden" name="mapa" value="klub" />
+                <select
+                  name="klub"
+                  aria-label={tNet("pickClub")}
+                  defaultValue={networkClub?.clubId}
+                  className="max-w-48 rounded-md border px-2 py-1.5 text-xs"
+                >
+                  {view.options.map((c) => (
+                    <option key={c.clubId} value={c.clubId}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <Button type="submit" size="sm" variant="outline">
+                  {tNet("show")}
+                </Button>
+              </form>
+            )}
+          </div>
+          {network ? (
+            <NetworkGraph
+              key={`${network.map}-${network.club?.clubId ?? ""}`}
+              nodes={network.nodes}
+              edges={network.edges}
+              club={network.map === "club"}
+            />
+          ) : (
+            <p className="text-muted-foreground text-sm">{tNet("unavailable")}</p>
+          )}
         </>
       ),
     },

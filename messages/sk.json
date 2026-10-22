@@ -1209,6 +1209,48 @@
       "average": "Priemer zobrazených klubov",
       "benchmark": "Priemer podobných klubov",
       "file": "analyza"
+    },
+    "network": {
+      "title": "Mapa súvislostí",
+      "noteAcademy": "Ako roly v klube súvisia s 11 oblasťami podľa katalógu rolí.",
+      "noteClub": "Oblasti klubu podľa Kompasu, úlohy z návštev mentora a plánu sezóny a kto za ne zodpovedá.",
+      "noteClubNoPeople": "Oblasti klubu podľa Kompasu a úlohy z návštev mentora a plánu sezóny.",
+      "academy": "Mapa Akadémie",
+      "club": "Mapa klubu",
+      "pickClub": "Klub",
+      "show": "Zobraziť",
+      "unavailable": "Mapu klubu sa nepodarilo pripraviť.",
+      "graphLabel": "Sieťový graf: {nodes} uzlov, {edges} prepojení. Textová podoba je v zozname pod grafom.",
+      "legendAcademy": "Kruhy = oblasti vo farbe línie jedenástky, obdĺžniky = roly. Hrubšia čiara = viac úloh roly v oblasti, modrá = oblasť je pre rolu prioritná.",
+      "legendClub": "Kruhy = oblasti vo farbe Kompasu (sivá = nevyplnené), obdĺžniky = roly, kosoštvorce = kroky z návštev, trojuholníky = ciele plánu, malé krúžky = ľudia. Bledé = splnené, červený okraj = po termíne.",
+      "tapHint": "Ťuknite na uzol – zvýraznia sa jeho prepojenia a ukáže sa detail. Graf posuniete ťahaním, priblížite dvoma prstami.",
+      "kind": {
+        "area": "Oblasť",
+        "role": "Rola",
+        "task": "Úloha",
+        "person": "Človek"
+      },
+      "kindPlural": {
+        "area": "Oblasti",
+        "role": "Roly",
+        "task": "Úlohy",
+        "person": "Ľudia"
+      },
+      "task": {
+        "visit": "krok z návštevy mentora",
+        "goal": "cieľ plánu sezóny"
+      },
+      "points": "Kompas: {points} z 20",
+      "notFilled": "Kompas: nevyplnené",
+      "due": "do {date}",
+      "done": "splnené",
+      "open": "otvorené",
+      "overdue": "po termíne",
+      "linked": "Prepojené:",
+      "openArea": "Otvoriť oblasť →",
+      "openTask": "Otvoriť →",
+      "list": "Zoznam uzlov (textová podoba grafu)",
+      "links": "prepojení"
     }
   }
 }

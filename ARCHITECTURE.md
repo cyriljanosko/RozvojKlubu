@@ -98,7 +98,8 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Rozsah podľa roly: admin SFZ všetky kluby (pracovný Kompas), mentor svoju kohortu (len odoslaný Kompas), vedenie a tréner vlastný klub (pracovný Kompas) a anonymný priemer klubov rovnakej veľkosti z odoslaných Kompasov – len ak sú aspoň 3 (`MIN_BENCHMARK`), bez mien
 3. Stránka `/analyza` volá službu priamo (Server Component), filtre sú GET formulár; grafy sú klientske obaly Recharts v `src/components/analytics/`, teplotná mapa Kompasu je serverová tabuľka
 4. Porovnanie je ten istý výpočet s filtrom `clubs` (najviac 4 na stránke); `format=csv` vráti ten istý pohľad ako CSV (`analyticsCsv`), takže export má rovnaké oprávnenia; rozloženie panelov je len v prehliadači (`localStorage` kľúč `analytics.layout.v1`), PDF je tlač prehliadača
-5. Výpočet ide po kluboch (N dotazov) – pri 10 pilotných kluboch ~1,5 s v dev režime; pri väčšom počte prerobiť na agregáciu alebo cache
+5. Mapa súvislostí (DA-d): `GET /api/v1/analytics/network?map=academy|club&club=` – služba `network.service.ts` skladá uzly (oblasti, roly, úlohy, ľudia) a hrany z katalógu rolí, Kompasu, odoslaných návštev, plánu sezóny a členov klubu; prístup ku klubu cez `getAnalytics`; ľudia len pre vedenie, mentora a admina, Mentor zväzu len pre mentora a admina; graf kreslí Cytoscape.js na klientovi (dynamický import)
+6. Výpočet ide po kluboch (N dotazov) – pri 10 pilotných kluboch ~1,5 s v dev režime; pri väčšom počte prerobiť na agregáciu alebo cache
 
 ### Vyhľadávanie (H6)
 

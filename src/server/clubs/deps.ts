@@ -22,6 +22,7 @@ import type { LicensingDeps } from "@/server/services/licensing.service";
 import type { AnalyticsDeps } from "@/server/services/analytics.service";
 import type { ClubPlanDeps } from "@/server/services/club-plan.service";
 import type { MentorVisitDeps } from "@/server/services/mentor-visit.service";
+import type { NetworkDeps } from "@/server/services/network.service";
 import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
 import type { SearchDeps } from "@/server/services/search.service";
 import type { VizitkaDeps } from "@/server/services/vizitka.service";
@@ -111,4 +112,10 @@ export const analyticsDeps: AnalyticsDeps = {
   licensingSubmissions: mongoLicensingSubmissionStore,
   visits: mongoVisitStore,
   plans: mongoPlanStore,
+};
+
+export const networkDeps: NetworkDeps = {
+  ...analyticsDeps,
+  content: mongoContentStore,
+  roleCatalog: mongoRoleCatalogStore,
 };

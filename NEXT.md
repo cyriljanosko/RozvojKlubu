@@ -62,8 +62,8 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Analýza – pracovná plocha s panelmi (rozhodnuté 22. 10.): pre admina SFZ (celý pilot), mentora (svoje kluby, Kompas len odoslaný) a vedenie klubu (vlastný klub + anonymný priemer klubov rovnakej veľkosti, len ak sú aspoň 3); dáta Kompas, licenčné hodnotenie, aktivita v Akadémii, Sportnet v čase; filtre sezóna / ObFZ / veľkosť, porovnanie klubov, usporiadanie panelov (v prehliadači), export CSV a PDF cez tlač (Excel zatiaľ nie); odkaz v Moja Akadémia a pre admina v hlavičke; grafy Recharts, sieťový graf Cytoscape.js (súhlas s oboma závislosťami) – uzly oblasti, roly, úlohy klubu, ľudia (ľudia len pre vedenie, mentora, admina), prepínač mapa Akadémie / mapa klubu.
     - [x] DA-a – výpočty a API podľa roly, bez novej kolekcie (PR #59).
     - [x] DA-b – stránka `/analyza`, 4 panely, filtre, mobil (PR #60).
-    - [ ] DA-c – porovnanie klubov, usporiadanie panelov, export (vetva `feat/analytics-compare`): hotové, overené na 375 px, PR na review.
-    - [ ] DA-d – sieťový graf (mapa Akadémie / mapa klubu).
+    - [x] DA-c – porovnanie klubov, usporiadanie panelov, export (PR #62).
+    - [ ] DA-d – sieťový graf (vetva `feat/analytics-network`): hotové, overené na dátach pilotu, PR na review. Ťuknutie prstom na skutočnom telefóne ešte overiť (v emulácii mobilu nástroj posiela klik myšou).
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).
