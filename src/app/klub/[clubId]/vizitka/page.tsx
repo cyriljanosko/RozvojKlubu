@@ -10,7 +10,8 @@ import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { planDeps, visitDeps, vizitkaDeps } from "@/server/clubs/deps";
+import { mentoringDeps, planDeps, visitDeps, vizitkaDeps } from "@/server/clubs/deps";
+import { getClubMentoring } from "@/server/services/club-mentoring.service";
 import { getClubPlan, summarizePlan } from "@/server/services/club-plan.service";
 import { PublicPlan } from "@/components/vizitka/public-plan";
 import { seasonFromSlug, seasonToSlug } from "@/server/services/season";
@@ -77,6 +78,7 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
       />
       <PlanLine clubId={clubId} season={vizitka.season} />
       <VisitLine clubId={clubId} season={vizitka.season} />
+      <MentoringLine clubId={clubId} season={vizitka.season} />
       <PublicPlan clubId={clubId} season={vizitka.season} />
     </div>
   );
@@ -132,6 +134,28 @@ async function VisitLine({ clubId, season }: { clubId: string; season: string })
       {s.overdue > 0 && (
         <span className="text-destructive text-xs">· {t("overdue", { count: s.overdue })}</span>
       )}
+    </Link>
+  );
+}
+
+/** The season's mentoring cycle – only in the Vizitka for club roles, never public (MC-d). */
+async function MentoringLine({ clubId, season }: { clubId: string; season: string }) {
+  const user = await getCurrentUser(await headers());
+  const t = await getTranslations("mentoring.vizitka");
+  let view;
+  try {
+    view = await getClubMentoring(mentoringDeps, user, clubId, season);
+  } catch {
+    return null; // no access to the mentoring
+  }
+  const done = Object.values(view.done).filter(Boolean).length;
+  return (
+    <Link
+      href={`/klub/${encodeURIComponent(clubId)}/mentoring`}
+      className="hover:bg-muted/50 flex flex-wrap items-center gap-x-2 rounded-xl border p-3 text-sm"
+    >
+      <span className="font-medium">{t("title")}</span>
+      <span className="text-muted-foreground">{done > 0 ? t("line", { done }) : t("none")}</span>
     </Link>
   );
 }

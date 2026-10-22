@@ -197,3 +197,25 @@ export async function saveMentoringPart(
   if (!saved) throw new ApiError("CONFLICT", "The mentoring was changed by someone else");
   return mentoringView(saved, { clubId, season, role, current: true });
 }
+
+export type MentoringStatus = Record<MentoringPartKey, boolean>;
+
+/** Pure: which parts of the season's cycle are filled in (tasks, dashboard, overviews – MC-d). */
+export function mentoringStatus(
+  doc: Pick<ClubMentoringDoc, MentoringPartKey> | null,
+): MentoringStatus {
+  return {
+    intro: Boolean(doc?.intro),
+    focus: Boolean(doc?.focus),
+    closingClub: Boolean(doc?.closingClub),
+    closingMentor: Boolean(doc?.closingMentor),
+  };
+}
+
+/** Pure: the closing is due in the last two months of the season (May, June – season ends 30. 6.). */
+export const closingDue = (now: Date) => {
+  const month = Number(
+    now.toLocaleDateString("en-US", { month: "numeric", timeZone: "Europe/Bratislava" }),
+  );
+  return month === 5 || month === 6;
+};
