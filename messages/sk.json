@@ -737,7 +737,8 @@
         "none": "Žiadny klub nemá krok po termíne.",
         "noVisit": "Bez návštevy v sezóne: {count, plural, one {# klub} few {# kluby} other {# klubov}}"
       }
-    }
+    },
+    "favorites": "★ Obľúbené"
   },
   "trialKompas": {
     "title": "Kompas klubu – vyskúšajte",
@@ -1309,5 +1310,38 @@
     "show": "Zobraziť {title}",
     "reset": "Pôvodné rozloženie",
     "saveError": "Rozloženie sa nepodarilo uložiť. Skúste to znova."
+  },
+  "favorites": {
+    "pin": "Pripnúť do Moja Akadémia: {label}",
+    "unpin": "Odopnúť z Moja Akadémia: {label}",
+    "pinShort": "Pripnúť do Moja Akadémia",
+    "unpinShort": "Odopnúť z Moja Akadémia",
+    "full": "Pripnúť sa dá najviac 30 položiek.",
+    "error": "Nepodarilo sa uložiť.",
+    "labels": {
+      "area": "Oblasť {area} · {name}",
+      "section": "Metodika {area} · {title}",
+      "practice": "Prax {area} · {title}",
+      "pattern": "Vzor · {title}",
+      "vizitka": "Vizitka · {club}",
+      "plan": "Plán sezóny · {club}",
+      "visits": "Návštevy mentora · {club}"
+    },
+    "tile": {
+      "title": "Obľúbené",
+      "empty": "Pripnite si oblasť, sekciu Metodiky, krok alebo vzor Praxe, Vizitku, plán či návštevy klubu hviezdičkou ☆ na ich stránke.",
+      "up": "Posunúť {label} vyššie",
+      "down": "Posunúť {label} nižšie",
+      "remove": "Odopnúť {label}",
+      "kind": {
+        "area": "oblasť",
+        "section": "Metodika",
+        "practice": "Prax",
+        "pattern": "vzor",
+        "vizitka": "Vizitka",
+        "plan": "plán",
+        "visits": "návštevy"
+      }
+    }
   }
 }

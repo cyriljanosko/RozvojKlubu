@@ -10,6 +10,7 @@ import {
   TaskCheck,
   type ProgressStep,
 } from "@/components/content/practice-progress";
+import { PinButton } from "@/components/favorites/pin-button";
 import type { PracticeContent } from "@/server/services/practice.schema";
 
 type Role = PracticeContent["roles"][number];
@@ -35,6 +36,7 @@ export async function PracticeView({
   progress,
   signedIn,
   openKey = null,
+  pins = null,
 }: {
   practice: PracticeContent;
   roleId: string;
@@ -43,8 +45,12 @@ export async function PracticeView({
   signedIn: boolean;
   /** template to open, e.g. "tpl-prehlad" (search hit, H6) */
   openKey?: string | null;
+  /** signed-in users: pinned paths and the Prax link base (MD-c) */
+  pins?: { hrefs: string[]; base: string; area: number } | null;
 }) {
   const t = await getTranslations("practice");
+  const tFav = await getTranslations("favorites.labels");
+  const pinned = new Set(pins?.hrefs ?? []);
   const role = practice.roles.find((r) => r.id === roleId) ?? practice.roles[0];
   const templates = new Map(practice.templates.map((tpl) => [tpl.key, tpl]));
   const modules = new Map(practice.mentorModules.map((m) => [m.key, m]));
@@ -202,7 +208,18 @@ export async function PracticeView({
               className="flex scroll-mt-6 flex-col gap-3 rounded-xl border p-4 sm:p-6"
             >
               <p className="text-muted-foreground text-xs">{step.label}</p>
-              <h3 className="font-semibold break-words">{step.title}</h3>
+              <div className="flex items-start gap-1">
+                <h3 className="font-semibold break-words">{step.title}</h3>
+                {pins && (
+                  <PinButton
+                    kind="practice"
+                    href={`${pins.base}&role=${role.id}#step-${step.id}`}
+                    label={tFav("practice", { area: pins.area, title: step.title })}
+                    pinned={pinned.has(`${pins.base}&role=${role.id}#step-${step.id}`)}
+                    className="-mt-1.5"
+                  />
+                )}
+              </div>
               <p className="text-sm">
                 <span className="text-muted-foreground">{t("why")}: </span>
                 {step.why}
@@ -320,7 +337,20 @@ export async function PracticeView({
                   open={openKey === `tpl-${tpl.key}`}
                   className="scroll-mt-6 rounded-lg border p-3"
                 >
-                  <summary className="cursor-pointer font-medium">{tpl.title}</summary>
+                  <summary className="cursor-pointer font-medium">
+                    {tpl.title}
+                    {pins && (
+                      <PinButton
+                        kind="pattern"
+                        href={`${pins.base}&role=${role.id}&open=tpl-${tpl.key}#tpl-${tpl.key}`}
+                        label={tFav("pattern", { title: tpl.title })}
+                        pinned={pinned.has(
+                          `${pins.base}&role=${role.id}&open=tpl-${tpl.key}#tpl-${tpl.key}`,
+                        )}
+                        className="ml-1 align-middle"
+                      />
+                    )}
+                  </summary>
                   <p className="text-muted-foreground mt-1 text-xs">{tpl.description}</p>
                   {tpl.text ? (
                     <pre className="bg-muted/50 mt-2 rounded-md p-2 text-xs whitespace-pre-wrap">

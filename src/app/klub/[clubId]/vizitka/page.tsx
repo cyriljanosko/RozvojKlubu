@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { ClubPin } from "@/components/favorites/club-pin";
 import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
@@ -61,6 +62,13 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
         >
           {t("publicLink")}
         </Link>
+        <ClubPin
+          user={user}
+          kind="vizitka"
+          clubId={clubId}
+          clubName={vizitka.club.name}
+          className="-my-1.5 ml-auto"
+        />
       </nav>
       <VizitkaView
         vizitka={vizitka}

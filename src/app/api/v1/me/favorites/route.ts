@@ -16,7 +16,7 @@ export const POST = apiHandler(async (request) => {
   return ok(view, { status: 201 });
 });
 
-/** PUT – reorder. Body: { ids: [...], expectedVersion } */
+/** PUT – reorder. Body: { ids: [...] } (applied to the latest list) */
 export const PUT = apiHandler(async (request) => {
   await connection();
   const view = await orderFavorites(
