@@ -7,6 +7,7 @@ import { Suspense } from "react";
 
 import { GroupedBars } from "@/components/analytics/charts";
 import type { BoardPanel } from "@/components/analytics/panel-board";
+import { CoachEducation } from "@/components/content/coach-education";
 import { FavoritesList } from "@/components/favorites/favorites-list";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
@@ -408,6 +409,11 @@ async function Academy({ searchParams }: Props) {
             },
           ]
         : []),
+      {
+        id: "coach-education",
+        title: tD("coachEducation"),
+        content: <CoachEducation compact />,
+      },
       {
         id: "practice",
         title: tD("practice.title"),

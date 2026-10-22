@@ -100,6 +100,12 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Jeden plán na klub a sezónu: ciele (oblasť, cieľ, text pre verejnú Vizitku, ukazovateľ, zodpovedný, termín, stav nezačatý / rozbehnutý / splnený), potvrdenie mentorom (nepovinné), verzia (súbežná úprava → 409)
 3. Zapisuje vedenie, mentor klubu a admin SFZ, tréner číta; stav cieľa mení aj jeho zodpovedný; prázdny plán ponúkne 2 najslabšie oblasti Kompasu (odoslaného, inak pracovného – ak ho čitateľ smie vidieť); verejne len oblasť, verejný text a stav, bez mien
 
+### Odkazy na web SFZ
+
+1. `content/odkazy-sfz.json` – pojmy → stránky futbalsfz.sk (školenia, kontinuálne vzdelávanie, Ticketing, ISSF…), oblasti, kde sa používajú (zatiaľ 3), a skupiny rozcestníka; mení sa cez PR
+2. `src/lib/sfz-links.ts` – čisté funkcie: prvá zmienka každej stránky v sekcii Metodiky (remark plugin v `MarkdownContent`) a v kroku Praxe (`LinkedText`), najdlhší pojem prvý, celé slová, nie v kóde, odkazoch a nadpisoch
+3. Rozcestník `CoachEducation` v oblasti 3 a dlaždica v Moja Akadémia; termíny len odkazom na SFZ Ticketing (bez verejného API)
+
 ### Analýza (DA)
 
 1. `GET /api/v1/analytics?season=&union=&size=&clubs=a,b` – služba `analytics.service.ts`, bez novej kolekcie: Kompas po oblastiach, licenčné hodnotenie (uzavreté), aktivita (odoslaný Kompas, uzavreté licenčné, návštevy a kroky, plán), Sportnet po sezónach

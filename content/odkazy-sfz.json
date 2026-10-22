@@ -1,0 +1,149 @@
+{
+  "source": "futbalsfz.sk – sekcia Tréneri, overené 22. 10. 2026",
+  "areas": [3],
+  "links": [
+    {
+      "id": "grassroots-leader-kv",
+      "terms": [
+        "SFZ Grassroots Leader — kontinuálne vzdelávanie",
+        "SFZ Grassroots Leader – kontinuálne vzdelávanie"
+      ],
+      "url": "https://futbalsfz.sk/treneri/kontinualne-vzdelavanie/sfz-grassroots-leader/",
+      "label": "SFZ Grassroots Leader – kontinuálne vzdelávanie"
+    },
+    {
+      "id": "grassroots-leader",
+      "terms": ["SFZ Grassroots Leader", "Grassroots Leader"],
+      "url": "https://futbalsfz.sk/treneri/skolenia/sfz-grassroots-leader/",
+      "label": "SFZ Grassroots Leader"
+    },
+    {
+      "id": "uefa-c",
+      "terms": ["UEFA C"],
+      "url": "https://futbalsfz.sk/treneri/skolenia/uefa-c/",
+      "label": "UEFA C"
+    },
+    {
+      "id": "uefa-b",
+      "terms": ["UEFA B"],
+      "url": "https://futbalsfz.sk/treneri/skolenia/uefa-b/",
+      "label": "UEFA B"
+    },
+    {
+      "id": "uefa-a",
+      "terms": ["UEFA A"],
+      "url": "https://futbalsfz.sk/treneri/skolenia/uefa-a/",
+      "label": "UEFA A"
+    },
+    {
+      "id": "uefa-pro",
+      "terms": ["UEFA PRO"],
+      "url": "https://futbalsfz.sk/treneri/skolenia/uefa-pro/",
+      "label": "UEFA PRO"
+    },
+    {
+      "id": "youth",
+      "terms": ["UEFA Elite Youth A", "UEFA Youth B", "Youth Coach"],
+      "url": "https://futbalsfz.sk/treneri/skolenia/youth-coach/",
+      "label": "Tréner mládeže (Youth)"
+    },
+    {
+      "id": "goalkeeper",
+      "terms": ["UEFA Goalkeeper A", "UEFA Goalkeeper B", "SFZ Goalkeeper"],
+      "url": "https://futbalsfz.sk/treneri/skolenia/goalkeeper/",
+      "label": "Tréner brankárov"
+    },
+    {
+      "id": "child-protection",
+      "terms": [
+        "UEFA — Ochrana detí vo futbale",
+        "UEFA – Ochrana detí vo futbale",
+        "UEFA Ochrana detí vo futbale",
+        "Ochrana detí vo futbale"
+      ],
+      "url": "https://futbalsfz.sk/treneri/kontinualne-vzdelavanie/ochrana-deti-vo-futbale/",
+      "label": "UEFA – Ochrana detí vo futbale"
+    },
+    {
+      "id": "seminars",
+      "terms": ["otvorené aj uzavreté semináre", "semináre"],
+      "url": "https://futbalsfz.sk/treneri/kontinualne-vzdelavanie/seminare/",
+      "label": "Semináre – otvorené, s prihlásením"
+    },
+    {
+      "id": "conference",
+      "terms": ["konferencie trénerov SFZ", "Konferencia trénerov SFZ", "konferencia trénerov SFZ"],
+      "url": "https://futbalsfz.sk/treneri/kontinualne-vzdelavanie/",
+      "label": "Konferencia trénerov SFZ"
+    },
+    {
+      "id": "continuing",
+      "terms": [
+        "Kontinuálne vzdelávanie",
+        "kontinuálne vzdelávanie",
+        "kontinuálneho vzdelávania",
+        "kontinuálnom vzdelávaní"
+      ],
+      "url": "https://futbalsfz.sk/treneri/kontinualne-vzdelavanie/",
+      "label": "Kontinuálne vzdelávanie"
+    },
+    {
+      "id": "coaches-hub",
+      "terms": ["Soccer Coaches Hub"],
+      "url": "https://soccercoacheshub.com",
+      "label": "Online kurzy a webináre – Soccer Coaches Hub"
+    },
+    {
+      "id": "ticketing",
+      "terms": ["SFZ Ticketing", "SFZ Ticket"],
+      "url": "https://ticketing.futbalsfz.sk/events",
+      "label": "SFZ Ticketing – prihlásenie na školenie"
+    },
+    {
+      "id": "issf",
+      "terms": ["ISSF konto", "ISSF kontá", "ISSF"],
+      "url": "https://futbalsfz.sk/issf/",
+      "label": "ISSF – konto trénera"
+    },
+    { "id": "xps", "terms": ["XPS"], "url": "https://futbalsfz.sk/xps/", "label": "XPS" },
+    {
+      "id": "coach-contacts",
+      "terms": ["futbalsfz.sk/treneri/kontakt", "Technický úsek SFZ"],
+      "url": "https://futbalsfz.sk/treneri/kontakt/",
+      "label": "Kontakty – vzdelávanie trénerov"
+    },
+    {
+      "id": "coach-section",
+      "terms": ["futbalsfz.sk → Tréneri"],
+      "url": "https://futbalsfz.sk/treneri/",
+      "label": "futbalsfz.sk – Tréneri"
+    },
+    {
+      "id": "licence-holders",
+      "terms": ["držitelia licencií", "Držitelia trénerských licencií"],
+      "url": "https://futbalsfz.sk/treneri/drzitelia-trenerskych-licencii/",
+      "label": "Držitelia trénerských licencií"
+    },
+    {
+      "id": "documents",
+      "terms": [],
+      "url": "https://futbalsfz.sk/treneri/dokumenty/",
+      "label": "Dokumenty"
+    },
+    {
+      "id": "manuals",
+      "terms": [],
+      "url": "https://futbalsfz.sk/treneri/manualy/",
+      "label": "Manuály"
+    }
+  ],
+  "hub": [
+    { "key": "start", "links": ["grassroots-leader"] },
+    { "key": "higher", "links": ["uefa-c", "uefa-b", "uefa-a", "uefa-pro", "youth", "goalkeeper"] },
+    {
+      "key": "renew",
+      "links": ["continuing", "seminars", "child-protection", "coaches-hub", "grassroots-leader-kv"]
+    },
+    { "key": "signup", "links": ["ticketing", "issf", "coach-contacts", "documents", "manuals"] }
+  ]
+}

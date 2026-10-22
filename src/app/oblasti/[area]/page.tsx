@@ -5,7 +5,9 @@ import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { CoachEducation } from "@/components/content/coach-education";
 import { MarkdownContent } from "@/components/content/markdown";
+import { sfzLinksFor } from "@/lib/sfz-links";
 import { PracticeView } from "@/components/content/practice-view";
 import { ScrollToHash } from "@/components/content/scroll-to-hash";
 import { PinButton } from "@/components/favorites/pin-button";
@@ -185,6 +187,9 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
         )}
       </header>
 
+      {/* area 3 (coaches): the way to courses and continuing education on the SFZ web */}
+      {area.number === 3 && <CoachEducation />}
+
       {practice && (
         <nav className="flex gap-2 border-b" aria-label={t("contents")}>
           {(["metodika", "prax"] as const).map((key) => (
@@ -251,6 +256,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
           practice={practice.content}
           roleId={roleId ?? practice.content.roles[0].id}
           hrefForRole={(id) => `${base}?tab=prax&role=${id}${clubQuery}`}
+          links={sfzLinksFor(area.number)}
           pins={
             pins
               ? { hrefs: [...pins], base: `/oblasti/${area.number}?tab=prax`, area: area.number }
@@ -359,7 +365,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
                       .join(" · ")}
                   </p>
                 )}
-                <MarkdownContent>{s.body}</MarkdownContent>
+                <MarkdownContent links={sfzLinksFor(area.number)}>{s.body}</MarkdownContent>
               </div>
             </details>
           ))}

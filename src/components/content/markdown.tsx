@@ -1,6 +1,8 @@
 import Markdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import { remarkSfzLinks, type SfzLink } from "@/lib/sfz-links";
+
 /** Renders managed Markdown content (GFM: tables, lists). No raw HTML – it is not enabled. */
 const components: Components = {
   h3: (props) => <h3 className="mt-6 text-base font-semibold" {...props} />,
@@ -28,21 +30,32 @@ const components: Components = {
       {...props}
     />
   ),
-  a: ({ href, ...props }) => (
+  a: ({ href, children, ...props }) => (
     <a
       href={href}
       className="underline underline-offset-4"
       target="_blank"
       rel="noopener noreferrer"
       {...props}
-    />
+    >
+      {children}
+      {/* links out of the Academy (SFZ web) are marked */}
+      {href?.startsWith("http") && <span aria-hidden> ↗</span>}
+    </a>
   ),
 };
 
-export function MarkdownContent({ children }: { children: string }) {
+export function MarkdownContent({
+  children,
+  links = [],
+}: {
+  children: string;
+  /** SFZ pages to link at their first mention in this text (area 3 for now) */
+  links?: readonly SfzLink[];
+}) {
   return (
     <div className="text-sm break-words">
-      <Markdown remarkPlugins={[remarkGfm]} components={components}>
+      <Markdown remarkPlugins={[remarkGfm, [remarkSfzLinks, { links }]]} components={components}>
         {children}
       </Markdown>
     </div>
