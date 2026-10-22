@@ -30,7 +30,20 @@ async function Plan({ params, searchParams }: Props) {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
   const clubId = decodeURIComponent((await params).clubId);
-  const editRequested = (await searchParams).upravit === "1";
+  const query = await searchParams;
+  const editRequested = query.upravit === "1";
+  // priority areas of the mentor's development focus (MC-c) replace the Kompas suggestion
+  const focus =
+    typeof query.oblasti === "string"
+      ? [
+          ...new Set(
+            query.oblasti
+              .split(",")
+              .map(Number)
+              .filter((n) => Number.isInteger(n) && n >= 1 && n <= 11),
+          ),
+        ].slice(0, 3)
+      : [];
   const t = await getTranslations("plan");
   const tClub = await getTranslations("club");
   const format = await getFormatter();
@@ -85,13 +98,15 @@ async function Plan({ params, searchParams }: Props) {
           dueDate: g.dueDate,
           status: g.status,
         }))
-      : Array.from({ length: SUGGESTED }, (_, i) =>
-          blank(
-            view.suggestions[i] ??
-              areas.find((a) => !view.suggestions.includes(a.number))?.number ??
-              1,
-          ),
-        );
+      : focus.length > 0
+        ? focus.map(blank)
+        : Array.from({ length: SUGGESTED }, (_, i) =>
+            blank(
+              view.suggestions[i] ??
+                areas.find((a) => !view.suggestions.includes(a.number))?.number ??
+                1,
+            ),
+          );
 
   return (
     <div className="flex flex-col gap-5">
@@ -123,7 +138,7 @@ async function Plan({ params, searchParams }: Props) {
       {editing ? (
         <>
           <p className="text-sm">{goals.length === 0 ? t("introNew") : t("introEdit")}</p>
-          {goals.length === 0 && view.suggestions.length > 0 && (
+          {goals.length === 0 && focus.length === 0 && view.suggestions.length > 0 && (
             <p className="text-muted-foreground text-sm">
               {t("suggested", {
                 areas: view.suggestions.map((a) => `${a} ${areaName(a)}`).join(" · "),

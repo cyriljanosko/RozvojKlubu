@@ -91,6 +91,7 @@ MCP server (F5, plánovaný)        ─┘        │
 
 1. `GET /api/v1/clubs/:clubId/mentoring?season=`, `PUT .../mentoring/:part` (`intro`, `focus`, `closing-club`, `closing-mentor`) – služba `club-mentoring.service.ts`, jeden dokument na klub a sezónu, verzia (súbežná úprava → 409)
 2. Úvod a záver klubu píše vedenie, zameranie a záver mentora mentor klubu, admin SFZ všetko; tréner číta bez pripomienok k mentoringu; zapisuje sa len aktuálna sezóna
+3. Stránka `/klub/[clubId]/mentoring` (MC-c) skladá cyklus z `club-mentoring.service` a návštev sezóny; časti ukladá Server Action; prioritné oblasti zamerania prejdú do plánu sezóny cez `?oblasti=`
 
 ### Plán klubu na sezónu (CP)
 
