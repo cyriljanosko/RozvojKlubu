@@ -13,7 +13,7 @@ export interface BoardPanel {
   content: ReactNode;
 }
 
-interface Layout {
+export interface Layout {
   order: string[];
   hidden: string[];
 }
@@ -67,11 +67,29 @@ function parseLayout(raw: string | null): Layout {
 
 /** Analysis panels the viewer can reorder and hide; the layout lives in this browser (DA-c). */
 export function PanelBoard({ panels }: { panels: BoardPanel[] }) {
-  const t = useTranslations("analytics.layout");
   // the server render (null) uses the default order
   const raw = useSyncExternalStore(subscribe, snapshot, () => null);
   const layout = useMemo(() => parseLayout(raw), [raw]);
-  const update = writeLayout;
+  return <BoardView panels={panels} layout={layout} onChange={writeLayout} />;
+}
+
+/**
+ * Panels with arrows and "hide"; the caller keeps the layout (browser for the analysis, the account
+ * for Moja Akadémia). `onChange(null)` = back to the default layout.
+ */
+export function BoardView({
+  panels,
+  layout,
+  onChange,
+  pending = false,
+}: {
+  panels: BoardPanel[];
+  layout: Layout;
+  onChange: (layout: Layout | null) => void;
+  pending?: boolean;
+}) {
+  const t = useTranslations("board");
+  const update = onChange;
 
   // panels missing from a stored order (e.g. the comparison) keep their default place
   const rank = (id: string) => {
@@ -91,7 +109,7 @@ export function PanelBoard({ panels }: { panels: BoardPanel[] }) {
 
   return (
     <>
-      <div className="grid gap-4 lg:grid-cols-2 print:block">
+      <div className="grid gap-4 lg:grid-cols-2 print:block" aria-busy={pending}>
         {visible.map((p, i) => (
           <section
             key={p.id}
@@ -154,7 +172,7 @@ export function PanelBoard({ panels }: { panels: BoardPanel[] }) {
               {p.title}
             </Button>
           ))}
-          <Button size="sm" variant="ghost" onClick={() => writeLayout(null)}>
+          <Button size="sm" variant="ghost" onClick={() => update(null)}>
             {t("reset")}
           </Button>
         </div>

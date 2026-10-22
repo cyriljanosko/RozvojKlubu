@@ -162,6 +162,20 @@ describe("getMyAcademy", () => {
     );
   });
 
+  it("gives the dashboard tiles their data: Kompas by area, visits, plan; admin all clubs (MD-b)", async () => {
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    const club = (await getMyAcademy(deps, alice)).clubs[0];
+    expect(club.kompas?.areas).toHaveLength(11);
+    expect(club.kompas?.areas[2]).toBeGreaterThan(0);
+    expect(club.visits).toEqual({ lastDate: null, open: 0, overdue: 0 });
+    expect(club.plan).toMatchObject({ goals: 0, done: 0 });
+    expect(club.planGoals).toEqual([]);
+    expect((await getMyAcademy(deps, alice)).admin).toBeNull();
+    const all = await getMyAcademy(deps, admin);
+    expect(all.admin?.rows.map((r) => r.clubId)).toContain(A);
+    expect(all.admin?.rows[0].visits).toMatchObject({ open: 0 });
+  });
+
   it("adds the Prax task of the user's role once the club has started (F6d)", async () => {
     const keys = async (u: typeof alice) =>
       (await getMyAcademy(deps, u)).clubs[0].tasks.map((t) => t.key);

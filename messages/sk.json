@@ -681,7 +681,63 @@
       "coach": "Tréner a trénerka vidí výsledky klubu (Kompas, licenčné hodnotenie, Vizitku) len na čítanie a pracuje hlavne s oblasťami 3 a 5.",
       "mentor": "Mentor zväzu vidí kluby svojej kohorty: odoslaný Kompas a licenčné hodnotenie, ktoré môže pri návšteve doplniť. Rozpracovaný Kompas nevidí."
     },
-    "analytics": "Analýza klubu a porovnanie"
+    "analytics": "Analýza klubu a porovnanie",
+    "dashboard": {
+      "hint": "Dlaždice si posuňte šípkami alebo skryte – rozloženie sa uloží vo vašom účte.",
+      "club": "Klub",
+      "kompas": {
+        "title": "Kompas po oblastiach",
+        "own": "Náš klub",
+        "similar": "Podobné kluby (priemer)",
+        "note": "Body 0–20 v 11 oblastiach.",
+        "benchmark": "Porovnanie s anonymným priemerom {count} klubov rovnakej veľkosti.",
+        "empty": "Kompas zatiaľ nevyplnený.",
+        "fill": "Vyplniť Kompas →"
+      },
+      "weak": {
+        "title": "Slabé oblasti",
+        "note": "Najnižšie body z vyplnených oblastí Kompasu.",
+        "item": "{area} {name} – {points} z 20",
+        "practice": "Prax →",
+        "none": "Slabé oblasti sa ukážu po vyplnení Kompasu."
+      },
+      "plan": {
+        "title": "Plán sezóny",
+        "summary": "Splnené {done} z {goals}",
+        "none": "Plán sezóny zatiaľ nie je zostavený.",
+        "open": "Otvoriť plán →"
+      },
+      "visits": {
+        "title": "Návštevy mentora",
+        "last": "Posledná návšteva {date}",
+        "none": "V tejto sezóne zatiaľ bez návštevy.",
+        "open": "Otvorené kroky: {count}",
+        "overdue": "{count, plural, one {# krok po termíne} few {# kroky po termíne} other {# krokov po termíne}}",
+        "list": "Všetky návštevy →"
+      },
+      "practice": {
+        "title": "Pokračujte v Praxi",
+        "none": "V Praxi ste zatiaľ nezačali.",
+        "browse": "Vybrať oblasť →"
+      },
+      "roles": {
+        "title": "Moje roly v oblastiach"
+      },
+      "mentorTasks": {
+        "title": "Úlohy mentora"
+      },
+      "adminKompas": {
+        "title": "Kluby bez odoslaného Kompasu",
+        "note": "Celý pilot · {count, plural, =0 {všetky odoslali} one {# klub} few {# kluby} other {# klubov}}",
+        "none": "Všetky kluby Kompas odoslali."
+      },
+      "adminOverdue": {
+        "title": "Kroky po termíne",
+        "note": "Dohodnuté kroky z návštev mentora, ktorým uplynul termín.",
+        "none": "Žiadny klub nemá krok po termíne.",
+        "noVisit": "Bez návštevy v sezóne: {count, plural, one {# klub} few {# kluby} other {# klubov}}"
+      }
+    }
   },
   "trialKompas": {
     "title": "Kompas klubu – vyskúšajte",
@@ -1168,14 +1224,6 @@
       "coachesWithLicence": "Tréneri s licenciou",
       "teamsWithoutCoach": "Družstvá bez trénera"
     },
-    "layout": {
-      "up": "Posunúť panel {title} vyššie",
-      "down": "Posunúť panel {title} nižšie",
-      "hide": "Skryť panel {title}",
-      "hidden": "Skryté panely:",
-      "show": "Zobraziť {title}",
-      "reset": "Pôvodné rozloženie"
-    },
     "export": {
       "csv": "Stiahnuť CSV",
       "print": "Tlačiť / PDF",
@@ -1252,5 +1300,14 @@
       "list": "Zoznam uzlov (textová podoba grafu)",
       "links": "prepojení"
     }
+  },
+  "board": {
+    "up": "Posunúť panel {title} vyššie",
+    "down": "Posunúť panel {title} nižšie",
+    "hide": "Skryť panel {title}",
+    "hidden": "Skryté panely:",
+    "show": "Zobraziť {title}",
+    "reset": "Pôvodné rozloženie",
+    "saveError": "Rozloženie sa nepodarilo uložiť. Skúste to znova."
   }
 }

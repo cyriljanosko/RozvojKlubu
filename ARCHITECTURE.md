@@ -99,7 +99,8 @@ MCP server (F5, plánovaný)        ─┘        │
 3. Stránka `/analyza` volá službu priamo (Server Component), filtre sú GET formulár; grafy sú klientske obaly Recharts v `src/components/analytics/`, teplotná mapa Kompasu je serverová tabuľka
 4. Porovnanie je ten istý výpočet s filtrom `clubs` (najviac 4 na stránke); `format=csv` vráti ten istý pohľad ako CSV (`analyticsCsv`), takže export má rovnaké oprávnenia; rozloženie panelov je len v prehliadači (`localStorage` kľúč `analytics.layout.v1`), PDF je tlač prehliadača
 5. Mapa súvislostí (DA-d): `GET /api/v1/analytics/network?map=academy|club&club=` – služba `network.service.ts` skladá uzly (oblasti, roly, úlohy, ľudia) a hrany z katalógu rolí, Kompasu, odoslaných návštev, plánu sezóny a členov klubu; prístup ku klubu cez `getAnalytics`; ľudia len pre vedenie, mentora a admina, Mentor zväzu len pre mentora a admina; graf kreslí Cytoscape.js na klientovi (dynamický import)
-6. Výpočet ide po kluboch (N dotazov) – pri 10 pilotných kluboch ~1,5 s v dev režime; pri väčšom počte prerobiť na agregáciu alebo cache
+6. Moja Akadémia je nástenka dlaždíc (MD-b): dáta z `getMyAcademy` (pre admina aj prehľad všetkých klubov), rozloženie dlaždíc z `user_preferences` (ADR 0012) cez Server Action `saveDashboardAction`; spoločný komponent `BoardView` pre panely analýzy (rozloženie v prehliadači) aj dlaždice (rozloženie v účte)
+7. Výpočet ide po kluboch (N dotazov) – pri 10 pilotných kluboch ~1,5 s v dev režime; pri väčšom počte prerobiť na agregáciu alebo cache
 
 ### Vyhľadávanie (H6)
 

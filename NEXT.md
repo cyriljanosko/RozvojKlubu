@@ -65,8 +65,8 @@ Aktualizované: 17. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] DA-c – porovnanie klubov, usporiadanie panelov, export (PR #62).
     - [x] DA-d – sieťový graf (PR #63). Ťuknutie prstom na skutočnom telefóne overí Cyril.
   - [ ] Moja Akadémia ako nástenka (rozhodnuté 22. 10., ADR 0012): dlaždice s posúvaním a skrytím, pripínanie obľúbených hviezdičkou (oblasť, sekcia Metodiky, krok a vzor Praxe, Vizitka, plán a návštevy klubu), prepínač klubu pri viacerých kluboch, malý graf Kompasu, vlastné dlaždice pre admina a mentora; uložené v účte (kolekcia `user_preferences`, súhlas).
-    - [ ] MD-a – kolekcia `user_preferences`, služba, API (vetva `feat/user-preferences`): hotové, PR na review.
-    - [ ] MD-b – nástenka v Moja Akadémia: dlaždice, poradie a skrytie v účte, prepínač klubu, graf Kompasu, dlaždice admina („Kluby bez Kompasu“, „Návštevy po termíne“) a mentora.
+    - [x] MD-a – kolekcia `user_preferences`, služba, API (PR #64).
+    - [ ] MD-b – nástenka v Moja Akadémia (vetva `feat/academy-dashboard`): hotové, overené na 375 px, PR na review. Dve stĺpce od 1024 px overiť na počítači.
     - [ ] MD-c – hviezdička „Pripnúť“ na stránkach a dlaždica Obľúbené (odopnúť, poradie).
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie).
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
