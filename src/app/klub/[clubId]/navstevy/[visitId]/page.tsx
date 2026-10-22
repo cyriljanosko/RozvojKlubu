@@ -21,6 +21,7 @@ import {
 
 import { VisitContext } from "../visit-context";
 import { VisitForm } from "../visit-form";
+import { RatingsForm } from "../ratings-form";
 import { VisitView } from "../visit-view";
 
 export const metadata: Metadata = { title: defaultMessages.visits.title };
@@ -80,7 +81,7 @@ async function Visit({ params }: Props) {
           </span>
         </p>
       </header>
-      {(mode.checklist || !mode.form) && (
+      {(mode.checklist || !mode.form || visit.status === "planned") && (
         <VisitView
           visit={visit}
           members={new Map(list.members.map((m) => [m.userId, m.name]))}
@@ -88,6 +89,18 @@ async function Visit({ params }: Props) {
           clubId={clubId}
           canTick={mode.checklist}
           today={isoToday()}
+        />
+      )}
+      {mode.form && visit.status === "sent" && (visit.prepTask || visit.actions.length > 0) && (
+        <RatingsForm
+          key={visit.version}
+          clubId={clubId}
+          visitId={visit.id}
+          version={visit.version}
+          prep={
+            visit.prepTask ? { text: visit.prepTask.text, rating: visit.prepTask.rating } : null
+          }
+          actions={visit.actions.map((a) => ({ id: a.id, text: a.text, rating: a.rating }))}
         />
       )}
       {mode.form && data && (
@@ -104,6 +117,12 @@ async function Visit({ params }: Props) {
               participantIds: visit.participantIds,
               participants: visit.participants,
               summary: visit.summary,
+              topics: visit.topics,
+              assessment: visit.assessment ?? { topics: [], overall: "" },
+              prepTask: {
+                text: visit.prepTask?.text ?? "",
+                dueDate: visit.prepTask?.dueDate ?? null,
+              },
               findings: visit.findings,
               actions: visit.actions.map(({ id, text, area, owner, ownerId, dueDate }) => ({
                 id,

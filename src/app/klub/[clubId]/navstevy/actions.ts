@@ -5,10 +5,13 @@ import { headers } from "next/headers";
 
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
+import type { MentorRating } from "@/server/db/types";
 import { visitDeps } from "@/server/clubs/deps";
 import {
   createMentorVisit,
+  rateMentorVisit,
   sendMentorVisit,
+  setPrepTaskDone,
   setVisitActionDone,
   updateMentorVisit,
   withdrawMentorVisit,
@@ -44,11 +47,11 @@ async function run(fn: () => Promise<{ id: string; version: number }>): Promise<
 
 const user = async () => getCurrentUser(await headers());
 
-/** Create a draft (visitId null) or save changes of an existing visit. */
+/** Create a draft or a planned visit (visitId null) or save changes of an existing visit. */
 export async function saveVisitAction(
   clubId: string,
   visitId: string | null,
-  input: VisitInput,
+  input: VisitInput & { planned?: boolean },
   expectedVersion: number,
 ): Promise<VisitActionResult> {
   return run(async () =>
@@ -91,5 +94,32 @@ export async function toggleVisitActionAction(
       done,
       expectedVersion,
     }),
+  );
+}
+
+/** The club ticks the task before the visit (MC). */
+export async function prepDoneAction(
+  clubId: string,
+  visitId: string,
+  done: boolean,
+  expectedVersion: number,
+): Promise<VisitActionResult> {
+  return run(async () =>
+    setPrepTaskDone(visitDeps, await user(), clubId, visitId, { done, expectedVersion }),
+  );
+}
+
+/** The mentor rates the task before the visit and the agreed steps (MC). */
+export async function rateVisitAction(
+  clubId: string,
+  visitId: string,
+  ratings: {
+    prep?: MentorRating | null;
+    actions: { id: string; rating: MentorRating | null }[];
+  },
+  expectedVersion: number,
+): Promise<VisitActionResult> {
+  return run(async () =>
+    rateMentorVisit(visitDeps, await user(), clubId, visitId, { ...ratings, expectedVersion }),
   );
 }

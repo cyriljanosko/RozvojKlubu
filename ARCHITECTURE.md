@@ -85,7 +85,7 @@ MCP server (F5, plánovaný)        ─┘        │
 1. `GET|POST /api/v1/clubs/:clubId/mentor-visits`, `GET|PATCH .../:visitId`, `POST .../:visitId/send`, `POST .../:visitId/withdraw`, `PATCH .../:visitId/actions/:actionId` – služba `mentor-visit.service.ts`
 2. Záznam: dátum, forma (osobne / online / telefonicky), prítomní (mená, len pre klub, jeho mentora a admina SFZ), zhrnutie, zistenia pri vybraných oblastiach, dohodnuté kroky (čo, oblasť, kto, do kedy, splnené)
 3. Stav rozpracovaná → odoslaná klubu → zrušená (nič sa nemaže); zapisuje mentor klubu v sezóne a admin SFZ, vedenie a tréner vidia len odoslané a odškrtávajú kroky; verzia (súbežná úprava → 409)
-4. Mentoring (MC, ADR 0013): stav aj **naplánovaná** (klub ju vidí), téma 0–3 oblasti, úloha vopred (`PATCH .../:visitId/prep` – klub odškrtne), hodnotenie v štyroch poliach namiesto zhrnutia, hodnotenia úlohy a krokov mentorom (`PATCH .../:visitId/ratings`); staré záznamy dostanú prázdne nové polia pri čítaní
+4. Mentoring (MC, ADR 0013): stav aj **naplánovaná** (klub ju vidí), téma 0–3 oblasti, úloha vopred (`PATCH .../:visitId/prep` – klub odškrtne), hodnotenie podľa tém (blok pri každej téme, bez témy všeobecný) a celkové hodnotenie namiesto zhrnutia a zistení (ADR 0014), hodnotenia úlohy a krokov mentorom (`PATCH .../:visitId/ratings`); staré záznamy dostanú prázdne nové polia pri čítaní
 
 ### Mentoring klubu (MC)
 

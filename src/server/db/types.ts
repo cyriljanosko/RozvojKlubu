@@ -305,11 +305,21 @@ export type MentorVisitStatus = "planned" | "draft" | "sent" | "withdrawn";
 /** How an agreed step or a task before the visit turned out (mentor's rating, MC). */
 export type MentorRating = "done" | "partial" | "not";
 
-/** Mentor's assessment of a visit in four fields, like the EYA coach mentoring (MC). */
-export interface MentorAssessment {
+/**
+ * Mentor's assessment of a visit, like the EYA coach mentoring (MC, decision 22. 10. 2026):
+ * one block per topic of the visit (strengths, weaknesses, recommendations) – or one general
+ * block (area null) when the visit has no topic – and one overall assessment of the meeting.
+ */
+export interface MentorTopicAssessment {
+  /** the topic's area; null = the general block of a visit without a topic */
+  area: number | null;
   strengths: string;
   weaknesses: string;
   recommendations: string;
+}
+
+export interface MentorAssessment {
+  topics: MentorTopicAssessment[];
   overall: string;
 }
 

@@ -20,12 +20,30 @@ function ensureIndexes(db: Db): Promise<unknown> {
   return indexes;
 }
 
+/** The first MC-a shape (four flat fields, 22. 10. 2026) read as one general block. */
+function normalizeAssessment(value: unknown): MentorVisitDoc["assessment"] {
+  if (!value || typeof value !== "object") return null;
+  if ("topics" in value) return value as MentorVisitDoc["assessment"];
+  const flat = value as Record<string, string>;
+  return {
+    topics: [
+      {
+        area: null,
+        strengths: flat.strengths ?? "",
+        weaknesses: flat.weaknesses ?? "",
+        recommendations: flat.recommendations ?? "",
+      },
+    ],
+    overall: flat.overall ?? "",
+  };
+}
+
 const toStored = ({ _id, ...rest }: MentorVisitDoc): StoredVisit => ({
   ...rest,
   participantIds: rest.participantIds ?? [], // visits recorded before 21. 10. 2026
   // visits recorded before the mentoring cycle (22. 10. 2026)
   topics: rest.topics ?? [],
-  assessment: rest.assessment ?? null,
+  assessment: normalizeAssessment(rest.assessment),
   prepTask: rest.prepTask ?? null,
   actions: rest.actions.map((a) => ({
     ...a,
