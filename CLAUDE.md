@@ -5,7 +5,7 @@
 ## 1. Čo to je a ako to rozbehať
 
 - Web aplikácia SFZ na vzdelávanie a rozvoj futbalových klubov: https://rozvojklubu.ltk.solutions
-- Stack: Next.js 16 (App Router, TypeScript), Tailwind CSS 4 + shadcn/ui, MongoDB Atlas (oficiálny driver `mongodb`), Better Auth, next-intl, Vercel (fra1), Vitest
+- Stack: Next.js 16 (App Router, TypeScript), Tailwind CSS 4 + SFZ Design System (shadcn/ui len v obrazovkách pred prepisom, ADR 0018), MongoDB Atlas (oficiálny driver `mongodb`), Better Auth, next-intl, Vercel (fra1), Vitest
 - Štruktúra: jedna aplikácia, API-first – pozri `ARCHITECTURE.md`
 - Lokálny beh: `npm install && npm run dev` → http://localhost:3000 (stav: `/api/v1/health`)
 - Premenné prostredia: všetky kľúče sú v `.env.example` (bez hodnôt). Nové kľúče vždy doplň aj tam.
@@ -75,6 +75,7 @@ Sekcia „Nefungovalo“ je povinná, keď sa niečo zamietlo – z git logu sa 
 - Server Components sú default. `"use client"` len tam, kde je naozaj potrebná interaktivita, a čo najnižšie v strome.
 - Dáta sa načítavajú v serverovej vrstve, nie cez `useEffect` + `fetch`.
 - `next/image` povinne. Dizajn (farby, písmo, tmavá téma, logá) vychádza z balíka `@slovensky-futbalovy-zvaz/design-system` (ADR 0016): farby len cez tokeny, písmo SF Pro z tokenov (žiadne webfonty, bez Google Fonts).
+- **UI len z komponentov SFZ Design System** (ADR 0018): nová alebo prepísaná obrazovka používa komponenty cez `src/components/sfz`, nikdy `src/components/ui` (shadcn) ani farby mimo tokenov. Čo dizajn systém nemá, sa skladá v `src/components/sfz` z tokenov. Obrazovka sa prepisuje až podľa návrhu schváleného Cyrilom (`docs/dizajn/plan-redesignu.md`); pred prácou na UI použi skill `sfz-ui`.
 - Zapnuté `cacheComponents`: dynamické časti (session, `headers()`) patria do `<Suspense>`. Cachovanie sa nastavuje vedome; zmena cache stratégie patrí do devlogu.
 - Žiadne `any` v props a v návratových typoch API.
 
