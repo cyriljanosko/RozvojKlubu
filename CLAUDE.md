@@ -32,7 +32,7 @@ Zdroj pravdy pri rozpore: **kód → git log → ADR → NEXT.md → devlog** (v
 
 - Vetvy: `feat/<popis>`, `fix/<popis>`, `chore/<popis>`, `docs/<popis>`. Do `main` sa nepushuje priamo, pokiaľ si to Cyril výslovne neželá.
 - `main` je vždy nasaditeľný.
-- Každá zmena ide cez PR (squash merge) priamo do `main`, bez reťazí PR. PR zlučuje Cyril, alebo Claude **len na jeho výslovný pokyn** pre konkrétny PR – PR aj tak vzniká, lebo nesie odôvodnenie zmeny. Po zlúčení sa stav overí cez GitHub API.
+- Každá zmena ide cez PR (merge commit – zachová každý commit vetvy, ADR 0017) priamo do `main`, bez reťazí PR. PR zlučuje Cyril, alebo Claude **len na jeho výslovný pokyn** pre konkrétny PR – PR aj tak vzniká, lebo nesie odôvodnenie zmeny. Po zlúčení sa stav overí cez GitHub API.
 - Conventional Commits v angličtine: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`. Jeden commit = jedna logická zmena.
 - Popis PR odpovedá na **prečo**, nie na čo. Odkaz na issue alebo ADR.
 - Zakázané bez súhlasu: `force push`, rebase zdieľanej vetvy, mazanie vetvy.

@@ -4,7 +4,7 @@
 
 - `main` je chránená, priamo sa do nej necommituje.
 - Každá úloha má issue a vlastnú vetvu: `feat/…`, `fix/…`, `chore/…`, `docs/…`.
-- Zmena ide cez pull request, vyžaduje review (@cyriljanosko) a zelené CI. Merge cez **squash**.
+- Zmena ide cez pull request, vyžaduje review (@cyriljanosko) a zelené CI. Merge cez **merge commit** – každý commit vetvy ostane v histórii (ADR 0017).
 
 ## Commity
 
