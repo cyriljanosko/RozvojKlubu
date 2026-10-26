@@ -38,6 +38,9 @@ const envSchema = z.object({
   ECOMAIL_API_KEY: optional(z.string().min(1)),
   EMAIL_FROM: optional(z.email()),
   EMAIL_FROM_NAME: z.string().min(1).default("Rozvoj klubu SFZ"),
+
+  // Development pages (/dev/ukazky) for visual regression tests; never set in production
+  ENABLE_DEV_PAGES: optional(z.enum(["0", "1"])),
 });
 
 export type Env = z.infer<typeof envSchema>;
