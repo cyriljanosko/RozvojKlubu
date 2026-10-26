@@ -10,8 +10,11 @@ import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { mentoringDeps, planDeps, visitDeps, vizitkaDeps } from "@/server/clubs/deps";
+import { mentoringDeps, planDeps, settingsDeps, visitDeps, vizitkaDeps } from "@/server/clubs/deps";
+import { getClubSettings } from "@/server/services/club-settings.service";
 import { getClubMentoring } from "@/server/services/club-mentoring.service";
+
+import { RankingConsentToggle } from "./ranking-consent";
 import { getClubPlan, summarizePlan } from "@/server/services/club-plan.service";
 import { PublicPlan } from "@/components/vizitka/public-plan";
 import { seasonFromSlug, seasonToSlug } from "@/server/services/season";
@@ -79,6 +82,7 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
       <PlanLine clubId={clubId} season={vizitka.season} />
       <VisitLine clubId={clubId} season={vizitka.season} />
       <MentoringLine clubId={clubId} season={vizitka.season} />
+      <RankingConsent clubId={clubId} />
       <PublicPlan clubId={clubId} season={vizitka.season} />
     </div>
   );
@@ -157,6 +161,52 @@ async function MentoringLine({ clubId, season }: { clubId: string; season: strin
       <span className="font-medium">{t("title")}</span>
       <span className="text-muted-foreground">{done > 0 ? t("line", { done }) : t("none")}</span>
     </Link>
+  );
+}
+
+/** Consent to the public rankings (MR-c, ADR 0015): management decides, other roles see the state. */
+async function RankingConsent({ clubId }: { clubId: string }) {
+  const user = await getCurrentUser(await headers());
+  const t = await getTranslations("ranking.consent");
+  let settings;
+  try {
+    settings = await getClubSettings(settingsDeps, user, clubId);
+  } catch {
+    return null; // no access to the club's settings
+  }
+  const consent = settings.rankingConsent;
+  const date = (d: Date) =>
+    d.toLocaleDateString("sk", { dateStyle: "medium", timeZone: "Europe/Bratislava" });
+  return (
+    <section
+      id="rebricek"
+      aria-labelledby="ranking-consent"
+      className="flex scroll-mt-20 flex-col gap-2 rounded-xl border p-4"
+    >
+      <h2 id="ranking-consent" className="font-semibold">
+        {t("title")}
+      </h2>
+      <p className="text-sm">{t("intro")}</p>
+      <p className="text-sm font-medium">
+        {consent === null
+          ? t("undecided")
+          : consent.given
+            ? t("given", { date: date(consent.at) })
+            : t("declined", { date: date(consent.at) })}
+      </p>
+      {settings.canEdit ? (
+        <RankingConsentToggle
+          clubId={clubId}
+          given={consent?.given ?? null}
+          version={settings.version}
+        />
+      ) : (
+        <p className="text-muted-foreground text-xs">{t("managementOnly")}</p>
+      )}
+      <Link href="/vizitka" className="self-start text-xs underline underline-offset-4">
+        {t("see")}
+      </Link>
+    </section>
   );
 }
 

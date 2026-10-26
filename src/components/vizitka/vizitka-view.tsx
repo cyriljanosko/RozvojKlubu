@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import { ConfirmedBadge } from "@/components/vizitka/milestones";
 import type { ClubVizitka, PublicVizitka } from "@/server/services/vizitka.service";
 
 /** Shared Vizitka layout: club profile, Kompas and licensing evaluation side by side (ADR 0007). */
@@ -95,6 +96,7 @@ export async function VizitkaView({
                 <span className="text-muted-foreground text-sm">
                   {t("kompas.filled", { filled: vizitka.kompas.filledAreas })}
                 </span>
+                {vizitka.kompas.confirmed && <ConfirmedBadge />}
               </p>
               <ol className="divide-y rounded-md border">
                 {vizitka.kompas.areas.map((a) => (

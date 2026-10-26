@@ -4,6 +4,12 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
+- [ ] DS – dizajn podľa SFZ Design System (rozhodnuté 26. 10., ADR 0016): projekt predvolene vychádza z `@slovensky-futbalovy-zvaz/design-system` (^1), nové verzie prináša Dependabot denne ako PR; žiadne natvrdo zapísané farby.
+  - [ ] DS-1 – napojenie (vetva `feat/sfz-design-system`, hotové a overené lokálne, PR na review): balík z GitHub Packages (`.npmrc`, `NPM_GITHUB_TOKEN` v Actions, Dependabot a Verceli – nastavené 26. 10.), tokeny namiesto farieb shadcn, písmo SF Pro (namiesto Geist), tmavá téma podľa zariadenia, logo SFZ (variant D) v hlavičke, Dependabot s privátnym registrom.
+  - [ ] DS-2 – natvrdo zapísané farby (pásma oblastí, Kompas, Prax, ihrisko, odznaky) na tokeny.
+  - [ ] DS-3 – komponenty SFZ postupne (tlačidlá, karty, polia, okná, tabuľky) namiesto shadcn.
+- [ ] Upgrade Next.js 16.4.0 → 16.4.3 – lokálny build hlási známu bezpečnostnú zraniteľnosť (26. 10.).
+
 - [x] Mapa produktu z návrhov v artifactoch (`docs/produkt/mapa-produktu.md`) – schválená 16. 10., roly v klube v ADR 0004.
 - [ ] Pilot Stupňa II podľa mapy, časť 11 (F1 → F7). Rozsah: Vizitka, Kompas v aplikácii s odoslaním mentorovi, Moja Akadémia (vedenie, tréner, mentor), Naši tréneri; 10 pilotných klubov z Vizitky.
 - [x] F2 – roly v klube a dáta pilotných klubov – PR #14 (zlúčený 16. 10.).
@@ -81,8 +87,8 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Mentorský smer (rozhodnuté 26. 10.): prioritne pomôcť klubom a ľuďom v klube, hodnotenie a rebríčky majú motivovať.
     - [ ] MR – motivačné rebríčky (ADR 0015): súhlas klubu (opt-in, vedenie), Kompas potvrdený mentorom (odznak), najväčší posun oproti minulej sezóne, míľniky sezóny, verejne len top 3 v každej veľkosti + hviezdy bez poradia.
       - [x] MR-a – dáta a API: kolekcia `club_settings` (súhlas), `confirmedAt`/`confirmedBy` v `kompas_submissions` (PR #79, v produkcii `fb735d7`).
-      - [ ] MR-b – pravidlá (rozhodnuté 26. 10.): kluby bez súhlasu v zozname neutrálne bez hviezd, verejne všetkých 6 míľnikov, posun v bodoch aj hviezdach, top 3 vždy (aj menej klubov); `GET /api/v1/vizitky` – vetva `feat/mr-b-ranking-rules`, PR na review. Top 3 a posun s ozajstnými dátami overiť po prvom súhlase klubu.
-      - [ ] MR-c – rozhranie: prepínač súhlasu (vedenie, Vizitka klubu), tlačidlo „Potvrdiť Kompas“ (mentor), odznak „potvrdené mentorom“ a ikony míľnikov v rebríčku a vo Vizitke.
+      - [x] MR-b – pravidlá (rozhodnuté 26. 10.): kluby bez súhlasu v zozname neutrálne bez hviezd, verejne všetkých 6 míľnikov, posun v bodoch aj hviezdach, top 3 vždy (aj menej klubov); `GET /api/v1/vizitky` – vetva `feat/mr-b-ranking-rules`, PR #80 (v produkcii `51f7f4a`). Top 3 a posun s ozajstnými dátami overiť po prvom súhlase klubu.
+      - [ ] MR-c – rozhranie (rozhodnuté 26. 10.): súhlas vo Vizitke klubu + úloha vedenia, kým nerozhodne; „Potvrdiť Kompas“ na detaile odoslaného Kompasu + úloha mentora; odznak „potvrdené mentorom“ v rebríčku aj vo verejnej Vizitke (pri každom klube); míľniky v rebríčku, vo verejnej Vizitke (so súhlasom) a dlaždica v Moja Akadémia – vetva `feat/mr-c-ranking-ui`, PR na review. Prepínač súhlasu a tlačidlo potvrdenia overiť v preview s účtom vedenia a mentora.
     - [ ] DK – karta „Váš ďalší krok“ v Moja Akadémia a sprievodca „Prvých 30 dní v Akadémii“.
     - [ ] ZK – sekcia „Zo života klubov“: príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
     - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.

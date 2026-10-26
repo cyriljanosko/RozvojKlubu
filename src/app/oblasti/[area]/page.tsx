@@ -324,7 +324,9 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
                   <a href={`#${s.key}`} className="underline-offset-4 hover:underline">
                     {s.title}
                   </a>
-                  {s.forRole && <span className="text-primary text-xs"> · {t("forYourRole")}</span>}
+                  {s.forRole && (
+                    <span className="text-primary-ink text-xs"> · {t("forYourRole")}</span>
+                  )}
                 </li>
               ))}
             </ol>

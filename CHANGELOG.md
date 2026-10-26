@@ -4,12 +4,17 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Pridané
+
+- Dizajn podľa SFZ Design System (DS-1, ADR 0016): balík `@slovensky-futbalovy-zvaz/design-system` (^1) z GitHub Packages, farby aplikácie z tokenov SFZ (modrá `#1450df`, plochy, okraje, stavy), písmo SF Pro z tokenov namiesto Geist, tmavá téma podľa nastavenia zariadenia, logo SFZ (variant D, v tmavej téme biele) v hlavičke; Dependabot denne kontroluje nové verzie dizajn systému.
+
 ### Zmenené
 
 - Vizitky klubov: blok „Hľadať klub“ s filtrami je pod mapou na celú šírku (na počítači filtre v jednom riadku, zoznam v dvoch stĺpcoch); zoznam klubov sa ukáže až po zadaní názvu, zvolení filtra alebo kliknutí na zväz na mape, dovtedy krátka nápoveda.
 
 ### Pridané
 
+- Motivačné rebríčky – rozhranie (MR-c, ADR 0015): blok „Verejný rebríček klubov“ v neverejnej Vizitke klubu – vedenie klub zapojí, odmietne alebo súhlas zruší, ostatné roly vidia stav; úloha vedenia „Rozhodnúť, či sa klub zapojí do verejného rebríčka“, kým nerozhodne. Na detaile odoslaného Kompasu tlačidlo „Potvrdiť Kompas“ / „Zrušiť potvrdenie“ pre mentora klubu a admina SFZ; úloha mentora „Potvrdiť Kompas“ a stav „Kompas potvrdený / čaká na potvrdenie“ v prehľade jeho klubov. Odznak „potvrdené mentorom“ pri Kompase v rebríčku a vo verejnej Vizitke. Míľniky sezóny (ikony a počet „4/6“) v rebríčku, blok „Míľniky sezóny“ vo verejnej Vizitke klubov so súhlasom a dlaždica „Míľniky sezóny“ v Moja Akadémia s odkazmi „Ako na to“ pri chýbajúcich.
 - Motivačné rebríčky – pravidlá (MR-b, ADR 0015): na `/vizitka` sú hviezdy, body, posun a míľniky len pri kluboch, ktorých vedenie dalo súhlas; ostatné kluby sú v zozname a na mape neutrálne („Zapojený do Akadémie“), bez textu „Kompas neodoslaný“. V každej veľkosti verejne Top 3 (podľa Kompasu alebo licencovania) a „Najväčší posun v Kompase oproti minulej sezóne“ (+body, hviezdy pred a po), ostatné kluby so súhlasom abecedne bez čísla poradia; zoznam klubov už nie je číslovaný. Vedenie a tréner vidia riadok s neverejným miestom svojho klubu, mentor pri svojich kluboch a admin SFZ pri všetkých číslo poradia „(neverejné)“. Míľniky sezóny (odoslaný Kompas, potvrdený mentorom, plán sezóny, splnený cieľ, stretnutie s mentorom, uzavreté licenčné) v dátach – zobrazia sa v MR-c. Verejné `GET /api/v1/vizitky`.
 - Motivačné rebríčky – základ (MR-a, ADR 0015): súhlas vedenia klubu so zaradením do verejného rebríčka (opt-in, dá sa zrušiť) – `GET /api/v1/clubs/:clubId/settings`, `PUT …/settings/ranking-consent`, kolekcia `club_settings`; potvrdenie odoslaného Kompasu mentorom klubu alebo adminom SFZ (odznak „potvrdené mentorom“, dá sa vrátiť) – `POST|DELETE …/kompas/submissions/:id/confirm`.
 - Rebríčky klubov vo Vizitkách (VK-b): na `/vizitka` dve samostatné hodnotenia v hviezdičkách aj bodoch – Kompas (0 – 220 b. v piatich pásmach po 44 b.) a licencovanie (priemer pásiem oblastí uzavretého licenčného hodnotenia: bez pásma 1, grassroots 2, bronz 3, striebro 4, zlato 5); zoradenie podľa Kompasu, licencovania, počtu hráčov, ObFZ alebo RFZ (aj z adresy `?sort=`); mapa sa dá zafarbiť podľa priemeru hviezdičiek Kompasu alebo licencovania (podľa zvolenej veľkosti); pod zoznamom rebríčky podľa veľkosti klubu (veľké, stredné, malé) a poradie zväzov (RFZ / ObFZ) s priemerom hviezdičiek, klik zväz vyfiltruje; rozbaľovacie vysvetlenie pravidla (skúšobná verzia).
