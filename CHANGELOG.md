@@ -76,6 +76,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Opravené
 
+- Úvodná stránka: po výbere roly („Kto ste v klube?“) stránka neskočí na začiatok, ale posunie sa na „oblasti pre vašu rolu“.
 - Splnenie kroku z návštevy mentora: zodpovedný, ktorý je zároveň mentorom klubu alebo adminom SFZ, nevedel krok označiť ako splnený (videl len formulár mentora). Pri odoslanej návšteve sa zaškrtávanie krokov ukazuje každému, kto ju vidí; formulár mentora je zbalený pod „Upraviť návštevu“.
 - Uloženie obsahu z formulára prepísalo text na konce riadkov CRLF (falošná zmena v histórii) – text sa ukladá s LF.
 - `INITIAL_ADMIN_EMAILS` povýši na admina SFZ aj existujúci účet pri ďalšom prihlásení (predtým len pri vytvorení účtu).

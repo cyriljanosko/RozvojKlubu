@@ -43,7 +43,11 @@ async function Hub({ searchParams }: Props) {
   const hub = await getHub(hubDeps, user, selection);
   if (!hub) return <p className="text-sm">{t("lead")}</p>;
 
-  const href = (change: Partial<Record<"track" | "role" | "club", string | null>>) => {
+  const href = (
+    change: Partial<Record<"track" | "role" | "club", string | null>>,
+    /** section to land on after the reload (choosing a role → its areas, 26. 10. 2026) */
+    anchor?: string,
+  ) => {
     const next = new URLSearchParams();
     const merged = {
       track: hub.track.key,
@@ -52,7 +56,7 @@ async function Hub({ searchParams }: Props) {
       ...change,
     };
     for (const [k, v] of Object.entries(merged)) if (v) next.set(k, v);
-    return `/?${next.toString()}`;
+    return `/?${next.toString()}${anchor ? `#${anchor}` : ""}`;
   };
   const approved = hub.track.status === "approved";
   const areaHref = (n: number) =>
@@ -240,7 +244,7 @@ async function Hub({ searchParams }: Props) {
             {roleCards.map((r) => (
               <li key={r.key}>
                 <Link
-                  href={href({ role: r.key })}
+                  href={href({ role: r.key }, "hub-areas")}
                   aria-current={r.key === hub.role.key ? "page" : undefined}
                   className="hover:bg-muted/50 aria-[current=page]:border-primary aria-[current=page]:bg-primary/5 flex h-full flex-col gap-1 rounded-xl border p-3 aria-[current=page]:border-2"
                 >
@@ -270,7 +274,7 @@ async function Hub({ searchParams }: Props) {
         )}
         {!hub.role.whole && whole && (
           <Link
-            href={href({ role: whole.key })}
+            href={href({ role: whole.key }, "hub-areas")}
             className="self-start text-sm underline underline-offset-4"
           >
             {t("noRole")}
