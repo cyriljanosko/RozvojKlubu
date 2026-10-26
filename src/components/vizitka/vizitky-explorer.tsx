@@ -35,7 +35,8 @@ const href = (c: VizitkaCard) => `/vizitka/${encodeURIComponent(c.clubId)}`;
 /**
  * Vizitky klubov (VK-a) with the rankings (VK-b, 26. 10. 2026): map of Slovakia by RFZ or ObFZ
  * coloured by the number of pilot clubs or their average stars, a click on an area filters;
- * filters by name, RFZ, ObFZ and size, ordering by Kompas, licensing, players, ObFZ or RFZ;
+ * under the map the search block – filters by name, RFZ, ObFZ and size, ordering by Kompas,
+ * licensing, players, ObFZ or RFZ; the list of clubs appears only after a search or filter;
  * below the list the rankings by club size and the order of the unions.
  */
 export function VizitkyExplorer({
@@ -89,6 +90,8 @@ export function VizitkyExplorer({
     (!q || c.name.toLocaleLowerCase("sk").includes(q.toLocaleLowerCase("sk"))) &&
     (!rfz || c.place?.rfz === rfz) &&
     (!obfz || c.place?.obfz === obfz);
+  // the list shows up only once the visitor searches or filters (decision 26. 10. 2026)
+  const searching = Boolean(q || rfz || obfz || size);
   const shown = sortClubs(
     cards.filter((c) => matches(c) && (!size || c.size === size)),
     sort,
@@ -145,7 +148,7 @@ export function VizitkyExplorer({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-start">
+      <div className="flex flex-col gap-4">
         <section className="flex min-w-0 flex-col gap-3 rounded-xl border p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 className="font-semibold">{t("map.title")}</h2>
@@ -238,8 +241,8 @@ export function VizitkyExplorer({
         </section>
 
         <section className="flex min-w-0 flex-col gap-3 rounded-xl border p-4">
-          <div className="grid gap-2 sm:grid-cols-2">
-            <label className="flex flex-col gap-1 text-xs sm:col-span-2">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[minmax(0,2fr)_repeat(4,minmax(0,1fr))]">
+            <label className="flex flex-col gap-1 text-xs sm:col-span-2 lg:col-span-1">
               <span className="text-muted-foreground">{t("filters.search")}</span>
               <input
                 type="search"
@@ -310,7 +313,7 @@ export function VizitkyExplorer({
                 ))}
               </select>
             </label>
-            {(q || rfz || obfz || size) && (
+            {searching && (
               <button
                 type="button"
                 onClick={() => {
@@ -326,57 +329,65 @@ export function VizitkyExplorer({
             )}
           </div>
 
-          <h2 className="font-semibold">
-            {t("list.title")}{" "}
-            <span className="text-muted-foreground text-sm font-normal">
-              · {t("list.count", { count: shown.length })}
-            </span>
-          </h2>
-          {shown.length === 0 ? (
+          {!searching ? (
             <p className="text-muted-foreground rounded-lg border border-dashed p-3 text-sm">
-              {t("list.empty")}
+              {t("list.hint")}
             </p>
           ) : (
-            <ol className="flex flex-col gap-2">
-              {shown.map((c, i) => (
-                <li key={c.clubId}>
-                  <Link
-                    href={href(c)}
-                    className="hover:bg-muted/50 flex gap-3 rounded-lg border p-3 text-sm"
-                  >
-                    <span className="text-muted-foreground w-6 shrink-0 font-semibold">
-                      {i + 1}.
-                    </span>
-                    <span className="flex min-w-0 flex-col gap-1">
-                      <span className="font-medium break-words">{c.name}</span>
-                      <span className="text-muted-foreground text-xs">
-                        {[
-                          c.place ? `${c.place.obfz} · ${c.place.rfz}` : t("list.noPlace"),
-                          c.size ? t(`sizes.${c.size}`) : null,
-                          c.players !== null ? t("list.players", { count: c.players }) : null,
-                        ]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </span>
-                      <span className="grid gap-1 sm:grid-cols-2">
-                        <span className="flex flex-col">
-                          <span className="text-muted-foreground text-[11px]">
-                            {t("stars.kompas")}
-                          </span>
-                          {kompas(c)}
+            <>
+              <h2 className="font-semibold">
+                {t("list.title")}{" "}
+                <span className="text-muted-foreground text-sm font-normal">
+                  · {t("list.count", { count: shown.length })}
+                </span>
+              </h2>
+              {shown.length === 0 ? (
+                <p className="text-muted-foreground rounded-lg border border-dashed p-3 text-sm">
+                  {t("list.empty")}
+                </p>
+              ) : (
+                <ol className="grid gap-2 lg:grid-cols-2">
+                  {shown.map((c, i) => (
+                    <li key={c.clubId}>
+                      <Link
+                        href={href(c)}
+                        className="hover:bg-muted/50 flex gap-3 rounded-lg border p-3 text-sm"
+                      >
+                        <span className="text-muted-foreground w-6 shrink-0 font-semibold">
+                          {i + 1}.
                         </span>
-                        <span className="flex flex-col">
-                          <span className="text-muted-foreground text-[11px]">
-                            {t("stars.licensing")}
+                        <span className="flex min-w-0 flex-col gap-1">
+                          <span className="font-medium break-words">{c.name}</span>
+                          <span className="text-muted-foreground text-xs">
+                            {[
+                              c.place ? `${c.place.obfz} · ${c.place.rfz}` : t("list.noPlace"),
+                              c.size ? t(`sizes.${c.size}`) : null,
+                              c.players !== null ? t("list.players", { count: c.players }) : null,
+                            ]
+                              .filter(Boolean)
+                              .join(" · ")}
                           </span>
-                          {licensing(c)}
+                          <span className="grid gap-1 sm:grid-cols-2">
+                            <span className="flex flex-col">
+                              <span className="text-muted-foreground text-[11px]">
+                                {t("stars.kompas")}
+                              </span>
+                              {kompas(c)}
+                            </span>
+                            <span className="flex flex-col">
+                              <span className="text-muted-foreground text-[11px]">
+                                {t("stars.licensing")}
+                              </span>
+                              {licensing(c)}
+                            </span>
+                          </span>
                         </span>
-                      </span>
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
+                      </Link>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </>
           )}
         </section>
       </div>

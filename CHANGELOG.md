@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Zmenené
+
+- Vizitky klubov: blok „Hľadať klub“ s filtrami je pod mapou na celú šírku (na počítači filtre v jednom riadku, zoznam v dvoch stĺpcoch); zoznam klubov sa ukáže až po zadaní názvu, zvolení filtra alebo kliknutí na zväz na mape, dovtedy krátka nápoveda.
+
 ### Pridané
 
 - Rebríčky klubov vo Vizitkách (VK-b): na `/vizitka` dve samostatné hodnotenia v hviezdičkách aj bodoch – Kompas (0 – 220 b. v piatich pásmach po 44 b.) a licencovanie (priemer pásiem oblastí uzavretého licenčného hodnotenia: bez pásma 1, grassroots 2, bronz 3, striebro 4, zlato 5); zoradenie podľa Kompasu, licencovania, počtu hráčov, ObFZ alebo RFZ (aj z adresy `?sort=`); mapa sa dá zafarbiť podľa priemeru hviezdičiek Kompasu alebo licencovania (podľa zvolenej veľkosti); pod zoznamom rebríčky podľa veľkosti klubu (veľké, stredné, malé) a poradie zväzov (RFZ / ObFZ) s priemerom hviezdičiek, klik zväz vyfiltruje; rozbaľovacie vysvetlenie pravidla (skúšobná verzia).

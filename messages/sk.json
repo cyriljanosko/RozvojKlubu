@@ -1547,7 +1547,7 @@
   },
   "vizitky": {
     "title": "Vizitky klubov",
-    "intro": "Kluby v Akadémii rozvoja klubov SFZ na mape Slovenska a ich rebríčky. Kliknite na zväz na mape alebo použite filtre a otvorte Vizitku klubu.",
+    "intro": "Kluby v Akadémii rozvoja klubov SFZ na mape Slovenska a ich rebríčky. Kliknite na zväz na mape alebo vyhľadajte klub a otvorte jeho Vizitku.",
     "map": {
       "title": "Mapa Slovenska",
       "level": "Zobraziť",
@@ -1585,7 +1585,8 @@
       "licensingNone": "licenčné zatiaľ neuzavreté",
       "open": "Otvoriť Vizitku",
       "noPlace": "zaradenie chýba",
-      "players": "{count, plural, one {# hráč} few {# hráči} other {# hráčov}}"
+      "players": "{count, plural, one {# hráč} few {# hráči} other {# hráčov}}",
+      "hint": "Zadajte názov klubu, zvoľte filter alebo kliknite na zväz na mape – zobrazí sa zoznam klubov."
     },
     "sizes": {
       "small": "malý klub",
