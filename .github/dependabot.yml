@@ -1,12 +1,23 @@
 version: 2
+registries:
+  # SFZ Design System from GitHub Packages (ADR 0016); token in Dependabot secrets
+  github-sfz:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{ secrets.NPM_GITHUB_TOKEN }}
 updates:
+  # checked daily so the design follows SFZ Design System (ADR 0016); the design system gets its own PR
   - package-ecosystem: npm
     directory: /
+    registries: [github-sfz]
     schedule:
-      interval: weekly
+      interval: daily
     open-pull-requests-limit: 5
     groups:
+      sfz-design-system:
+        patterns: ["@slovensky-futbalovy-zvaz/*"]
       minor-and-patch:
+        exclude-patterns: ["@slovensky-futbalovy-zvaz/*"]
         update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: /

@@ -1,8 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Suspense } from "react";
 import { ChartColumn, Info, MapPinned, Search, UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+
+import logoColour from "@slovensky-futbalovy-zvaz/design-system/brand/logos/Loga-SFZ/sfz-D-farebne.svg";
+import logoWhite from "@slovensky-futbalovy-zvaz/design-system/brand/logos/Loga-SFZ/sfz-D-biele.svg";
 
 import { SearchForm } from "@/components/search/search-form";
 import { Button } from "@/components/ui/button";
@@ -68,8 +72,27 @@ export async function SiteHeader() {
   return (
     <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-40 border-b backdrop-blur print:hidden">
       <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
-        <Link href="/" className="min-w-0 truncate font-semibold">
-          {t("brand")}
+        <Link href="/" className="flex min-w-0 items-center gap-2 font-semibold">
+          {/* SFZ logo, horizontal variant D (design system, ADR 0016); white one in the dark theme */}
+          <Image
+            src={logoColour}
+            alt={t("logoAlt")}
+            width={75}
+            height={36}
+            unoptimized
+            priority
+            className="h-9 w-auto shrink-0 dark:hidden"
+          />
+          <Image
+            src={logoWhite}
+            alt={t("logoAlt")}
+            width={75}
+            height={36}
+            unoptimized
+            priority
+            className="hidden h-9 w-auto shrink-0 dark:block"
+          />
+          <span className="hidden truncate sm:inline">{t("brand")}</span>
         </Link>
         <div className="ml-auto hidden w-full max-w-64 md:block">
           <SearchForm size="compact" />

@@ -23,6 +23,9 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+        env:
+          # read:packages token for @slovensky-futbalovy-zvaz/design-system (ADR 0016)
+          NPM_GITHUB_TOKEN: ${{ secrets.NPM_GITHUB_TOKEN }}
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
