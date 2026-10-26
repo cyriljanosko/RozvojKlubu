@@ -17,7 +17,7 @@ a `VERCEL_URL`, ktoré nastavuje Vercel sám (`src/server/auth/base-url.ts`). Pr
 ## Nasadenie
 
 1. PR do `main` → Vercel vytvorí Preview a GitHub Actions spustí CI (format, lint, typecheck, test, build).
-2. Po review squash merge → Vercel nasadí produkciu automaticky.
+2. Po review merge commit (ADR 0017) → Vercel nasadí produkciu automaticky.
 3. Kontrola: `https://rozvojklubu.ltk.solutions/api/v1/health` → `status: ok`, `database: ok`, `version` = prvých 7 znakov commitu.
 
 Nastavenia projektu Vercel: Framework **Next.js**, Node 24.x, región funkcií **fra1**. Premenné prostredia: viď `.env.example`.
