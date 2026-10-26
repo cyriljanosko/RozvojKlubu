@@ -2,6 +2,7 @@ import {
   kompasProgress,
   kompasStars,
   licensingStars,
+  milestonesOf,
   previousSeason,
   type KompasProgress,
   type Milestone,
@@ -41,7 +42,7 @@ export interface VizitkaCard extends RankedClub {
 }
 
 export interface RankingsDeps extends VizitkaDeps {
-  settings: Pick<ClubSettingsStore, "listRankingConsents">;
+  settings: Pick<ClubSettingsStore, "listRankingConsents" | "findSettings">;
   plans: Pick<PlanStore, "findPlan">;
   visits: Pick<MentorVisitStore, "listVisits">;
 }
@@ -62,7 +63,11 @@ export interface VizitkyView {
 const totalOf = (s: { result: Record<string, unknown> }) =>
   (s.result as unknown as KompasResult).total;
 
-async function latestKompas(deps: RankingsDeps, clubId: string, season: string) {
+async function latestKompas(
+  deps: Pick<RankingsDeps, "submissions">,
+  clubId: string,
+  season: string,
+) {
   const subs = await deps.submissions.listSubmissions(clubId, season);
   return subs.filter(isValidSubmission).sort((a, b) => +b.submittedAt - +a.submittedAt)[0] ?? null;
 }
@@ -82,23 +87,45 @@ async function viewerOf(deps: RankingsDeps, actor: CurrentUser | null): Promise<
   return { positions: [...new Set([...own, ...mentored])], own };
 }
 
-/** Pure: which milestones a club reached in a season (ADR 0015). */
-export function milestonesOf(input: {
-  kompas: boolean;
-  confirmed: boolean;
-  goals: { status: string }[] | null;
-  sentVisit: boolean;
-  licensing: boolean;
-}): Milestone[] {
-  const reached: Record<Milestone, boolean> = {
-    kompas: input.kompas,
-    confirmed: input.confirmed,
-    plan: (input.goals?.length ?? 0) > 0,
-    goal: (input.goals ?? []).some((g) => g.status === "done"),
-    visit: input.sentVisit,
-    licensing: input.licensing,
+type MilestoneDeps = Pick<RankingsDeps, "submissions" | "plans" | "visits">;
+
+/** The season's milestones of a club with its latest valid Kompas (shared by the rankings,
+ *  the public Vizitka and Moja Akadémia). */
+export async function seasonMilestones(
+  deps: MilestoneDeps,
+  clubId: string,
+  season: string,
+  licensingClosed: boolean,
+) {
+  const [latest, plan, visits] = await Promise.all([
+    latestKompas(deps, clubId, season),
+    deps.plans.findPlan(clubId, season),
+    deps.visits.listVisits(clubId),
+  ]);
+  const confirmed = Boolean(latest?.confirmedAt);
+  return {
+    latest,
+    confirmed,
+    milestones: milestonesOf({
+      kompas: latest !== null,
+      confirmed,
+      goals: plan?.goals ?? null,
+      sentVisit: visits.some((x) => x.season === season && x.status === "sent"),
+      licensing: licensingClosed,
+    }),
   };
-  return (Object.keys(reached) as Milestone[]).filter((m) => reached[m]);
+}
+
+/** Milestones for the public Vizitka – only when the club consented to the rankings (ADR 0015). */
+export async function getPublicMilestones(
+  deps: RankingsDeps,
+  clubId: string,
+  season: string,
+): Promise<Milestone[] | null> {
+  const settings = await deps.settings.findSettings(clubId);
+  if (!settings?.rankingConsent?.given) return null;
+  const closed = await deps.licensingSubmissions.findSubmission(clubId, season);
+  return (await seasonMilestones(deps, clubId, season, closed !== null)).milestones;
 }
 
 export async function listVizitky(
@@ -134,14 +161,11 @@ export async function listVizitky(
           milestones: [],
         };
       }
-      const [latest, previous, plan, visits] = await Promise.all([
-        latestKompas(deps, c.clubId, v.season),
+      const [{ latest, confirmed, milestones }, previous] = await Promise.all([
+        seasonMilestones(deps, c.clubId, v.season, v.licensing !== null),
         latestKompas(deps, c.clubId, previousSeason(v.season)),
-        deps.plans.findPlan(c.clubId, v.season),
-        deps.visits.listVisits(c.clubId),
       ]);
       const kompas = latest ? totalOf(latest) : null;
-      const confirmed = Boolean(latest?.confirmedAt);
       return {
         ...base,
         ranked: true,
@@ -155,13 +179,7 @@ export async function listVizitky(
           : null,
         confirmed,
         progress: kompasProgress(previous ? totalOf(previous) : null, kompas),
-        milestones: milestonesOf({
-          kompas: latest !== null,
-          confirmed,
-          goals: plan?.goals ?? null,
-          sentVisit: visits.some((x) => x.season === v.season && x.status === "sent"),
-          licensing: v.licensing !== null,
-        }),
+        milestones,
       };
     }),
   );

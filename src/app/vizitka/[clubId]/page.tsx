@@ -7,9 +7,11 @@ import { PublicPlan } from "@/components/vizitka/public-plan";
 import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
-import { vizitkaDeps } from "@/server/clubs/deps";
+import { Milestones } from "@/components/vizitka/milestones";
+import { rankingsDeps, vizitkaDeps } from "@/server/clubs/deps";
 import { seasonFromSlug, seasonToSlug } from "@/server/services/season";
 import { getPublicVizitka } from "@/server/services/vizitka.service";
+import { getPublicMilestones } from "@/server/services/vizitky.service";
 
 export const metadata: Metadata = { title: defaultMessages.vizitka.title };
 
@@ -35,8 +37,32 @@ async function PublicVizitkaPage({ params, searchParams }: Props) {
   return (
     <div className="flex flex-col gap-6">
       <VizitkaView vizitka={vizitka} seasonHref={(s) => `${base}?season=${seasonToSlug(s)}`} />
+      <MilestonesBlock clubId={clubId} season={vizitka.season} />
       <PublicPlan clubId={clubId} season={vizitka.season} />
     </div>
+  );
+}
+
+/** The season's milestones – only for clubs that consented to the public rankings (ADR 0015). */
+async function MilestonesBlock({ clubId, season }: { clubId: string; season: string }) {
+  const milestones = await getPublicMilestones(rankingsDeps, clubId, season);
+  if (!milestones) return null;
+  const t = await getTranslations("milestones");
+  return (
+    <section
+      aria-labelledby="vizitka-milestones"
+      className="flex flex-col gap-3 rounded-xl border p-4"
+    >
+      <div>
+        <h2 id="vizitka-milestones" className="text-lg font-semibold">
+          {t("title", { season })}
+        </h2>
+        <p className="text-muted-foreground text-xs">
+          {t("count", { count: milestones.length, total: 6 })}
+        </p>
+      </div>
+      <Milestones reached={milestones} variant="list" />
+    </section>
   );
 }
 

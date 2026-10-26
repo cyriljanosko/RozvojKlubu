@@ -1,8 +1,11 @@
 import { z } from "zod";
 
+import { milestonesOf, type Milestone } from "@/lib/rankings";
+
 import { ApiError } from "@/server/api/errors";
 import type { AreaRoleChoiceDoc, ClubRole, PlanGoalStatus } from "@/server/db/types";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
+import type { ClubSettingsStore } from "@/server/services/club-settings.service";
 import type { ContentStore } from "@/server/services/content.service";
 import { profileFromSeason } from "@/server/services/kompas-export";
 import type { KompasResult } from "@/server/services/kompas-scoring";
@@ -72,6 +75,8 @@ export interface AcademyDeps extends SubmissionDeps {
   progress: Pick<PracticeProgressStore, "findProgress">;
   /** the club's mentoring cycle (MC-d); absent in older test setups */
   mentoring?: Pick<MentoringStore, "findMentoring">;
+  /** the club's settings – consent to the rankings (MR-c); absent in older test setups */
+  settings?: Pick<ClubSettingsStore, "findSettings">;
 }
 
 export type TaskSeverity = "crit" | "warn" | "info";
@@ -80,6 +85,8 @@ export interface AcademyTask {
   key:
     | "kompas_empty"
     | "kompas_unsent"
+    | "ranking_consent"
+    | "club_kompas_unconfirmed"
     | "licensing_open"
     | "teams_without_coach"
     | "weak_area"
@@ -141,6 +148,8 @@ export interface TaskInput {
   planTasks?: PlanTask[];
   /** the club has a Kompas but no plan for the season yet (management) */
   planMissing?: boolean;
+  /** management has not decided on the public rankings yet (MR-c, ADR 0015) */
+  rankingUndecided?: boolean;
   /** the club's mentoring cycle (MC-d): only when the club has a mentor this season */
   mentoring?: {
     status: MentoringStatus;
@@ -222,6 +231,9 @@ export function clubTasks(i: TaskInput): AcademyTask[] {
       ...(p ? { practice: { stepsDone: p.stepsDone, stepsTotal: p.stepsTotal } } : {}),
     });
   }
+  if (management && i.rankingUndecided) {
+    tasks.push({ key: "ranking_consent", severity: "info", href: `${base}/vizitka#rebricek` });
+  }
   const planHref = `/klub/${encodeURIComponent(i.clubId)}/plan`;
   if (i.planMissing && i.roles.includes("management")) {
     tasks.push({ key: "plan_missing", severity: "info", href: planHref });
@@ -299,6 +311,8 @@ export function mentorTasks(
     ? rows.filter((r) => r.mentoring && !r.mentoring.closingMentor).map((r) => r.name)
     : [];
   const missing = rows.filter((r) => !r.latest).map((r) => r.name);
+  // the latest Kompas of the season waits for the mentor's confirmation (MR-c, ADR 0015)
+  const unconfirmed = rows.filter((r) => r.latest && !r.latest.confirmedAt).map((r) => r.name);
   const unvisited = rows.filter((r) => r.visits && !r.visits.lastDate).map((r) => r.name);
   const unplanned = rows.filter((r) => r.plan && r.plan.goals === 0).map((r) => r.name);
   const open = rows.filter((r) => !r.licensingClosed).map((r) => r.name);
@@ -310,6 +324,15 @@ export function mentorTasks(
       href: "#mentor-clubs",
       count: missing.length,
       clubName: missing.join(", "),
+    });
+  }
+  if (unconfirmed.length > 0) {
+    tasks.push({
+      key: "club_kompas_unconfirmed",
+      severity: "warn",
+      href: "#mentor-clubs",
+      count: unconfirmed.length,
+      clubName: unconfirmed.join(", "),
     });
   }
   if (open.length > 0) {
@@ -453,6 +476,10 @@ export interface AcademyClub {
   tasks: AcademyTask[];
   /** the season's mentoring cycle; null when the club has no mentor this season (MC-d) */
   mentoring: (MentoringStatus & { nextPlanned: string | null }) | null;
+  /** milestones of the season (MR-c, ADR 0015) – the club sees them whatever its consent */
+  milestones: Milestone[];
+  /** consent to the public rankings: null = not decided yet */
+  rankingConsent: boolean | null;
   /** chosen roles as "area.key" */
   chosenRoles: string[];
   roleOptions: AreaRoleOption[];
@@ -534,6 +561,7 @@ export async function getMyAcademy(
     const unsent = !latest || (view.updatedAt !== null && +view.updatedAt > +latest.submittedAt);
     const plan = await deps.plans.findPlan(club.clubId, season);
     const visits = await deps.visits.listVisits(club.clubId);
+    const settings = (await deps.settings?.findSettings(club.clubId)) ?? null;
     const hasMentor = (await deps.memberships.listByClub(club.clubId, season)).some(
       (m) => m.role === "mentor",
     );
@@ -586,6 +614,14 @@ export async function getMyAcademy(
             nextPlanned: summarizeVisits(visits, season, today).nextPlanned,
           }
         : null,
+      milestones: milestonesOf({
+        kompas: latest !== null,
+        confirmed: Boolean(latest?.confirmedAt),
+        goals: plan?.goals ?? null,
+        sentVisit: visits.some((v) => v.season === season && v.status === "sent"),
+        licensing: closed !== null,
+      }),
+      rankingConsent: settings?.rankingConsent?.given ?? null,
       planGoals: (plan?.goals ?? []).map((g) => ({
         id: g.id,
         area: g.area,
@@ -605,6 +641,7 @@ export async function getMyAcademy(
         visitTasks,
         planTasks,
         planMissing: view.result.filledAreas > 0 && (plan?.goals.length ?? 0) === 0,
+        rankingUndecided: deps.settings !== undefined && !settings?.rankingConsent,
         mentoring: hasMentor
           ? {
               status: mentoringStatus(mentoringDoc),

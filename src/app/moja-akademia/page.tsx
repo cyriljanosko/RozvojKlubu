@@ -9,6 +9,7 @@ import { GroupedBars } from "@/components/analytics/charts";
 import type { BoardPanel } from "@/components/analytics/panel-board";
 import { CoachEducation } from "@/components/content/coach-education";
 import { FavoritesList } from "@/components/favorites/favorites-list";
+import { Milestones } from "@/components/vizitka/milestones";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { academyDeps, analyticsDeps, preferencesDeps } from "@/server/clubs/deps";
@@ -99,7 +100,9 @@ async function MentorClubs({
                   total: r.latest.total,
                   filled: r.latest.filledAreas,
                 })
-              : t("mentor.none")}{" "}
+              : t("mentor.none")}
+            {r.latest &&
+              ` · ${r.latest.confirmedAt ? t("mentor.confirmed") : t("mentor.unconfirmed")}`}{" "}
             · {r.licensingClosed ? t("mentor.licensingClosed") : t("mentor.licensingOpen")}
           </span>
           <span className="text-muted-foreground text-xs">
@@ -131,6 +134,14 @@ async function MentorClubs({
             })}
           </span>
           <span className="flex flex-wrap gap-x-3 text-xs">
+            {r.latest && !r.latest.confirmedAt && (
+              <Link
+                href={`/klub/${encodeURIComponent(r.clubId)}/kompas/odoslane/${r.latest.id}`}
+                className="font-medium underline underline-offset-4"
+              >
+                {t("mentor.confirm")}
+              </Link>
+            )}
             <Link
               href={`/klub/${encodeURIComponent(r.clubId)}/mentoring`}
               className="underline underline-offset-4"
@@ -409,6 +420,37 @@ async function Academy({ searchParams }: Props) {
             },
           ]
         : []),
+      {
+        // milestones of the season – the club sees them whatever its consent (MR-c, ADR 0015)
+        id: "milestones",
+        title: tD("milestones.title"),
+        note: tD("milestones.count", { count: club.milestones.length, total: 6 }),
+        content: (
+          <>
+            <Milestones
+              reached={club.milestones}
+              variant="list"
+              hrefs={{
+                kompas: `${base}/kompas`,
+                plan: `${base}/plan`,
+                goal: `${base}/plan`,
+                visit: `${base}/navstevy`,
+                licensing: `${base}/licencne-hodnotenie`,
+              }}
+            />
+            <p className="text-muted-foreground text-xs">
+              {club.rankingConsent === true
+                ? tD("milestones.ranked")
+                : club.rankingConsent === false
+                  ? tD("milestones.notRanked")
+                  : tD("milestones.undecided")}
+            </p>
+            <Link href={`${base}/vizitka#rebricek`} className={link}>
+              {tD("milestones.consent")}
+            </Link>
+          </>
+        ),
+      },
       {
         id: "coach-education",
         title: tD("coachEducation"),

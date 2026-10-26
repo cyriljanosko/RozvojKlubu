@@ -78,6 +78,22 @@ describe("clubTasks", () => {
       { key: "weak_area", severity: "info", href: "/oblasti/5?tab=prax", area: 5, points: 6 },
     ]);
   });
+  it("asks management – not the coach – to decide on the public rankings (MR-c)", () => {
+    const base = {
+      clubId: A,
+      kompasVersion: 3,
+      kompasResult: { filledAreas: 11, next: [], areas: [] } as never,
+      kompasUnsent: false,
+      licensingClosed: true,
+      teamsWithoutCoach: 0,
+      rankingUndecided: true,
+    };
+    expect(clubTasks({ ...base, roles: ["management"] })).toEqual([
+      { key: "ranking_consent", severity: "info", href: `/klub/${A}/vizitka#rebricek` },
+    ]);
+    expect(clubTasks({ ...base, roles: ["coach"] })).toEqual([]);
+    expect(clubTasks({ ...base, rankingUndecided: false, roles: ["management"] })).toEqual([]);
+  });
 });
 
 describe("mentoring tasks (MC-d)", () => {
@@ -115,7 +131,7 @@ describe("mentoring tasks (MC-d)", () => {
     const row = (name: string, m: Partial<typeof status>) => ({
       clubId: name,
       name,
-      latest: {} as never,
+      latest: { confirmedAt: new Date() } as never,
       licensingClosed: true,
       mentoring: { ...status, ...m },
     });
@@ -142,7 +158,12 @@ describe("mentorTasks", () => {
   it("summarises clubs without a submitted Kompas or a closed season", () => {
     const tasks = mentorTasks([
       { clubId: "x", name: "X", latest: null, licensingClosed: false },
-      { clubId: "y", name: "Y", latest: {} as never, licensingClosed: false },
+      {
+        clubId: "y",
+        name: "Y",
+        latest: { confirmedAt: new Date() } as never,
+        licensingClosed: false,
+      },
       { clubId: "z", name: "Z", latest: null, licensingClosed: true },
     ]);
     expect(tasks.map((t) => [t.key, t.count, t.clubName])).toEqual([
@@ -150,8 +171,32 @@ describe("mentorTasks", () => {
       ["club_licensing_open", 2, "X, Y"],
     ]);
     expect(
-      mentorTasks([{ clubId: "y", name: "Y", latest: {} as never, licensingClosed: true }]),
+      mentorTasks([
+        {
+          clubId: "y",
+          name: "Y",
+          latest: { confirmedAt: new Date() } as never,
+          licensingClosed: true,
+        },
+      ]),
     ).toEqual([]);
+  });
+
+  it("asks the mentor to confirm a submitted Kompas (MR-c, ADR 0015)", () => {
+    const tasks = mentorTasks([
+      { clubId: "x", name: "X", latest: { confirmedAt: null } as never, licensingClosed: true },
+      {
+        clubId: "y",
+        name: "Y",
+        latest: { confirmedAt: new Date() } as never,
+        licensingClosed: true,
+      },
+      { clubId: "z", name: "Z", latest: null, licensingClosed: true },
+    ]);
+    expect(tasks.map((t) => [t.key, t.severity, t.clubName])).toEqual([
+      ["club_kompas_missing", "crit", "Z"],
+      ["club_kompas_unconfirmed", "warn", "X"],
+    ]);
   });
 });
 
