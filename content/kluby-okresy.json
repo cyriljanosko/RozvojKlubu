@@ -1,0 +1,15 @@
+{
+  "source": "Územné zaradenie pilotných klubov podľa sídla (okres); ObFZ a RFZ sa odvodia z content/obfz-okresy.json.",
+  "clubs": {
+    "skm-liptovsky-hradok.futbalnet.sk": "Liptovský Mikuláš",
+    "msk-sneznica.futbalnet.sk": "Kysucké Nové Mesto",
+    "issf_club_11686": "Banská Bystrica",
+    "tj-druzstevnik-koprivnica.futbalnet.sk": "Bardejov",
+    "fk-v-niznom-zipove.futbalnet.sk": "Trebišov",
+    "tj-druzstevnik-plechotice.futbalnet.sk": "Trebišov",
+    "fam-poprad.futbalnet.sk": "Poprad",
+    "slavoj-trebisov.futbalnet.sk": "Trebišov",
+    "sk-top-puste-ulany.futbalnet.sk": "Galanta",
+    "tj-slovan-bojna.futbalnet.sk": "Topoľčany"
+  }
+}

@@ -10,6 +10,7 @@ import { saveKompasAnswers } from "./kompas.service";
 import { memoryEvaluationStore, memoryLicensingSubmissionStore } from "./licensing.fixture";
 import { closeLicensing, reopenLicensing, saveLicensing } from "./licensing.service";
 import { getClubVizitka, getPublicVizitka } from "./vizitka.service";
+import { listVizitky } from "./vizitky.service";
 
 const carl = { id: "carl", email: "carl@iny.sk", name: "Carl", role: "public" as const };
 
@@ -122,5 +123,24 @@ describe("Vizitka klubu", () => {
     await withdrawKompasSubmission(deps, admin, A, sub.id);
     expect((await getPublicVizitka(deps, A)).kompas).toBeNull();
     expect((await getClubVizitka(deps, alice, A)).kompasSubmittedAt).toBeNull();
+  });
+});
+
+describe("Vizitky – public list for the map (VK-a)", () => {
+  it("lists every club with size and public status, without sign-in", async () => {
+    const deps = await setup();
+    const cards = await listVizitky(deps);
+    expect(cards.map((c) => c.clubId).sort()).toEqual([A, B].sort());
+    expect(cards.find((c) => c.clubId === A)).toMatchObject({
+      name: "TJ Test",
+      size: "small",
+      players: 31,
+      kompas: null,
+      licensingClosed: false,
+      place: null, // test clubs are not in the district table
+    });
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    expect((await listVizitky(deps)).find((c) => c.clubId === A)?.kompas).toBeGreaterThan(0);
   });
 });

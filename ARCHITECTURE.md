@@ -100,6 +100,12 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Jeden plán na klub a sezónu: ciele (oblasť, cieľ, text pre verejnú Vizitku, ukazovateľ, zodpovedný, termín, stav nezačatý / rozbehnutý / splnený), potvrdenie mentorom (nepovinné), verzia (súbežná úprava → 409)
 3. Zapisuje vedenie, mentor klubu a admin SFZ, tréner číta; stav cieľa mení aj jeho zodpovedný; prázdny plán ponúkne 2 najslabšie oblasti Kompasu (odoslaného, inak pracovného – ak ho čitateľ smie vidieť); verejne len oblasť, verejný text a stav, bez mien
 
+### Vizitky klubov na mape (VK)
+
+1. Verejná stránka `/vizitka` – `vizitky.service.ts` skladá zoznam z verejnej Vizitky každého klubu (veľkosť, odoslaný Kompas, uzavreté licenčné), bez prihlásenia
+2. Mapa: `content/mapa-sr.json` (SVG cesty 8 krajov a 79 okresov z geoBoundaries / OpenStreetMap, ODbL, generuje `scripts/build-map.py`), `content/obfz-okresy.json` (38 ObFZ → okresy, RFZ), `content/kluby-okresy.json` (okres klubu); čisté funkcie v `src/lib/slovakia-map.ts`; RFZ sa kreslí z krajov, ObFZ z okresov
+3. Filtre a mapa bežia v prehliadači (desiatky klubov); pri stovkách klubov prejsť na filtrovanie na serveri
+
 ### Odkazy na web SFZ
 
 1. `content/odkazy-sfz.json` – pojmy → stránky futbalsfz.sk (školenia, kontinuálne vzdelávanie, Ticketing, ISSF…), oblasti, kde sa používajú (zatiaľ 3), a skupiny rozcestníka; mení sa cez PR
