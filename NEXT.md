@@ -8,6 +8,7 @@ Aktualizované: 26. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] DS-1 – napojenie (PR #82, v produkcii `5b2daff`): balík z GitHub Packages (`.npmrc`, `NPM_GITHUB_TOKEN` v Actions, Dependabot a Verceli – nastavené 26. 10.), tokeny namiesto farieb shadcn, písmo SF Pro (namiesto Geist), tmavá téma podľa zariadenia, logo SFZ (variant D) v hlavičke, Dependabot s privátnym registrom.
   - [ ] DS-2 – natvrdo zapísané farby (pásma oblastí, Kompas, Prax, ihrisko, odznaky) na tokeny.
   - [ ] DS-3 – komponenty SFZ postupne (tlačidlá, karty, polia, okná, tabuľky) namiesto shadcn.
+  - [ ] R3.2 – navigačný model `src/lib/navigation.ts` (vetva `feat/navigation-model`). Stránky `/viac`, členovia a nastavenia klubu, číselníky a Sportnet v administrácii model zatiaľ nemá – pribudnú s R3.3, R4 a S3.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
 - [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – PR #83 (`6210a90`). Dependabot PR #85 (minor a patch) – rozhodne Cyril.
 
