@@ -1547,7 +1547,7 @@
   },
   "vizitky": {
     "title": "Vizitky klubov",
-    "intro": "Kluby v Akadémii rozvoja klubov SFZ na mape Slovenska. Kliknite na zväz na mape alebo použite filtre a otvorte Vizitku klubu.",
+    "intro": "Kluby v Akadémii rozvoja klubov SFZ na mape Slovenska a ich rebríčky. Kliknite na zväz na mape alebo použite filtre a otvorte Vizitku klubu.",
     "map": {
       "title": "Mapa Slovenska",
       "level": "Zobraziť",
@@ -1557,7 +1557,14 @@
       "legend": "Farba podľa počtu klubov v Akadémii",
       "none": "bez klubu",
       "selected": "Vybraný zväz: {name}",
-      "source": "Hranice: © prispievatelia OpenStreetMap (geoBoundaries), ODbL."
+      "source": "Hranice: © prispievatelia OpenStreetMap (geoBoundaries), ODbL.",
+      "metric": "Farba podľa",
+      "count": "Počet klubov",
+      "kompas": "★ Kompas",
+      "licensing": "★ Licencovanie",
+      "legendStars": "Farba podľa priemeru hviezdičiek ({metric}) klubov vo zväze",
+      "average": "priemer {value} {metric}",
+      "noStars": "zatiaľ bez hodnotenia"
     },
     "filters": {
       "search": "Hľadať klub",
@@ -1577,7 +1584,8 @@
       "licensing": "licenčné uzavreté",
       "licensingNone": "licenčné zatiaľ neuzavreté",
       "open": "Otvoriť Vizitku",
-      "noPlace": "zaradenie chýba"
+      "noPlace": "zaradenie chýba",
+      "players": "{count, plural, one {# hráč} few {# hráči} other {# hráčov}}"
     },
     "sizes": {
       "small": "malý klub",
@@ -1589,6 +1597,50 @@
       "ZsFZ": "Západoslovenský FZ",
       "SsFZ": "Stredoslovenský FZ",
       "VsFZ": "Východoslovenský FZ"
+    },
+    "sort": {
+      "label": "Zoradiť podľa",
+      "kompas": "Kompas",
+      "licensing": "Licencovanie",
+      "players": "Počet hráčov",
+      "obfz": "ObFZ",
+      "rfz": "RFZ"
+    },
+    "stars": {
+      "kompas": "Kompas",
+      "licensing": "Licencovanie",
+      "label": "{rating}: {value} z 5 hviezdičiek",
+      "kompasPoints": "{points} z {max} b.",
+      "licensingPoints": "{points} b."
+    },
+    "rankings": {
+      "title": "Rebríčky podľa veľkosti klubu",
+      "intro": "Kluby sa porovnávajú s klubmi podobnej veľkosti. Kompas a licencovanie sú dve samostatné hodnotenia, nesčítavajú sa. Filtre a zoradenie zhora platia aj tu.",
+      "sizes": {
+        "large": "Veľké kluby",
+        "medium": "Stredné kluby",
+        "small": "Malé kluby"
+      },
+      "empty": "Pre zvolené filtre tu zatiaľ nie je žiadny klub.",
+      "columns": {
+        "rank": "#",
+        "club": "Klub",
+        "union": "Zväz",
+        "players": "Hráči"
+      },
+      "unions": {
+        "title": {
+          "rfz": "Poradie regionálnych zväzov",
+          "obfz": "Poradie oblastných zväzov"
+        },
+        "intro": "Priemer hviezdičiek klubov zväzu (podľa zvolenej veľkosti). Kliknutím zväz vyfiltrujete."
+      },
+      "rule": {
+        "title": "Ako počítame hviezdičky",
+        "kompas": "Kompas: body z posledného odoslaného Kompasu (0 – 220) v piatich pásmach po 44 bodov – 1 – 44 b. je ★, 45 – 88 b. ★★, 89 – 132 b. ★★★, 133 – 176 b. ★★★★ a 177 – 220 b. ★★★★★.",
+        "licensing": "Licencovanie: priemer pásiem oblastí v uzavretom licenčnom hodnotení – bez pásma 1, grassroots 2, bronz 3, striebro 4 a zlato 5 hviezdičiek, zaokrúhlené. Oblasti bez pásiem sa nepočítajú.",
+        "note": "Pravidlo je v skúšobnej verzii a môže sa ešte zmeniť."
+      }
     }
   }
 }

@@ -75,9 +75,9 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] MC-d – úlohy, nástenka, Vizitka a prehľady (PR #70, v produkcii `aca4c0b`).
     - [ ] Po prvom skutočnom uložení mentoringu overiť index `club_mentoring` cez `explain`; úlohy záveru sezóny skontrolovať v máji.
   - [ ] Vizitky klubov na mape (rozhodnuté 26. 10.): verejná stránka `/vizitka` – mapa SR (RFZ / ObFZ, farba podľa počtu klubov, klik = filter), filtre (názov, RFZ, ObFZ, veľkosť), zoznam verejných Vizitiek; zatiaľ pilotné kluby; hranice z geoBoundaries (OSM, ODbL); odkaz z úvodu a z hlavičky.
-    - [ ] VK-a – mapa, filtre a zoznam (vetva `feat/vizitky-map`): hotové, PR na review.
+    - [x] VK-a – mapa, filtre a zoznam (PR #75, v produkcii `37f86dd`).
     - [x] Tabuľka okres → ObFZ skontrolovaná Cyrilom (26. 10.).
-    - [ ] VK-b – rebríček podľa veľkosti klubu a hviezd – až po určení pravidla hviezd (pozri levely klubu a hviezdy pri F5).
+    - [ ] VK-b – rebríčky v `/vizitka` (rozhodnuté 26. 10.): verejne; Kompas ★ v 5 pásmach po 44 b., licencovanie ★ ako priemer pásiem oblastí (bez pásma 1 … zlato 5), body aj hviezdy, nesčítavajú sa; zoradenie Kompas / licencovanie / hráči / ObFZ / RFZ; mapa aj podľa priemeru hviezd, tabuľky podľa veľkosti, poradie zväzov – vetva `feat/vizitka-rankings`, PR na review. Pravidlo je skúšobné – po pripomienkach kolegov (návrh na plátne „Rebríčky klubov – návrh“) prípadne upraviť.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
   - [ ] Prepojenie na web SFZ (rozhodnuté 22. 10.): v oblasti 3 odkaz na futbalsfz.sk pri prvej zmienke školenia, licencie a kontinuálneho vzdelávania v každej sekcii Metodiky a v každom kroku Praxe; rozcestník „Vzdelávanie trénera“ v oblasti 3 a dlaždica v Moja Akadémia; zoznam odkazov v `content/odkazy-sfz.json` (zmena cez PR); termíny len odkazom na SFZ Ticketing (nemá verejné API) – vetva `feat/sfz-links`, PR na review.
     - [ ] Neskôr: rozšíriť automatické odkazy na ďalšie oblasti (napr. Ochrana detí v oblasti 11, ISSF v oblasti 10) – stačí doplniť `areas` v súbore.

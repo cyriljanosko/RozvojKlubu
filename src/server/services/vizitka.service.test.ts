@@ -143,4 +143,23 @@ describe("Vizitky – public list for the map (VK-a)", () => {
     await submitKompas(deps, alice, A, { expectedVersion: 1 });
     expect((await listVizitky(deps)).find((c) => c.clubId === A)?.kompas).toBeGreaterThan(0);
   });
+
+  it("carries the ranking stars: Kompas from its points, licensing once closed (VK-b)", async () => {
+    const deps = await setup();
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    let card = (await listVizitky(deps)).find((c) => c.clubId === A)!;
+    expect(card.kompasStars).toBe(1); // a few points – the first band
+    expect(card.licensing).toBeNull();
+    await saveLicensing(deps, alice, A, {
+      season: "2026/2027",
+      inputs: emptyInputs,
+      expectedVersion: 0,
+    });
+    await closeLicensing(deps, alice, A, { season: "2026/2027", expectedVersion: 1 });
+    card = (await listVizitky(deps)).find((c) => c.clubId === A)!;
+    expect(card.licensing?.stars).toBeGreaterThanOrEqual(1);
+    expect(card.licensing?.stars).toBeLessThanOrEqual(5);
+    expect(card.licensing?.points).toBeGreaterThanOrEqual(0);
+  });
 });
