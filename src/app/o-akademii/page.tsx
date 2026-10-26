@@ -146,7 +146,7 @@ export default async function AboutPage() {
           >
             {items.map(([item, Icon]) => (
               <li key={item} className="flex gap-3 rounded-xl border p-4">
-                <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-full">
+                <span className="bg-primary/10 text-primary-ink flex size-10 shrink-0 items-center justify-center rounded-full">
                   <Icon aria-hidden className="size-5" />
                 </span>
                 <span className="flex flex-col gap-1">

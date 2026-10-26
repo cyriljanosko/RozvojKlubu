@@ -173,3 +173,22 @@ export function positionOf(
   const i = order.findIndex((c) => c.clubId === clubId);
   return i < 0 ? null : { position: i + 1, of: order.length };
 }
+
+/** Pure: which milestones a club reached in a season (ADR 0015). */
+export function milestonesOf(input: {
+  kompas: boolean;
+  confirmed: boolean;
+  goals: { status: string }[] | null;
+  sentVisit: boolean;
+  licensing: boolean;
+}): Milestone[] {
+  const reached: Record<Milestone, boolean> = {
+    kompas: input.kompas,
+    confirmed: input.confirmed,
+    plan: (input.goals?.length ?? 0) > 0,
+    goal: (input.goals ?? []).some((g) => g.status === "done"),
+    visit: input.sentVisit,
+    licensing: input.licensing,
+  };
+  return (Object.keys(reached) as Milestone[]).filter((m) => reached[m]);
+}

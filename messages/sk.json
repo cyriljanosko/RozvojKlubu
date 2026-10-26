@@ -14,7 +14,8 @@
     "search": "Hľadať",
     "about": "O Akadémii",
     "analytics": "Analýza",
-    "vizitky": "Vizitky klubov"
+    "vizitky": "Vizitky klubov",
+    "logoAlt": "Slovenský futbalový zväz"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -384,6 +385,13 @@
       "no": "Nie",
       "error": "Zrušenie sa nepodarilo. Obnovte stránku a skúste to znova.",
       "withdrawn": "Odoslanie bolo zrušené {date}. Nezapočítava sa do Vizitky ani prehľadu mentora."
+    },
+    "confirm": {
+      "button": "Potvrdiť Kompas",
+      "undo": "Zrušiť potvrdenie",
+      "hint": "Potvrdenie mentorom je odznak pri Kompase vo Vizitke a v rebríčku; body sa nemenia.",
+      "error": "Nepodarilo sa uložiť, skúste to znova.",
+      "confirmed": "Potvrdené mentorom {date}"
     }
   },
   "mentor": {
@@ -653,7 +661,9 @@
       "mentoring_prep": "Pripravte sa na stretnutie s mentorom: {step}",
       "mentoring_closing": "Mentoring: vyplniť záver sezóny za klub",
       "club_no_focus": "Bez zamerania rozvoja: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
-      "club_no_closing": "Bez záveru mentoringu: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}"
+      "club_no_closing": "Bez záveru mentoringu: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
+      "ranking_consent": "Rozhodnúť, či sa klub zapojí do verejného rebríčka",
+      "club_kompas_unconfirmed": "Potvrdiť Kompas – {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}"
     },
     "roles": {
       "title": "Moje roly v oblastiach",
@@ -681,7 +691,10 @@
       "planUnconfirmed": "nepotvrdený",
       "noPlan": "bez plánu sezóny",
       "plan": "Plán",
-      "mentoringLine": "mentoring: {parts}"
+      "mentoringLine": "mentoring: {parts}",
+      "confirmed": "Kompas potvrdený",
+      "unconfirmed": "čaká na potvrdenie",
+      "confirm": "Potvrdiť Kompas"
     },
     "sees": {
       "title": "Čo táto rola vidí",
@@ -762,7 +775,15 @@
         "noFocus": "Bez zamerania: {count}",
         "closed": "Uzavreté: {count}"
       },
-      "coachEducation": "Vzdelávanie trénera"
+      "coachEducation": "Vzdelávanie trénera",
+      "milestones": {
+        "title": "Míľniky sezóny",
+        "count": "{count} zo {total}",
+        "ranked": "Klub je vo verejnom rebríčku.",
+        "notRanked": "Klub nie je vo verejnom rebríčku – míľniky vidíte len vy.",
+        "undecided": "O zapojení do verejného rebríčka ešte vedenie nerozhodlo.",
+        "consent": "Verejný rebríček klubov"
+      }
     },
     "favorites": "★ Obľúbené"
   },
@@ -1627,7 +1648,8 @@
         "rank": "#",
         "club": "Klub",
         "union": "Zväz",
-        "players": "Hráči"
+        "players": "Hráči",
+        "milestones": "Míľniky"
       },
       "unions": {
         "title": {
@@ -1642,7 +1664,8 @@
         "licensing": "Licencovanie: priemer pásiem oblastí v uzavretom licenčnom hodnotení – bez pásma 1, grassroots 2, bronz 3, striebro 4 a zlato 5 hviezdičiek, zaokrúhlené. Oblasti bez pásiem sa nepočítajú.",
         "note": "Pravidlo je v skúšobnej verzii a môže sa ešte zmeniť.",
         "consent": "V rebríčku sú len kluby, ktorých vedenie dalo súhlas. Verejne sa ukazujú prví traja v každej veľkosti a kluby s najväčším posunom; ostatné kluby majú hviezdičky bez čísla poradia. Celé poradie vidí klub sám, jeho mentor a SFZ.",
-        "progress": "Posun: body posledného odoslaného Kompasu sezóny oproti poslednému Kompasu minulej sezóny."
+        "progress": "Posun: body posledného odoslaného Kompasu sezóny oproti poslednému Kompasu minulej sezóny.",
+        "milestones": "Míľniky sezóny ukazujú, čo klub tento rok urobil:"
       },
       "noneYet": "Do rebríčka sa zatiaľ nezapojil žiadny klub. Vedenie klubu môže dať súhlas vo Vizitke klubu.",
       "top": "Top 3 – {by}",
@@ -1656,6 +1679,42 @@
         "position": "{name}: {position}. miesto z {of} – {size}, podľa hodnotenia {by}. Poradie je neverejné.",
         "notRanked": "{name} zatiaľ nie je v rebríčku. Vedenie klubu môže dať súhlas vo Vizitke klubu.",
         "noValue": "{name} je v rebríčku, ale zatiaľ bez hodnotenia {by}."
+      }
+    }
+  },
+  "milestones": {
+    "title": "Míľniky sezóny {season}",
+    "count": "{count} zo {total} míľnikov",
+    "summary": "Míľniky sezóny: {count} zo {total}. {names}",
+    "names": {
+      "kompas": "Kompas odoslaný",
+      "confirmed": "Kompas potvrdený mentorom",
+      "plan": "Plán sezóny zostavený",
+      "goal": "Splnený cieľ plánu",
+      "visit": "Stretnutie s mentorom",
+      "licensing": "Licenčné hodnotenie uzavreté"
+    },
+    "done": "dosiahnuté",
+    "missing": "zatiaľ chýba",
+    "how": "Ako na to",
+    "confirmed": "potvrdené mentorom"
+  },
+  "ranking": {
+    "consent": {
+      "title": "Verejný rebríček klubov",
+      "intro": "Klub sa môže zapojiť do rebríčkov na stránke Vizitky klubov. Verejne sa ukážu hviezdičky Kompasu a licencovania, posun oproti minulej sezóne a míľniky sezóny; prví traja v každej veľkosti majú poradie, ostatné kluby sú bez čísla poradia. Súhlas sa dá kedykoľvek zrušiť.",
+      "undecided": "Vedenie zatiaľ nerozhodlo.",
+      "given": "Klub je v rebríčku (súhlas od {date}).",
+      "declined": "Klub nie je v rebríčku (rozhodnutie z {date}).",
+      "give": "Zapojiť klub do rebríčka",
+      "withdraw": "Zrušiť súhlas",
+      "decline": "Zatiaľ nie",
+      "managementOnly": "O zapojení rozhoduje vedenie klubu.",
+      "see": "Pozrieť rebríčky",
+      "errors": {
+        "CONFLICT": "Niekto medzitým nastavenie zmenil – obnovte stránku.",
+        "FORBIDDEN": "O zapojení rozhoduje len vedenie klubu.",
+        "INTERNAL": "Nepodarilo sa uložiť, skúste to znova."
       }
     }
   }

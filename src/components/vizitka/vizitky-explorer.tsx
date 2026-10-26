@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
+import { ConfirmedBadge, Milestones } from "@/components/vizitka/milestones";
 import { Stars } from "@/components/vizitka/stars";
 import {
   KOMPAS_MAX,
@@ -146,6 +147,7 @@ export function VizitkyExplorer({
         <span className="text-muted-foreground text-xs">
           {t("stars.kompasPoints", { points: c.kompas ?? 0, max: KOMPAS_MAX })}
         </span>
+        {c.confirmed && <ConfirmedBadge />}
       </span>
     );
   const licensing = (c: VizitkaCard) =>
@@ -495,6 +497,9 @@ export function VizitkyExplorer({
                                   </th>
                                   <th className="px-3 py-2 font-medium">{t("stars.kompas")}</th>
                                   <th className="px-3 py-2 font-medium">{t("stars.licensing")}</th>
+                                  <th className="px-3 py-2 font-medium">
+                                    {t("rankings.columns.milestones")}
+                                  </th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -521,6 +526,9 @@ export function VizitkyExplorer({
                                     </td>
                                     <td className="px-3 py-2">{kompas(c)}</td>
                                     <td className="px-3 py-2">{licensing(c)}</td>
+                                    <td className="px-3 py-2 whitespace-nowrap">
+                                      <Milestones reached={c.milestones} />
+                                    </td>
                                   </tr>
                                 ))}
                               </tbody>
@@ -592,6 +600,7 @@ export function VizitkyExplorer({
                                     {kompas(c)}
                                     {licensing(c)}
                                   </span>
+                                  <Milestones reached={c.milestones} />
                                 </li>
                               );
                             })}
@@ -656,6 +665,8 @@ export function VizitkyExplorer({
           <p>{t("rankings.rule.licensing")}</p>
           <p>{t("rankings.rule.consent")}</p>
           <p>{t("rankings.rule.progress")}</p>
+          <p>{t("rankings.rule.milestones")}</p>
+          <Milestones reached={[]} variant="legend" />
           <p className="text-muted-foreground text-xs">{t("rankings.rule.note")}</p>
         </div>
       </details>

@@ -22,6 +22,8 @@ a `VERCEL_URL`, ktoré nastavuje Vercel sám (`src/server/auth/base-url.ts`). Pr
 
 Nastavenia projektu Vercel: Framework **Next.js**, Node 24.x, región funkcií **fra1**. Premenné prostredia: viď `.env.example`.
 
+**Dizajn systém SFZ (ADR 0016):** `npm install` / `npm ci` sťahuje `@slovensky-futbalovy-zvaz/design-system` z GitHub Packages a potrebuje `NPM_GITHUB_TOKEN` (classic token, `read:packages`) – vo Verceli (všetky prostredia), v GitHub Actions secrets a v Dependabot secrets. Ak build alebo CI padne na `npm install` s 401/403, token chýba alebo vypršal: vytvoriť nový a vymeniť ho na všetkých troch miestach. Novú verziu dizajn systému prinesie Dependabot ako PR (skupina `sfz-design-system`) – skontrolovať náhľad a zlúčiť.
+
 ## Rollback
 
 - Vercel → Deployments → posledné funkčné produkčné nasadenie → **Promote to Production** (okamžité).

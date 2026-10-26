@@ -14,9 +14,11 @@ import { mongoContentStore } from "@/server/db/content.store";
 import { getClubOverview } from "@/server/services/clubs.service";
 import { listAreas } from "@/server/services/content.service";
 import type { KompasResult } from "@/server/services/kompas-scoring";
-import { isAdmin } from "@/server/services/club-access";
+import { clubRolesFor, isAdmin } from "@/server/services/club-access";
+import { currentSeason } from "@/server/services/season";
 import { getSubmission, isValidSubmission } from "@/server/services/kompas-submission.service";
 
+import { ConfirmSubmission } from "./confirm-submission";
 import { WithdrawSubmission } from "./withdraw-submission";
 
 export const metadata: Metadata = { title: defaultMessages.kompas.submission.title };
@@ -42,10 +44,14 @@ async function Submission({ params }: PageProps<"/klub/[clubId]/kompas/odoslane/
     }
     throw error;
   }
-  const [club, areas] = await Promise.all([
+  const [club, areas, memberships] = await Promise.all([
     getClubOverview(submissionDeps, user, clubId),
     listAreas(mongoContentStore, user),
+    submissionDeps.memberships.listByUser(user.id),
   ]);
+  // the club's mentor of the season or admin_sfz may confirm (ADR 0015)
+  const canConfirm =
+    isAdmin(user) || clubRolesFor(memberships, clubId, currentSeason()).includes("mentor");
   const result = sub.result as unknown as KompasResult;
   const checked = new Set(sub.answers);
   const date = sub.submittedAt.toLocaleString("sk", {
@@ -80,6 +86,23 @@ async function Submission({ params }: PageProps<"/klub/[clubId]/kompas/odoslane/
               }),
             })}
           </p>
+        )}
+        {isValidSubmission(sub) && sub.confirmedAt && (
+          <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+            {t("confirm.confirmed", {
+              date: sub.confirmedAt.toLocaleDateString("sk", {
+                dateStyle: "medium",
+                timeZone: "Europe/Bratislava",
+              }),
+            })}
+          </p>
+        )}
+        {isValidSubmission(sub) && canConfirm && (
+          <ConfirmSubmission
+            clubId={clubId}
+            submissionId={sub.id}
+            confirmed={Boolean(sub.confirmedAt)}
+          />
         )}
         {isValidSubmission(sub) && isAdmin(user) && (
           <WithdrawSubmission clubId={clubId} submissionId={sub.id} />

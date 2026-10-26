@@ -49,6 +49,8 @@ export interface PublicVizitka {
   kompas: {
     total: number;
     filledAreas: number;
+    /** the submission is confirmed by the club's mentor (a badge, ADR 0015) */
+    confirmed: boolean;
     areas: {
       area: number;
       name: string;
@@ -114,6 +116,7 @@ async function build(deps: VizitkaDeps, clubId: string, requested?: string | nul
       ? {
           total: kompasResult.total,
           filledAreas: kompasResult.filledAreas,
+          confirmed: Boolean(latest?.confirmedAt),
           areas: kompasResult.areas.map((a) => ({
             area: a.area,
             name: areas.find((x) => x.number === a.area)?.name ?? "",

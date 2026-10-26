@@ -207,7 +207,9 @@ export async function MyAcademyHome({ user }: { user: CurrentUser }) {
                           total: r.latest.total,
                           filled: r.latest.filledAreas,
                         })
-                      : tA("mentor.none")}{" "}
+                      : tA("mentor.none")}
+                    {r.latest &&
+                      ` · ${r.latest.confirmedAt ? tA("mentor.confirmed") : tA("mentor.unconfirmed")}`}{" "}
                     ·{" "}
                     {r.licensingClosed ? tA("mentor.licensingClosed") : tA("mentor.licensingOpen")}{" "}
                     ·{" "}

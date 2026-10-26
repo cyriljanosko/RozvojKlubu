@@ -14,7 +14,9 @@ import { saveKompasAnswers } from "./kompas.service";
 import { memoryEvaluationStore, memoryLicensingSubmissionStore } from "./licensing.fixture";
 import { closeLicensing, reopenLicensing, saveLicensing } from "./licensing.service";
 import { getClubVizitka, getPublicVizitka } from "./vizitka.service";
-import { listVizitky, milestonesOf, type RankingsDeps } from "./vizitky.service";
+import { milestonesOf } from "@/lib/rankings";
+
+import { getPublicMilestones, listVizitky, type RankingsDeps } from "./vizitky.service";
 import { memoryPlanStore } from "./club-plan.fixture";
 import { memoryClubSettingsStore } from "./club-settings.fixture";
 import { setRankingConsent } from "./club-settings.service";
@@ -263,6 +265,19 @@ describe("Vizitky – public list and motivational rankings (VK-a, VK-b, MR-b)",
     expect((await listVizitky(deps, mona)).viewer).toEqual({ positions: [A], own: [] });
     expect((await listVizitky(deps, alice)).viewer).toEqual({ positions: [A], own: [A] });
     expect((await listVizitky(deps, carl)).viewer).toEqual({ positions: [], own: [] });
+  });
+
+  it("public Vizitka milestones only with consent; the Kompas shows the mentor's confirmation", async () => {
+    const deps = await rankingSetup();
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    const sub = await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    expect(await getPublicMilestones(deps, A, "2026/2027")).toBeNull();
+    await setRankingConsent(deps, alice, A, { given: true, expectedVersion: 0 });
+    expect(await getPublicMilestones(deps, A, "2026/2027")).toEqual(["kompas"]);
+    expect((await getPublicVizitka(deps, A)).kompas?.confirmed).toBe(false);
+    await confirmKompasSubmission(deps, mona, A, sub.id, true);
+    expect((await getPublicVizitka(deps, A)).kompas?.confirmed).toBe(true);
+    expect(await getPublicMilestones(deps, A, "2026/2027")).toEqual(["kompas", "confirmed"]);
   });
 
   it("milestones are pure and ordered", () => {
