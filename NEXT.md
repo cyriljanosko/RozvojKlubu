@@ -10,7 +10,8 @@ Aktualizované: 26. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 - [ ] Redesign a Sportnet (zadanie Cyrila 26. 10., plán `docs/dizajn/plan-redesignu.md`): celá aplikácia vyhradne v SFZ Design System bez dočasného shadcn (ADR 0018), prepracované rozloženie a UX, verejné vs. prihlásené podľa roly v klube, hlavné menu a podmenu; potom Sportnet (prihlásenie, roly, číselníky).
   - [x] R0 – ADR 0018, pravidlo v `CLAUDE.md`, skill `sfz-ui` (vetva `docs/redesign-plan`).
   - [ ] R1 – analýza obrazoviek, model prístupov, menu – hotová v `docs/dizajn/analyza-obrazoviek.md` (vetva `docs/redesign-plan`), čaká na schválenie a odpovede na otázky v kap. 8.
-  - [ ] R2a – návrh skupiny 1 v Claude Design (26. 10., 12 plátien – verejná časť, domov, môj klub, menu; mobil aj desktop): https://claude.ai/artifact/9QUPTrsQ2KiRHh2SweNbkb – pripomienky a schválenie Cyril. R2b – ostatné skupiny.
+  - [x] R2a – návrh skupiny 1 schválený 26. 10. (plátno https://claude.ai/artifact/9QUPTrsQ2KiRHh2SweNbkb).
+  - [ ] R2b – návrh skupín 2–5 na tom istom plátne (26. 10., 15 obrazoviek: klub – Kompas, odoslaný Kompas, plán, licenčné, mentoring, nová návšteva, členovia, nastavenia; účet; pracovisko mentora; analýza; administrácia – kluby, osoby a členstvá, číselníky, obsah) – pripomienky a schválenie Cyril.
   - [ ] R3 – vrstva `src/components/sfz`, hlavička a navigácia, lint pravidlá dizajnu.
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
   - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
