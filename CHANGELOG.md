@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Bezpečnosť
+
+- Next.js a `eslint-config-next` 16.4.0 → 16.4.3: verzia 16.4.0 má známu bezpečnostnú chybu (npm advisory), kvôli ktorej sa lokálny `next build` zastavoval.
+
 ### Zmenené
 
 - Vizitky klubov: blok „Hľadať klub“ s filtrami je pod mapou na celú šírku (na počítači filtre v jednom riadku, zoznam v dvoch stĺpcoch); zoznam klubov sa ukáže až po zadaní názvu, zvolení filtra alebo kliknutí na zväz na mape, dovtedy krátka nápoveda.

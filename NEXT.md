@@ -106,6 +106,7 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Závislosti
 
+- [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – vetva `chore/next-16-4-3`, PR čaká na zlúčenie Cyrilom; Dependabot PR #74 (Next 16.4.2) sa tým v časti Next prekrýva.
 - [ ] TypeScript 7 (Dependabot PR #5) – čaká na podporu v typescript-eslint (`eslint-config-next`); dovtedy TS 5.9.
 
 ## Pred prvými ostrými dátami
