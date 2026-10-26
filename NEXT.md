@@ -8,11 +8,12 @@ Aktualizované: 26. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] DS-1 – napojenie (PR #82, v produkcii `5b2daff`): balík z GitHub Packages (`.npmrc`, `NPM_GITHUB_TOKEN` v Actions, Dependabot a Verceli – nastavené 26. 10.), tokeny namiesto farieb shadcn, písmo SF Pro (namiesto Geist), tmavá téma podľa zariadenia, logo SFZ (variant D) v hlavičke, Dependabot s privátnym registrom.
   - [ ] DS-2 a DS-3 nahradil redesign (ADR 0018, nižšie) – farby aj komponenty sa riešia pri prepise skupín.
 - [ ] Redesign a Sportnet (zadanie Cyrila 26. 10., plán `docs/dizajn/plan-redesignu.md`): celá aplikácia vyhradne v SFZ Design System bez dočasného shadcn (ADR 0018), prepracované rozloženie a UX, verejné vs. prihlásené podľa roly v klube, hlavné menu a podmenu; potom Sportnet (prihlásenie, roly, číselníky).
-  - [x] R0 – ADR 0018, pravidlo v `CLAUDE.md`, skill `sfz-ui` (vetva `docs/redesign-plan`).
-  - [ ] R1 – analýza obrazoviek, model prístupov, menu – hotová v `docs/dizajn/analyza-obrazoviek.md` (vetva `docs/redesign-plan`), čaká na schválenie a odpovede na otázky v kap. 8.
+  - [x] R0 – ADR 0018, pravidlo v `CLAUDE.md`, skill `sfz-ui` (PR #88).
+  - [x] R1 – analýza obrazoviek, model prístupov, menu (`docs/dizajn/analyza-obrazoviek.md`, PR #88), rozhodnutia v kap. 8.
   - [x] R2a – návrh skupiny 1 schválený 26. 10. (plátno https://claude.ai/artifact/9QUPTrsQ2KiRHh2SweNbkb).
   - [x] R2b – návrh skupín 2–5 na tom istom plátne (15 obrazoviek) schválený 26. 10.
   - [ ] R3 – technický základ (postup schválený 26. 10., `docs/dizajn/plan-redesignu.md`): R3.1 vrstva `src/components/sfz`, R3.2 navigačný model, R3.3 rám aplikácie hneď pre celú appku, R3.4 lint + Playwright; PR do sfz-design-system s chýbajúcimi ikonami.
+    - [x] R3.1 – vrstva `src/components/sfz` (PR #89): komponenty DS za klientskou hranicou, `AppNavBar`, `AppTabBar`, `LinkTabs`, akordeón, ukazovateľ postupu, pásma z tokenov.
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
   - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.

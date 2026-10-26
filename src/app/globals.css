@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 
 @import "@slovensky-futbalovy-zvaz/design-system/tokens.css";
+/* Component styles in the components layer, so Tailwind layout utilities can still adjust them (ADR 0018). */
+@import "@slovensky-futbalovy-zvaz/design-system/components.css" layer(components);
 
 /* Dark theme follows the device, as tokens.css defines it (ADR 0016). */
 @custom-variant dark (@media (prefers-color-scheme: dark));
