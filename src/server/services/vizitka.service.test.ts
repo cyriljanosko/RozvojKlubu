@@ -5,12 +5,22 @@ import { addClubMember } from "./clubs.service";
 import { memoryContentStore } from "./content.fixture";
 import { seedContent } from "./content.service";
 import { memoryAssessmentStore, memorySubmissionStore } from "./kompas.fixture";
-import { submitKompas, withdrawKompasSubmission } from "./kompas-submission.service";
+import {
+  confirmKompasSubmission,
+  submitKompas,
+  withdrawKompasSubmission,
+} from "./kompas-submission.service";
 import { saveKompasAnswers } from "./kompas.service";
 import { memoryEvaluationStore, memoryLicensingSubmissionStore } from "./licensing.fixture";
 import { closeLicensing, reopenLicensing, saveLicensing } from "./licensing.service";
 import { getClubVizitka, getPublicVizitka } from "./vizitka.service";
-import { listVizitky } from "./vizitky.service";
+import { listVizitky, milestonesOf, type RankingsDeps } from "./vizitky.service";
+import { memoryPlanStore } from "./club-plan.fixture";
+import { memoryClubSettingsStore } from "./club-settings.fixture";
+import { setRankingConsent } from "./club-settings.service";
+import { memoryVisitStore } from "./mentor-visit.fixture";
+import type { StoredVisit } from "./mentor-visit.service";
+import type { CurrentUser } from "./users.service";
 
 const carl = { id: "carl", email: "carl@iny.sk", name: "Carl", role: "public" as const };
 
@@ -126,40 +136,181 @@ describe("Vizitka klubu", () => {
   });
 });
 
-describe("Vizitky – public list for the map (VK-a)", () => {
-  it("lists every club with size and public status, without sign-in", async () => {
+describe("Vizitky – public list and motivational rankings (VK-a, VK-b, MR-b)", () => {
+  const mona = { id: "mona", email: "mona@obfz.sk", name: "Mona", role: "public" as const };
+
+  async function rankingSetup() {
     const deps = await setup();
-    const cards = await listVizitky(deps);
+    const people = [admin, alice, bob, carl, mona];
+    deps.users.findByEmail = async (e) => people.find((p) => p.email === e) ?? null;
+    deps.users.findById = async (id) => people.find((p) => p.id === id) ?? null;
+    await addClubMember(deps, admin, A, { email: "mona@obfz.sk", role: "mentor" });
+    const settings = memoryClubSettingsStore();
+    const plans = memoryPlanStore();
+    const visits = memoryVisitStore();
+    return { ...deps, settings, plans, visits };
+  }
+  const cardOf = async (deps: RankingsDeps, clubId: string, actor: CurrentUser | null = null) =>
+    (await listVizitky(deps, actor)).cards.find((c) => c.clubId === clubId)!;
+
+  it("lists every club; without consent neutrally – no stars, points or milestones", async () => {
+    const deps = await rankingSetup();
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    const { cards } = await listVizitky(deps);
     expect(cards.map((c) => c.clubId).sort()).toEqual([A, B].sort());
     expect(cards.find((c) => c.clubId === A)).toMatchObject({
       name: "TJ Test",
       size: "small",
       players: 31,
-      kompas: null,
-      licensingClosed: false,
       place: null, // test clubs are not in the district table
+      ranked: false,
+      kompas: null,
+      kompasStars: null,
+      licensing: null,
+      confirmed: false,
+      progress: null,
+      milestones: [],
     });
-    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
-    await submitKompas(deps, alice, A, { expectedVersion: 1 });
-    expect((await listVizitky(deps)).find((c) => c.clubId === A)?.kompas).toBeGreaterThan(0);
   });
 
-  it("carries the ranking stars: Kompas from its points, licensing once closed (VK-b)", async () => {
-    const deps = await setup();
+  it("with consent: stars, licensing, mentor's confirmation and the season's milestones", async () => {
+    const deps = await rankingSetup();
+    await setRankingConsent(deps, alice, A, { given: true, expectedVersion: 0 });
+    let card = await cardOf(deps, A);
+    expect(card).toMatchObject({ ranked: true, kompasStars: null, milestones: [] });
+
     await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
-    await submitKompas(deps, alice, A, { expectedVersion: 1 });
-    let card = (await listVizitky(deps)).find((c) => c.clubId === A)!;
-    expect(card.kompasStars).toBe(1); // a few points – the first band
-    expect(card.licensing).toBeNull();
+    const sub = await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    await confirmKompasSubmission(deps, mona, A, sub.id, true);
     await saveLicensing(deps, alice, A, {
       season: "2026/2027",
       inputs: emptyInputs,
       expectedVersion: 0,
     });
     await closeLicensing(deps, alice, A, { season: "2026/2027", expectedVersion: 1 });
-    card = (await listVizitky(deps)).find((c) => c.clubId === A)!;
+    deps.plans.docs.push({
+      clubId: A,
+      season: "2026/2027",
+      goals: [
+        {
+          id: "g1",
+          area: 3,
+          title: "Dvaja noví tréneri",
+          publicText: "",
+          indicator: "",
+          owner: "Alice",
+          ownerId: "alice",
+          dueDate: null,
+          status: "done",
+          doneAt: new Date(),
+        },
+      ],
+      confirmedAt: null,
+      confirmedBy: null,
+      editedAt: null,
+      version: 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      updatedBy: "alice",
+    });
+    deps.visits.docs.push(
+      { ...(await visitDoc()), id: "v1", season: "2026/2027", status: "planned" },
+      { ...(await visitDoc()), id: "v2", season: "2025/2026", status: "sent" },
+    );
+    card = await cardOf(deps, A);
+    expect(card.kompasStars).toBe(1); // a few points – the first band
     expect(card.licensing?.stars).toBeGreaterThanOrEqual(1);
-    expect(card.licensing?.stars).toBeLessThanOrEqual(5);
-    expect(card.licensing?.points).toBeGreaterThanOrEqual(0);
+    expect(card.confirmed).toBe(true);
+    // a planned visit and last season's visit do not count
+    expect(card.milestones).toEqual(["kompas", "confirmed", "plan", "goal", "licensing"]);
+    deps.visits.docs.push({ ...(await visitDoc()), id: "v3", season: "2026/2027", status: "sent" });
+    expect((await cardOf(deps, A)).milestones).toContain("visit");
+
+    // withdrawing the consent hides it all again
+    await setRankingConsent(deps, alice, A, { given: false, expectedVersion: 1 });
+    expect(await cardOf(deps, A)).toMatchObject({
+      ranked: false,
+      kompasStars: null,
+      milestones: [],
+    });
+  });
+
+  it("progress: this season's Kompas against the last one of the previous season", async () => {
+    const deps = await rankingSetup();
+    await setRankingConsent(deps, alice, A, { given: true, expectedVersion: 0 });
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    const sub = await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    expect((await cardOf(deps, A)).progress).toBeNull(); // nothing last season
+    const current = deps.submissions.docs.find((d) => d.id === sub.id)!;
+    deps.submissions.docs.push({
+      ...structuredClone(current),
+      id: "old",
+      season: "2025/2026",
+      result: { ...current.result, total: 0 },
+    });
+    expect((await cardOf(deps, A)).progress).toEqual({
+      points: sub.total,
+      fromStars: 0,
+      toStars: 1,
+    });
+  });
+
+  it("the viewer: admin sees every position, mentor their clubs, the club its own", async () => {
+    const deps = await rankingSetup();
+    expect((await listVizitky(deps)).viewer).toEqual({ positions: [], own: [] });
+    expect((await listVizitky(deps, admin)).viewer).toEqual({ positions: "all", own: [] });
+    expect((await listVizitky(deps, mona)).viewer).toEqual({ positions: [A], own: [] });
+    expect((await listVizitky(deps, alice)).viewer).toEqual({ positions: [A], own: [A] });
+    expect((await listVizitky(deps, carl)).viewer).toEqual({ positions: [], own: [] });
+  });
+
+  it("milestones are pure and ordered", () => {
+    expect(
+      milestonesOf({
+        kompas: true,
+        confirmed: false,
+        goals: [{ status: "doing" }],
+        sentVisit: true,
+        licensing: false,
+      }),
+    ).toEqual(["kompas", "plan", "visit"]);
+    expect(
+      milestonesOf({
+        kompas: false,
+        confirmed: false,
+        goals: [],
+        sentVisit: false,
+        licensing: false,
+      }),
+    ).toEqual([]);
   });
 });
+
+/** a sent visit of club A – only `season` and `status` matter for the milestones */
+async function visitDoc(): Promise<StoredVisit> {
+  return {
+    id: "v",
+    clubId: A,
+    season: "2026/2027",
+    date: "2026-10-01",
+    form: "onsite",
+    participantIds: [],
+    participants: "",
+    summary: "",
+    topics: [],
+    assessment: null,
+    prepTask: null,
+    findings: [],
+    actions: [],
+    status: "sent",
+    sentAt: new Date(),
+    withdrawnAt: null,
+    withdrawnBy: null,
+    version: 1,
+    createdBy: "mona",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    updatedBy: "mona",
+  };
+}

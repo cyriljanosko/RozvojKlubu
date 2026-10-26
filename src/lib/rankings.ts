@@ -102,3 +102,74 @@ export function unionRatings(clubs: readonly RankedClub[], level: MapLevel): Uni
         a.id.localeCompare(b.id, "sk"),
     );
 }
+
+/** Milestones of a season (ADR 0015), in the order they are shown. */
+export const MILESTONES = ["kompas", "confirmed", "plan", "goal", "visit", "licensing"] as const;
+export type Milestone = (typeof MILESTONES)[number];
+
+/** Kompas of this season against the last one of the previous season (ADR 0015). */
+export interface KompasProgress {
+  /** points gained (may be negative) */
+  points: number;
+  fromStars: number;
+  toStars: number;
+}
+
+/** Pure: progress between two Kompas totals; null when either is missing. */
+export function kompasProgress(
+  previous: number | null,
+  latest: number | null,
+): KompasProgress | null {
+  if (previous === null || latest === null) return null;
+  return {
+    points: latest - previous,
+    fromStars: kompasStars(previous) ?? 0,
+    toStars: kompasStars(latest) ?? 0,
+  };
+}
+
+/** Pure: the season before "2026/2027" is "2025/2026". */
+export function previousSeason(season: string): string {
+  const start = Number(season.slice(0, 4));
+  return `${start - 1}/${start}`;
+}
+
+/** what the public top 3 are ordered by – ordering by players, ObFZ or RFZ ranks by the Kompas */
+const rankingSort = (sort: RankSort): "kompas" | "licensing" =>
+  sort === "licensing" ? "licensing" : "kompas";
+const valueOf = (c: RankedClub, by: "kompas" | "licensing") =>
+  by === "kompas" ? c.kompasStars : (c.licensing?.stars ?? null);
+
+/** Pure: the clubs in ranking order – only those with a value for it (no "last places" of empty ones). */
+export function rankingOrder<T extends RankedClub>(clubs: readonly T[], sort: RankSort): T[] {
+  const by = rankingSort(sort);
+  return sortClubs(
+    clubs.filter((c) => valueOf(c, by) !== null),
+    by,
+  );
+}
+
+/** Pure: the public top 3 of a ranking (ADR 0015) – fewer when fewer clubs have a value. */
+export const topThree = <T extends RankedClub>(clubs: readonly T[], sort: RankSort): T[] =>
+  rankingOrder(clubs, sort).slice(0, 3);
+
+/** Pure: the top 3 by progress – only clubs that improved, the biggest gain first. */
+export function topProgress<T extends RankedClub & { progress: KompasProgress | null }>(
+  clubs: readonly T[],
+): T[] {
+  return clubs
+    .filter((c) => (c.progress?.points ?? 0) > 0)
+    .sort((a, b) => b.progress!.points - a.progress!.points || a.name.localeCompare(b.name, "sk"))
+    .slice(0, 3);
+}
+
+/** Pure: 1-based position of a club in the ranking and the number of ranked clubs; null when not ranked. */
+export function positionOf(
+  clubs: readonly RankedClub[],
+  clubId: string,
+  sort: RankSort,
+): { position: number; of: number } | null {
+  const order = rankingOrder(clubs, sort);
+  const i = order.findIndex((c) => c.clubId === clubId);
+  return i < 0 ? null : { position: i + 1, of: order.length };
+}

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { VizitkyExplorer } from "@/components/vizitka/vizitky-explorer";
 import { defaultMessages } from "@/i18n/config";
-import { vizitkaDeps } from "@/server/clubs/deps";
+import { getCurrentUser } from "@/server/auth/session";
+import { rankingsDeps } from "@/server/clubs/deps";
 import { listVizitky } from "@/server/services/vizitky.service";
 
 export const metadata: Metadata = { title: defaultMessages.vizitky.title };
@@ -19,7 +21,7 @@ async function Vizitky({ searchParams }: Props) {
   await connection(); // public page, rendered per request
   const t = await getTranslations("vizitky");
   const q = await searchParams;
-  const cards = await listVizitky(vizitkaDeps);
+  const { cards, viewer } = await listVizitky(rankingsDeps, await getCurrentUser(await headers()));
   return (
     <div className="flex flex-col gap-5">
       <header className="flex flex-col gap-1">
@@ -28,6 +30,7 @@ async function Vizitky({ searchParams }: Props) {
       </header>
       <VizitkyExplorer
         cards={cards}
+        viewer={viewer}
         initial={{
           q: str(q.q),
           rfz: str(q.rfz),
