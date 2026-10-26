@@ -14,7 +14,7 @@ type Props = PageProps<"/vizitka">;
 
 const str = (v: string | string[] | undefined) => (typeof v === "string" ? v : "");
 
-/** Vizitky klubov – public map and list of the pilot clubs' Vizitky (VK-a, 26. 10. 2026). */
+/** Vizitky klubov – public map, list and rankings of the pilot clubs' Vizitky (VK-a, VK-b). */
 async function Vizitky({ searchParams }: Props) {
   await connection(); // public page, rendered per request
   const t = await getTranslations("vizitky");
@@ -28,7 +28,13 @@ async function Vizitky({ searchParams }: Props) {
       </header>
       <VizitkyExplorer
         cards={cards}
-        initial={{ q: str(q.q), rfz: str(q.rfz), obfz: str(q.obfz), size: str(q.size) }}
+        initial={{
+          q: str(q.q),
+          rfz: str(q.rfz),
+          obfz: str(q.obfz),
+          size: str(q.size),
+          sort: str(q.sort),
+        }}
       />
     </div>
   );
