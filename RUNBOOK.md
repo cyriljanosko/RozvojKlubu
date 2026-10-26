@@ -29,6 +29,22 @@ Nastavenia projektu Vercel: Framework **Next.js**, Node 24.x, región funkcií *
 - Vercel → Deployments → posledné funkčné produkčné nasadenie → **Promote to Production** (okamžité).
 - Potom revert commitu v `main` cez PR, aby sa chyba nevrátila pri ďalšom nasadení.
 
+## Vizuálne regresné testy (Playwright, ADR 0019)
+
+- Lokálne: `npm run build`, potom `npm run test:e2e` (server s `ENABLE_DEV_PAGES=1` spustí Playwright sám). Na macOS
+  sa vytvoria len lokálne screenshoty `*-darwin.png` (necommitujú sa).
+- CI porovnáva s Linux screenshotmi v `e2e/__screenshots__/*-linux.png`. Pri rozdiele CI zlyhá a priloží artefakt
+  `playwright-report` (porovnanie aj nové obrázky).
+- **Zámerná zmena vzhľadu** (alebo nový screenshot): stiahnuť artefakt a skopírovať nové obrázky ako základ.
+  Súbory `*-actual.png` v `test-results/` sa premenujú na meno z chybovej hlášky (`<meno>-<projekt>-linux.png`)
+  a uložia do `e2e/__screenshots__/`:
+
+  ```bash
+  gh run download <id-behu> -n playwright-report -D /tmp/pw
+  ```
+
+  Nový základ sa commituje v tom istom PR ako zmena, s vysvetlením v popise PR.
+
 ## Keď to spadne
 
 | Príznak                                                        | Pravdepodobná príčina                                                     | Riešenie                                                                                                                                                                                        |
