@@ -3,6 +3,7 @@
 - Stav: prijaté
 - Dátum: 2026-10-26
 - Rozhodol: Cyril Janoško
+- Nahradené: 0018 (bod 7 – komponenty SFZ ako jediný základ UI, bez dočasného shadcn)
 
 ## Kontext
 
