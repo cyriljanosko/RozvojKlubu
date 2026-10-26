@@ -12,7 +12,8 @@ Aktualizované: 26. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] R1 – analýza obrazoviek, model prístupov, menu – hotová v `docs/dizajn/analyza-obrazoviek.md` (vetva `docs/redesign-plan`), čaká na schválenie a odpovede na otázky v kap. 8.
   - [x] R2a – návrh skupiny 1 schválený 26. 10. (plátno https://claude.ai/artifact/9QUPTrsQ2KiRHh2SweNbkb).
   - [ ] R2b – návrh skupín 2–5 na tom istom plátne (26. 10., 15 obrazoviek: klub – Kompas, odoslaný Kompas, plán, licenčné, mentoring, nová návšteva, členovia, nastavenia; účet; pracovisko mentora; analýza; administrácia – kluby, osoby a členstvá, číselníky, obsah) – pripomienky a schválenie Cyril.
-  - [ ] R3 – vrstva `src/components/sfz`, hlavička a navigácia, lint pravidlá dizajnu.
+  - [x] R2b – skupiny 2–5 schválené 26. 10.
+  - [ ] R3 – technický základ (postup schválený 26. 10., `docs/dizajn/plan-redesignu.md`): R3.1 vrstva `src/components/sfz`, R3.2 navigačný model, R3.3 rám aplikácie hneď pre celú appku, R3.4 lint + Playwright; PR do sfz-design-system s chýbajúcimi ikonami.
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
   - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.

@@ -41,8 +41,25 @@ výstupu predchádzajúcej.
   `@/components/ui/*` v prepísaných obrazovkách, zákaz farieb mimo tokenov (hex, `rgb()`, triedy palety Tailwind
   typu `bg-blue-500`). Pravidlá sa zapínajú postupne pre prepísané skupiny, po R4 pre celý `src`.
 - **Kontrolný zoznam v PR**: 375 px a desktop, svetlá aj tmavá téma, len komponenty `src/components/sfz`.
-- **Voliteľne** vizuálne regresné testy (Playwright screenshoty) – nová závislosť, len so súhlasom Cyrila.
+- **Vizuálne regresné testy** (Playwright screenshoty hlavných obrazoviek pri 375 px a na desktope) v CI – schválené 26. 10.; závislosť `@playwright/test` sa pridá v R3.4.
 - Aktualizácie dizajn systému chodia cez Dependabot ako PR – náhľad na Verceli ukáže zmenu pred zlúčením (ADR 0016).
+
+## R3 – technický základ (schválené 26. 10. 2026)
+
+Rozhodnutia Cyrila: chýbajúce ikony sa doplnia do repozitára sfz-design-system (PR, zlučuje Cyril), nie lokálne;
+Tailwind ostáva **len na rozloženie** (flex, grid, medzery, šírky), farby, písmo a komponenty výhradne z dizajn
+systému; nový rám aplikácie (hlavička, spodná lišta) platí **hneď pre celú aplikáciu**; vizuálne regresné testy áno.
+
+| PR   | Obsah                                                                                                                                                                                                                                   |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R3.1 | `src/components/sfz`: `transpilePackages`, `components.css`, klientska hranica pre komponenty DS, `AppNavBar` / `AppTabBar` / `LinkTabs` s `next/link`, doplnky (akordeón, ukazovateľ postupu, pásma Kompasu, licencií a línie oblastí) |
+| R3.2 | Navigačný model `src/lib/navigation.ts` (položky podľa prihlásenia, roly v klube, mentora, admina) s testami, texty `nav.*`                                                                                                             |
+| R3.3 | Rám aplikácie v root layoute namiesto `SiteHeader`, `klub/[clubId]/layout.tsx` (hlavička klubu, podmenu), `admin/layout.tsx` (bočné menu, jedna kontrola prístupu)                                                                      |
+| R3.4 | Ochrana dizajnu: ESLint (zákaz `@/components/ui`, `lucide-react` a farieb mimo tokenov v prepísaných priečinkoch), Playwright screenshoty v CI                                                                                          |
+| DS   | PR do sfz-design-system: chýbajúce ikony (mapa, kompas, kniha, hviezda …), prípadne `"use client"` a podpora vlastného odkazu v NavBar/TabBar                                                                                           |
+
+Po R3 nasleduje R4 – prepis skupín 1–5 (jedna skupina = jeden PR). Chyby v prístupoch (analýza, kap. 3.3) idú ako
+samostatné `fix/` PR s reprodukujúcim testom.
 
 ## Riziká a otvorené technické veci
 
