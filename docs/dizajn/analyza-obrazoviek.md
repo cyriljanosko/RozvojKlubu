@@ -36,7 +36,7 @@ Návrh = čo sa pri redesigne zmení okrem výmeny za komponenty SFZ.
 | Obrazovka           | Účel                                                                                  | Prístup dnes               | Farby natvrdo                                   | Mobil                                                            | Návrh                                                                                                                    |
 | ------------------- | ------------------------------------------------------------------------------------- | -------------------------- | ----------------------------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `/` Hub             | Rozcestník: dráha, rola, 11 oblastí, Kompas; prihlásenému aj blok Moja Akadémia       | V (prihlásený vidí viac)   | línie oblastí, Kompas (amber), ilustrácia       | ~9 sekcií pod sebou, odkazy `text-xs`                            | Rozdeliť: verejný Hub (rola → oblasti → Kompas) a pre prihláseného presmerovať „domov“ na Moju Akadémiu; kratšia stránka |
-| `/o-akademii`       | O Akadémii: video, „Jedenástka“ (ihrisko so 11 hráčmi), úrovne, prínosy               | V                          | ihrisko (`#3b8c2e`…), línie                     | piny 26 px, popisky `text-[10px]`                                | Ihrisko z tokenov (`--program-green`), väčšie piny, popover → Drawer na mobile                                           |
+| `/o-akademii`       | O Akadémii: video, „Jedenástka“ (ihrisko so 11 hráčmi), úrovne, prínosy               | V                          | ihrisko (`#3b8c2e`…), línie                     | piny 26 px, popisky `text-[10px]`                                | Ihrisko z tokenov (`--success`), väčšie piny, popover → Drawer na mobile                                                 |
 | `/oblasti`          | Zoznam 11 oblastí                                                                     | V                          | línie oblastí                                   | –                                                                | Karty SFZ s líniou oblasti ako Badge                                                                                     |
 | `/oblasti/[area]`   | Detail oblasti: záložky Metodika / Prax, rola, postup klubu                           | V; postup a pin len P/K    | „hotové“ green, pin amber                       | najdlhšia obrazovka, tabuľky Metodiky, čipy, pin 32 px           | Tabs SFZ, akordeón sekcií (chýba v DS), Stepper pre cestu krokov v Praxi, tabuľky ako karty na mobile                    |
 | `/kompas`           | Kompas na vyskúšanie bez uloženia (výber klubu → dotazník v prehliadači)              | V                          | pásma Kompasu                                   | lepkavý panel pod hlavičkou, malé checkboxy                      | Spoločný „dotazník“ vzor s klubovým Kompasom; skóre ako spodný panel; výsledok + CTA prihlásiť sa / uložiť               |
@@ -94,17 +94,18 @@ ale obrazovka nie.
 
 ### 3.1 Úrovne
 
-| Úroveň | Kto                                                                    | Zdroj (dnes → po S2)                               |
-| ------ | ---------------------------------------------------------------------- | -------------------------------------------------- |
-| V      | ktokoľvek bez prihlásenia                                              | –                                                  |
-| P      | prihlásený bez roly v klube (rodič, fanúšik, dobrovoľník bez pozvánky) | Better Auth                                        |
-| Č      | **člen klubu** (hráč/hráčka, iný člen)                                 | – → Sportnet (príslušnosť ku klubu)                |
-| T      | **realizačný tím**: tréner, **tímový manažér**, **vedúci tímu**        | `coach` → Sportnet (funkcie pri družstve)          |
-| M      | **vedenie klubu**: štatutár, **klubový manažér**, výbor                | `management` → Sportnet (funkcionári klubu PO/PPO) |
-| Mn     | mentor zväzu (kohorta klubov)                                          | `mentor` (väzba v aplikácii, nie zo Sportnetu)     |
-| A      | admin SFZ (neskôr aj ObFZ so zoznamom klubov)                          | globálna rola `admin_sfz`                          |
+| Úroveň | Kto                                                                                                        | Zdroj (dnes → po S2)                               |
+| ------ | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| V      | ktokoľvek bez prihlásenia                                                                                  | –                                                  |
+| P      | prihlásený bez roly v klube (rodič, fanúšik, dobrovoľník bez pozvánky)                                     | Better Auth                                        |
+| Č      | **Člen** – každá iná príslušnosť ku klubu a typ osoby; základné práva                                      | – → Sportnet (príslušnosť ku klubu)                |
+| H      | **Hráč / hráčka** – samostatná rola; zatiaľ práva ako Člen, neskôr hodnotenie klubu očami hráča (ADR 0011) | – → Sportnet (súpiska)                             |
+| T      | **Tréner** a **Tímový manažér** (predtým vedúci tímu) – dve roly, zatiaľ rovnaké práva                     | `coach` → Sportnet (funkcie pri družstve)          |
+| M      | **Klubový manažér** – správca klubu (admin klubu)                                                          | `management` → Sportnet (funkcionári klubu PO/PPO) |
+| Mn     | mentor zväzu (kohorta klubov)                                                                              | `mentor` (väzba v aplikácii, nie zo Sportnetu)     |
+| A      | admin SFZ (neskôr aj ObFZ so zoznamom klubov)                                                              | globálna rola `admin_sfz`                          |
 
-Vyššia úroveň v klube zahŕňa nižšie (M ⊃ T ⊃ Č). Mentor a admin sú mimo klubu, ich práva sú vymenované.
+Základné roly v klube (Cyril, 26. 10.): **Klubový manažér, Tréner, Tímový manažér, Hráč, Člen**. Vyššia úroveň v klube zahŕňa nižšie (M ⊃ T ⊃ Č; H = Č). Mentor a admin sú mimo klubu, ich práva sú vymenované.
 
 ### 3.2 Čo kto vidí a robí
 
@@ -212,15 +213,18 @@ s náhľadom, ilustrácie (ihrisko, Hub).
 
 ## 6. Farby natvrdo → tokeny (návrh)
 
-| Paleta (výskyty)                                                           | Návrh tokenov                                                                                           |
-| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Pásma Kompasu – 5 úrovní (`kompas-form`, `vizitka-view`)                   | `--danger`, `--warning`, `--ink-muted`, `--brand-blue`, `--gold`                                        |
-| Pásma licenčného (`licensing-form`, `vizitka-view`)                        | `--success`, `--warning`, `--ink-muted`, `--gold`                                                       |
-| Línie oblastí – 4 (`page.tsx`, `oblasti`, `hub-illustration`, `formation`) | `--program-sky`, `--program-cyan`, `--program-green`, `--program-yellow` alebo `--brand-blue` + odtiene |
-| Závažnosť úloh (`moja-akademia`, `my-academy-home`)                        | `--danger`, `--warning`, `--info`                                                                       |
-| Grafy a mapa (`charts`, `network-graph`, `vizitky-explorer`)               | `--chart-1` … `--chart-4`; škála mapy z `--brand-blue-tint` → `--brand-blue`                            |
-| Akcenty: potvrdené, hotové, upozornenie, tip                               | `--success`/`--success-ink`, `--warning-tint`, `--info-tint`                                            |
-| Ihrisko, biela, čierna                                                     | `--program-green`, `--surface`, `--ink`, `--overlay`                                                    |
+| Paleta (výskyty)                                                           | Návrh tokenov                                                                                                                                                |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Pásma Kompasu – 5 úrovní (`kompas-form`, `vizitka-view`)                   | `--danger`, `--warning`, `--ink-muted`, `--info`, `--success` (stav vždy aj slovom)                                                                          |
+| Pásma licenčného (`licensing-form`, `vizitka-view`)                        | „bez pásma“ `--ink-muted`, úrovne stupnicou `--brand-blue-tint` → `--brand-blue` → `--brand-blue-deep` + názov pásma                                         |
+| Línie oblastí – 4 (`page.tsx`, `oblasti`, `hub-illustration`, `formation`) | **modrá SFZ v odtieňoch** (`--brand-blue-deep`, `--brand-blue`, `--brand-blue-ink` na `--brand-blue-tint`, `--ink-muted`) + názov línie (rozhodnuté 26. 10.) |
+| Závažnosť úloh (`moja-akademia`, `my-academy-home`)                        | `--danger`, `--warning`, `--info`                                                                                                                            |
+| Grafy a mapa (`charts`, `network-graph`, `vizitky-explorer`)               | `--chart-1` … `--chart-4`; škála mapy z `--brand-blue-tint` → `--brand-blue`                                                                                 |
+| Akcenty: potvrdené, hotové, upozornenie, tip                               | `--success`/`--success-ink`, `--warning-tint`, `--info-tint`                                                                                                 |
+| Ihrisko, biela, čierna                                                     | trávnik `--success` / `--success-tint`, `--surface`, `--ink`, `--overlay`                                                                                    |
+
+**Farby programov** (`--gold`, `--program-*`) sa v rozhraní nepoužívajú – patria len k logám programov SFZ (brand book
+dizajn systému). Grafy používajú `--chart-1` až `--chart-4`, ktoré sa líšia svetlosťou, nie odtieňom.
 
 Pásma budú mať jednu definíciu v `src/components/sfz` (dnes sú skopírované 2× až 3×). Presné priradenie overí
 Cyril pri návrhu R2a (kontrast vo svetlej aj tmavej téme).
@@ -236,11 +240,13 @@ Cyril pri návrhu R2a (kontrast vo svetlej aj tmavej téme).
 - **Skupina 5:** administrácia (s ohľadom na číselníky zo Sportnetu – obrazovky Osoby a Číselníky sa navrhnú, dáta
   pribudnú v S3).
 
-## 8. Otvorené otázky pre Cyrila
+## 8. Rozhodnutia Cyrila (26. 10. 2026)
 
-1. **Člen klubu (hráč/hráčka, bez funkcie):** má vidieť prehľad klubu a plán (návrh v 3.2), alebo len verejnú vizitku?
-2. **Tímový manažér a vedúci tímu:** rovnaké práva ako tréner (návrh), alebo aj zápis do plánu / licenčného?
-3. **Prihlásený bez klubu** – „domov“ = Moja Akadémia s obľúbenými a Hubom, súhlas?
-4. **Prenos Kompasu „otestuj sa“** do klubu po prihlásení – chceme to?
-5. **Zlúčenie internej vizitky s prehľadom klubu** – súhlas?
-6. **Línie oblastí** – farby `--program-*` z dizajn systému, alebo jednofarebne (modrá SFZ v odtieňoch)?
+1. **Člen klubu** (aj hráč) po prihlásení vidí prehľad klubu a plán (len čítanie).
+2. **Roly v klube:** Klubový manažér (správca klubu), Tréner, Tímový manažér (predtým vedúci tímu), Hráč (samostatná
+   rola), Člen (všetky ostatné príslušnosti a typy osôb, základné práva). Tímový manažér má zatiaľ rovnaké práva ako
+   tréner. Implementácia rolí patrí do S2 (zmena schémy `CLUB_ROLES` – súhlas pri implementácii).
+3. **Domov prihláseného** = Moja Akadémia; verejný Hub ostáva v menu ako Akadémia.
+4. **Prenos Kompasu „otestuj sa“** do Kompasu klubu po prihlásení – áno, ponúknuť (s potvrdením, neskoršia etapa).
+5. **Interná vizitka klubu sa zlúči s prehľadom klubu**; `/klub/[id]/vizitka` presmeruje.
+6. **Línie oblastí** – modrá SFZ v odtieňoch + názov línie; farby programov sa v rozhraní nepoužívajú.
