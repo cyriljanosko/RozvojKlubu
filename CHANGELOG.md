@@ -11,6 +11,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 ### Pridané
 
 - Dizajn podľa SFZ Design System (DS-1, ADR 0016): balík `@slovensky-futbalovy-zvaz/design-system` (^1) z GitHub Packages, farby aplikácie z tokenov SFZ (modrá `#1450df`, plochy, okraje, stavy), písmo SF Pro z tokenov namiesto Geist, tmavá téma podľa nastavenia zariadenia, logo SFZ (variant D, v tmavej téme biele) v hlavičke; Dependabot denne kontroluje nové verzie dizajn systému.
+- Technický základ redesignu (R3.1, ADR 0018): vrstva `src/components/sfz` – komponenty SFZ Design System za klientskou hranicou (`transpilePackages`, štýly `components.css` vo vrstve `components`), navigácia `AppNavBar`, `AppTabBar` a `LinkTabs` s `next/link`, akordeón, ukazovateľ postupu a jedna definícia pásiem Kompasu, licenčného hodnotenia a línií oblastí z tokenov. Obrazovky ich zatiaľ nepoužívajú.
 - Navigačný model redesignu (R3.2): `src/lib/navigation.ts` určuje položky hornej navigácie, spodnej lišty (najviac 5), menu „Viac“, podmenu klubu a menu administrácie podľa prihlásenia, roly v klube, mentora a admina SFZ; texty v `messages/sk.json` (`nav`). Rám aplikácie ho začne používať v R3.3.
 
 ### Zmenené
