@@ -194,14 +194,14 @@ async function Hub({ searchParams }: Props) {
               )}
             </li>
             <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
-              <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+              <p className="text-primary-ink text-xs font-semibold tracking-wide uppercase">
                 {t("how.level1.badge")}
               </p>
               <p className="font-semibold">{t("how.level1.title")}</p>
               <p className="text-muted-foreground">{t("how.level1.text")}</p>
             </li>
             <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
-              <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+              <p className="text-primary-ink text-xs font-semibold tracking-wide uppercase">
                 {t("how.level2.badge")}
               </p>
               <p className="font-semibold">{t("how.level2.title")}</p>
@@ -309,7 +309,7 @@ async function Hub({ searchParams }: Props) {
         </h2>
         {hub.role.start && (
           <div className="border-l-primary flex flex-col gap-2 border-l-4 pl-4">
-            <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+            <p className="text-primary-ink text-xs font-semibold tracking-wide uppercase">
               {t("start")}
             </p>
             <p className="font-semibold">{hub.role.start.title}</p>
@@ -326,7 +326,7 @@ async function Hub({ searchParams }: Props) {
                 href={
                   hub.role.start.cta.area === 0 ? kompasHref : areaHref(hub.role.start.cta.area)
                 }
-                className="text-primary self-start text-sm font-semibold underline-offset-4 hover:underline"
+                className="text-primary-ink self-start text-sm font-semibold underline-offset-4 hover:underline"
               >
                 {hub.role.start.cta.label} →
               </Link>

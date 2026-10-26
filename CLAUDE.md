@@ -74,7 +74,7 @@ Sekcia „Nefungovalo“ je povinná, keď sa niečo zamietlo – z git logu sa 
 
 - Server Components sú default. `"use client"` len tam, kde je naozaj potrebná interaktivita, a čo najnižšie v strome.
 - Dáta sa načítavajú v serverovej vrstve, nie cez `useEffect` + `fetch`.
-- `next/image` a `next/font` povinne (písmo Geist z balíka `geist`, bez Google Fonts).
+- `next/image` povinne. Dizajn (farby, písmo, tmavá téma, logá) vychádza z balíka `@slovensky-futbalovy-zvaz/design-system` (ADR 0016): farby len cez tokeny, písmo SF Pro z tokenov (žiadne webfonty, bez Google Fonts).
 - Zapnuté `cacheComponents`: dynamické časti (session, `headers()`) patria do `<Suspense>`. Cachovanie sa nastavuje vedome; zmena cache stratégie patrí do devlogu.
 - Žiadne `any` v props a v návratových typoch API.
 
