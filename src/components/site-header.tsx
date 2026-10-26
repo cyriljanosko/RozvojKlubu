@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Suspense } from "react";
-import { ChartColumn, Info, Search, UserRound } from "lucide-react";
+import { ChartColumn, Info, MapPinned, Search, UserRound } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 import { SearchForm } from "@/components/search/search-form";
@@ -22,15 +22,27 @@ async function AccountLink() {
       console.error(`[header] cannot resolve session: ${(error as Error).message}`);
     }
   }
+  // Vizitky on the map (VK-a): for visitors always; signed in, the phone header has no room
+  const vizitky = (className = "") => (
+    <Button asChild size="icon" variant="ghost" className={className}>
+      <Link href="/vizitka" aria-label={t("vizitky")} title={t("vizitky")}>
+        <MapPinned aria-hidden />
+      </Link>
+    </Button>
+  );
   if (!user) {
     return (
-      <Button asChild size="sm">
-        <Link href="/prihlasenie">{t("signIn")}</Link>
-      </Button>
+      <div className="flex items-center gap-1">
+        {vizitky()}
+        <Button asChild size="sm">
+          <Link href="/prihlasenie">{t("signIn")}</Link>
+        </Button>
+      </div>
     );
   }
   return (
     <div className="flex min-w-0 items-center gap-1">
+      {vizitky("hidden sm:inline-flex")}
       {isAdmin(user) && (
         <Button asChild size="icon" variant="ghost" className="hidden sm:inline-flex">
           <Link href="/analyza" aria-label={t("analytics")} title={t("analytics")}>

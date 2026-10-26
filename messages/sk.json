@@ -13,7 +13,8 @@
     "academy": "Moja Akadémia",
     "search": "Hľadať",
     "about": "O Akadémii",
-    "analytics": "Analýza"
+    "analytics": "Analýza",
+    "vizitky": "Vizitky klubov"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -864,7 +865,8 @@
       "vizitka": {
         "title": "Vizitka klubu",
         "text": "Každý klub tu má svoju Vizitku: profil zo Sportnetu (družstvá, hráči, tréneri), výsledok Kompasu v 11 oblastiach a licenčné hodnotenie za sezónu. Vizitku si môže pozrieť ktokoľvek.",
-        "find": "Nájsť Vizitku klubu"
+        "find": "Nájsť Vizitku klubu",
+        "map": "Všetky vizitky na mape"
       },
       "level1": {
         "badge": "1. úroveň · bez prihlásenia",
@@ -1542,5 +1544,51 @@
     "dates": "Najbližšie termíny a prihlásenie",
     "all": "Všetko o vzdelávaní trénerov na futbalsfz.sk",
     "external": "otvorí sa web SFZ v novom okne"
+  },
+  "vizitky": {
+    "title": "Vizitky klubov",
+    "intro": "Kluby v Akadémii rozvoja klubov SFZ na mape Slovenska. Kliknite na zväz na mape alebo použite filtre a otvorte Vizitku klubu.",
+    "map": {
+      "title": "Mapa Slovenska",
+      "level": "Zobraziť",
+      "rfz": "RFZ",
+      "obfz": "ObFZ",
+      "clubs": "{count, plural, =0 {bez klubu} one {# klub} few {# kluby} other {# klubov}}",
+      "legend": "Farba podľa počtu klubov v Akadémii",
+      "none": "bez klubu",
+      "selected": "Vybraný zväz: {name}",
+      "source": "Hranice: © prispievatelia OpenStreetMap (geoBoundaries), ODbL."
+    },
+    "filters": {
+      "search": "Hľadať klub",
+      "searchPlaceholder": "Názov klubu",
+      "rfz": "RFZ",
+      "obfz": "ObFZ",
+      "size": "Veľkosť",
+      "all": "Všetky",
+      "clear": "Zrušiť filtre"
+    },
+    "list": {
+      "title": "Kluby",
+      "count": "{count, plural, =0 {Žiadny klub} one {# klub} few {# kluby} other {# klubov}}",
+      "empty": "Pre zvolené filtre tu zatiaľ nie je žiadny klub.",
+      "kompas": "Kompas {points} z 220",
+      "kompasNone": "Kompas zatiaľ neodoslaný",
+      "licensing": "licenčné uzavreté",
+      "licensingNone": "licenčné zatiaľ neuzavreté",
+      "open": "Otvoriť Vizitku",
+      "noPlace": "zaradenie chýba"
+    },
+    "sizes": {
+      "small": "malý klub",
+      "medium": "stredný klub",
+      "large": "veľký klub"
+    },
+    "rfzNames": {
+      "BFZ": "Bratislavský FZ",
+      "ZsFZ": "Západoslovenský FZ",
+      "SsFZ": "Stredoslovenský FZ",
+      "VsFZ": "Východoslovenský FZ"
+    }
   }
 }

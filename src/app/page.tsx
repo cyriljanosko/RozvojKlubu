@@ -162,8 +162,14 @@ async function Hub({ searchParams }: Props) {
             <li className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
               <p className="font-semibold">{t("how.vizitka.title")}</p>
               <p className="text-muted-foreground">{t("how.vizitka.text")}</p>
+              <Link
+                href="/vizitka"
+                className="mt-auto self-start font-medium underline underline-offset-4"
+              >
+                {t("how.vizitka.map")} →
+              </Link>
               {approved && hub.clubs.length > 0 && (
-                <details className="mt-auto">
+                <details>
                   <summary className="cursor-pointer font-medium underline underline-offset-4">
                     {t("how.vizitka.find")}
                   </summary>

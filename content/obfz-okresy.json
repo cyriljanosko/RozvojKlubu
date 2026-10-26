@@ -1,0 +1,75 @@
+{
+  "source": "Zoznam ObFZ a ich RFZ zo Sportnetu (aktívne zväzy, 26. 10. 2026); pridelenie okresov skontroloval Cyril 26. 10. 2026.",
+  "reviewed": true,
+  "obfz": [
+    {
+      "id": "ObFZ Bratislava-mesto",
+      "rfz": "BFZ",
+      "okresy": ["Bratislava I", "Bratislava II", "Bratislava III", "Bratislava IV", "Bratislava V"]
+    },
+    { "id": "ObFZ Bratislava-vidiek", "rfz": "BFZ", "okresy": ["Malacky", "Pezinok", "Senec"] },
+
+    { "id": "ObFZ Dunajská Streda", "rfz": "ZsFZ", "okresy": ["Dunajská Streda"] },
+    { "id": "ObFZ Galanta", "rfz": "ZsFZ", "okresy": ["Galanta", "Šaľa"] },
+    { "id": "ObFZ Komárno", "rfz": "ZsFZ", "okresy": ["Komárno"] },
+    { "id": "ObFZ Levice", "rfz": "ZsFZ", "okresy": ["Levice"] },
+    { "id": "ObFZ Nitra", "rfz": "ZsFZ", "okresy": ["Nitra", "Zlaté Moravce"] },
+    { "id": "ObFZ Nové Zámky", "rfz": "ZsFZ", "okresy": ["Nové Zámky"] },
+    { "id": "ObFZ Senica", "rfz": "ZsFZ", "okresy": ["Senica", "Skalica"] },
+    {
+      "id": "ObFZ Topoľčany",
+      "rfz": "ZsFZ",
+      "okresy": ["Topoľčany", "Partizánske"]
+    },
+    {
+      "id": "ObFZ Trenčín",
+      "rfz": "ZsFZ",
+      "okresy": ["Trenčín", "Nové Mesto nad Váhom", "Myjava", "Bánovce nad Bebravou"]
+    },
+    { "id": "ObFZ Trnava", "rfz": "ZsFZ", "okresy": ["Trnava", "Hlohovec", "Piešťany"] },
+    {
+      "id": "ObFZ Považská Bystrica",
+      "rfz": "ZsFZ",
+      "okresy": ["Považská Bystrica", "Púchov", "Ilava"]
+    },
+    { "id": "ObFZ Prievidza", "rfz": "ZsFZ", "okresy": ["Prievidza"] },
+
+    { "id": "ObFZ Banská Bystrica", "rfz": "SsFZ", "okresy": ["Banská Bystrica", "Brezno"] },
+    { "id": "ObFZ Kysúc", "rfz": "SsFZ", "okresy": ["Čadca", "Kysucké Nové Mesto"] },
+    { "id": "Liptovský FZ", "rfz": "SsFZ", "okresy": ["Liptovský Mikuláš", "Ružomberok"] },
+    { "id": "ObFZ Lučenec", "rfz": "SsFZ", "okresy": ["Lučenec", "Poltár"] },
+    { "id": "Oravský FZ", "rfz": "SsFZ", "okresy": ["Dolný Kubín", "Námestovo", "Tvrdošín"] },
+    { "id": "ObFZ Rimavská Sobota", "rfz": "SsFZ", "okresy": ["Rimavská Sobota", "Revúca"] },
+    { "id": "Turčiansky FZ Martin", "rfz": "SsFZ", "okresy": ["Martin", "Turčianske Teplice"] },
+    { "id": "ObFZ Veľký Krtíš", "rfz": "SsFZ", "okresy": ["Veľký Krtíš"] },
+    { "id": "ObFZ Zvolen", "rfz": "SsFZ", "okresy": ["Zvolen", "Detva", "Krupina"] },
+    {
+      "id": "ObFZ Žiar nad Hronom",
+      "rfz": "SsFZ",
+      "okresy": ["Žiar nad Hronom", "Žarnovica", "Banská Štiavnica"]
+    },
+    { "id": "ObFZ Žilina", "rfz": "SsFZ", "okresy": ["Žilina", "Bytča"] },
+
+    { "id": "ObFZ Bardejov", "rfz": "VsFZ", "okresy": ["Bardejov"] },
+    { "id": "ObFZ Humenné", "rfz": "VsFZ", "okresy": ["Humenné", "Medzilaborce", "Snina"] },
+    { "id": "ObFZ Košice-okolie", "rfz": "VsFZ", "okresy": ["Košice-okolie"] },
+    {
+      "id": "MFZ Košice",
+      "rfz": "VsFZ",
+      "okresy": ["Košice I", "Košice II", "Košice III", "Košice IV"]
+    },
+    { "id": "ObFZ Michalovce", "rfz": "VsFZ", "okresy": ["Michalovce", "Sobrance"] },
+    { "id": "Ondavský ObFZ Svidník", "rfz": "VsFZ", "okresy": ["Svidník", "Stropkov"] },
+    { "id": "Podtatranský FZ", "rfz": "VsFZ", "okresy": ["Poprad", "Kežmarok"] },
+    { "id": "ObFZ Prešov", "rfz": "VsFZ", "okresy": ["Prešov", "Sabinov"] },
+    { "id": "ObFZ Rožňava", "rfz": "VsFZ", "okresy": ["Rožňava"] },
+    {
+      "id": "Spišský ObFZ",
+      "rfz": "VsFZ",
+      "okresy": ["Spišská Nová Ves", "Levoča", "Gelnica"]
+    },
+    { "id": "ObFZ Stará Ľubovňa", "rfz": "VsFZ", "okresy": ["Stará Ľubovňa"] },
+    { "id": "ObFZ Trebišov", "rfz": "VsFZ", "okresy": ["Trebišov"] },
+    { "id": "ObFZ Vranov nad Topľou", "rfz": "VsFZ", "okresy": ["Vranov nad Topľou"] }
+  ]
+}
