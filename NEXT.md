@@ -80,9 +80,9 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] VK-b – rebríčky v `/vizitka` (PR #77, v produkcii `e9b3501`); blok hľadania pod mapou, zoznam až po hľadaní (PR #78, `de5ed81`).
   - [ ] Mentorský smer (rozhodnuté 26. 10.): prioritne pomôcť klubom a ľuďom v klube, hodnotenie a rebríčky majú motivovať.
     - [ ] MR – motivačné rebríčky (ADR 0015): súhlas klubu (opt-in, vedenie), Kompas potvrdený mentorom (odznak), najväčší posun oproti minulej sezóne, míľniky sezóny, verejne len top 3 v každej veľkosti + hviezdy bez poradia.
-      - [ ] MR-a – dáta a API: kolekcia `club_settings` (súhlas), `confirmedAt`/`confirmedBy` v `kompas_submissions` – vetva `feat/mr-a-consent-confirm`.
-      - [ ] MR-b – pravidlá: posun, míľniky, verejný vs. úplný rebríček, bez „Kompas neodoslaný“ verejne.
-      - [ ] MR-c – rozhranie: prepínač súhlasu, tlačidlo „Potvrdiť Kompas“, odznaky a míľniky, blok „Najväčší posun“.
+      - [x] MR-a – dáta a API: kolekcia `club_settings` (súhlas), `confirmedAt`/`confirmedBy` v `kompas_submissions` (PR #79, v produkcii `fb735d7`).
+      - [ ] MR-b – pravidlá (rozhodnuté 26. 10.): kluby bez súhlasu v zozname neutrálne bez hviezd, verejne všetkých 6 míľnikov, posun v bodoch aj hviezdach, top 3 vždy (aj menej klubov); `GET /api/v1/vizitky` – vetva `feat/mr-b-ranking-rules`, PR na review. Top 3 a posun s ozajstnými dátami overiť po prvom súhlase klubu.
+      - [ ] MR-c – rozhranie: prepínač súhlasu (vedenie, Vizitka klubu), tlačidlo „Potvrdiť Kompas“ (mentor), odznak „potvrdené mentorom“ a ikony míľnikov v rebríčku a vo Vizitke.
     - [ ] DK – karta „Váš ďalší krok“ v Moja Akadémia a sprievodca „Prvých 30 dní v Akadémii“.
     - [ ] ZK – sekcia „Zo života klubov“: príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
     - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.

@@ -5,7 +5,16 @@ import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
 import { Stars } from "@/components/vizitka/stars";
-import { KOMPAS_MAX, RANK_SORTS, sortClubs, unionRatings, type RankSort } from "@/lib/rankings";
+import {
+  KOMPAS_MAX,
+  RANK_SORTS,
+  positionOf,
+  sortClubs,
+  topProgress,
+  topThree,
+  unionRatings,
+  type RankSort,
+} from "@/lib/rankings";
 import {
   MAP_VIEWBOX,
   OBFZ,
@@ -15,7 +24,7 @@ import {
   type MapLevel,
   type Rfz,
 } from "@/lib/slovakia-map";
-import type { VizitkaCard } from "@/server/services/vizitky.service";
+import type { RankingsViewer, VizitkaCard } from "@/server/services/vizitky.service";
 
 const SIZES = ["small", "medium", "large"] as const;
 const METRICS = ["count", "kompas", "licensing"] as const;
@@ -38,12 +47,17 @@ const href = (c: VizitkaCard) => `/vizitka/${encodeURIComponent(c.clubId)}`;
  * under the map the search block – filters by name, RFZ, ObFZ and size, ordering by Kompas,
  * licensing, players, ObFZ or RFZ; the list of clubs appears only after a search or filter;
  * below the list the rankings by club size and the order of the unions.
+ * Motivational rules (MR-b, ADR 0015): ratings only of clubs that consented, publicly the top 3
+ * and the top 3 by progress of each size, the others without a position; the full position only
+ * for the viewer's own clubs (management, coach), a mentor's clubs and admin_sfz.
  */
 export function VizitkyExplorer({
   cards,
+  viewer,
   initial,
 }: {
   cards: VizitkaCard[];
+  viewer: RankingsViewer;
   initial: { q: string; rfz: string; obfz: string; size: string; sort: string };
 }) {
   const t = useTranslations("vizitky");
@@ -69,15 +83,19 @@ export function VizitkyExplorer({
       ),
     [cards, level],
   );
+  const ranked = useMemo(() => cards.filter((c) => c.ranked), [cards]);
   // the stars of the map follow the size filter – clubs compare with clubs of their size
   const ratings = useMemo(
     () =>
       unionRatings(
-        cards.filter((c) => !size || c.size === size),
+        ranked.filter((c) => !size || c.size === size),
         level,
       ),
-    [cards, level, size],
+    [ranked, level, size],
   );
+  const seesPosition = (clubId: string) =>
+    viewer.positions === "all" || viewer.positions.includes(clubId);
+  const by = sort === "licensing" ? "licensing" : "kompas";
   const valueOf = (id: string): number | null =>
     metric === "count"
       ? (counts.get(id) ?? 0)
@@ -117,7 +135,7 @@ export function VizitkyExplorer({
 
   const kompas = (c: VizitkaCard) =>
     c.kompasStars === null ? (
-      <span className="text-muted-foreground text-xs">{t("list.kompasNone")}</span>
+      <span className="text-muted-foreground text-xs">{t("stars.none")}</span>
     ) : (
       <span className="flex flex-wrap items-center gap-x-1.5">
         <Stars
@@ -132,7 +150,7 @@ export function VizitkyExplorer({
     );
   const licensing = (c: VizitkaCard) =>
     c.licensing === null || c.licensing.stars === null ? (
-      <span className="text-muted-foreground text-xs">{t("list.licensingNone")}</span>
+      <span className="text-muted-foreground text-xs">{t("stars.none")}</span>
     ) : (
       <span className="flex flex-wrap items-center gap-x-1.5">
         <Stars
@@ -347,15 +365,12 @@ export function VizitkyExplorer({
                 </p>
               ) : (
                 <ol className="grid gap-2 lg:grid-cols-2">
-                  {shown.map((c, i) => (
+                  {shown.map((c) => (
                     <li key={c.clubId}>
                       <Link
                         href={href(c)}
                         className="hover:bg-muted/50 flex gap-3 rounded-lg border p-3 text-sm"
                       >
-                        <span className="text-muted-foreground w-6 shrink-0 font-semibold">
-                          {i + 1}.
-                        </span>
                         <span className="flex min-w-0 flex-col gap-1">
                           <span className="font-medium break-words">{c.name}</span>
                           <span className="text-muted-foreground text-xs">
@@ -367,20 +382,26 @@ export function VizitkyExplorer({
                               .filter(Boolean)
                               .join(" · ")}
                           </span>
-                          <span className="grid gap-1 sm:grid-cols-2">
-                            <span className="flex flex-col">
-                              <span className="text-muted-foreground text-[11px]">
-                                {t("stars.kompas")}
-                              </span>
-                              {kompas(c)}
+                          {!c.ranked ? (
+                            <span className="text-muted-foreground text-xs">
+                              {t("list.notRanked")}
                             </span>
-                            <span className="flex flex-col">
-                              <span className="text-muted-foreground text-[11px]">
-                                {t("stars.licensing")}
+                          ) : (
+                            <span className="grid gap-1 sm:grid-cols-2">
+                              <span className="flex flex-col">
+                                <span className="text-muted-foreground text-[11px]">
+                                  {t("stars.kompas")}
+                                </span>
+                                {kompas(c)}
                               </span>
-                              {licensing(c)}
+                              <span className="flex flex-col">
+                                <span className="text-muted-foreground text-[11px]">
+                                  {t("stars.licensing")}
+                                </span>
+                                {licensing(c)}
+                              </span>
                             </span>
-                          </span>
+                          )}
                         </span>
                       </Link>
                     </li>
@@ -399,64 +420,190 @@ export function VizitkyExplorer({
           </h2>
           <p className="text-muted-foreground max-w-2xl text-sm">{t("rankings.intro")}</p>
         </div>
-        {(["large", "medium", "small"] as const)
-          .filter((s) => !size || s === size)
-          .map((s) => {
-            const rows = sortClubs(
-              cards.filter((c) => c.size === s && matches(c)),
-              sort,
-            );
-            return (
-              <div key={s} className="flex flex-col gap-2">
-                <h3 className="font-semibold">{t(`rankings.sizes.${s}`)}</h3>
-                {rows.length === 0 ? (
-                  <p className="text-muted-foreground rounded-lg border border-dashed p-3 text-sm">
-                    {t("rankings.empty")}
-                  </p>
-                ) : (
-                  <div className="overflow-x-auto rounded-xl border">
-                    <table className="w-full min-w-[640px] text-sm">
-                      <thead className="bg-muted/40 text-muted-foreground text-left text-xs">
-                        <tr>
-                          <th className="w-10 px-3 py-2 font-medium">
-                            {t("rankings.columns.rank")}
-                          </th>
-                          <th className="px-3 py-2 font-medium">{t("rankings.columns.club")}</th>
-                          <th className="px-3 py-2 font-medium">{t("rankings.columns.union")}</th>
-                          <th className="px-3 py-2 font-medium">{t("rankings.columns.players")}</th>
-                          <th className="px-3 py-2 font-medium">{t("stars.kompas")}</th>
-                          <th className="px-3 py-2 font-medium">{t("stars.licensing")}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {rows.map((c, i) => (
-                          <tr key={c.clubId} className="border-t">
-                            <td className="text-muted-foreground px-3 py-2 font-semibold">
-                              {i + 1}.
-                            </td>
-                            <td className="px-3 py-2">
-                              <Link
-                                href={href(c)}
-                                className="font-medium underline-offset-4 hover:underline"
-                              >
-                                {c.name}
-                              </Link>
-                            </td>
-                            <td className="text-muted-foreground px-3 py-2">
-                              {c.place ? `${c.place.obfz} · ${c.place.rfz}` : t("list.noPlace")}
-                            </td>
-                            <td className="text-muted-foreground px-3 py-2">{c.players ?? "–"}</td>
-                            <td className="px-3 py-2">{kompas(c)}</td>
-                            <td className="px-3 py-2">{licensing(c)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+        {viewer.own.map((id) => {
+          const c = cards.find((x) => x.clubId === id);
+          if (!c) return null;
+          const pos = c.ranked
+            ? positionOf(
+                ranked.filter((x) => x.size === c.size),
+                id,
+                sort,
+              )
+            : null;
+          return (
+            <p key={id} className="bg-muted/40 rounded-lg p-3 text-sm">
+              {!c.ranked
+                ? t("rankings.own.notRanked", { name: c.name })
+                : pos
+                  ? t("rankings.own.position", {
+                      name: c.name,
+                      position: pos.position,
+                      of: pos.of,
+                      size: c.size ? t(`sizes.${c.size}`) : "",
+                      by: t(`stars.${by}`),
+                    })
+                  : t("rankings.own.noValue", { name: c.name, by: t(`stars.${by}`) })}
+            </p>
+          );
+        })}
+        {ranked.length === 0 ? (
+          <p className="text-muted-foreground rounded-lg border border-dashed p-3 text-sm">
+            {t("rankings.noneYet")}
+          </p>
+        ) : (
+          (["large", "medium", "small"] as const)
+            .filter((s) => !size || s === size)
+            .map((s) => {
+              const pool = ranked.filter((c) => c.size === s && matches(c));
+              const top = topThree(pool, sort);
+              const climbers = topProgress(pool);
+              // alphabetically – the public order of the rest says nothing about their rank
+              const others = pool
+                .filter((c) => !top.includes(c))
+                .sort((a, b) => a.name.localeCompare(b.name, "sk"));
+              return (
+                <div key={s} className="flex flex-col gap-3">
+                  <h3 className="font-semibold">{t(`rankings.sizes.${s}`)}</h3>
+                  {pool.length === 0 ? (
+                    <p className="text-muted-foreground rounded-lg border border-dashed p-3 text-sm">
+                      {t("rankings.empty")}
+                    </p>
+                  ) : (
+                    <>
+                      <div className="flex flex-col gap-2">
+                        <h4 className="text-muted-foreground text-xs font-medium">
+                          {t("rankings.top", { by: t(`stars.${by}`) })}
+                        </h4>
+                        {top.length === 0 ? (
+                          <p className="text-muted-foreground text-sm">{t("stars.none")}</p>
+                        ) : (
+                          <div className="overflow-x-auto rounded-xl border">
+                            <table className="w-full min-w-[640px] text-sm">
+                              <thead className="bg-muted/40 text-muted-foreground text-left text-xs">
+                                <tr>
+                                  <th className="w-10 px-3 py-2 font-medium">
+                                    {t("rankings.columns.rank")}
+                                  </th>
+                                  <th className="px-3 py-2 font-medium">
+                                    {t("rankings.columns.club")}
+                                  </th>
+                                  <th className="px-3 py-2 font-medium">
+                                    {t("rankings.columns.union")}
+                                  </th>
+                                  <th className="px-3 py-2 font-medium">
+                                    {t("rankings.columns.players")}
+                                  </th>
+                                  <th className="px-3 py-2 font-medium">{t("stars.kompas")}</th>
+                                  <th className="px-3 py-2 font-medium">{t("stars.licensing")}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {top.map((c, i) => (
+                                  <tr key={c.clubId} className="border-t">
+                                    <td className="text-muted-foreground px-3 py-2 font-semibold">
+                                      {i + 1}.
+                                    </td>
+                                    <td className="px-3 py-2">
+                                      <Link
+                                        href={href(c)}
+                                        className="font-medium underline-offset-4 hover:underline"
+                                      >
+                                        {c.name}
+                                      </Link>
+                                    </td>
+                                    <td className="text-muted-foreground px-3 py-2">
+                                      {c.place
+                                        ? `${c.place.obfz} · ${c.place.rfz}`
+                                        : t("list.noPlace")}
+                                    </td>
+                                    <td className="text-muted-foreground px-3 py-2">
+                                      {c.players ?? "–"}
+                                    </td>
+                                    <td className="px-3 py-2">{kompas(c)}</td>
+                                    <td className="px-3 py-2">{licensing(c)}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
+                      </div>
+                      {climbers.length > 0 && (
+                        <div className="flex flex-col gap-1">
+                          <h4 className="text-muted-foreground text-xs font-medium">
+                            {t("rankings.progress.title")}
+                          </h4>
+                          <ol className="flex flex-col gap-1 text-sm">
+                            {climbers.map((c, i) => (
+                              <li key={c.clubId} className="flex flex-wrap gap-x-2">
+                                <span className="text-muted-foreground font-semibold">
+                                  {i + 1}.
+                                </span>
+                                <Link
+                                  href={href(c)}
+                                  className="font-medium underline-offset-4 hover:underline"
+                                >
+                                  {c.name}
+                                </Link>
+                                <span className="font-medium text-blue-600 dark:text-blue-400">
+                                  {t("rankings.progress.value", {
+                                    points: c.progress!.points,
+                                    from: c.progress!.fromStars,
+                                    to: c.progress!.toStars,
+                                  })}
+                                </span>
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      )}
+                      {others.length > 0 && (
+                        <div className="flex flex-col gap-1">
+                          <h4 className="text-muted-foreground text-xs font-medium">
+                            {t("rankings.others")}
+                          </h4>
+                          <ul className="grid gap-2 sm:grid-cols-2">
+                            {others.map((c) => {
+                              const pos = seesPosition(c.clubId)
+                                ? positionOf(pool, c.clubId, sort)
+                                : null;
+                              return (
+                                <li
+                                  key={c.clubId}
+                                  className="flex flex-col gap-1 rounded-lg border p-3 text-sm"
+                                >
+                                  <span className="flex flex-wrap items-baseline gap-x-2">
+                                    <Link
+                                      href={href(c)}
+                                      className="font-medium underline-offset-4 hover:underline"
+                                    >
+                                      {c.name}
+                                    </Link>
+                                    {pos && (
+                                      <span className="text-muted-foreground text-xs">
+                                        {t("rankings.position", {
+                                          position: pos.position,
+                                          of: pos.of,
+                                        })}
+                                      </span>
+                                    )}
+                                  </span>
+                                  <span className="grid gap-1 sm:grid-cols-2">
+                                    {kompas(c)}
+                                    {licensing(c)}
+                                  </span>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              );
+            })
+        )}
       </section>
 
       <section className="flex flex-col gap-3 rounded-xl border p-4" aria-labelledby="unions-title">
@@ -507,6 +654,8 @@ export function VizitkyExplorer({
         <div className="mt-2 flex flex-col gap-2">
           <p>{t("rankings.rule.kompas")}</p>
           <p>{t("rankings.rule.licensing")}</p>
+          <p>{t("rankings.rule.consent")}</p>
+          <p>{t("rankings.rule.progress")}</p>
           <p className="text-muted-foreground text-xs">{t("rankings.rule.note")}</p>
         </div>
       </details>

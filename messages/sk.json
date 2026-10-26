@@ -1580,13 +1580,12 @@
       "count": "{count, plural, =0 {Žiadny klub} one {# klub} few {# kluby} other {# klubov}}",
       "empty": "Pre zvolené filtre tu zatiaľ nie je žiadny klub.",
       "kompas": "Kompas {points} z 220",
-      "kompasNone": "Kompas zatiaľ neodoslaný",
       "licensing": "licenčné uzavreté",
-      "licensingNone": "licenčné zatiaľ neuzavreté",
       "open": "Otvoriť Vizitku",
       "noPlace": "zaradenie chýba",
       "players": "{count, plural, one {# hráč} few {# hráči} other {# hráčov}}",
-      "hint": "Zadajte názov klubu, zvoľte filter alebo kliknite na zväz na mape – zobrazí sa zoznam klubov."
+      "hint": "Zadajte názov klubu, zvoľte filter alebo kliknite na zväz na mape – zobrazí sa zoznam klubov.",
+      "notRanked": "Zapojený do Akadémie"
     },
     "sizes": {
       "small": "malý klub",
@@ -1612,17 +1611,18 @@
       "licensing": "Licencovanie",
       "label": "{rating}: {value} z 5 hviezdičiek",
       "kompasPoints": "{points} z {max} b.",
-      "licensingPoints": "{points} b."
+      "licensingPoints": "{points} b.",
+      "none": "zatiaľ bez hodnotenia"
     },
     "rankings": {
       "title": "Rebríčky podľa veľkosti klubu",
-      "intro": "Kluby sa porovnávajú s klubmi podobnej veľkosti. Kompas a licencovanie sú dve samostatné hodnotenia, nesčítavajú sa. Filtre a zoradenie zhora platia aj tu.",
+      "intro": "Kluby sa porovnávajú s klubmi podobnej veľkosti. Kompas a licencovanie sú dve samostatné hodnotenia, nesčítavajú sa. V rebríčku sú len kluby, ktorých vedenie dalo súhlas. Filtre a zoradenie zhora platia aj tu.",
       "sizes": {
         "large": "Veľké kluby",
         "medium": "Stredné kluby",
         "small": "Malé kluby"
       },
-      "empty": "Pre zvolené filtre tu zatiaľ nie je žiadny klub.",
+      "empty": "V tejto veľkosti zatiaľ nie je žiadny klub v rebríčku.",
       "columns": {
         "rank": "#",
         "club": "Klub",
@@ -1640,7 +1640,22 @@
         "title": "Ako počítame hviezdičky",
         "kompas": "Kompas: body z posledného odoslaného Kompasu (0 – 220) v piatich pásmach po 44 bodov – 1 – 44 b. je ★, 45 – 88 b. ★★, 89 – 132 b. ★★★, 133 – 176 b. ★★★★ a 177 – 220 b. ★★★★★.",
         "licensing": "Licencovanie: priemer pásiem oblastí v uzavretom licenčnom hodnotení – bez pásma 1, grassroots 2, bronz 3, striebro 4 a zlato 5 hviezdičiek, zaokrúhlené. Oblasti bez pásiem sa nepočítajú.",
-        "note": "Pravidlo je v skúšobnej verzii a môže sa ešte zmeniť."
+        "note": "Pravidlo je v skúšobnej verzii a môže sa ešte zmeniť.",
+        "consent": "V rebríčku sú len kluby, ktorých vedenie dalo súhlas. Verejne sa ukazujú prví traja v každej veľkosti a kluby s najväčším posunom; ostatné kluby majú hviezdičky bez čísla poradia. Celé poradie vidí klub sám, jeho mentor a SFZ.",
+        "progress": "Posun: body posledného odoslaného Kompasu sezóny oproti poslednému Kompasu minulej sezóny."
+      },
+      "noneYet": "Do rebríčka sa zatiaľ nezapojil žiadny klub. Vedenie klubu môže dať súhlas vo Vizitke klubu.",
+      "top": "Top 3 – {by}",
+      "progress": {
+        "title": "Najväčší posun v Kompase oproti minulej sezóne",
+        "value": "+{points} b. ({from} ★ → {to} ★)"
+      },
+      "others": "Ďalšie kluby v rebríčku",
+      "position": "{position}. z {of} (neverejné)",
+      "own": {
+        "position": "{name}: {position}. miesto z {of} – {size}, podľa hodnotenia {by}. Poradie je neverejné.",
+        "notRanked": "{name} zatiaľ nie je v rebríčku. Vedenie klubu môže dať súhlas vo Vizitke klubu.",
+        "noValue": "{name} je v rebríčku, ale zatiaľ bez hodnotenia {by}."
       }
     }
   }

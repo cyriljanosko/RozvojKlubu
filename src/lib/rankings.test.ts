@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest";
 
-import { kompasStars, licensingStars, sortClubs, unionRatings, type RankedClub } from "./rankings";
+import {
+  kompasProgress,
+  kompasStars,
+  licensingStars,
+  positionOf,
+  previousSeason,
+  sortClubs,
+  topProgress,
+  topThree,
+  unionRatings,
+  type RankedClub,
+} from "./rankings";
 
 const club = (o: Partial<RankedClub> & { name: string }): RankedClub => ({
   clubId: o.name,
@@ -75,5 +86,35 @@ describe("rankings – order", () => {
       { id: "VsFZ", clubs: 1, kompas: 4, licensing: 3 },
       { id: "ZsFZ", clubs: 2, kompas: 2.5, licensing: 3 },
     ]);
+  });
+});
+
+describe("rankings – public top 3, progress and positions (MR-b, ADR 0015)", () => {
+  const list = [80, 200, null, 150, 120, 10].map((kompas, i) =>
+    club({ name: `K${i}`, kompas, licensing: i === 0 ? { points: 9, stars: 4 } : null }),
+  );
+
+  it("top 3 only from clubs with a value, fewer when fewer have one", () => {
+    expect(topThree(list, "kompas").map((c) => c.name)).toEqual(["K1", "K3", "K4"]);
+    expect(topThree(list, "players").map((c) => c.name)).toEqual(["K1", "K3", "K4"]); // ranks by Kompas
+    expect(topThree(list, "licensing").map((c) => c.name)).toEqual(["K0"]);
+  });
+
+  it("position among the clubs with a value; null without one", () => {
+    expect(positionOf(list, "K4", "kompas")).toEqual({ position: 3, of: 5 });
+    expect(positionOf(list, "K2", "kompas")).toBeNull();
+  });
+
+  it("progress against the previous season; top 3 only of clubs that improved", () => {
+    expect(previousSeason("2026/2027")).toBe("2025/2026");
+    expect(kompasProgress(40, 100)).toEqual({ points: 60, fromStars: 1, toStars: 3 });
+    expect(kompasProgress(null, 100)).toBeNull();
+    const withProgress = [
+      { ...club({ name: "Up" }), progress: kompasProgress(40, 100) },
+      { ...club({ name: "Down" }), progress: kompasProgress(100, 40) },
+      { ...club({ name: "New" }), progress: null },
+      { ...club({ name: "Bit" }), progress: kompasProgress(40, 45) },
+    ];
+    expect(topProgress(withProgress).map((c) => c.name)).toEqual(["Up", "Bit"]);
   });
 });

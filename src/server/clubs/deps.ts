@@ -32,6 +32,7 @@ import type { PreferencesDeps } from "@/server/services/preferences.service";
 import type { PracticeProgressDeps } from "@/server/services/practice-progress.service";
 import type { SearchDeps } from "@/server/services/search.service";
 import type { VizitkaDeps } from "@/server/services/vizitka.service";
+import type { RankingsDeps } from "@/server/services/vizitky.service";
 import type { KompasDeps } from "@/server/services/kompas.service";
 
 /** Production wiring of the club services (route handlers, pages, server actions). */
@@ -62,6 +63,13 @@ export const vizitkaDeps: VizitkaDeps = {
   submissions: mongoSubmissionStore,
   evaluations: mongoEvaluationStore,
   licensingSubmissions: mongoLicensingSubmissionStore,
+};
+
+export const rankingsDeps: RankingsDeps = {
+  ...vizitkaDeps,
+  settings: mongoClubSettingsStore,
+  plans: mongoPlanStore,
+  visits: mongoVisitStore,
 };
 
 export const academyDeps: AcademyDeps = {
