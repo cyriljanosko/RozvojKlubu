@@ -8,7 +8,7 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] DS-1 – napojenie (vetva `feat/sfz-design-system`, hotové a overené lokálne, PR na review): balík z GitHub Packages (`.npmrc`, `NPM_GITHUB_TOKEN` v Actions, Dependabot a Verceli – nastavené 26. 10.), tokeny namiesto farieb shadcn, písmo SF Pro (namiesto Geist), tmavá téma podľa zariadenia, logo SFZ (variant D) v hlavičke, Dependabot s privátnym registrom.
   - [ ] DS-2 – natvrdo zapísané farby (pásma oblastí, Kompas, Prax, ihrisko, odznaky) na tokeny.
   - [ ] DS-3 – komponenty SFZ postupne (tlačidlá, karty, polia, okná, tabuľky) namiesto shadcn.
-- [ ] Upgrade Next.js 16.4.0 → 16.4.3 – lokálny build hlási známu bezpečnostnú zraniteľnosť (26. 10.).
+- [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – vetva `chore/next-16-4-3`, PR čaká na zlúčenie Cyrilom; Dependabot PR #74 (Next 16.4.2) sa tým v časti Next prekrýva.
 
 - [x] Mapa produktu z návrhov v artifactoch (`docs/produkt/mapa-produktu.md`) – schválená 16. 10., roly v klube v ADR 0004.
 - [ ] Pilot Stupňa II podľa mapy, časť 11 (F1 → F7). Rozsah: Vizitka, Kompas v aplikácii s odoslaním mentorovi, Moja Akadémia (vedenie, tréner, mentor), Naši tréneri; 10 pilotných klubov z Vizitky.
