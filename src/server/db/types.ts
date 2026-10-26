@@ -218,6 +218,9 @@ export interface KompasSubmissionDoc {
   status?: "submitted" | "withdrawn";
   withdrawnAt?: Date;
   withdrawnBy?: string;
+  /** confirmed by the club's mentor or admin_sfz – a badge in the rankings (ADR 0015); missing = not */
+  confirmedAt?: Date;
+  confirmedBy?: string;
 }
 
 /** Club inputs of the licensing evaluation (areas 5–7, population, coach gender corrections). */
@@ -498,6 +501,18 @@ export interface ClubMentoringDoc {
   focus: MentoringFocus | null;
   closingClub: MentoringClosingClub | null;
   closingMentor: MentoringClosingMentor | null;
+  version: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+/** Collection `club_settings` – the club's own settings, unique `clubId` (MR, ADR 0015). */
+export interface ClubSettingsDoc {
+  _id?: ObjectId;
+  clubId: string;
+  /** consent of club management to appear in the public rankings (opt-in); null = never decided */
+  rankingConsent: { given: boolean; at: Date; by: string } | null;
   version: number;
   createdAt: Date;
   updatedAt: Date;
