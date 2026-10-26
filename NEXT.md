@@ -14,6 +14,7 @@ Aktualizované: 26. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] R2b – návrh skupín 2–5 na tom istom plátne (15 obrazoviek) schválený 26. 10.
   - [ ] R3 – technický základ (postup schválený 26. 10., `docs/dizajn/plan-redesignu.md`): R3.1 vrstva `src/components/sfz`, R3.2 navigačný model, R3.3 rám aplikácie hneď pre celú appku, R3.4 lint + Playwright; PR do sfz-design-system s chýbajúcimi ikonami.
     - [x] R3.1 – vrstva `src/components/sfz` (PR #89): komponenty DS za klientskou hranicou, `AppNavBar`, `AppTabBar`, `LinkTabs`, akordeón, ukazovateľ postupu, pásma z tokenov.
+    - [x] R3.2 – navigačný model `src/lib/navigation.ts` (PR #90). Stránky `/viac`, členovia a nastavenia klubu, číselníky a Sportnet v administrácii model zatiaľ nemá – pribudnú s R3.3, R4 a S3.
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
   - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.

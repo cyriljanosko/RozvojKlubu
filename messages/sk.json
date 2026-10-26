@@ -1717,5 +1717,35 @@
         "INTERNAL": "Nepodarilo sa uložiť, skúste to znova."
       }
     }
+  },
+  "nav": {
+    "mainLabel": "Hlavná navigácia",
+    "tabsLabel": "Navigácia",
+    "clubLabel": "Podmenu klubu",
+    "adminLabel": "Menu administrácie",
+    "academy": "Akadémia",
+    "home": "Domov",
+    "areas": "Oblasti",
+    "kompas": "Kompas",
+    "clubs": "Kluby",
+    "about": "O Akadémii",
+    "signIn": "Prihlásiť",
+    "search": "Hľadať",
+    "myClub": "Môj klub",
+    "mentorClubs": "Moje kluby",
+    "more": "Viac",
+    "account": "Môj účet",
+    "analytics": "Analýza",
+    "mentorWorkspace": "Pracovisko mentora",
+    "admin": "Administrácia",
+    "clubOverview": "Prehľad",
+    "clubKompas": "Kompas",
+    "clubPlan": "Plán",
+    "clubLicensing": "Licenčné hodnotenie",
+    "clubMentoring": "Mentoring",
+    "clubVisits": "Návštevy",
+    "adminClubs": "Kluby",
+    "adminContent": "Obsah",
+    "adminRoles": "Katalóg rolí"
   }
 }
