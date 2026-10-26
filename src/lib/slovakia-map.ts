@@ -5,7 +5,7 @@ import table from "../../content/obfz-okresy.json";
 /**
  * Map of Slovakia for the Vizitky (VK-a, 26. 10. 2026): district shapes from geoBoundaries
  * (© OpenStreetMap contributors, ODbL) simplified to SVG, district → ObFZ → RFZ from
- * `content/obfz-okresy.json` (ObFZ list from Sportnet, districts to be reviewed by Cyril) and the
+ * `content/obfz-okresy.json` (ObFZ list from Sportnet, districts reviewed by Cyril) and the
  * pilot clubs' districts from `content/kluby-okresy.json`.
  */
 export type MapLevel = "rfz" | "obfz";
@@ -16,7 +16,6 @@ export interface Obfz {
   id: string;
   rfz: Rfz;
   okresy: string[];
-  check?: string[];
 }
 
 export const MAP_VIEWBOX: string = map.viewBox;

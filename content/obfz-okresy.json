@@ -1,6 +1,6 @@
 {
-  "source": "Zoznam ObFZ a ich RFZ zo Sportnetu (aktívne zväzy, 26. 10. 2026); pridelenie okresov je návrh na kontrolu (Cyril).",
-  "reviewed": false,
+  "source": "Zoznam ObFZ a ich RFZ zo Sportnetu (aktívne zväzy, 26. 10. 2026); pridelenie okresov skontroloval Cyril 26. 10. 2026.",
+  "reviewed": true,
   "obfz": [
     {
       "id": "ObFZ Bratislava-mesto",
@@ -19,21 +19,18 @@
     {
       "id": "ObFZ Topoľčany",
       "rfz": "ZsFZ",
-      "okresy": ["Topoľčany", "Partizánske"],
-      "check": ["Partizánske"]
+      "okresy": ["Topoľčany", "Partizánske"]
     },
     {
       "id": "ObFZ Trenčín",
       "rfz": "ZsFZ",
-      "okresy": ["Trenčín", "Nové Mesto nad Váhom", "Myjava", "Bánovce nad Bebravou"],
-      "check": ["Myjava", "Bánovce nad Bebravou"]
+      "okresy": ["Trenčín", "Nové Mesto nad Váhom", "Myjava", "Bánovce nad Bebravou"]
     },
     { "id": "ObFZ Trnava", "rfz": "ZsFZ", "okresy": ["Trnava", "Hlohovec", "Piešťany"] },
     {
       "id": "ObFZ Považská Bystrica",
       "rfz": "ZsFZ",
-      "okresy": ["Považská Bystrica", "Púchov", "Ilava"],
-      "check": ["Ilava"]
+      "okresy": ["Považská Bystrica", "Púchov", "Ilava"]
     },
     { "id": "ObFZ Prievidza", "rfz": "ZsFZ", "okresy": ["Prievidza"] },
 
@@ -69,8 +66,7 @@
     {
       "id": "Spišský ObFZ",
       "rfz": "VsFZ",
-      "okresy": ["Spišská Nová Ves", "Levoča", "Gelnica"],
-      "check": ["Levoča", "Gelnica"]
+      "okresy": ["Spišská Nová Ves", "Levoča", "Gelnica"]
     },
     { "id": "ObFZ Stará Ľubovňa", "rfz": "VsFZ", "okresy": ["Stará Ľubovňa"] },
     { "id": "ObFZ Trebišov", "rfz": "VsFZ", "okresy": ["Trebišov"] },

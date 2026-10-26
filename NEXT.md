@@ -76,7 +76,7 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] Po prvom skutočnom uložení mentoringu overiť index `club_mentoring` cez `explain`; úlohy záveru sezóny skontrolovať v máji.
   - [ ] Vizitky klubov na mape (rozhodnuté 26. 10.): verejná stránka `/vizitka` – mapa SR (RFZ / ObFZ, farba podľa počtu klubov, klik = filter), filtre (názov, RFZ, ObFZ, veľkosť), zoznam verejných Vizitiek; zatiaľ pilotné kluby; hranice z geoBoundaries (OSM, ODbL); odkaz z úvodu a z hlavičky.
     - [ ] VK-a – mapa, filtre a zoznam (vetva `feat/vizitky-map`): hotové, PR na review.
-    - [ ] Cyril: skontrolovať tabuľku okres → ObFZ (`content/obfz-okresy.json`, sporné: Partizánske, Myjava, Bánovce nad Bebravou, Ilava, Levoča, Gelnica) a potom nastaviť `"reviewed": true`.
+    - [x] Tabuľka okres → ObFZ skontrolovaná Cyrilom (26. 10.).
     - [ ] VK-b – rebríček podľa veľkosti klubu a hviezd – až po určení pravidla hviezd (pozri levely klubu a hviezdy pri F5).
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
   - [ ] Prepojenie na web SFZ (rozhodnuté 22. 10.): v oblasti 3 odkaz na futbalsfz.sk pri prvej zmienke školenia, licencie a kontinuálneho vzdelávania v každej sekcii Metodiky a v každom kroku Praxe; rozcestník „Vzdelávanie trénera“ v oblasti 3 a dlaždica v Moja Akadémia; zoznam odkazov v `content/odkazy-sfz.json` (zmena cez PR); termíny len odkazom na SFZ Ticketing (nemá verejné API) – vetva `feat/sfz-links`, PR na review.

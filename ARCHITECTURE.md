@@ -103,7 +103,7 @@ MCP server (F5, plánovaný)        ─┘        │
 ### Vizitky klubov na mape (VK)
 
 1. Verejná stránka `/vizitka` – `vizitky.service.ts` skladá zoznam z verejnej Vizitky každého klubu (veľkosť, odoslaný Kompas, uzavreté licenčné), bez prihlásenia
-2. Mapa: `content/mapa-sr.json` (SVG cesty 8 krajov a 79 okresov z geoBoundaries / OpenStreetMap, ODbL, generuje `scripts/build-map.py`), `content/obfz-okresy.json` (38 ObFZ → okresy, RFZ), `content/kluby-okresy.json` (okres klubu); čisté funkcie v `src/lib/slovakia-map.ts`; RFZ sa kreslí z krajov, ObFZ z okresov
+2. Mapa: `content/mapa-sr.json` (SVG cesty 8 krajov a 79 okresov z geoBoundaries / OpenStreetMap, ODbL, generuje `scripts/build-map.py`), `content/obfz-okresy.json` (38 ObFZ → okresy, RFZ; skontrolované 26. 10. 2026), `content/kluby-okresy.json` (okres klubu); čisté funkcie v `src/lib/slovakia-map.ts`; RFZ sa kreslí z krajov, ObFZ z okresov
 3. Filtre a mapa bežia v prehliadači (desiatky klubov); pri stovkách klubov prejsť na filtrovanie na serveri
 
 ### Odkazy na web SFZ
