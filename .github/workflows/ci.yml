@@ -31,3 +31,14 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      # Visual regression of the SFZ design layer (R3.4, ADR 0019); baselines are Linux screenshots in e2e/__screenshots__
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
