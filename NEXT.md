@@ -77,7 +77,16 @@ Aktualizované: 22. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Vizitky klubov na mape (rozhodnuté 26. 10.): verejná stránka `/vizitka` – mapa SR (RFZ / ObFZ, farba podľa počtu klubov, klik = filter), filtre (názov, RFZ, ObFZ, veľkosť), zoznam verejných Vizitiek; zatiaľ pilotné kluby; hranice z geoBoundaries (OSM, ODbL); odkaz z úvodu a z hlavičky.
     - [x] VK-a – mapa, filtre a zoznam (PR #75, v produkcii `37f86dd`).
     - [x] Tabuľka okres → ObFZ skontrolovaná Cyrilom (26. 10.).
-    - [ ] VK-b – rebríčky v `/vizitka` (rozhodnuté 26. 10.): verejne; Kompas ★ v 5 pásmach po 44 b., licencovanie ★ ako priemer pásiem oblastí (bez pásma 1 … zlato 5), body aj hviezdy, nesčítavajú sa; zoradenie Kompas / licencovanie / hráči / ObFZ / RFZ; mapa aj podľa priemeru hviezd, tabuľky podľa veľkosti, poradie zväzov – vetva `feat/vizitka-rankings`, PR na review. Pravidlo je skúšobné – po pripomienkach kolegov (návrh na plátne „Rebríčky klubov – návrh“) prípadne upraviť.
+    - [x] VK-b – rebríčky v `/vizitka` (PR #77, v produkcii `e9b3501`); blok hľadania pod mapou, zoznam až po hľadaní (PR #78, `de5ed81`).
+  - [ ] Mentorský smer (rozhodnuté 26. 10.): prioritne pomôcť klubom a ľuďom v klube, hodnotenie a rebríčky majú motivovať.
+    - [ ] MR – motivačné rebríčky (ADR 0015): súhlas klubu (opt-in, vedenie), Kompas potvrdený mentorom (odznak), najväčší posun oproti minulej sezóne, míľniky sezóny, verejne len top 3 v každej veľkosti + hviezdy bez poradia.
+      - [ ] MR-a – dáta a API: kolekcia `club_settings` (súhlas), `confirmedAt`/`confirmedBy` v `kompas_submissions` – vetva `feat/mr-a-consent-confirm`.
+      - [ ] MR-b – pravidlá: posun, míľniky, verejný vs. úplný rebríček, bez „Kompas neodoslaný“ verejne.
+      - [ ] MR-c – rozhranie: prepínač súhlasu, tlačidlo „Potvrdiť Kompas“, odznaky a míľniky, blok „Najväčší posun“.
+    - [ ] DK – karta „Váš ďalší krok“ v Moja Akadémia a sprievodca „Prvých 30 dní v Akadémii“.
+    - [ ] ZK – sekcia „Zo života klubov“: príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
+    - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.
+    - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
   - [ ] Prepojenie na web SFZ (rozhodnuté 22. 10.): v oblasti 3 odkaz na futbalsfz.sk pri prvej zmienke školenia, licencie a kontinuálneho vzdelávania v každej sekcii Metodiky a v každom kroku Praxe; rozcestník „Vzdelávanie trénera“ v oblasti 3 a dlaždica v Moja Akadémia; zoznam odkazov v `content/odkazy-sfz.json` (zmena cez PR); termíny len odkazom na SFZ Ticketing (nemá verejné API) – vetva `feat/sfz-links`, PR na review.
     - [ ] Neskôr: rozšíriť automatické odkazy na ďalšie oblasti (napr. Ochrana detí v oblasti 11, ISSF v oblasti 10) – stačí doplniť `areas` v súbore.

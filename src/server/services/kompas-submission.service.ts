@@ -12,7 +12,8 @@ import { requireUser, type CurrentUser } from "@/server/services/users.service";
 /**
  * Sending the Kompas to the mentor = a frozen copy (answers, question texts, result, transfer line).
  * The club can keep editing and send again; submissions are the history.
- * Access: management/admin submit; management, coach and mentor of the club read submissions.
+ * Access: management/admin submit; management, coach and mentor of the club read submissions;
+ * the club's mentor or admin_sfz confirm a submission (a badge in the rankings, ADR 0015).
  */
 export interface SubmissionStore {
   addSubmission: (doc: Omit<KompasSubmissionDoc, "_id">) => Promise<StoredSubmission>;
@@ -24,6 +25,12 @@ export interface SubmissionStore {
     submissionId: string,
     withdrawnBy: string,
     withdrawnAt: Date,
+  ) => Promise<StoredSubmission | null>;
+  /** sets or clears the mentor's confirmation; null when not found or withdrawn */
+  setConfirmation: (
+    clubId: string,
+    submissionId: string,
+    confirmation: { by: string; at: Date } | null,
   ) => Promise<StoredSubmission | null>;
 }
 
@@ -47,6 +54,8 @@ export interface SubmissionSummary {
   line: string;
   /** set when admin_sfz withdrew the submission (ADR 0009) */
   withdrawnAt: Date | null;
+  /** set when the club's mentor or admin_sfz confirmed it (ADR 0015) */
+  confirmedAt: Date | null;
 }
 
 const summary = (s: StoredSubmission): SubmissionSummary => {
@@ -60,6 +69,7 @@ const summary = (s: StoredSubmission): SubmissionSummary => {
     filledAreas: r.filledAreas,
     line: s.line,
     withdrawnAt: s.status === "withdrawn" ? (s.withdrawnAt ?? null) : null,
+    confirmedAt: s.confirmedAt ?? null,
   };
 };
 
@@ -204,4 +214,34 @@ export async function withdrawKompasSubmission(
   );
   if (!withdrawn) throw new ApiError("CONFLICT", "Already withdrawn");
   return summary(withdrawn);
+}
+
+/** Confirms a submission or takes the confirmation back – the club's mentor of the season or
+ *  admin_sfz (ADR 0015). A badge only: the stars stay the same; a withdrawn one cannot be confirmed. */
+export async function confirmKompasSubmission(
+  deps: SubmissionDeps,
+  actor: CurrentUser | null,
+  clubId: string,
+  submissionId: string,
+  confirmed: boolean,
+): Promise<SubmissionSummary> {
+  const user = requireUser(actor);
+  if (!isAdmin(user)) {
+    const season = currentSeason(deps.now?.() ?? new Date());
+    const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
+    if (!roles.includes("mentor")) {
+      throw new ApiError("FORBIDDEN", "Only the club's mentor or admin_sfz can confirm");
+    }
+  }
+  const existing = await deps.submissions.findSubmission(clubId, submissionId);
+  if (!existing) throw new ApiError("NOT_FOUND", "Submission not found");
+  if (!isValidSubmission(existing))
+    throw new ApiError("CONFLICT", "A withdrawn Kompas cannot be confirmed");
+  const saved = await deps.submissions.setConfirmation(
+    clubId,
+    submissionId,
+    confirmed ? { by: user.id, at: deps.now?.() ?? new Date() } : null,
+  );
+  if (!saved) throw new ApiError("CONFLICT", "A withdrawn Kompas cannot be confirmed");
+  return summary(saved);
 }

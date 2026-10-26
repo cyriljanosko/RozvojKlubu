@@ -53,5 +53,16 @@ export function memorySubmissionStore(): SubmissionStore & { docs: StoredSubmiss
       Object.assign(d, { status: "withdrawn", withdrawnBy, withdrawnAt });
       return structuredClone(d);
     },
+    async setConfirmation(clubId, id, confirmation) {
+      const d = docs.find((x) => x.id === id && x.clubId === clubId && x.status !== "withdrawn");
+      if (!d) return null;
+      if (confirmation)
+        Object.assign(d, { confirmedBy: confirmation.by, confirmedAt: confirmation.at });
+      else {
+        delete d.confirmedBy;
+        delete d.confirmedAt;
+      }
+      return structuredClone(d);
+    },
   };
 }

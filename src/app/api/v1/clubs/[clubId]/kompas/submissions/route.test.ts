@@ -22,6 +22,7 @@ vi.mock("@/server/clubs/deps", () => ({
 const list = await import("./route");
 const one = await import("./[submissionId]/route");
 const withdraw = await import("./[submissionId]/withdraw/route");
+const confirm = await import("./[submissionId]/confirm/route");
 const mentor = await import("../../../../mentor/clubs/route");
 const p = <T>(x: T) => ({ params: Promise.resolve(x) }) as never;
 const req = (url: string, init?: RequestInit) => new Request(`http://localhost${url}`, init);
@@ -111,5 +112,27 @@ describe("Kompas submissions API", () => {
     expect(ok.status).toBe(200);
     expect((await ok.json()).data.withdrawnAt).toBeTruthy();
     expect((await withdraw.POST(req(url, { method: "POST" }), ctx())).status).toBe(409);
+  });
+
+  it("the mentor confirms a submission (200) and takes it back; management cannot (403)", async () => {
+    getCurrentUser.mockResolvedValue(alice);
+    const created = await list.POST(
+      req(`/api/v1/clubs/${A}/kompas/submissions`, {
+        method: "POST",
+        body: JSON.stringify({ expectedVersion: 1 }),
+      }),
+      p({ clubId: A }),
+    );
+    const { data: sub } = await created.json();
+    const url = `/api/v1/clubs/${A}/kompas/submissions/${sub.id}/confirm`;
+    const ctx = () => p({ clubId: A, submissionId: sub.id });
+
+    expect((await confirm.POST(req(url, { method: "POST" }), ctx())).status).toBe(403);
+    getCurrentUser.mockResolvedValue(bob); // mentor of the club
+    const ok = await confirm.POST(req(url, { method: "POST" }), ctx());
+    expect(ok.status).toBe(200);
+    expect((await ok.json()).data.confirmedAt).toBeTruthy();
+    const back = await confirm.DELETE(req(url, { method: "DELETE" }), ctx());
+    expect((await back.json()).data.confirmedAt).toBeNull();
   });
 });

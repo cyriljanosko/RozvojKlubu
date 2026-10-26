@@ -6,6 +6,7 @@ import { memoryContentStore } from "./content.fixture";
 import { seedContent } from "./content.service";
 import { memoryAssessmentStore, memorySubmissionStore } from "./kompas.fixture";
 import {
+  confirmKompasSubmission,
   getSubmission,
   listClubSubmissions,
   listMentorClubs,
@@ -117,5 +118,35 @@ describe("kompas submissions", () => {
     expect((await getSubmission(deps, mona, A, second.id)).status).toBe("withdrawn");
     const [row] = (await listMentorClubs(deps, mona)).filter((r) => r.clubId === A);
     expect(row.latest?.id).toBe(first.id);
+  });
+
+  it("the club's mentor or admin_sfz confirms a submission and can take it back (ADR 0015)", async () => {
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    const sub = await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    expect(sub.confirmedAt).toBeNull();
+
+    for (const who of [alice, bob]) {
+      await expect(confirmKompasSubmission(deps, who, A, sub.id, true)).rejects.toMatchObject({
+        code: "FORBIDDEN",
+      });
+    }
+    const confirmed = await confirmKompasSubmission(deps, mona, A, sub.id, true);
+    expect(confirmed.confirmedAt).toBeInstanceOf(Date);
+    expect((await getSubmission(deps, alice, A, sub.id)).confirmedBy).toBe("mona");
+    expect((await listClubSubmissions(deps, alice, A))[0].confirmedAt).toBeInstanceOf(Date);
+
+    expect((await confirmKompasSubmission(deps, admin, A, sub.id, false)).confirmedAt).toBeNull();
+    await expect(confirmKompasSubmission(deps, admin, B, sub.id, true)).rejects.toMatchObject({
+      code: "NOT_FOUND",
+    });
+
+    // a new submission starts unconfirmed; a withdrawn one cannot be confirmed
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1", "3.i.2"], expectedVersion: 1 });
+    const next = await submitKompas(deps, alice, A, { expectedVersion: 2 });
+    expect(next.confirmedAt).toBeNull();
+    await withdrawKompasSubmission(deps, admin, A, next.id);
+    await expect(confirmKompasSubmission(deps, mona, A, next.id, true)).rejects.toMatchObject({
+      code: "CONFLICT",
+    });
   });
 });

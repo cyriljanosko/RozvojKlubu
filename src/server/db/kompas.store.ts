@@ -101,4 +101,16 @@ export const mongoSubmissionStore: SubmissionStore = {
     );
     return doc ? toStored(doc) : null;
   },
+  async setConfirmation(clubId, submissionId, confirmation) {
+    if (!ObjectId.isValid(submissionId)) return null;
+    const db = await getDb();
+    const doc = await submissions(db).findOneAndUpdate(
+      { _id: new ObjectId(submissionId), clubId, status: { $ne: "withdrawn" } },
+      confirmation
+        ? { $set: { confirmedBy: confirmation.by, confirmedAt: confirmation.at } }
+        : { $unset: { confirmedBy: "", confirmedAt: "" } },
+      { returnDocument: "after" },
+    );
+    return doc ? toStored(doc) : null;
+  },
 };
