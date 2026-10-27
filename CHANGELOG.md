@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Opravené
+
+- Mentoring klubu: `?season=` (stránka `/klub/:clubId/mentoring` aj `GET /api/v1/clubs/:clubId/mentoring`) prijíma tvar `2025-2026` ako ostatné stránky; starý tvar `2025/2026` funguje ďalej (analýza obrazoviek, kap. 3.3, bod 5).
+
 ### Bezpečnosť
 
 - Next.js a `eslint-config-next` 16.4.0 → 16.4.3: verzia 16.4.0 má známu bezpečnostnú chybu (npm advisory), kvôli ktorej sa lokálny `next build` zastavoval.

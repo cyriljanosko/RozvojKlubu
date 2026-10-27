@@ -1,6 +1,6 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 26. 10. 2026. Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
@@ -17,6 +17,7 @@ Aktualizované: 26. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] R3.2 – navigačný model `src/lib/navigation.ts` (PR #90). Stránky `/viac`, členovia a nastavenia klubu, číselníky a Sportnet v administrácii model zatiaľ nemá – pribudnú s R3.3, R4 a S3.
     - [ ] R3.3 – rám aplikácie (vetva `feat/app-frame`): `AppFrame` v root layoute, `/viac`, `klub/[clubId]/layout.tsx`, `admin/layout.tsx`. Starú `src/components/site-header.tsx` už nič nepoužíva – zmazať so súhlasom.
     - [ ] R3.4 – lint pravidlá dizajnu a Playwright screenshoty v CI.
+  - [ ] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: bod 5 sezóna v Mentoringu ako slug (vetva `fix/mentoring-season-slug`).
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
   - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
