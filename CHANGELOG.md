@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Zmenené
+
+- Súhlas s verejným rebríčkom (ADR 0020, nahrádza časť ADR 0015): okrem vedenia klubu ho môže dať alebo zrušiť aj admin SFZ za klub – vo Vizitke klubu vidí prepínač, `PUT /api/v1/clubs/:clubId/settings/ranking-consent` ho pustí; ukladá sa, kto zmenu urobil, a vedenie ju môže vrátiť (analýza obrazoviek, kap. 3.3, bod 4).
+
 ### Bezpečnosť
 
 - Next.js a `eslint-config-next` 16.4.0 → 16.4.3: verzia 16.4.0 má známu bezpečnostnú chybu (npm advisory), kvôli ktorej sa lokálny `next build` zastavoval.

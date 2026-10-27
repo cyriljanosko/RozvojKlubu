@@ -96,7 +96,7 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ### Motivačné rebríčky (MR, ADR 0015)
 
-1. `GET /api/v1/clubs/:clubId/settings`, `PUT .../settings/ranking-consent` (`{ given, expectedVersion }`) – služba `club-settings.service.ts`, kolekcia `club_settings` (jeden dokument na klub, verzia, súbežná úprava → 409); súhlas so zaradením do verejného rebríčka (opt-in) dáva a ruší len vedenie klubu, číta každá rola klubu a admin SFZ
+1. `GET /api/v1/clubs/:clubId/settings`, `PUT .../settings/ranking-consent` (`{ given, expectedVersion }`) – služba `club-settings.service.ts`, kolekcia `club_settings` (jeden dokument na klub, verzia, súbežná úprava → 409); súhlas so zaradením do verejného rebríčka (opt-in) dáva a ruší vedenie klubu alebo admin SFZ za klub (ADR 0020), číta každá rola klubu a admin SFZ
 2. `POST|DELETE /api/v1/clubs/:clubId/kompas/submissions/:submissionId/confirm` – mentor klubu v sezóne alebo admin SFZ potvrdí odoslaný Kompas (odznak, `confirmedAt` / `confirmedBy`), stiahnutý sa potvrdiť nedá (409)
 3. `GET /api/v1/vizitky` (verejné, `vizitky.service.ts`): karty klubov – hviezdy, body licencovania, posun oproti minulej sezóne, potvrdenie a míľniky sezóny len pri kluboch so súhlasom (`listRankingConsents`); `viewer` určuje, pri ktorých kluboch smie používateľ vidieť neverejné poradie (admin SFZ všetky, mentor svoje, vedenie a tréner vlastný klub). Top 3, posun a poradie počíta `src/lib/rankings.ts`
 

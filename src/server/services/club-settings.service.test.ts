@@ -5,7 +5,7 @@ import { getClubSettings, setRankingConsent, type ClubSettingsDeps } from "./clu
 import { A, B, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import { addClubMember } from "./clubs.service";
 
-describe("club settings – consent to the rankings (MR-a, ADR 0015)", () => {
+describe("club settings – consent to the rankings (MR-a, ADR 0015, ADR 0020)", () => {
   let deps: ClubSettingsDeps & { settings: ReturnType<typeof memoryClubSettingsStore> };
   beforeEach(async () => {
     deps = { ...memoryDeps(), settings: memoryClubSettingsStore() };
@@ -13,7 +13,7 @@ describe("club settings – consent to the rankings (MR-a, ADR 0015)", () => {
     await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
   });
 
-  it("nobody decided yet: no consent, management may change it", async () => {
+  it("nobody decided yet: no consent, management and admin_sfz may change it", async () => {
     expect(await getClubSettings(deps, alice, A)).toEqual({
       clubId: A,
       rankingConsent: null,
@@ -21,7 +21,7 @@ describe("club settings – consent to the rankings (MR-a, ADR 0015)", () => {
       version: 0,
     });
     expect((await getClubSettings(deps, bob, A)).canEdit).toBe(false);
-    expect((await getClubSettings(deps, admin, A)).canEdit).toBe(false);
+    expect((await getClubSettings(deps, admin, A)).canEdit).toBe(true);
     expect(await deps.settings.listRankingConsents()).toEqual([]);
   });
 
@@ -38,12 +38,27 @@ describe("club settings – consent to the rankings (MR-a, ADR 0015)", () => {
     expect(deps.settings.docs[0]).toMatchObject({ clubId: A, updatedBy: "alice" });
   });
 
-  it("coaches, admin_sfz and other clubs cannot decide; strangers cannot read", async () => {
-    for (const user of [bob, admin]) {
-      await expect(
-        setRankingConsent(deps, user, A, { given: true, expectedVersion: 0 }),
-      ).rejects.toMatchObject({ code: "FORBIDDEN" });
-    }
+  it("admin_sfz changes the consent for the club (ADR 0020); the change records who made it", async () => {
+    const given = await setRankingConsent(deps, admin, A, { given: true, expectedVersion: 0 });
+    expect(given).toMatchObject({ rankingConsent: { given: true }, canEdit: true, version: 1 });
+    expect(await deps.settings.listRankingConsents()).toEqual([A]);
+    expect(deps.settings.docs[0]).toMatchObject({
+      clubId: A,
+      rankingConsent: { given: true, by: admin.id },
+      updatedBy: admin.id,
+    });
+    // management can still change it back
+    await setRankingConsent(deps, alice, A, { given: false, expectedVersion: 1 });
+    expect(await deps.settings.listRankingConsents()).toEqual([]);
+    await expect(
+      setRankingConsent(deps, admin, "nope", { given: true, expectedVersion: 0 }),
+    ).rejects.toMatchObject({ code: "NOT_FOUND" });
+  });
+
+  it("coaches and other clubs cannot decide; strangers cannot read", async () => {
+    await expect(
+      setRankingConsent(deps, bob, A, { given: true, expectedVersion: 0 }),
+    ).rejects.toMatchObject({ code: "FORBIDDEN" });
     await expect(
       setRankingConsent(deps, alice, B, { given: true, expectedVersion: 0 }),
     ).rejects.toMatchObject({ code: "FORBIDDEN" });
