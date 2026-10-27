@@ -3,6 +3,7 @@
 - Stav: prijaté
 - Dátum: 2026-10-26
 - Rozhodol: Cyril Janoško
+- Nahradené: 0020 (kto mení súhlas s verejným rebríčkom – aj admin SFZ za klub)
 
 ## Kontext
 
