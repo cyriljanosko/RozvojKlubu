@@ -74,6 +74,8 @@ export interface ClubVizitka extends PublicVizitka {
   kompasSubmittedAt: Date | null;
   licensingClosedAt: Date | null;
   licensingCoefficient: number | null;
+  /** where the Kompas link leads: the form, the last valid submission (mentor), or nowhere */
+  kompasLink: { kind: "assessment" } | { kind: "submission"; submissionId: string } | null;
   /** working versions not yet submitted / closed (0 = none) */
   drafts: { kompasVersion: number; licensingVersion: number };
 }
@@ -158,15 +160,18 @@ export async function getClubVizitka(
   season?: string | null,
 ): Promise<ClubVizitka> {
   const user = requireUser(actor);
-  if (!isAdmin(user)) {
-    const roles = clubRolesFor(
-      await deps.memberships.listByUser(user.id),
-      clubId,
-      currentSeason(deps.now?.() ?? new Date()),
-    );
-    if (roles.length === 0) throw new ApiError("FORBIDDEN", "No access to this club");
-  }
+  const roles = isAdmin(user)
+    ? []
+    : clubRolesFor(
+        await deps.memberships.listByUser(user.id),
+        clubId,
+        currentSeason(deps.now?.() ?? new Date()),
+      );
+  if (!isAdmin(user) && roles.length === 0)
+    throw new ApiError("FORBIDDEN", "No access to this club");
   const { view, latest, closed, licensingResult } = await build(deps, clubId, season);
+  // Same rule as the Kompas itself: a mentor alone never opens the working form (F4c).
+  const opensAssessment = isAdmin(user) || roles.includes("management") || roles.includes("coach");
   const [assessment, evaluation] = await Promise.all([
     deps.assessments.findAssessment(clubId, view.season),
     deps.evaluations.findEvaluation(clubId, view.season),
@@ -176,6 +181,11 @@ export async function getClubVizitka(
     kompasSubmittedAt: latest?.submittedAt ?? null,
     licensingClosedAt: closed?.closedAt ?? null,
     licensingCoefficient: licensingResult?.coefficient ?? null,
+    kompasLink: opensAssessment
+      ? { kind: "assessment" }
+      : latest
+        ? { kind: "submission", submissionId: latest.id }
+        : null,
     drafts: {
       kompasVersion: assessment?.version ?? 0,
       licensingVersion: evaluation?.version ?? 0,
