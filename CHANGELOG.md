@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Opravené
+
+- `/mentor` („Moje kluby v kohorte“): mentor vidí svoje kluby sezóny s posledným odoslaným Kompasom namiesto presmerovania do Moja Akadémia; admin SFZ ďalej všetky kluby, ostatní prihlásení hlášku „Nie ste mentor žiadneho klubu.“ (analýza obrazoviek, kap. 3.3, bod 3). Odkazy na `/mentor` v novej navigácii tak vedú tam, kam sľubujú.
+
 ### Bezpečnosť
 
 - Next.js a `eslint-config-next` 16.4.0 → 16.4.3: verzia 16.4.0 má známu bezpečnostnú chybu (npm advisory), kvôli ktorej sa lokálny `next build` zastavoval.
