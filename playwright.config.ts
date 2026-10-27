@@ -14,7 +14,8 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
-  updateSnapshots: process.env.CI ? "none" : "missing",
+  // Missing baselines are written; CI then fails until they are committed (.github/workflows/ci.yml)
+  updateSnapshots: "missing",
   expect: {
     toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: "disabled", caret: "hide" },
   },
