@@ -21,6 +21,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95), bod 5 (PR #96); bod 4 – admin SFZ mení súhlas s rebríčkom za klub (rozhodnutie Cyrila 28. 10., ADR 0020, PR #97).
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
     - [ ] G1a – Akadémia (Hub), Oblasti, Prihlásenie (vetva `feat/g1a-hub`). Ďalej G1b detail oblasti, G1c Kompas na vyskúšanie, G1d Kluby a verejná vizitka (rozdelenie G1 na 4 PR – Cyril 28. 10.).
+    - [ ] G1d – Kluby (`/vizitka`) a vizitka klubu (vetva `feat/g1d-clubs`): záložky Mapa / Rebríčky so všetkými doterajšími funkciami, zoznam až po hľadaní, hviezdičky v modrej SFZ, vizitka spoločná pre verejnú aj klubovú (Cyril 28. 10.). Klubovú vizitku overiť na preview ako klubový manažér; ikony míľnikov po vydaní DS.
     - [ ] Vizuálne testy Akadémie a Oblastí potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
   - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.

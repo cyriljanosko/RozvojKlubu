@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Redesign Klubov a vizitky (R4 G1d, ADR 0018): stránka Kluby (predtým „Vizitky klubov“) má záložky Mapa (mapa v stupnici modrej SFZ, rebríček zväzov) a Rebríčky (Top 3 podľa veľkosti, najväčší posun, ďalšie kluby, pravidlá), pod nimi vyhľadávanie s filtrami a zoznam klubov. Hviezdičky Kompasu aj licencií sú v modrej SFZ. Vizitka klubu (verejná aj klubová): hlavička s iniciálami klubu, pásmo veľkosti, sezóny čipmi, dve dlaždice, Kompas a licenčné hodnotenie po oblastiach v kartách, plán sezóny a míľniky v kartách.
 - Redesign verejnej časti, prvá časť (R4 G1a, ADR 0018): Akadémia (úvod), Oblasti a Prihlásenie v SFZ Design System podľa schváleného návrhu. Oblasti sú zoskupené podľa línií jedenástky (brankár, obrana, stred, útok) v odtieňoch modrej SFZ; rola sa vyberá čipmi, „Začnite tu“ je zvýraznená karta, Kompas s výberom klubu v karte. Úvod je pre všetkých rovnaký – prehľad prihláseného je v Moja Akadémia (Domov). Prihlásenie: „Prihlásiť sa cez sportnet.online“ so symbolom sportnet.online.
 
 ### Opravené
