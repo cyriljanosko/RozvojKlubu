@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
+import { Badge } from "@/components/sfz";
 import { MILESTONES, type Milestone } from "@/lib/rankings";
 
 const ICON: Record<Milestone, LucideIcon> = {
@@ -25,7 +26,7 @@ const ICON: Record<Milestone, LucideIcon> = {
  * Milestones of the season (MR-c, ADR 0015). `compact`: six icons and "4/6" – reached ones in
  * colour, the rest muted, names for screen readers and on hover. `list`: icon and name of each,
  * on a phone too; with `hrefs` a missing milestone links to where the club gets it. `legend`:
- * the names in colour, to explain the icons.
+ * the names in colour, to explain the icons. Icons stay from lucide until the design system has them.
  */
 export function Milestones({
   reached,
@@ -56,20 +57,18 @@ export function Milestones({
           const Icon = ICON[m];
           return (
             <span key={m} title={t(`names.${m}`)} aria-hidden>
-              <Icon
-                className={`size-4 ${has.has(m) ? "text-emerald-700 dark:text-emerald-400" : "text-muted-foreground/40"}`}
-              />
+              <Icon className={`size-4 ${has.has(m) ? "text-(--success)" : "text-(--hairline)"}`} />
             </span>
           );
         })}
-        <span className="text-muted-foreground ml-0.5 text-xs tabular-nums" aria-hidden>
+        <span className="caption-1 ml-0.5 text-(--ink-muted) tabular-nums" aria-hidden>
           {has.size}/{MILESTONES.length}
         </span>
       </span>
     );
   }
   return (
-    <ul className="grid gap-1.5 text-sm sm:grid-cols-2">
+    <ul className="subheadline grid gap-1.5 sm:grid-cols-2">
       {MILESTONES.map((m) => {
         const Icon = ICON[m];
         const done = variant === "legend" || has.has(m);
@@ -78,16 +77,16 @@ export function Milestones({
           <li key={m} className="flex items-center gap-2">
             <Icon
               aria-hidden
-              className={`size-4 shrink-0 ${done ? "text-emerald-700 dark:text-emerald-400" : "text-muted-foreground/50"}`}
+              className={`size-4 shrink-0 ${done ? "text-(--success)" : "text-(--hairline)"}`}
             />
-            <span className={done ? "" : "text-muted-foreground"}>
+            <span className={done ? "" : "text-(--ink-muted)"}>
               {t(`names.${m}`)}
               {variant === "list" && (
                 <span className="sr-only"> – {done ? t("done") : t("missing")}</span>
               )}
             </span>
             {href && (
-              <Link href={href} className="ml-auto shrink-0 text-xs underline underline-offset-4">
+              <Link href={href} className="footnote ml-auto shrink-0">
                 {t("how")}
               </Link>
             )}
@@ -102,9 +101,8 @@ export function Milestones({
 export function ConfirmedBadge() {
   const t = useTranslations("milestones");
   return (
-    <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 dark:text-emerald-400">
-      <BadgeCheck aria-hidden className="size-3.5" />
+    <Badge tone="success" dot>
       {t("confirmed")}
-    </span>
+    </Badge>
   );
 }
