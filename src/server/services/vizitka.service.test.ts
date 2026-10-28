@@ -136,6 +136,30 @@ describe("Vizitka klubu", () => {
     expect((await getPublicVizitka(deps, A)).kompas).toBeNull();
     expect((await getClubVizitka(deps, alice, A)).kompasSubmittedAt).toBeNull();
   });
+
+  it("links the mentor to the last submitted Kompas, never to the working form (F4c)", async () => {
+    await addClubMember(deps, admin, A, { email: "carl@iny.sk", role: "mentor" });
+    expect((await getClubVizitka(deps, carl, A)).kompasLink).toBeNull(); // nothing submitted yet
+
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
+    const first = await submitKompas(deps, alice, A, { expectedVersion: 1 });
+    await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1", "3.i.2"], expectedVersion: 1 });
+    deps.now = () => new Date("2026-10-17T12:00:00Z");
+    const second = await submitKompas(deps, alice, A, { expectedVersion: 2 });
+    expect((await getClubVizitka(deps, carl, A)).kompasLink).toEqual({
+      kind: "submission",
+      submissionId: second.id,
+    });
+    await withdrawKompasSubmission(deps, admin, A, second.id);
+    expect((await getClubVizitka(deps, carl, A)).kompasLink).toEqual({
+      kind: "submission",
+      submissionId: first.id,
+    });
+
+    for (const user of [alice, bob, admin]) {
+      expect((await getClubVizitka(deps, user, A)).kompasLink).toEqual({ kind: "assessment" });
+    }
+  });
 });
 
 describe("Vizitky – public list and motivational rankings (VK-a, VK-b, MR-b)", () => {
