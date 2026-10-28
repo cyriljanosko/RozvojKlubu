@@ -4,6 +4,13 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Opravené
+
+- Vizitka klubu: mentor už nevidí odkaz „Otvoriť Kompas“ na pracovnú verziu, ktorá mu vrátila „bez prístupu“ – odkaz ho vedie na posledný platný odoslaný Kompas; kým klub nič neodoslal, odkaz sa mentorovi nezobrazí (analýza obrazoviek, kap. 3.3, bod 1).
+- Mentoring klubu: kto je v klube mentor aj vedenie, píše časti klubu (úvodné sebahodnotenie, záver klubu) aj časti mentora (zameranie, záver mentora) – doteraz mal len práva mentora (analýza obrazoviek, kap. 3.3, bod 2).
+- `/mentor` („Moje kluby v kohorte“): mentor vidí svoje kluby sezóny s posledným odoslaným Kompasom namiesto presmerovania do Moja Akadémia; admin SFZ ďalej všetky kluby, ostatní prihlásení hlášku „Nie ste mentor žiadneho klubu.“ (analýza obrazoviek, kap. 3.3, bod 3). Odkazy na `/mentor` v novej navigácii tak vedú tam, kam sľubujú.
+- Mentoring klubu: `?season=` (stránka `/klub/:clubId/mentoring` aj `GET /api/v1/clubs/:clubId/mentoring`) prijíma tvar `2025-2026` ako ostatné stránky; starý tvar `2025/2026` funguje ďalej (analýza obrazoviek, kap. 3.3, bod 5).
+
 ### Zmenené
 
 - Súhlas s verejným rebríčkom (ADR 0020, nahrádza časť ADR 0015): okrem vedenia klubu ho môže dať alebo zrušiť aj admin SFZ za klub – vo Vizitke klubu vidí prepínač, `PUT /api/v1/clubs/:clubId/settings/ranking-consent` ho pustí; ukladá sa, kto zmenu urobil, a vedenie ju môže vrátiť (analýza obrazoviek, kap. 3.3, bod 4).
@@ -18,6 +25,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 - Technický základ redesignu (R3.1, ADR 0018): vrstva `src/components/sfz` – komponenty SFZ Design System za klientskou hranicou (`transpilePackages`, štýly `components.css` vo vrstve `components`), navigácia `AppNavBar`, `AppTabBar` a `LinkTabs` s `next/link`, akordeón, ukazovateľ postupu a jedna definícia pásiem Kompasu, licenčného hodnotenia a línií oblastí z tokenov. Obrazovky ich zatiaľ nepoužívajú.
 - Navigačný model redesignu (R3.2): `src/lib/navigation.ts` určuje položky hornej navigácie, spodnej lišty (najviac 5), menu „Viac“, podmenu klubu a menu administrácie podľa prihlásenia, roly v klube, mentora a admina SFZ; texty v `messages/sk.json` (`nav`). Rám aplikácie ho začne používať v R3.3.
 - Nový rám aplikácie (R3.3, ADR 0018): horná navigácia SFZ (od 768 px) a spodná lišta (mobil) podľa navigačného modelu namiesto doterajšej hlavičky s ikonami; stránka „Viac“ (`/viac`) so zvyškom menu a odhlásením; hlavička klubu s podmenu (Prehľad, Kompas, Plán, Licenčné hodnotenie, Mentoring, Návštevy) nad každou stránkou klubu; bočné menu administrácie. Obsah stránok sa nemení – prepíše sa v R4.
+- Ochrana dizajnu (R3.4, ADR 0019): lint pravidlá v prepísaných súboroch (zákaz shadcn, `lucide-react`, priameho importu dizajn systému, farieb mimo tokenov a farieb programov) a vizuálne regresné testy Playwright (`npm run test:e2e`) v CI – screenshoty ukážkovej stránky `/dev/ukazky` pri 375 px a 1280 px vo svetlej aj tmavej téme; stránka existuje len s `ENABLE_DEV_PAGES=1`.
 
 ### Zmenené
 

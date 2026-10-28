@@ -2,9 +2,79 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
+/**
+ * Files already rebuilt on the SFZ Design System (ADR 0018). Each redesigned group of screens
+ * (R4) adds its folders here, so the new design cannot slip back to shadcn or raw colours.
+ */
+export const REDESIGNED_FILES = [
+  "src/components/sfz/**",
+  "src/components/app-frame/**",
+  "src/app/layout.tsx",
+  "src/app/viac/**",
+  "src/app/dev/**",
+  "src/app/admin/layout.tsx",
+  "src/app/klub/[[]clubId]/layout.tsx",
+];
+
+/** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */
+// esquery regexes cannot contain "/", so opacity suffixes (bg-blue-600/50) are covered by the word boundary
+const PALETTE =
+  "\\b(bg|text|border(-[trblxyse])?|fill|stroke|ring|outline|decoration|divide|from|via|to|accent|caret|shadow)-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|slate|gray|zinc|neutral|stone|white|black)(-[0-9]+)?\\b";
+const RAW_COLOUR =
+  "#[0-9a-fA-F]{3}([0-9a-fA-F]{3}([0-9a-fA-F]{2})?)?\\b|\\brgba?\\(|\\bhsla?\\(|\\boklch\\(";
+const PROGRAMME = "--gold|--program-";
+
+const colourMessage =
+  "Farby len z tokenov SFZ Design System (ADR 0016, 0018) – žiadne hex, rgb(), oklch(), triedy palety Tailwindu ani farby programov.";
+
+const designGuard = {
+  files: REDESIGNED_FILES,
+  ignores: ["**/*.test.ts"],
+  rules: {
+    "no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          {
+            name: "@slovensky-futbalovy-zvaz/design-system",
+            message: "Komponenty dizajn systému importuj z @/components/sfz (ADR 0018).",
+          },
+          {
+            name: "lucide-react",
+            message:
+              "Ikony z dizajn systému (Icon z @/components/sfz); chýbajúce doplniť do sfz-design-system.",
+          },
+        ],
+        patterns: [
+          {
+            group: ["@/components/ui", "@/components/ui/*"],
+            message: "Prepísané obrazovky nepoužívajú shadcn – len @/components/sfz (ADR 0018).",
+          },
+        ],
+      },
+    ],
+    "no-restricted-syntax": [
+      "error",
+      { selector: `Literal[value=/${PALETTE}/]`, message: colourMessage },
+      { selector: `TemplateElement[value.raw=/${PALETTE}/]`, message: colourMessage },
+      { selector: `Literal[value=/${RAW_COLOUR}|${PROGRAMME}/]`, message: colourMessage },
+      {
+        selector: `TemplateElement[value.raw=/${RAW_COLOUR}|${PROGRAMME}/]`,
+        message: colourMessage,
+      },
+    ],
+  },
+};
+
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  designGuard,
+  {
+    // The one place that may import the design system package directly
+    files: ["src/components/sfz/ds.ts"],
+    rules: { "no-restricted-imports": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -12,6 +82,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Playwright output
+    "test-results/**",
+    "playwright-report/**",
   ]),
 ]);
 

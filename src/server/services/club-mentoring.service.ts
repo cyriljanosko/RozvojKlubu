@@ -4,7 +4,7 @@ import { ApiError } from "@/server/api/errors";
 import type { ClubMentoringDoc, MentoringClosingClub } from "@/server/db/types";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
-import { currentSeason } from "@/server/services/season";
+import { currentSeason, seasonFromSlug } from "@/server/services/season";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
 /**
@@ -82,23 +82,25 @@ export const canWrite = (role: MentoringRole, part: MentoringPartKey) =>
 /** Pure: the club's remarks on the mentoring – not for coaches (decision 22. 10. 2026). */
 export const seesFeedback = (role: MentoringRole) => role !== "coach";
 
-async function roleFor(
+/** Every mentoring role of the user in the club, the main one first (mentor before management):
+ *  a mentor who is also the club's management writes both the club and the mentor parts. */
+async function rolesFor(
   deps: MentoringDeps,
   user: CurrentUser,
   clubId: string,
-): Promise<MentoringRole> {
-  if (isAdmin(user)) return "admin";
+): Promise<MentoringRole[]> {
+  if (isAdmin(user)) return ["admin"];
   const season = currentSeason(deps.now?.() ?? new Date());
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
-  if (roles.includes("mentor")) return "mentor";
-  if (roles.includes("management")) return "management";
-  if (roles.includes("coach")) return "coach";
-  throw new ApiError("FORBIDDEN", "No access to this club's mentoring");
+  const found = (["mentor", "management", "coach"] as const).filter((r) => roles.includes(r));
+  if (found.length === 0) throw new ApiError("FORBIDDEN", "No access to this club's mentoring");
+  return found;
 }
 
 export interface MentoringView {
   clubId: string;
   season: string;
+  /** the viewer's main role (mentor before management) */
   role: MentoringRole;
   /** parts the viewer may write (current season only) */
   writes: MentoringPartKey[];
@@ -116,20 +118,22 @@ export interface MentoringView {
 /** Pure: what the viewer sees of the season's document. */
 export function mentoringView(
   doc: ClubMentoringDoc | null,
-  meta: { clubId: string; season: string; role: MentoringRole; current: boolean },
+  meta: { clubId: string; season: string; roles: MentoringRole[]; current: boolean },
 ): MentoringView {
   const closingClub = doc?.closingClub ?? null;
   return {
     clubId: meta.clubId,
     season: meta.season,
-    role: meta.role,
+    role: meta.roles[0],
     writes: meta.current
-      ? (Object.keys(WRITERS) as MentoringPartKey[]).filter((p) => canWrite(meta.role, p))
+      ? (Object.keys(WRITERS) as MentoringPartKey[]).filter((p) =>
+          meta.roles.some((r) => canWrite(r, p)),
+        )
       : [],
     intro: doc?.intro ?? null,
     focus: doc?.focus ?? null,
     closingClub: closingClub
-      ? { ...closingClub, feedback: seesFeedback(meta.role) ? closingClub.feedback : null }
+      ? { ...closingClub, feedback: meta.roles.some(seesFeedback) ? closingClub.feedback : null }
       : null,
     closingMentor: doc?.closingMentor ?? null,
     version: doc?.version ?? 0,
@@ -146,9 +150,14 @@ async function requireClub(deps: MentoringDeps, clubId: string) {
   if (!(await deps.clubs.findClub(clubId))) throw new ApiError("NOT_FOUND", "Club not found");
 }
 
+/** `?season=` as the URL slug "2025-2026" like other pages; the older "2025/2026" form still works. */
 const seasonSchema = z
   .string()
-  .regex(/^\d{4}\/\d{4}$/)
+  .transform((value, ctx) => {
+    const season = seasonFromSlug(value);
+    if (!season) ctx.addIssue({ code: "custom", message: "Invalid season" });
+    return season ?? z.NEVER;
+  })
   .nullish();
 
 export async function getClubMentoring(
@@ -158,14 +167,14 @@ export async function getClubMentoring(
   season?: string | null,
 ): Promise<MentoringView> {
   const user = requireUser(actor);
-  const role = await roleFor(deps, user, clubId);
+  const roles = await rolesFor(deps, user, clubId);
   await requireClub(deps, clubId);
   const now = currentSeason(deps.now?.() ?? new Date());
   const wanted = seasonSchema.parse(season) ?? now;
   return mentoringView(await deps.mentoring.findMentoring(clubId, wanted), {
     clubId,
     season: wanted,
-    role,
+    roles,
     current: wanted === now,
   });
 }
@@ -179,8 +188,8 @@ export async function saveMentoringPart(
   input: unknown,
 ): Promise<MentoringView> {
   const user = requireUser(actor);
-  const role = await roleFor(deps, user, clubId);
-  if (!canWrite(role, part)) {
+  const roles = await rolesFor(deps, user, clubId);
+  if (!roles.some((r) => canWrite(r, part))) {
     throw new ApiError("FORBIDDEN", `This role cannot write the ${part} part`);
   }
   await requireClub(deps, clubId);
@@ -195,7 +204,7 @@ export async function saveMentoringPart(
     updatedBy: user.id,
   });
   if (!saved) throw new ApiError("CONFLICT", "The mentoring was changed by someone else");
-  return mentoringView(saved, { clubId, season, role, current: true });
+  return mentoringView(saved, { clubId, season, roles, current: true });
 }
 
 export type MentoringStatus = Record<MentoringPartKey, boolean>;

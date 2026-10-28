@@ -137,12 +137,18 @@ export async function VizitkaView({
               {club.drafts.kompasVersion > 0 && !club.kompasSubmittedAt && (
                 <span>{t("kompas.draftOnly", { version: club.drafts.kompasVersion })}</span>
               )}
-              <Link
-                href={`${base}/kompas`}
-                className="text-sm font-medium underline underline-offset-4"
-              >
-                {t("kompas.link")}
-              </Link>
+              {club.kompasLink && (
+                <Link
+                  href={
+                    club.kompasLink.kind === "assessment"
+                      ? `${base}/kompas`
+                      : `${base}/kompas/odoslane/${encodeURIComponent(club.kompasLink.submissionId)}`
+                  }
+                  className="text-sm font-medium underline underline-offset-4"
+                >
+                  {t("kompas.link")}
+                </Link>
+              )}
             </div>
           )}
         </section>

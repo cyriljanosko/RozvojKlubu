@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/server/auth/session";
 import { mentoringDeps } from "@/server/clubs/deps";
 import { getClubMentoring } from "@/server/services/club-mentoring.service";
 
-/** GET ?season= – the club's mentoring cycle (MC): intro, focus, closings; current season by default. */
+/** GET ?season=2025-2026 (or 2025/2026) – the club's mentoring cycle (MC): intro, focus, closings; current season by default. */
 export const GET = apiHandler<RouteContext<"/api/v1/clubs/[clubId]/mentoring">>(
   async (request, context) => {
     await connection();
