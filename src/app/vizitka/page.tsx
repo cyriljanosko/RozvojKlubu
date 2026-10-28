@@ -23,10 +23,10 @@ async function Vizitky({ searchParams }: Props) {
   const q = await searchParams;
   const { cards, viewer } = await listVizitky(rankingsDeps, await getCurrentUser(await headers()));
   return (
-    <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground max-w-2xl text-sm">{t("intro")}</p>
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-col gap-2">
+        <h1 className="large-title">{t("title")}</h1>
+        <p className="body max-w-2xl text-(--ink-muted)">{t("intro")}</p>
       </header>
       <VizitkyExplorer
         cards={cards}
@@ -37,6 +37,7 @@ async function Vizitky({ searchParams }: Props) {
           obfz: str(q.obfz),
           size: str(q.size),
           sort: str(q.sort),
+          view: str(q.view),
         }}
       />
     </div>
@@ -45,7 +46,7 @@ async function Vizitky({ searchParams }: Props) {
 
 export default function VizitkyPage(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-10 sm:px-6 sm:py-14">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-10">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <Vizitky {...props} />
       </Suspense>

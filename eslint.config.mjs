@@ -28,6 +28,12 @@ export const REDESIGNED_FILES = [
   // R4 G1c – Kompas na vyskúšanie; the form is shared with the club Kompas (page itself in G2)
   "src/app/kompas/**",
   "src/app/klub/[[]clubId]/kompas/kompas-form.tsx",
+  // R4 G1d – Kluby a vizitka (verejná aj klubová); milestones.tsx waits for DS icons
+  "src/app/vizitka/**",
+  "src/components/vizitka/public-plan.tsx",
+  "src/components/vizitka/stars.tsx",
+  "src/components/vizitka/vizitka-view.tsx",
+  "src/components/vizitka/vizitky-explorer.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

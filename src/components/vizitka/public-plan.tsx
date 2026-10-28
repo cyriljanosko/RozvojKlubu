@@ -1,9 +1,12 @@
 import { getTranslations } from "next-intl/server";
 
+import { Badge, Card } from "@/components/sfz";
 import { planDeps } from "@/server/clubs/deps";
 import { mongoContentStore } from "@/server/db/content.store";
 import { getPublicPlan } from "@/server/services/club-plan.service";
 import { listAreas } from "@/server/services/content.service";
+
+const STATUS_TONE = { todo: "neutral", doing: "info", done: "success" } as const;
 
 /** "What the club works on this season" – area, public sentence and status, never names (CP-b). */
 export async function PublicPlan({ clubId, season }: { clubId: string; season: string }) {
@@ -15,27 +18,22 @@ export async function PublicPlan({ clubId, season }: { clubId: string; season: s
   if (plan.goals.length === 0) return null;
   const areaName = (n: number) => areas.find((a) => a.number === n)?.name ?? "";
   return (
-    <section aria-labelledby="vizitka-plan" className="flex flex-col gap-3">
-      <h2 id="vizitka-plan" className="text-lg font-semibold">
-        {t("vizitka.title")}
-      </h2>
-      <ul className="grid gap-2 sm:grid-cols-2">
+    <Card title={t("vizitka.title")}>
+      <ul className="flex flex-col gap-3">
         {plan.goals.map((g, i) => (
-          <li key={i} className="flex flex-col gap-1 rounded-xl border p-4 text-sm">
-            <p className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="text-muted-foreground">
+          <li key={i} className="flex items-start gap-3">
+            <Badge tone={STATUS_TONE[g.status]} className="shrink-0">
+              {t(`status.${g.status}`)}
+            </Badge>
+            <span className="flex min-w-0 flex-col gap-0.5">
+              <span className="callout">{g.publicText}</span>
+              <span className="footnote text-(--ink-muted)">
                 {g.area} · {areaName(g.area)}
               </span>
-              <span
-                className={`rounded-full border px-2 py-0.5 ${g.status === "done" ? "border-green-700 text-green-700 dark:border-green-500 dark:text-green-500" : ""}`}
-              >
-                {t(`status.${g.status}`)}
-              </span>
-            </p>
-            <p>{g.publicText}</p>
+            </span>
           </li>
         ))}
       </ul>
-    </section>
+    </Card>
   );
 }
