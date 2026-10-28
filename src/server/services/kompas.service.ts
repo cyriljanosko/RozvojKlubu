@@ -6,6 +6,7 @@ import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import type { ContentStore } from "@/server/services/content.service";
 import {
+  ALL_CATEGORIES,
   clubCategories,
   isQuestionValid,
   scoreKompas,
@@ -159,7 +160,8 @@ export async function saveKompasAnswers(
 }
 
 export interface KompasTemplate {
-  club: { clubId: string; name: string; union: string };
+  /** null = trial without a club (every category applies) */
+  club: { clubId: string; name: string; union: string } | null;
   season: string;
   categories: ClubCategory[];
   categoriesFromSeason: string | null;
@@ -168,16 +170,21 @@ export interface KompasTemplate {
 
 /** Public trial Kompas (ADR 0011): questions with validity for the club's Sportnet categories.
  *  Nothing is read from or written to the club's assessment; answers stay in the browser. */
-export async function getKompasTemplate(deps: KompasDeps, clubId: string): Promise<KompasTemplate> {
-  const club = await deps.clubs.findClub(clubId);
-  if (!club) throw new ApiError("NOT_FOUND", "Club not found");
+export async function getKompasTemplate(
+  deps: KompasDeps,
+  clubId: string | null,
+): Promise<KompasTemplate> {
+  const club = clubId === null ? null : await deps.clubs.findClub(clubId);
+  if (clubId !== null && !club) throw new ApiError("NOT_FOUND", "Club not found");
   const season = currentSeason(deps.now?.() ?? new Date());
   const [{ categories, from }, questions] = await Promise.all([
-    categoriesFor(deps, clubId, season),
+    club
+      ? categoriesFor(deps, club.clubId, season)
+      : { categories: [...ALL_CATEGORIES], from: null },
     deps.content.listQuestions(),
   ]);
   return {
-    club: { clubId: club.clubId, name: club.name, union: club.union },
+    club: club && { clubId: club.clubId, name: club.name, union: club.union },
     season,
     categories,
     categoriesFromSeason: from,

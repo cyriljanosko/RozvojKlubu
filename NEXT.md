@@ -21,8 +21,9 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95), bod 5 (PR #96); bod 4 – admin SFZ mení súhlas s rebríčkom za klub (rozhodnutie Cyrila 28. 10., ADR 0020, PR #97).
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
     - [x] G1a – Akadémia (Hub), Oblasti, Prihlásenie (PR #98). Rozdelenie G1 na 4 PR – Cyril 28. 10.
-    - [ ] G1b – detail oblasti `/oblasti/[area]` (Metodika v akordeóne podľa roly, Prax na kartách so Stepperom) – vetva `feat/g1b-area-detail`.
-    - [ ] G1c Kompas na vyskúšanie, G1d Kluby a verejná vizitka.
+    - [x] G1b – detail oblasti `/oblasti/[area]` (Metodika v akordeóne podľa roly, Prax na kartách so Stepperom) – PR #101.
+    - [ ] G1c – Kompas na vyskúšanie (vetva `feat/g1c-kompas-trial`): nový formulár Kompasu (spoločný s Kompasom klubu), vyskúšanie bez klubu, prenos odpovedí z vyskúšania do Kompasu klubu (Cyril 28. 10.). Prenos overiť na preview ako klubový manažér.
+    - [ ] G1d Kluby a verejná vizitka.
     - [ ] Vizuálne testy Akadémie, Oblastí a detailu oblasti potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
   - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
