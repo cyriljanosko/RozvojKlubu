@@ -257,7 +257,10 @@
     "allRoles": "Všetky roly",
     "forYourRole": "pre vašu rolu",
     "tagsDraft": "Priradenie sekcií k rolám je návrh a ešte ho skontroluje pracovná skupina. Rola mení len poradie – všetky sekcie zostávajú dostupné.",
-    "progressClub": "Postup za klub"
+    "progressClub": "Postup za klub",
+    "ofEleven": "{number} / 11",
+    "forRoleGroup": "Pre rolu: {role}",
+    "otherTopics": "Ďalšie témy oblasti"
   },
   "practice": {
     "chooseRole": "Kto ste v tejto oblasti?",
@@ -309,8 +312,13 @@
       "doneOn": "Hotové {date}",
       "signIn": "Postup klubu si po prihlásení môžete odškrtávať a ukladať.",
       "signInLink": "Prihlásiť sa",
-      "noClub": "Postup si ukladá klub – vedenie alebo tréner s rolou v klube."
-    }
+      "noClub": "Postup si ukladá klub – vedenie alebo tréner s rolou v klube.",
+      "signInTitle": "Váš postup sa neukladá"
+    },
+    "templates": "Vzory na stiahnutie",
+    "pathOverview": "Cesta krok za krokom",
+    "stepOf": "Krok {n} z {total}",
+    "options": "Možnosti"
   },
   "kompas": {
     "title": "Kompas klubu",

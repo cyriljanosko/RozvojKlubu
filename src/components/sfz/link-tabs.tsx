@@ -9,15 +9,17 @@ interface LinkTabsProps {
   items: readonly NavLink[];
   navLabel: string;
   variant?: "underline" | "segmented";
+  /** Active item when it depends on the query (e.g. ?tab=prax), not on the path. */
+  active?: string;
 }
 
 /**
  * Sub-menu (club, mentor) as page links styled like the design system's Tabs (ADR 0018).
  * These are navigation, not a tablist, so they render as <nav> with aria-current.
  */
-export function LinkTabs({ items, navLabel, variant = "underline" }: LinkTabsProps) {
+export function LinkTabs({ items, navLabel, variant = "underline", active: given }: LinkTabsProps) {
   const pathname = usePathname();
-  const active = activeLinkId(pathname, items);
+  const active = given ?? activeLinkId(pathname, items);
   return (
     <nav aria-label={navLabel}>
       <div className={`sfz-tabs sfz-tabs--${variant}`}>
