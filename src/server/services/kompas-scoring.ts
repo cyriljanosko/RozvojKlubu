@@ -27,6 +27,9 @@ export function bandOf(points: number): (typeof BANDS)[number] {
   return BANDS.find((b) => p >= b.min && p <= b.max) ?? BANDS[0];
 }
 
+/** Every club category, in display order; the trial Kompas without a club assumes all of them. */
+export const ALL_CATEGORIES: readonly ClubCategory[] = ["D", "Z", "DO", "S", "zd"];
+
 /** Categories from the club's teams in Sportnet: U06–U11 → D, U12–U15 → Z, U16–U19 → DO, U21/ADULTS → S, any women's team → zd. */
 export function clubCategories(
   teams: readonly Pick<TeamSummary, "ageGroup" | "gender">[],
@@ -41,8 +44,7 @@ export function clubCategories(
       out.add(age <= 11 ? "D" : age <= 15 ? "Z" : "DO");
     }
   }
-  const order: ClubCategory[] = ["D", "Z", "DO", "S", "zd"];
-  return order.filter((c) => out.has(c));
+  return ALL_CATEGORIES.filter((c) => out.has(c));
 }
 
 export interface ScoringQuestion {

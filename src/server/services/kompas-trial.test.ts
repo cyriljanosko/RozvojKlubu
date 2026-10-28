@@ -26,4 +26,16 @@ describe("public trial Kompas (ADR 0011)", () => {
     expect(t.questions.some((q) => !q.valid)).toBe(true);
     await expect(getKompasTemplate(deps, "nope")).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
+
+  it("without a club treats the club as having every category, so all questions apply", async () => {
+    const content = memoryContentStore();
+    await seedContent(content, admin);
+    const deps = { ...memoryDeps(), content, assessments: memoryAssessmentStore() };
+    const t = await getKompasTemplate(deps, null);
+    expect(t.club).toBeNull();
+    expect(t.categories).toEqual(["D", "Z", "DO", "S", "zd"]);
+    expect(t.categoriesFromSeason).toBeNull();
+    expect(t.questions).toHaveLength(220);
+    expect(t.questions.every((q) => q.valid && !q.checked)).toBe(true);
+  });
 });
