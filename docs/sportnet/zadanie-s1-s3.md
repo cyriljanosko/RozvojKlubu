@@ -114,7 +114,7 @@ desktope; texty cez next-intl; aktualizovaný `NEXT.md`, `CHANGELOG.md` a devlog
 
 ## 8. Otvorené otázky – odpovede 28. 10. 2026 (Ján Letko, SFZ)
 
-1. **OAuth klient** – nastaví Cyril, prípadne po konzultácii s vývojármi sportnet.online. Čo treba
+1. **OAuth klient** – nastaví Ján (SFZ), prípadne po konzultácii s vývojármi sportnet.online. Čo treba
    (client_id, hosty, redirect URI, granty, scope, claims): `docs/sportnet/otazky-sportnet-online.md`, časť A.
 2. **Token pre register členov** – nie JWT používateľa, ale aplikačný token (`client_credentials`, rovnaký
    `client_id` a `secret`). Až v S3; pre zoznam osôb klubu zatiaľ stačí verejný `GET /ppo/{appSpace}/users`.

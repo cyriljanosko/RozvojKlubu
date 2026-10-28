@@ -1,6 +1,6 @@
 # Rozvoj klubu × sportnet.online – OAuth klient a otázky pre vývojárov
 
-> Stav: 28. 10. 2026 – pripravené pre Cyrila (nastaví OAuth klienta, prípadne prekonzultuje so sportnet.online).
+> Stav: 28. 10. 2026 – OAuth klienta nastaví a otázky vývojárom sportnet.online pošle Ján (SFZ); Cyril dostane hodnoty do Vercelu.
 > Kontext: ADR 0002 (prihlásenie Sportnet), ADR 0021 (roly v klube), zadanie `zadanie-s1-s3.md`.
 > Overené v dokumentácii auth.sportnet.online a CoreApi a na živom verejnom API 28. 10. 2026.
 
