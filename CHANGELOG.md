@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Zmenené
+
+- Redesign verejnej časti, prvá časť (R4 G1a, ADR 0018): Akadémia (úvod), Oblasti a Prihlásenie v SFZ Design System podľa schváleného návrhu. Oblasti sú zoskupené podľa línií jedenástky (brankár, obrana, stred, útok) v odtieňoch modrej SFZ; rola sa vyberá čipmi, „Začnite tu“ je zvýraznená karta, Kompas s výberom klubu v karte. Úvod je pre všetkých rovnaký – prehľad prihláseného je v Moja Akadémia (Domov). Prihlásenie: „Prihlásiť sa cez sportnet.online“ so symbolom sportnet.online.
+
 ### Opravené
 
 - Vizitka klubu: mentor už nevidí odkaz „Otvoriť Kompas“ na pracovnú verziu, ktorá mu vrátila „bez prístupu“ – odkaz ho vedie na posledný platný odoslaný Kompas; kým klub nič neodoslal, odkaz sa mentorovi nezobrazí (analýza obrazoviek, kap. 3.3, bod 1).
