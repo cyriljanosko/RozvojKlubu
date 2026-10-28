@@ -25,6 +25,9 @@ export const REDESIGNED_FILES = [
   "src/components/content/markdown.tsx",
   "src/components/content/practice-progress.tsx",
   "src/components/content/practice-view.tsx",
+  // R4 G1c – Kompas na vyskúšanie; the form is shared with the club Kompas (page itself in G2)
+  "src/app/kompas/**",
+  "src/app/klub/[[]clubId]/kompas/kompas-form.tsx",
   // R4 G1d – Kluby a vizitka (verejná aj klubová); milestones.tsx waits for DS icons
   "src/app/vizitka/**",
   "src/components/vizitka/public-plan.tsx",

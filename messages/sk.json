@@ -402,6 +402,19 @@
       "hint": "Potvrdenie mentorom je odznak pri Kompase vo Vizitke a v rebríčku; body sa nemenia.",
       "error": "Nepodarilo sa uložiť, skúste to znova.",
       "confirmed": "Potvrdené mentorom {date}"
+    },
+    "areas": "Oblasti",
+    "filledShort": "vyplnené {filled} z 11",
+    "answered": "{answered} z {total} odpovedí",
+    "howTo": "Ako na to v oblasti {name}",
+    "result": "Výsledok",
+    "transfer": {
+      "title": "Máte odpovede z vyskúšania ({count})",
+      "body": "V tomto prehliadači ste si Kompas vyskúšali. Odpovede môžete prevziať do Kompasu klubu a potom ich uložiť.",
+      "replace": "V tomto prehliadači ste si Kompas vyskúšali. Prevzatím nahradíte odpovede vo formulári – uložia sa až tlačidlom Uložiť.",
+      "take": "Prevziať odpovede",
+      "dismiss": "Zahodiť",
+      "saveNow": "Odpovede z vyskúšania sú vo formulári. Uložte ich, aby sa zapísali do Kompasu klubu."
     }
   },
   "mentor": {
@@ -803,17 +816,22 @@
     "favorites": "★ Obľúbené"
   },
   "trialKompas": {
-    "title": "Kompas klubu – vyskúšajte",
-    "intro": "Sebahodnotenie v 11 oblastiach. V každej zaškrtnete, čo v klube naozaj platí, a skóre sa vypočíta samo.",
-    "pick": "Najprv vyberte svoj klub. Kategórie (deti, žiaci, dorast, dospelí, ženy) vezmeme zo Sportnetu, nezadávajú sa ručne.",
+    "title": "Kompas",
+    "intro": "Odškrtnite, čo už váš klub robí. Uvidíte, kde je silný a čím začať.",
     "pilot": "Pilot: kluby zapojené do Akadémie. Ďalšie pribudnú po overení pilotu.",
-    "change": "Zmeniť klub",
-    "local": "Toto je vyskúšanie: odpovede zostanú len v tomto prehliadači, nikam sa neodosielajú a mentor ich nevidí.",
-    "signIn": "Ste manažér alebo člen výboru klubu? Prihláste sa a Kompas uložte a odošlite mentorovi.",
+    "local": "Odpovede ostanú v tomto prehliadači. Po prihlásení ich klubový manažér môže preniesť do Kompasu klubu.",
+    "signIn": "Ste klubový manažér? Prihláste sa – odpovede z vyskúšania prenesiete do Kompasu klubu, uložíte ich a odošlete mentorovi.",
     "signInButton": "Prihlásiť sa",
     "member": "V tomto klube máte rolu – Kompas klubu si môžete uložiť a odoslať.",
     "memberButton": "Otvoriť Kompas klubu",
-    "notFound": "Klub sa nenašiel."
+    "notFound": "Klub sa nenašiel.",
+    "clubLabel": "Váš klub",
+    "noClub": "Bez klubu – len sa otestujem",
+    "show": "Zobraziť",
+    "localTitle": "Len na vyskúšanie",
+    "noClubHint": "Bez klubu platia všetky otázky. Kategórie klubu (deti, žiaci, dorast, dospelí, ženy) sa po výbere klubu vezmú zo Sportnetu.",
+    "memberTitle": "Kompas vášho klubu",
+    "signInTitle": "Uložiť a odoslať mentorovi"
   },
   "hub": {
     "eyebrow": "Slovenský futbalový zväz",
