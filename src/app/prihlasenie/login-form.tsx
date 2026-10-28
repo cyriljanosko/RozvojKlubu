@@ -1,12 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useState, type FormEvent } from "react";
-import { Loader2, Mail } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Alert, Button, Input } from "@/components/sfz";
 import { authClient } from "@/lib/auth-client";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -38,15 +36,14 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
 
   if (status === "sent") {
     return (
-      <div role="status" className="flex flex-col gap-2 rounded-lg border p-4">
-        <p className="font-medium">{t("sentTitle")}</p>
-        <p className="text-muted-foreground text-sm">
+      <div role="status" className="flex flex-col gap-3">
+        <Alert tone="success" title={t("sentTitle")}>
           {t.rich("sentBody", {
             email,
             strong: (chunks) => <strong className="break-all">{chunks}</strong>,
           })}
-        </p>
-        <Button variant="link" className="self-start px-0" onClick={() => setStatus("idle")}>
+        </Alert>
+        <Button variant="tertiary" onClick={() => setStatus("idle")}>
           {t("useAnotherEmail")}
         </Button>
       </div>
@@ -57,51 +54,49 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
     <div className="flex flex-col gap-6">
       {sportnetEnabled && (
         <>
-          <Button size="lg" className="w-full" onClick={signInWithSportnet} disabled={redirecting}>
-            {redirecting && <Loader2 className="animate-spin" aria-hidden />}
+          <Button size="lg" block onClick={signInWithSportnet} loading={redirecting}>
+            {/* sportnet.online symbol from its own site (approved 26. 10. 2026) */}
+            <Image
+              src="/brand/sportnet-online-symbol.svg"
+              alt=""
+              width={22}
+              height={24}
+              className="mr-1 inline-block align-middle"
+            />
             {t("sportnetButton")}
           </Button>
-          <div className="text-muted-foreground flex items-center gap-3 text-xs">
-            <span className="bg-border h-px flex-1" />
+          <div className="footnote flex items-center gap-3 text-(--ink-muted)">
+            <span className="h-px flex-1 bg-(--hairline)" />
             {t("or")}
-            <span className="bg-border h-px flex-1" />
+            <span className="h-px flex-1 bg-(--hairline)" />
           </div>
         </>
       )}
 
       <form onSubmit={sendLink} className="flex flex-col gap-3">
-        <Label htmlFor="email">{t("emailLabel")}</Label>
         <Input
-          id="email"
+          label={t("emailLabel")}
           type="email"
           inputMode="email"
           autoComplete="email"
           required
           placeholder={t("emailPlaceholder")}
+          hint={t("emailHint")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Button
           type="submit"
           size="lg"
-          variant={sportnetEnabled ? "outline" : "default"}
-          className="w-full"
-          disabled={status === "sending"}
+          block
+          variant={sportnetEnabled ? "secondary" : "primary"}
+          loading={status === "sending"}
         >
-          {status === "sending" ? (
-            <Loader2 className="animate-spin" aria-hidden />
-          ) : (
-            <Mail aria-hidden />
-          )}
           {t("sendLink")}
         </Button>
       </form>
 
-      {status === "error" && (
-        <p role="alert" className="text-destructive text-sm">
-          {t("error")}
-        </p>
-      )}
+      {status === "error" && <Alert tone="danger">{t("error")}</Alert>}
     </div>
   );
 }

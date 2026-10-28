@@ -42,9 +42,9 @@
   },
   "login": {
     "title": "Prihlásenie",
-    "introWithSportnet": "Prihláste sa účtom Sportnet. Ak ho nemáte, pošleme vám prihlasovací odkaz e-mailom.",
+    "introWithSportnet": "Prihláste sa účtom, ktorý používate na sportnet.online. Podľa vašej príslušnosti ku klubu uvidíte svoj klub, úlohy a hodnotenia.",
     "introEmailOnly": "Zadajte e-mail a pošleme vám prihlasovací odkaz.",
-    "sportnetButton": "Prihlásiť sa cez Sportnet",
+    "sportnetButton": "Prihlásiť sa cez sportnet.online",
     "or": "alebo",
     "emailLabel": "E-mail",
     "emailPlaceholder": "meno@klub.sk",
@@ -52,7 +52,9 @@
     "sentTitle": "Skontrolujte si e-mail",
     "sentBody": "Na adresu <strong>{email}</strong> sme poslali prihlasovací odkaz. Platí 15 minút.",
     "useAnotherEmail": "Použiť inú adresu",
-    "error": "Prihlásenie sa nepodarilo. Skúste to prosím znova."
+    "error": "Prihlásenie sa nepodarilo. Skúste to prosím znova.",
+    "emailHint": "Pošleme vám odkaz na prihlásenie bez hesla.",
+    "publicHint": "Oblasti, Kompas na vyskúšanie a vizitky klubov sú dostupné aj bez prihlásenia."
   },
   "account": {
     "title": "Môj účet",
@@ -901,7 +903,15 @@
         "communication": "Klub komunikuje so svojimi ľuďmi – rodičmi, dobrovoľníkmi a hráčmi."
       }
     },
-    "aboutLink": "Viac o Akadémii"
+    "aboutLink": "Viac o Akadémii",
+    "cta": {
+      "kompas": "Otestujte svoj klub"
+    },
+    "linesLead": "Klub ako jedenástka – od brankára (vedenie) po útok (hráči a obec).",
+    "clubs": {
+      "title": "Kluby v Akadémii",
+      "text": "Mapa, vizitky a rebríčky klubov"
+    }
   },
   "search": {
     "title": "Hľadať v Akadémii",

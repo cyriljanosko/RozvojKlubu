@@ -14,6 +14,13 @@ for (const colorScheme of ["light", "dark"] as const) {
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       await expect(page).toHaveScreenshot(`ukazky-${colorScheme}.png`, { fullPage: true });
     });
+
+    // R4 G1a – the sign-in needs no database; Hub and Oblasti need test data (they read MongoDB)
+    test("sign-in", async ({ page }) => {
+      await page.goto("/prihlasenie");
+      await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      await expect(page).toHaveScreenshot(`prihlasenie-${colorScheme}.png`, { fullPage: true });
+    });
   });
 }
 

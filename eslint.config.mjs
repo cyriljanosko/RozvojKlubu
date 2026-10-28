@@ -14,6 +14,11 @@ export const REDESIGNED_FILES = [
   "src/app/dev/**",
   "src/app/admin/layout.tsx",
   "src/app/klub/[[]clubId]/layout.tsx",
+  // R4 G1a – Akadémia (Hub), Oblasti, Prihlásenie
+  "src/app/page.tsx",
+  "src/app/oblasti/page.tsx",
+  "src/app/prihlasenie/**",
+  "src/components/areas/**",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

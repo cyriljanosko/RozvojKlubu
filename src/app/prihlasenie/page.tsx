@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import logoColour from "@slovensky-futbalovy-zvaz/design-system/brand/logos/Loga-SFZ/sfz-D-farebne.svg";
+import logoWhite from "@slovensky-futbalovy-zvaz/design-system/brand/logos/Loga-SFZ/sfz-D-biele.svg";
+
 import { defaultMessages } from "@/i18n/config";
 import { isSportnetLoginEnabled } from "@/server/auth/auth";
 
@@ -16,29 +19,41 @@ async function LoginOptions() {
   const sportnetEnabled = isSportnetLoginEnabled();
   const t = await getTranslations("login");
   return (
-    <div className="flex flex-col gap-6">
-      <p className="text-muted-foreground text-sm">
+    <>
+      <p className="body text-(--ink-muted)">
         {sportnetEnabled ? t("introWithSportnet") : t("introEmailOnly")}
       </p>
       <LoginForm sportnetEnabled={sportnetEnabled} />
-    </div>
+    </>
   );
 }
 
+/** Sign-in on the SFZ Design System (R4 G1a): sportnet.online first, e-mail link as a fallback. */
 export default async function LoginPage() {
-  const t = await getTranslations("login");
+  const [t, th] = await Promise.all([getTranslations("login"), getTranslations("header")]);
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 py-10 sm:py-16">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">{t("title")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<div className="h-40" aria-hidden />}>
-            <LoginOptions />
-          </Suspense>
-        </CardContent>
-      </Card>
+    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-8 sm:py-16">
+      <Image
+        src={logoColour}
+        alt={th("logoAlt")}
+        width={116}
+        height={56}
+        unoptimized
+        className="h-14 w-auto self-start dark:hidden"
+      />
+      <Image
+        src={logoWhite}
+        alt={th("logoAlt")}
+        width={116}
+        height={56}
+        unoptimized
+        className="hidden h-14 w-auto self-start dark:block"
+      />
+      <h1 className="large-title">{t("title")}</h1>
+      <Suspense fallback={<div className="h-40" aria-hidden />}>
+        <LoginOptions />
+      </Suspense>
+      <p className="footnote text-(--ink-muted)">{t("publicHint")}</p>
     </main>
   );
 }
