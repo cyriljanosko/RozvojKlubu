@@ -18,7 +18,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] R3.3 – rám aplikácie (PR #91): `AppFrame` v root layoute, `/viac`, `klub/[clubId]/layout.tsx`, `admin/layout.tsx`. Starú `src/components/site-header.tsx` už nič nepoužíva – zmazať so súhlasom.
     - [x] R3.4 – lint pravidlá dizajnu a Playwright screenshoty v CI (PR #92, ADR 0019).
     - [ ] PR do sfz-design-system s chýbajúcimi ikonami (mapa, kompas, kniha, hviezda …) a návrhom akordeónu a ukazovateľa postupu.
-  - [ ] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94); bod 4 (súhlas s rebríčkom) – PR #97 s ADR 0020 čaká na rozhodnutie Cyrila.
+  - [ ] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95); bod 4 (súhlas s rebríčkom) – PR #97 s ADR 0020 čaká na rozhodnutie Cyrila.
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
   - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
