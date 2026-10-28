@@ -4,7 +4,7 @@ import { ApiError } from "@/server/api/errors";
 import type { ClubMentoringDoc, MentoringClosingClub } from "@/server/db/types";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
-import { currentSeason } from "@/server/services/season";
+import { currentSeason, seasonFromSlug } from "@/server/services/season";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
 /**
@@ -150,9 +150,14 @@ async function requireClub(deps: MentoringDeps, clubId: string) {
   if (!(await deps.clubs.findClub(clubId))) throw new ApiError("NOT_FOUND", "Club not found");
 }
 
+/** `?season=` as the URL slug "2025-2026" like other pages; the older "2025/2026" form still works. */
 const seasonSchema = z
   .string()
-  .regex(/^\d{4}\/\d{4}$/)
+  .transform((value, ctx) => {
+    const season = seasonFromSlug(value);
+    if (!season) ctx.addIssue({ code: "custom", message: "Invalid season" });
+    return season ?? z.NEVER;
+  })
   .nullish();
 
 export async function getClubMentoring(

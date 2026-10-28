@@ -9,6 +9,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 - Vizitka klubu: mentor už nevidí odkaz „Otvoriť Kompas“ na pracovnú verziu, ktorá mu vrátila „bez prístupu“ – odkaz ho vedie na posledný platný odoslaný Kompas; kým klub nič neodoslal, odkaz sa mentorovi nezobrazí (analýza obrazoviek, kap. 3.3, bod 1).
 - Mentoring klubu: kto je v klube mentor aj vedenie, píše časti klubu (úvodné sebahodnotenie, záver klubu) aj časti mentora (zameranie, záver mentora) – doteraz mal len práva mentora (analýza obrazoviek, kap. 3.3, bod 2).
 - `/mentor` („Moje kluby v kohorte“): mentor vidí svoje kluby sezóny s posledným odoslaným Kompasom namiesto presmerovania do Moja Akadémia; admin SFZ ďalej všetky kluby, ostatní prihlásení hlášku „Nie ste mentor žiadneho klubu.“ (analýza obrazoviek, kap. 3.3, bod 3). Odkazy na `/mentor` v novej navigácii tak vedú tam, kam sľubujú.
+- Mentoring klubu: `?season=` (stránka `/klub/:clubId/mentoring` aj `GET /api/v1/clubs/:clubId/mentoring`) prijíma tvar `2025-2026` ako ostatné stránky; starý tvar `2025/2026` funguje ďalej (analýza obrazoviek, kap. 3.3, bod 5).
 
 ### Bezpečnosť
 

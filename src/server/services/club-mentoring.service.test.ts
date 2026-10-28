@@ -159,6 +159,13 @@ describe("club mentoring – service", () => {
     expect((await getClubMentoring(deps, admin, A, "2020/2021")).writes).toEqual([]);
   });
 
+  it("takes ?season= as the slug like other pages; the old 2025/2026 form still works", async () => {
+    expect((await getClubMentoring(deps, admin, A, "2025-2026")).season).toBe("2025/2026");
+    expect((await getClubMentoring(deps, admin, A, "2025/2026")).season).toBe("2025/2026");
+    await expect(getClubMentoring(deps, admin, A, "2025-2027")).rejects.toThrow();
+    await expect(getClubMentoring(deps, admin, A, "garbage")).rejects.toThrow();
+  });
+
   it("a mentor who is also the club's management writes both the club and the mentor parts", async () => {
     await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "mentor" });
     const view = await getClubMentoring(deps, alice, A);
