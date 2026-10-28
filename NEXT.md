@@ -20,7 +20,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] PR do sfz-design-system s chýbajúcimi ikonami (mapa, kompas, kniha, hviezda …) a návrhom akordeónu a ukazovateľa postupu.
   - [ ] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95), bod 5 (PR #96); bod 4 – admin SFZ mení súhlas s rebríčkom za klub (rozhodnutie Cyrila 28. 10., ADR 0020, PR #97).
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
-  - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
+  - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
 - [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – PR #83 (`6210a90`). Dependabot PR #85 (minor a patch) – rozhodne Cyril.
 
