@@ -22,7 +22,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
     - [ ] G1a – Akadémia (Hub), Oblasti, Prihlásenie (vetva `feat/g1a-hub`). Ďalej G1b detail oblasti, G1c Kompas na vyskúšanie, G1d Kluby a verejná vizitka (rozdelenie G1 na 4 PR – Cyril 28. 10.).
     - [ ] Vizuálne testy Akadémie a Oblastí potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
-    - [ ] Po prepise skupín zmazať nepoužívané súbory (so súhlasom): `src/components/site-header.tsx`, `src/components/hub/my-academy-home.tsx`, `src/components/hub/hub-illustration.tsx`, `src/components/search/search-form.tsx` (ak ho už nič nepoužije).
+    - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
   - [ ] S1 – prihlásenie Sportnet; S2 – roly zo Sportnetu (zmena schémy – súhlas); S3 – číselníky a administrácia. Treba pripojiť MCP so Sportnet dokumentáciou.
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
 - [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – PR #83 (`6210a90`). Dependabot PR #85 (minor a patch) – rozhodne Cyril.
