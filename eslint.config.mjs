@@ -19,6 +19,21 @@ export const REDESIGNED_FILES = [
   "src/app/oblasti/page.tsx",
   "src/app/prihlasenie/**",
   "src/components/areas/**",
+  // R4 G1b – detail oblasti (Metodika, Prax); pin-button waits for the DS "star" icon
+  "src/app/oblasti/[[]area]/**",
+  "src/components/content/coach-education.tsx",
+  "src/components/content/markdown.tsx",
+  "src/components/content/practice-progress.tsx",
+  "src/components/content/practice-view.tsx",
+  // R4 G1c – Kompas na vyskúšanie; the form is shared with the club Kompas (page itself in G2)
+  "src/app/kompas/**",
+  "src/app/klub/[[]clubId]/kompas/kompas-form.tsx",
+  // R4 G1d – Kluby a vizitka (verejná aj klubová); milestones.tsx waits for DS icons
+  "src/app/vizitka/**",
+  "src/components/vizitka/public-plan.tsx",
+  "src/components/vizitka/stars.tsx",
+  "src/components/vizitka/vizitka-view.tsx",
+  "src/components/vizitka/vizitky-explorer.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

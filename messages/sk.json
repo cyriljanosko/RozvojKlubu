@@ -257,7 +257,10 @@
     "allRoles": "Všetky roly",
     "forYourRole": "pre vašu rolu",
     "tagsDraft": "Priradenie sekcií k rolám je návrh a ešte ho skontroluje pracovná skupina. Rola mení len poradie – všetky sekcie zostávajú dostupné.",
-    "progressClub": "Postup za klub"
+    "progressClub": "Postup za klub",
+    "ofEleven": "{number} / 11",
+    "forRoleGroup": "Pre rolu: {role}",
+    "otherTopics": "Ďalšie témy oblasti"
   },
   "practice": {
     "chooseRole": "Kto ste v tejto oblasti?",
@@ -309,8 +312,13 @@
       "doneOn": "Hotové {date}",
       "signIn": "Postup klubu si po prihlásení môžete odškrtávať a ukladať.",
       "signInLink": "Prihlásiť sa",
-      "noClub": "Postup si ukladá klub – vedenie alebo tréner s rolou v klube."
-    }
+      "noClub": "Postup si ukladá klub – vedenie alebo tréner s rolou v klube.",
+      "signInTitle": "Váš postup sa neukladá"
+    },
+    "templates": "Vzory na stiahnutie",
+    "pathOverview": "Cesta krok za krokom",
+    "stepOf": "Krok {n} z {total}",
+    "options": "Možnosti"
   },
   "kompas": {
     "title": "Kompas klubu",
@@ -394,6 +402,19 @@
       "hint": "Potvrdenie mentorom je odznak pri Kompase vo Vizitke a v rebríčku; body sa nemenia.",
       "error": "Nepodarilo sa uložiť, skúste to znova.",
       "confirmed": "Potvrdené mentorom {date}"
+    },
+    "areas": "Oblasti",
+    "filledShort": "vyplnené {filled} z 11",
+    "answered": "{answered} z {total} odpovedí",
+    "howTo": "Ako na to v oblasti {name}",
+    "result": "Výsledok",
+    "transfer": {
+      "title": "Máte odpovede z vyskúšania ({count})",
+      "body": "V tomto prehliadači ste si Kompas vyskúšali. Odpovede môžete prevziať do Kompasu klubu a potom ich uložiť.",
+      "replace": "V tomto prehliadači ste si Kompas vyskúšali. Prevzatím nahradíte odpovede vo formulári – uložia sa až tlačidlom Uložiť.",
+      "take": "Prevziať odpovede",
+      "dismiss": "Zahodiť",
+      "saveNow": "Odpovede z vyskúšania sú vo formulári. Uložte ich, aby sa zapísali do Kompasu klubu."
     }
   },
   "mentor": {
@@ -609,7 +630,9 @@
       "submittedAt": "Odoslané {date}",
       "draft": "Rozpracovaná verzia {version} ešte nie je odoslaná – vo Vizitke je posledná odoslaná.",
       "draftOnly": "Rozpracovaný Kompas (verzia {version}) ešte nie je odoslaný mentorovi.",
-      "link": "Otvoriť Kompas"
+      "link": "Otvoriť Kompas",
+      "short": "{total} b.",
+      "byArea": "Kompas podľa oblastí"
     },
     "licensing": {
       "title": "Licenčné hodnotenie",
@@ -617,9 +640,12 @@
       "none": "Zatiaľ neuzavreté.",
       "closedAt": "Uzavreté {date} · koeficient sídla {coef}",
       "draftOnly": "Rozpracované hodnotenie (verzia {version}) ešte nie je uzavreté.",
-      "link": "Otvoriť licenčné hodnotenie"
+      "link": "Otvoriť licenčné hodnotenie",
+      "short": "{banded} z {total}",
+      "banded": "oblastí s pásmom"
     },
-    "notFound": "Klub sa nenašiel."
+    "notFound": "Klub sa nenašiel.",
+    "back": "Kluby"
   },
   "academy": {
     "title": "Moja Akadémia",
@@ -790,17 +816,22 @@
     "favorites": "★ Obľúbené"
   },
   "trialKompas": {
-    "title": "Kompas klubu – vyskúšajte",
-    "intro": "Sebahodnotenie v 11 oblastiach. V každej zaškrtnete, čo v klube naozaj platí, a skóre sa vypočíta samo.",
-    "pick": "Najprv vyberte svoj klub. Kategórie (deti, žiaci, dorast, dospelí, ženy) vezmeme zo Sportnetu, nezadávajú sa ručne.",
+    "title": "Kompas",
+    "intro": "Odškrtnite, čo už váš klub robí. Uvidíte, kde je silný a čím začať.",
     "pilot": "Pilot: kluby zapojené do Akadémie. Ďalšie pribudnú po overení pilotu.",
-    "change": "Zmeniť klub",
-    "local": "Toto je vyskúšanie: odpovede zostanú len v tomto prehliadači, nikam sa neodosielajú a mentor ich nevidí.",
-    "signIn": "Ste manažér alebo člen výboru klubu? Prihláste sa a Kompas uložte a odošlite mentorovi.",
+    "local": "Odpovede ostanú v tomto prehliadači. Po prihlásení ich klubový manažér môže preniesť do Kompasu klubu.",
+    "signIn": "Ste klubový manažér? Prihláste sa – odpovede z vyskúšania prenesiete do Kompasu klubu, uložíte ich a odošlete mentorovi.",
     "signInButton": "Prihlásiť sa",
     "member": "V tomto klube máte rolu – Kompas klubu si môžete uložiť a odoslať.",
     "memberButton": "Otvoriť Kompas klubu",
-    "notFound": "Klub sa nenašiel."
+    "notFound": "Klub sa nenašiel.",
+    "clubLabel": "Váš klub",
+    "noClub": "Bez klubu – len sa otestujem",
+    "show": "Zobraziť",
+    "localTitle": "Len na vyskúšanie",
+    "noClubHint": "Bez klubu platia všetky otázky. Kategórie klubu (deti, žiaci, dorast, dospelí, ženy) sa po výbere klubu vezmú zo Sportnetu.",
+    "memberTitle": "Kompas vášho klubu",
+    "signInTitle": "Uložiť a odoslať mentorovi"
   },
   "hub": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -1577,7 +1608,7 @@
     "external": "otvorí sa web SFZ v novom okne"
   },
   "vizitky": {
-    "title": "Vizitky klubov",
+    "title": "Kluby",
     "intro": "Kluby v Akadémii rozvoja klubov SFZ na mape Slovenska a ich rebríčky. Kliknite na zväz na mape alebo vyhľadajte klub a otvorte jeho Vizitku.",
     "map": {
       "title": "Mapa Slovenska",
@@ -1604,7 +1635,8 @@
       "obfz": "ObFZ",
       "size": "Veľkosť",
       "all": "Všetky",
-      "clear": "Zrušiť filtre"
+      "clear": "Zrušiť filtre",
+      "title": "Filtre a zoradenie"
     },
     "list": {
       "title": "Kluby",
@@ -1689,7 +1721,13 @@
         "position": "{name}: {position}. miesto z {of} – {size}, podľa hodnotenia {by}. Poradie je neverejné.",
         "notRanked": "{name} zatiaľ nie je v rebríčku. Vedenie klubu môže dať súhlas vo Vizitke klubu.",
         "noValue": "{name} je v rebríčku, ale zatiaľ bez hodnotenia {by}."
-      }
+      },
+      "topShort": "Top 3"
+    },
+    "views": {
+      "label": "Zobrazenie klubov",
+      "map": "Mapa",
+      "rankings": "Rebríčky"
     }
   },
   "milestones": {

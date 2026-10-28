@@ -17,11 +17,15 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] R3.2 – navigačný model `src/lib/navigation.ts` (PR #90). Stránky `/viac`, členovia a nastavenia klubu, číselníky a Sportnet v administrácii model zatiaľ nemá – pribudnú s R3.3, R4 a S3.
     - [x] R3.3 – rám aplikácie (PR #91): `AppFrame` v root layoute, `/viac`, `klub/[clubId]/layout.tsx`, `admin/layout.tsx`. Stará `src/components/site-header.tsx` zmazaná so súhlasom 28. 10.
     - [x] R3.4 – lint pravidlá dizajnu a Playwright screenshoty v CI (PR #92, ADR 0019).
-    - [ ] PR do sfz-design-system s chýbajúcimi ikonami (mapa, kompas, kniha, hviezda …) a návrhom akordeónu a ukazovateľa postupu.
-  - [ ] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95), bod 5 (PR #96); bod 4 – admin SFZ mení súhlas s rebríčkom za klub (rozhodnutie Cyrila 28. 10., ADR 0020, PR #97).
+    - [x] PR do sfz-design-system: ikony `map`, `map-pin`, `compass`, `book-open`, `star`, `Accordion` a `ProgressBar` (Slovensky-futbalovy-zvaz/sfz-design-system#1, 28. 10.). Po vydaní verzie: nahradiť vlastný akordeón a ukazovateľ postupu v `src/components/sfz` a hviezdu z lucide v `pin-button.tsx`.
+  - [x] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95), bod 5 (PR #96); bod 4 – admin SFZ mení súhlas s rebríčkom za klub (rozhodnutie Cyrila 28. 10., ADR 0020, PR #97).
   - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
-    - [ ] G1a – Akadémia (Hub), Oblasti, Prihlásenie (vetva `feat/g1a-hub`). Ďalej G1b detail oblasti, G1c Kompas na vyskúšanie, G1d Kluby a verejná vizitka (rozdelenie G1 na 4 PR – Cyril 28. 10.).
-    - [ ] Vizuálne testy Akadémie a Oblastí potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
+    - [x] G1a – Akadémia (Hub), Oblasti, Prihlásenie (PR #98). Rozdelenie G1 na 4 PR – Cyril 28. 10.
+    - [x] G1b – detail oblasti `/oblasti/[area]` (Metodika v akordeóne podľa roly, Prax na kartách so Stepperom) – PR #101.
+    - [x] G1c – Kompas na vyskúšanie (PR #102): nový formulár Kompasu (spoločný s Kompasom klubu), vyskúšanie bez klubu, prenos odpovedí do Kompasu klubu (Cyril 28. 10.).
+    - [x] G1d – Kluby (`/vizitka`) a vizitka klubu (PR #104): záložky Mapa / Rebríčky so všetkými funkciami, zoznam až po hľadaní, hviezdičky v modrej SFZ, vizitka spoločná pre verejnú aj klubovú (Cyril 28. 10.).
+    - [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Ikony míľnikov a hviezda pinu po vydaní DS.
+    - [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
   - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
     - [ ] S2-a – zdroje rolí overené v dokumentácii, návrh ADR 0021 (`docs/decisions/0021-roly-v-klube-zo-sportnetu.md`) na vetve `feat/s2-roles-adr` – rozhodne Cyril (schéma `club_memberships`, `management` → `club_manager`, obnova rolí). Neoverené: `competence_type` v `sport_expert_orgs`, názov CRM roly správcu klubu, scope pre `/me/*`.

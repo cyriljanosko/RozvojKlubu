@@ -2,10 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import { Save, Send } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionItem,
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  KompasBandBadge,
+  LinkButton,
+} from "@/components/sfz";
 import type { QuestionTag } from "@/server/db/types";
 import {
   bandOf,
@@ -17,7 +25,8 @@ import {
 import { saveKompasAction, submitKompasAction } from "./actions";
 
 export interface KompasFormProps {
-  clubId: string;
+  /** null = public trial without a club (every category applies) */
+  clubId: string | null;
   /** public trial (ADR 0011): no saving, answers kept only in this browser */
   trial?: boolean;
   editable: boolean;
@@ -27,13 +36,18 @@ export interface KompasFormProps {
   questions: (ScoringQuestion & { valid: boolean; checked: boolean })[];
 }
 
-const BAND_COLOR: Record<string, string> = {
-  start: "bg-red-600",
-  rising: "bg-orange-500",
-  average: "bg-zinc-500",
-  good: "bg-blue-600",
-  model: "bg-amber-600",
-};
+/** Browser key of the trial answers; a trial without a club uses "none". */
+const trialKey = (clubId: string | null) => `kompas-trial:${clubId ?? "none"}`;
+
+function readTrial(key: string): string[] | null {
+  try {
+    const raw = window.localStorage.getItem(key);
+    const parsed = raw ? (JSON.parse(raw) as unknown) : null;
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed.map(String) : null;
+  } catch {
+    return null; // storage may be unavailable (private mode)
+  }
+}
 
 export function KompasForm(props: KompasFormProps) {
   const t = useTranslations("kompas");
@@ -48,19 +62,34 @@ export function KompasForm(props: KompasFormProps) {
     "done" | "saveFirst" | "empty" | "error" | null
   >(null);
   const [pending, startTransition] = useTransition();
+  // club Kompas: answers from a trial in this browser, offered once after sign-in (decision 26. 10.)
+  const [offer, setOffer] = useState<{ key: string; ids: string[] } | null>(null);
+  const [transferred, setTransferred] = useState<string | null>(null);
 
-  const storageKey = `kompas-trial:${props.clubId}`;
+  const storageKey = trialKey(props.clubId);
+  const canTransfer = !props.trial && props.editable;
   useEffect(() => {
-    if (!props.trial) return;
-    try {
-      const raw = window.localStorage.getItem(storageKey);
+    if (props.trial) {
+      const ids = readTrial(storageKey);
       // eslint-disable-next-line react-hooks/set-state-in-effect -- restore answers saved in this browser
-      if (raw) setChecked(new Set(JSON.parse(raw) as string[]));
-    } catch {
-      // storage may be unavailable (private mode); the trial still works
+      if (ids) setChecked(new Set(ids));
+      return;
     }
-  }, [props.trial, storageKey]);
+    if (!canTransfer) return;
+    // the club's own trial first, then a trial without a club
+    for (const key of [storageKey, trialKey(null)]) {
+      const ids = readTrial(key);
+      if (ids) {
+        setOffer({ key, ids });
+        return;
+      }
+    }
+  }, [props.trial, canTransfer, storageKey]);
 
+  const valid = useMemo(
+    () => new Set(props.questions.filter((q) => q.valid).map((q) => q.questionId)),
+    [props.questions],
+  );
   const result = useMemo(
     () => scoreKompas(props.questions, props.categories, checked),
     [props.questions, props.categories, checked],
@@ -82,13 +111,41 @@ export function KompasForm(props: KompasFormProps) {
     }
   };
 
+  const takeOver = () => {
+    if (!offer) return;
+    // only questions that apply to this club; the club then saves as usual
+    setChecked(new Set(offer.ids.filter((id) => valid.has(id))));
+    setTransferred(offer.key);
+    setOffer(null);
+  };
+
+  const dismissOffer = () => {
+    if (!offer) return;
+    try {
+      window.localStorage.removeItem(offer.key);
+    } catch {
+      // nothing to clean up
+    }
+    setOffer(null);
+  };
+
   const save = () =>
     startTransition(async () => {
+      if (!props.clubId) return;
       const res = await saveKompasAction(props.clubId, [...checked], version);
       if (res.status === "ok") {
         setVersion(res.version);
         setSaved(new Set(checked));
         setMessage("saved");
+        if (transferred) {
+          // the trial answers now live in the club's Kompas
+          try {
+            window.localStorage.removeItem(transferred);
+          } catch {
+            // nothing to clean up
+          }
+          setTransferred(null);
+        }
       } else {
         setMessage(res.code === "CONFLICT" ? "conflict" : "error");
       }
@@ -96,6 +153,7 @@ export function KompasForm(props: KompasFormProps) {
 
   const submit = () =>
     startTransition(async () => {
+      if (!props.clubId) return;
       const res = await submitKompasAction(props.clubId, version);
       if (res.status === "ok") setSubmitMessage("done");
       else
@@ -110,166 +168,188 @@ export function KompasForm(props: KompasFormProps) {
       .map((tag) => tTags(tag))
       .join(", ");
 
-  return (
-    <div className="flex flex-col gap-4">
-      <section className="bg-primary text-primary-foreground sticky top-0 z-10 flex flex-col gap-1 rounded-xl p-4">
-        <p className="text-2xl font-semibold tabular-nums">{t("total", { total: result.total })}</p>
-        <p className="text-sm opacity-90">
-          {t("filled", { filled: result.filledAreas })}
-          {result.average !== null &&
-            ` · ${t("average", {
-              average: result.average.toLocaleString("sk", { maximumFractionDigits: 1 }),
-              band: t(`bands.${bandOf(result.average).key}`),
-            })}`}
-        </p>
-        {props.editable && !props.trial && (
-          <div className="mt-2 flex flex-wrap items-center gap-3">
-            <Button
-              type="button"
-              size="sm"
-              variant="secondary"
-              onClick={save}
-              disabled={pending || !dirty}
-            >
-              <Save aria-hidden />
-              {t("save")}
-            </Button>
-            <span role="status" className="text-xs">
-              {dirty && message !== "conflict" && t("unsaved")}
-              {!dirty && message === "saved" && t("saved", { version })}
-              {message === "conflict" && t("conflict")}
-              {message === "error" && t("error")}
-            </span>
-            <Button
-              type="button"
-              size="sm"
-              variant="secondary"
-              onClick={submit}
-              disabled={pending || dirty || version === 0 || result.filledAreas === 0}
-            >
-              <Send aria-hidden />
-              {t("submit.button")}
-            </Button>
-            <span role="status" className="text-xs">
-              {!dirty && submitMessage && t(`submit.${submitMessage}`)}
-            </span>
-          </div>
-        )}
-      </section>
+  const summary = (
+    <>
+      {t("filled", { filled: result.filledAreas })}
+      {result.average !== null &&
+        ` · ${t("average", {
+          average: result.average.toLocaleString("sk", { maximumFractionDigits: 1 }),
+          band: t(`bands.${bandOf(result.average).key}`),
+        })}`}
+    </>
+  );
 
-      <ol className="flex flex-col gap-2">
-        {props.areas.map((area) => {
-          const r = result.areas.find((a) => a.area === area.number);
-          const qs = props.questions.filter((q) => q.area === area.number);
-          return (
-            <li key={area.number}>
-              <details className="rounded-xl border">
-                <summary className="flex cursor-pointer items-center gap-3 p-3">
-                  <span
-                    className={`${r?.band ? `${BAND_COLOR[r.band]} text-white` : "bg-muted text-muted-foreground"} flex size-8 shrink-0 items-center justify-center rounded-md text-sm font-semibold`}
-                  >
-                    {area.number}
-                  </span>
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="font-medium break-words">{area.name}</span>
-                    <span className="text-muted-foreground text-xs">
-                      {r?.status === "scored" && r.points !== null
-                        ? `${t("areaScore", { points: r.points })} · ${t(`bands.${r.band!}`)}`
-                        : r?.status === "few"
-                          ? t("areaFew")
-                          : t("areaEmpty")}
+  return (
+    <div className="flex flex-col gap-6">
+      {offer && (
+        <Alert
+          tone="info"
+          title={t("transfer.title", { count: offer.ids.filter((id) => valid.has(id)).length })}
+          action={
+            <span className="flex flex-wrap gap-2">
+              <Button size="sm" onClick={takeOver}>
+                {t("transfer.take")}
+              </Button>
+              <Button size="sm" variant="tertiary" onClick={dismissOffer}>
+                {t("transfer.dismiss")}
+              </Button>
+            </span>
+          }
+        >
+          {checked.size > 0 ? t("transfer.replace") : t("transfer.body")}
+        </Alert>
+      )}
+      {transferred && dirty && <Alert tone="info">{t("transfer.saveNow")}</Alert>}
+
+      <section className="flex flex-col gap-2" aria-labelledby="kompas-areas">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 id="kompas-areas" className="title-3">
+            {t("areas")}
+          </h2>
+          <span className="footnote text-(--ink-muted)">
+            {t("filledShort", { filled: result.filledAreas })}
+          </span>
+        </div>
+        <Accordion>
+          {props.areas.map((area) => {
+            const r = result.areas.find((a) => a.area === area.number);
+            const qs = props.questions.filter((q) => q.area === area.number);
+            const applies = qs.filter((q) => q.valid);
+            const answered = applies.filter((q) => checked.has(q.questionId)).length;
+            return (
+              <AccordionItem
+                key={area.number}
+                id={`oblast-${area.number}`}
+                title={
+                  <span className="flex items-center gap-3">
+                    <span className="w-6 shrink-0 font-bold text-(--ink-muted)">{area.number}</span>
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="break-words">{area.name}</span>
+                      <span className="footnote font-normal text-(--ink-muted)">
+                        {r?.status === "scored" && r.points !== null
+                          ? `${t("areaScore", { points: r.points })} · ${t("answered", { answered, total: applies.length })}`
+                          : r?.status === "few"
+                            ? t("areaFew")
+                            : t("areaEmpty")}
+                      </span>
                     </span>
+                    {r?.band && (
+                      <KompasBandBadge band={r.band}>{t(`bands.${r.band}`)}</KompasBandBadge>
+                    )}
                   </span>
-                </summary>
-                <div className="grid gap-4 border-t p-3 lg:grid-cols-2">
+                }
+              >
+                <div className="grid gap-4 lg:grid-cols-2">
                   {(["i", "s"] as const).map((column) => (
-                    <fieldset key={column} className="flex flex-col gap-1">
-                      <legend className="mb-1 flex w-full justify-between text-sm font-semibold">
+                    <fieldset key={column} className="flex min-w-0 flex-col">
+                      <legend className="label mb-1 flex w-full justify-between text-(--ink-muted) uppercase">
                         <span>{t(`columns.${column}`)}</span>
-                        <span className="text-muted-foreground tabular-nums">
+                        <span className="tabular-nums">
                           {r?.columns[column].points ?? "–"} / 10
                         </span>
                       </legend>
                       {qs
                         .filter((q) => q.column === column)
                         .map((q) => (
-                          <label
+                          <Checkbox
                             key={q.questionId}
-                            className={`flex gap-2 rounded-md p-1.5 text-sm ${q.valid ? "hover:bg-muted/50" : "opacity-50"}`}
-                          >
-                            <input
-                              type="checkbox"
-                              className="mt-0.5 size-4 shrink-0"
-                              checked={checked.has(q.questionId)}
-                              onChange={() => toggle(q.questionId)}
-                              disabled={!props.editable || !q.valid}
-                            />
-                            <span>
-                              {q.text}
-                              {!q.valid && (
-                                <span className="text-muted-foreground block text-xs">
-                                  {t("notApplicable", { tags: missingTags(q.tags) })}
-                                </span>
-                              )}
-                            </span>
-                          </label>
+                            label={q.text}
+                            description={
+                              q.valid
+                                ? undefined
+                                : t("notApplicable", { tags: missingTags(q.tags) })
+                            }
+                            checked={checked.has(q.questionId)}
+                            onChange={() => toggle(q.questionId)}
+                            disabled={!props.editable || !q.valid}
+                          />
                         ))}
                     </fieldset>
                   ))}
-                  <Link
-                    href={`/oblasti/${area.number}`}
-                    className="text-sm underline underline-offset-4 lg:col-span-2"
-                  >
-                    {t("next.methodology")}
+                  <Link href={`/oblasti/${area.number}`} className="subheadline lg:col-span-2">
+                    {t("howTo", { name: area.name })}
                   </Link>
                 </div>
-              </details>
-            </li>
-          );
-        })}
-      </ol>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      </section>
 
-      <section className="flex flex-col gap-3 rounded-xl border p-4">
-        <h2 className="text-lg font-semibold">{t("next.title")}</h2>
+      <Card id="vysledok" title={t("next.title")} className="scroll-mt-6">
         {result.next.length === 0 ? (
-          <p className="text-muted-foreground text-sm">{t("next.empty")}</p>
+          <p className="callout text-(--ink-muted)">{t("next.empty")}</p>
         ) : (
-          <>
-            <p className="text-muted-foreground text-sm">{t("next.intro")}</p>
+          <div className="flex flex-col gap-3">
+            <p className="callout text-(--ink-muted)">{t("next.intro")}</p>
             <ol className="grid gap-3 lg:grid-cols-3">
               {result.next.map((n, i) => {
                 const name = props.areas.find((a) => a.number === n.area)?.name;
                 return (
-                  <li key={n.area} className="flex flex-col gap-2 rounded-lg border p-3 text-sm">
-                    <span className="text-muted-foreground text-xs">{t.raw("next.order")[i]}</span>
-                    <span className="font-semibold">
+                  <li
+                    key={n.area}
+                    className="flex flex-col gap-2 rounded-(--radius-sm) bg-(--surface) p-3"
+                  >
+                    <span className="label text-(--brand-blue-ink) uppercase">
+                      {t.raw("next.order")[i]}
+                    </span>
+                    <span className="headline">
                       {n.area}. {name} · {t("areaScore", { points: n.points })}
                     </span>
-                    <ul className="list-disc space-y-1 pl-5">
+                    <ul className="callout list-disc space-y-1 pl-5">
                       {n.tasks.map((task) => (
                         <li key={task.questionId}>{task.text}</li>
                       ))}
                     </ul>
-                    <span className="mt-auto flex flex-wrap gap-x-3 text-xs">
-                      <Link href={`/oblasti/${n.area}`} className="underline underline-offset-4">
-                        {t("next.methodology")}
-                      </Link>
+                    <span className="subheadline mt-auto flex flex-wrap gap-x-4">
+                      <Link href={`/oblasti/${n.area}`}>{t("next.methodology")}</Link>
                       {[3, 4].includes(n.area) && (
-                        <Link
-                          href={`/oblasti/${n.area}?tab=prax`}
-                          className="underline underline-offset-4"
-                        >
-                          {t("next.practice")}
-                        </Link>
+                        <Link href={`/oblasti/${n.area}?tab=prax`}>{t("next.practice")}</Link>
                       )}
                     </span>
                   </li>
                 );
               })}
             </ol>
-          </>
+          </div>
         )}
-      </section>
+      </Card>
+
+      {/* running score above the tab bar (mobile) or the bottom edge (desktop), as in the design */}
+      <div className="sticky bottom-[calc(var(--tabbar-height)+env(safe-area-inset-bottom,0px))] z-10 flex flex-wrap items-center gap-3 rounded-(--radius-md) border border-(--hairline) bg-(--surface) px-4 py-3 md:bottom-4">
+        <div className="flex min-w-0 flex-1 flex-col">
+          <span className="headline tabular-nums">{t("total", { total: result.total })}</span>
+          <span className="footnote text-(--ink-muted)">{summary}</span>
+        </div>
+        {props.editable && !props.trial ? (
+          <>
+            <Button
+              variant="secondary"
+              icon="check"
+              onClick={save}
+              disabled={pending || !dirty}
+              loading={pending}
+            >
+              {t("save")}
+            </Button>
+            <Button
+              onClick={submit}
+              disabled={pending || dirty || version === 0 || result.filledAreas === 0}
+            >
+              {t("submit.button")}
+            </Button>
+            <p className="footnote w-full" role="status">
+              {dirty && message !== "conflict" && t("unsaved")}
+              {!dirty && message === "saved" && t("saved", { version })}
+              {message === "conflict" && <span className="text-(--danger)">{t("conflict")}</span>}
+              {message === "error" && <span className="text-(--danger)">{t("error")}</span>}
+              {!dirty && submitMessage && ` ${t(`submit.${submitMessage}`)}`}
+            </p>
+          </>
+        ) : (
+          <LinkButton href="#vysledok">{t("result")}</LinkButton>
+        )}
+      </div>
     </div>
   );
 }

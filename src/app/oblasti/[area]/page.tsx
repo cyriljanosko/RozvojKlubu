@@ -5,6 +5,7 @@ import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { lineOfArea } from "@/components/areas/area-lines";
 import { CoachEducation } from "@/components/content/coach-education";
 import { MarkdownContent } from "@/components/content/markdown";
 import { sfzLinksFor } from "@/lib/sfz-links";
@@ -12,6 +13,19 @@ import { PracticeView } from "@/components/content/practice-view";
 import { ScrollToHash } from "@/components/content/scroll-to-hash";
 import { PinButton } from "@/components/favorites/pin-button";
 import { pinnedHrefs } from "@/components/favorites/pins";
+import {
+  Accordion,
+  AccordionItem,
+  AreaNumber,
+  Badge,
+  Card,
+  EmptyState,
+  Icon,
+  KompasBandBadge,
+  LinkButton,
+  LinkChip,
+  LinkTabs,
+} from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { academyDeps, clubDeps, kompasDeps, progressDeps } from "@/server/clubs/deps";
@@ -61,12 +75,10 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
     : undefined;
   if (!area) {
     return (
-      <div className="flex flex-col gap-4 text-sm">
-        <p>{t("notFound")}</p>
-        <Link href="/oblasti" className="font-medium underline underline-offset-4">
-          {t("back")}
-        </Link>
-      </div>
+      <EmptyState
+        title={t("notFound")}
+        action={<LinkButton href="/oblasti">{t("back")}</LinkButton>}
+      />
     );
   }
   const query = await searchParams;
@@ -149,38 +161,94 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   const clubQuery = progressClub && clubParam ? `&club=${encodeURIComponent(clubParam)}` : "";
   const date = (iso: string) => format.dateTime(new Date(iso), { dateStyle: "long" });
 
+  const tabs = practice
+    ? [
+        {
+          id: "metodika",
+          label: t("methodology"),
+          href: `${base}${roleParam ? `?role=${encodeURIComponent(roleParam)}` : ""}`,
+        },
+        {
+          id: "prax",
+          label: t("practice"),
+          href: `${base}?tab=prax${roleParam ? `&role=${encodeURIComponent(roleParam)}` : ""}`,
+        },
+      ]
+    : [];
+  const forRole = ordered.filter((s) => s.forRole);
+  const others = ordered.filter((s) => !s.forRole);
+  const lensName = lenses.find((h) => h.key === lensKey)?.name ?? null;
+  const sectionItem = (s: (typeof ordered)[number]) => {
+    const pinHref = `/oblasti/${area.number}?open=${encodeURIComponent(s.key)}#${s.key}`;
+    return (
+      <AccordionItem
+        key={s.key}
+        id={s.key}
+        defaultOpen={openKey === s.key}
+        title={
+          <span className="flex items-center gap-1">
+            <span className="min-w-0 flex-1 break-words">{s.title}</span>
+            {pins && (
+              <PinButton
+                kind="section"
+                href={pinHref}
+                label={tFav("section", { area: area.number, title: s.title })}
+                pinned={pins.has(pinHref)}
+              />
+            )}
+          </span>
+        }
+      >
+        {(s.validAsOf || s.reviewedAt) && (
+          <p className="footnote mb-2 text-(--ink-muted)">
+            {[
+              s.validAsOf && t("validAsOf", { date: date(s.validAsOf) }),
+              s.reviewedAt && t("reviewedAt", { date: date(s.reviewedAt) }),
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        )}
+        <MarkdownContent links={sfzLinksFor(area.number)}>{s.body}</MarkdownContent>
+      </AccordionItem>
+    );
+  };
+
   return (
     <article className="flex flex-col gap-6">
       <ScrollToHash />
-      <header className="flex flex-col gap-2">
+      <header className="flex flex-col gap-3">
         <Link
           href="/oblasti"
-          className="text-muted-foreground text-sm underline underline-offset-4"
+          className="body inline-flex min-h-(--touch-target) items-center gap-1 self-start no-underline"
         >
+          <Icon name="chevron-left" size={22} />
           {t("back")}
         </Link>
-        <p className="text-muted-foreground text-sm">
-          {area.number} / 11 · {t(`bands.${area.band}`)}
-        </p>
+        <div className="flex items-center gap-2">
+          <AreaNumber number={area.number} line={lineOfArea(area.number)} />
+          <Badge tone="brand">{t(`bands.${area.band}`)}</Badge>
+          <span className="footnote text-(--ink-muted)">
+            {t("ofEleven", { number: area.number })}
+          </span>
+        </div>
         <div className="flex items-start gap-1">
-          <h1 className="text-2xl font-semibold tracking-tight break-words sm:text-3xl">
-            {area.name}
-          </h1>
+          <h1 className="large-title min-w-0 flex-1 break-words">{area.name}</h1>
           {pins && (
             <PinButton
               kind="area"
-              href={`/oblasti/${area.number}`}
+              href={base}
               label={tFav("area", { area: area.number, name: area.name })}
-              pinned={pins.has(`/oblasti/${area.number}`)}
-              className="mt-0.5"
+              pinned={pins.has(base)}
+              className="mt-1"
             />
           )}
         </div>
-        <p className="text-muted-foreground max-w-2xl">{area.description}</p>
+        <p className="body max-w-2xl text-(--ink-muted)">{area.description}</p>
         {user && isAdmin(user) && (
           <Link
             href={`/admin/obsah/${area.number}/${tab === "prax" ? "prax" : "metodika"}`}
-            className="text-sm font-medium underline underline-offset-4"
+            className="subheadline self-start font-medium"
           >
             {t("edit")}
           </Link>
@@ -191,61 +259,55 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
       {area.number === 3 && <CoachEducation />}
 
       {practice && (
-        <nav className="flex gap-2 border-b" aria-label={t("contents")}>
-          {(["metodika", "prax"] as const).map((key) => (
-            <Link
-              key={key}
-              href={
-                key === "prax"
-                  ? `${base}?tab=prax${roleParam ? `&role=${encodeURIComponent(roleParam)}` : ""}`
-                  : `${base}${roleParam ? `?role=${encodeURIComponent(roleParam)}` : ""}`
-              }
-              aria-current={tab === key ? "page" : undefined}
-              className="aria-[current=page]:border-primary -mb-px border-b-2 border-transparent px-3 py-2 text-sm font-medium"
-            >
-              {key === "prax" ? t("practice") : t("methodology")}
-            </Link>
-          ))}
-        </nav>
+        <LinkTabs items={tabs} navLabel={t("contents")} variant="segmented" active={tab} />
       )}
 
       {tab === "prax" && standing.length > 0 && (
-        <section className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
-          <h2 className="font-semibold">{tKompas("practiceBlock.title")}</h2>
-          <ul className="flex flex-col gap-1.5">
+        <Card title={tKompas("practiceBlock.title")}>
+          <ul className="flex flex-col gap-3">
             {standing.map(({ club, area: r }) => (
-              <li key={club.clubId} className="flex flex-wrap items-center gap-x-2">
-                <span className="font-medium">{club.name}:</span>
-                <span>
-                  {r?.points != null
-                    ? `${tKompas("areaScore", { points: r.points })} · ${tKompas(`bands.${r.band!}`)}`
-                    : tKompas("practiceBlock.none")}
+              <li key={club.clubId} className="flex flex-col gap-1">
+                <span className="headline break-words">{club.name}</span>
+                <span className="flex flex-wrap items-center gap-2">
+                  {r?.points != null ? (
+                    <>
+                      <span className="subheadline">
+                        {tKompas("areaScore", { points: r.points })}
+                      </span>
+                      <KompasBandBadge band={r.band!}>
+                        {tKompas(`bands.${r.band!}`)}
+                      </KompasBandBadge>
+                    </>
+                  ) : (
+                    <span className="subheadline text-(--ink-muted)">
+                      {tKompas("practiceBlock.none")}
+                    </span>
+                  )}
                 </span>
                 <Link
                   href={`/klub/${encodeURIComponent(club.clubId)}/kompas`}
-                  className="underline underline-offset-4"
+                  className="subheadline self-start"
                 >
                   {tKompas("practiceBlock.fill")}
                 </Link>
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
       )}
 
       {tab === "prax" && progressClub && progressClubs.length > 1 && (
-        <nav aria-label={t("progressClub")} className="flex flex-col gap-2 text-sm">
-          <p className="font-medium">{t("progressClub")}</p>
-          <div className="flex gap-1 overflow-x-auto pb-1">
+        <nav aria-label={t("progressClub")} className="flex flex-col gap-2">
+          <p className="footnote text-(--ink-muted)">{t("progressClub")}</p>
+          <div className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1">
             {progressClubs.map((c) => (
-              <Link
+              <LinkChip
                 key={c.clubId}
                 href={`${base}?tab=prax${roleId ? `&role=${encodeURIComponent(roleId)}` : ""}&club=${encodeURIComponent(c.clubId)}`}
-                aria-current={c.clubId === progressClub.clubId ? "page" : undefined}
-                className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground shrink-0 rounded-md border px-3 py-1.5 whitespace-nowrap"
+                selected={c.clubId === progressClub.clubId}
               >
                 {c.name}
-              </Link>
+              </LinkChip>
             ))}
           </div>
         </nav>
@@ -284,93 +346,52 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
       ) : null}
 
       {tab === "prax" ? null : sections.length === 0 ? (
-        <p className="text-muted-foreground text-sm">{t("empty")}</p>
+        <p className="body text-(--ink-muted)">{t("empty")}</p>
       ) : (
         <>
           {lenses.length > 0 && (
             <nav aria-label={t("roleFor")} className="flex flex-col gap-2">
-              <p className="text-sm font-medium">{t("roleFor")}</p>
-              <div className="flex gap-1 overflow-x-auto pb-1 text-sm">
-                <Link
-                  href={base}
-                  aria-current={!methodologyRole ? "page" : undefined}
-                  className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground shrink-0 rounded-md border px-3 py-1.5 whitespace-nowrap"
-                >
+              <p className="footnote text-(--ink-muted)">{t("roleFor")}</p>
+              <div className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1">
+                <LinkChip href={base} selected={!methodologyRole}>
                   {t("allRoles")}
-                </Link>
+                </LinkChip>
                 {lenses.map((h) => (
-                  <Link
+                  <LinkChip
                     key={h.key}
                     href={`${base}?role=${encodeURIComponent(h.key)}`}
-                    aria-current={h.key === lensKey ? "page" : undefined}
-                    className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground shrink-0 rounded-md border px-3 py-1.5 whitespace-nowrap"
+                    selected={h.key === lensKey}
                   >
                     {h.name}
-                  </Link>
+                  </LinkChip>
                 ))}
               </div>
               {methodologyRole && areaTags?.sectionsDraft && (
-                <p className="text-muted-foreground text-xs">{t("tagsDraft")}</p>
+                <p className="caption-1 text-(--ink-muted)">{t("tagsDraft")}</p>
               )}
             </nav>
           )}
-          <nav aria-label={t("contents")} className="rounded-xl border p-4">
-            <h2 className="text-sm font-semibold">
-              {t("methodology")} · {t("contents")}
-            </h2>
-            <ol className="mt-2 grid gap-1 text-sm sm:grid-cols-2">
-              {ordered.map((s) => (
-                <li key={s.key}>
-                  <a href={`#${s.key}`} className="underline-offset-4 hover:underline">
-                    {s.title}
-                  </a>
-                  {s.forRole && (
-                    <span className="text-primary-ink text-xs"> · {t("forYourRole")}</span>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </nav>
-          {ordered.map((s) => (
-            <details
-              key={s.key}
-              id={s.key}
-              open={openKey === s.key}
-              className={`group scroll-mt-6 rounded-xl border sm:p-0 ${s.forRole ? "border-primary bg-primary/5" : ""}`}
-            >
-              <summary className="flex cursor-pointer flex-wrap items-center gap-x-2 gap-y-1 p-4 sm:px-6">
-                <span className="text-lg font-semibold break-words">{s.title}</span>
-                {pins && (
-                  <PinButton
-                    kind="section"
-                    href={`/oblasti/${area.number}?open=${encodeURIComponent(s.key)}#${s.key}`}
-                    label={tFav("section", { area: area.number, title: s.title })}
-                    pinned={pins.has(
-                      `/oblasti/${area.number}?open=${encodeURIComponent(s.key)}#${s.key}`,
-                    )}
-                  />
-                )}
-                {s.forRole && (
-                  <span className="bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
-                    {t("forYourRole")}
-                  </span>
-                )}
-              </summary>
-              <div className="px-4 pb-4 sm:px-6 sm:pb-6">
-                {(s.validAsOf || s.reviewedAt) && (
-                  <p className="text-muted-foreground mb-2 text-xs">
-                    {[
-                      s.validAsOf && t("validAsOf", { date: date(s.validAsOf) }),
-                      s.reviewedAt && t("reviewedAt", { date: date(s.reviewedAt) }),
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
-                  </p>
-                )}
-                <MarkdownContent links={sfzLinksFor(area.number)}>{s.body}</MarkdownContent>
-              </div>
-            </details>
-          ))}
+          {forRole.length > 0 ? (
+            <>
+              <section className="flex flex-col gap-2">
+                <h2 className="label text-(--brand-blue-ink) uppercase">
+                  {lensName ? t("forRoleGroup", { role: lensName }) : t("forYourRole")}
+                </h2>
+                <Accordion>{forRole.map(sectionItem)}</Accordion>
+              </section>
+              {others.length > 0 && (
+                <section className="flex flex-col gap-2">
+                  <h2 className="label text-(--ink-muted) uppercase">{t("otherTopics")}</h2>
+                  <Accordion>{others.map(sectionItem)}</Accordion>
+                </section>
+              )}
+            </>
+          ) : (
+            <section className="flex flex-col gap-2">
+              <h2 className="label text-(--ink-muted) uppercase">{t("methodology")}</h2>
+              <Accordion>{ordered.map(sectionItem)}</Accordion>
+            </section>
+          )}
         </>
       )}
     </article>
@@ -379,7 +400,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
 
 export default function AreaPage(props: PageProps<"/oblasti/[area]">) {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:py-16">
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-10">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <AreaDetail {...props} />
       </Suspense>

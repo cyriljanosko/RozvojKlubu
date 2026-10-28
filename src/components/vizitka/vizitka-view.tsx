@@ -1,25 +1,18 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import {
+  Avatar,
+  Badge,
+  Card,
+  KompasBandBadge,
+  LicensingBandPill,
+  LinkChip,
+} from "@/components/sfz";
 import { ConfirmedBadge } from "@/components/vizitka/milestones";
 import type { ClubVizitka, PublicVizitka } from "@/server/services/vizitka.service";
 
-/** Shared Vizitka layout: club profile, Kompas and licensing evaluation side by side (ADR 0007). */
-
-const KOMPAS_BAND: Record<string, string> = {
-  start: "bg-red-600 text-white",
-  rising: "bg-orange-500 text-white",
-  average: "bg-zinc-500 text-white",
-  good: "bg-blue-600 text-white",
-  model: "bg-amber-600 text-white",
-};
-const LICENSING_BAND: Record<string, string> = {
-  grassroots: "bg-green-700 text-white",
-  bronze: "bg-orange-800 text-white",
-  silver: "bg-zinc-500 text-white",
-  gold: "bg-amber-600 text-white",
-};
-const MUTED = "bg-muted text-muted-foreground";
+/** Shared Vizitka layout on the SFZ Design System (R4 G1d): profile, Kompas and licensing (ADR 0007). */
 
 const num = (n: number) => n.toLocaleString("sk", { maximumFractionDigits: 1 });
 const date = (d: Date) =>
@@ -40,142 +33,168 @@ export async function VizitkaView({
   const tLicensing = await getTranslations("licensing");
   const base = `/klub/${encodeURIComponent(vizitka.club.clubId)}`;
   const seasonSlug = vizitka.season.replace("/", "-");
+  const banded = vizitka.licensing?.areas.filter((a) => a.band !== null).length ?? 0;
 
   return (
-    <div className="flex flex-col gap-4">
-      <header className="flex flex-col gap-2">
-        <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-          {t("title")}
-        </p>
-        <h1 className="text-2xl font-semibold tracking-tight break-words">{vizitka.club.name}</h1>
-        <p className="text-muted-foreground text-sm">
-          {t("union", { union: vizitka.club.union, region: vizitka.club.region })}
-        </p>
-        {vizitka.profile ? (
-          <p className="text-sm">
-            <span className="bg-primary text-primary-foreground mr-2 rounded-full px-2 py-0.5 text-xs font-medium">
-              {t(`size.${vizitka.profile.size}`)}
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <Avatar name={vizitka.club.name} size="xl" />
+          <div className="flex min-w-0 flex-col gap-1">
+            <h1 className="title-1 break-words">{vizitka.club.name}</h1>
+            <span className="subheadline text-(--ink-muted)">
+              {t("union", { union: vizitka.club.union, region: vizitka.club.region })}
             </span>
-            {t("profile", vizitka.profile)}
-          </p>
-        ) : (
-          <p className="text-muted-foreground text-sm">{t("noProfile")}</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {vizitka.profile && <Badge tone="brand">{t(`size.${vizitka.profile.size}`)}</Badge>}
+          {vizitka.kompas?.confirmed && <ConfirmedBadge />}
+        </div>
+        <p className="footnote text-(--ink-muted)">
+          {vizitka.profile ? t("profile", vizitka.profile) : t("noProfile")}
+        </p>
+        {vizitka.seasons.length > 1 && (
+          <nav
+            aria-label={t("season")}
+            className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1"
+          >
+            {vizitka.seasons.map((s) => (
+              <LinkChip key={s} href={seasonHref(s)} selected={s === vizitka.season}>
+                {s}
+              </LinkChip>
+            ))}
+          </nav>
         )}
-        <nav aria-label={t("season")} className="flex flex-wrap gap-2 text-sm">
-          {vizitka.seasons.map((s) => (
-            <Link
-              key={s}
-              href={seasonHref(s)}
-              aria-current={s === vizitka.season ? "page" : undefined}
-              className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground rounded-md border px-3 py-1.5"
-            >
-              {s}
-            </Link>
-          ))}
-        </nav>
-        <p className="text-sm">{club ? t("clubIntro") : t("publicIntro")}</p>
+        <p className="callout text-(--ink-muted)">{club ? t("clubIntro") : t("publicIntro")}</p>
       </header>
 
-      <div className="grid gap-4 lg:grid-cols-2">
-        <section
-          aria-labelledby="vizitka-kompas"
-          className="flex flex-col gap-3 rounded-xl border p-4"
-        >
-          <div>
-            <h2 id="vizitka-kompas" className="text-lg font-semibold">
-              {t("kompas.title")}
-            </h2>
-            <p className="text-muted-foreground text-xs">{t("kompas.subtitle")}</p>
+      {(vizitka.kompas || vizitka.licensing) && (
+        <div className="grid grid-cols-2 gap-2">
+          <div className="flex flex-col gap-1 rounded-(--radius-md) bg-(--surface-raised) p-4">
+            <span className="label text-(--ink-muted)">{t("kompas.title")}</span>
+            <span className="title-1 tabular-nums">
+              {vizitka.kompas ? t("kompas.short", { total: vizitka.kompas.total }) : "–"}
+            </span>
+            <span className="footnote text-(--ink-muted)">
+              {vizitka.kompas
+                ? t("kompas.filled", { filled: vizitka.kompas.filledAreas })
+                : t("kompas.none")}
+            </span>
           </div>
-          {vizitka.kompas ? (
-            <>
-              <p className="flex flex-wrap items-baseline gap-x-3">
-                <span className="text-2xl font-semibold tabular-nums">
-                  {t("kompas.total", { total: vizitka.kompas.total })}
-                </span>
-                <span className="text-muted-foreground text-sm">
-                  {t("kompas.filled", { filled: vizitka.kompas.filledAreas })}
-                </span>
-                {vizitka.kompas.confirmed && <ConfirmedBadge />}
-              </p>
-              <ol className="divide-y rounded-md border">
-                {vizitka.kompas.areas.map((a) => (
-                  <li key={a.area} className="flex items-center gap-2 p-2 text-sm">
-                    <span className="min-w-0 flex-1 break-words">
-                      {a.area}. {a.name}
-                    </span>
-                    <span className="tabular-nums">
-                      {a.points !== null
-                        ? t("kompas.points", { points: a.points })
-                        : a.status === "few"
-                          ? t("kompas.few")
-                          : t("kompas.empty")}
-                    </span>
-                    {a.band && (
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${KOMPAS_BAND[a.band] ?? MUTED}`}
-                      >
-                        {tKompasBands(a.band)}
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ol>
-            </>
-          ) : (
-            <p className="text-muted-foreground rounded-md border p-3 text-sm">
-              {t("kompas.none")}
-            </p>
-          )}
-          {club && (
-            <div className="flex flex-col gap-1 text-xs">
-              {club.kompasSubmittedAt && (
-                <span className="text-muted-foreground">
-                  {t("kompas.submittedAt", { date: date(club.kompasSubmittedAt) })}
-                </span>
-              )}
-              {club.drafts.kompasVersion > 0 && !club.kompasSubmittedAt && (
-                <span>{t("kompas.draftOnly", { version: club.drafts.kompasVersion })}</span>
-              )}
-              {club.kompasLink && (
-                <Link
-                  href={
-                    club.kompasLink.kind === "assessment"
-                      ? `${base}/kompas`
-                      : `${base}/kompas/odoslane/${encodeURIComponent(club.kompasLink.submissionId)}`
-                  }
-                  className="text-sm font-medium underline underline-offset-4"
-                >
-                  {t("kompas.link")}
-                </Link>
-              )}
-            </div>
-          )}
-        </section>
+          <div className="flex flex-col gap-1 rounded-(--radius-md) bg-(--surface-raised) p-4">
+            <span className="label text-(--ink-muted)">{t("licensing.title")}</span>
+            <span className="title-1 tabular-nums">
+              {vizitka.licensing
+                ? t("licensing.short", { banded, total: vizitka.licensing.areas.length })
+                : "–"}
+            </span>
+            <span className="footnote text-(--ink-muted)">
+              {vizitka.licensing ? t("licensing.banded") : t("licensing.none")}
+            </span>
+          </div>
+        </div>
+      )}
 
-        <section
-          aria-labelledby="vizitka-licensing"
-          className="flex flex-col gap-3 rounded-xl border p-4"
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card
+          title={t("kompas.byArea")}
+          flush
+          footer={
+            club ? (
+              <div className="footnote flex flex-col gap-1">
+                {club.kompasSubmittedAt && (
+                  <span className="text-(--ink-muted)">
+                    {t("kompas.submittedAt", { date: date(club.kompasSubmittedAt) })}
+                  </span>
+                )}
+                {club.drafts.kompasVersion > 0 && !club.kompasSubmittedAt && (
+                  <span>{t("kompas.draftOnly", { version: club.drafts.kompasVersion })}</span>
+                )}
+                {club.kompasLink && (
+                  <Link
+                    href={
+                      club.kompasLink.kind === "assessment"
+                        ? `${base}/kompas`
+                        : `${base}/kompas/odoslane/${encodeURIComponent(club.kompasLink.submissionId)}`
+                    }
+                    className="subheadline font-semibold"
+                  >
+                    {t("kompas.link")}
+                  </Link>
+                )}
+              </div>
+            ) : undefined
+          }
         >
-          <div>
-            <h2 id="vizitka-licensing" className="text-lg font-semibold">
-              {t("licensing.title")}
-            </h2>
-            <p className="text-muted-foreground text-xs">{t("licensing.subtitle")}</p>
-          </div>
+          {vizitka.kompas ? (
+            <ol>
+              {vizitka.kompas.areas.map((a) => (
+                <li
+                  key={a.area}
+                  className="flex min-h-12 items-center gap-3 border-t border-(--hairline) px-4 py-2 first:border-t-0"
+                >
+                  <span className="w-6 shrink-0 font-bold text-(--ink-muted)">{a.area}</span>
+                  <span className="subheadline min-w-0 flex-1 break-words">{a.name}</span>
+                  <span className="subheadline text-(--ink-muted) tabular-nums">
+                    {a.points !== null
+                      ? t("kompas.points", { points: a.points })
+                      : a.status === "few"
+                        ? t("kompas.few")
+                        : t("kompas.empty")}
+                  </span>
+                  {a.band && (
+                    <KompasBandBadge band={a.band}>{tKompasBands(a.band)}</KompasBandBadge>
+                  )}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p className="callout px-4 pb-4 text-(--ink-muted)">{t("kompas.none")}</p>
+          )}
+        </Card>
+
+        <Card
+          title={t("licensing.title")}
+          flush
+          footer={
+            club ? (
+              <div className="footnote flex flex-col gap-1">
+                {club.licensingClosedAt && club.licensingCoefficient !== null && (
+                  <span className="text-(--ink-muted)">
+                    {t("licensing.closedAt", {
+                      date: date(club.licensingClosedAt),
+                      coef: num(club.licensingCoefficient),
+                    })}
+                  </span>
+                )}
+                {club.drafts.licensingVersion > 0 && !club.licensingClosedAt && (
+                  <span>{t("licensing.draftOnly", { version: club.drafts.licensingVersion })}</span>
+                )}
+                <Link
+                  href={`${base}/licencne-hodnotenie?season=${seasonSlug}`}
+                  className="subheadline font-semibold"
+                >
+                  {t("licensing.link")}
+                </Link>
+              </div>
+            ) : undefined
+          }
+        >
           {vizitka.licensing ? (
-            <ol className="divide-y rounded-md border">
+            <ol>
               {vizitka.licensing.areas.map((a) => (
-                <li key={a.key} className="flex items-center gap-2 p-2 text-sm">
-                  <span className="min-w-0 flex-1 break-words">
+                <li
+                  key={a.key}
+                  className="flex min-h-12 items-center gap-3 border-t border-(--hairline) px-4 py-2 first:border-t-0"
+                >
+                  <span className="subheadline min-w-0 flex-1 break-words">
                     {a.area}. {tLicensing(`areas.${a.key}`)}
                   </span>
-                  <span className="tabular-nums">
+                  <span className="subheadline text-(--ink-muted) tabular-nums">
                     {tLicensing("points", { points: num(a.points) })}
                   </span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${a.band ? LICENSING_BAND[a.band] : MUTED}`}
-                  >
+                  <LicensingBandPill band={a.band ?? "none"}>
                     {a.status === "empty"
                       ? tLicensing("bands.empty")
                       : a.status === "unbanded"
@@ -183,39 +202,16 @@ export async function VizitkaView({
                         : a.band
                           ? tLicensing(`bands.${a.band}`)
                           : tLicensing("bands.none")}
-                  </span>
+                  </LicensingBandPill>
                 </li>
               ))}
             </ol>
           ) : (
-            <p className="text-muted-foreground rounded-md border p-3 text-sm">
-              {t("licensing.none")}
-            </p>
+            <p className="callout px-4 pb-4 text-(--ink-muted)">{t("licensing.none")}</p>
           )}
-          {club && (
-            <div className="flex flex-col gap-1 text-xs">
-              {club.licensingClosedAt && club.licensingCoefficient !== null && (
-                <span className="text-muted-foreground">
-                  {t("licensing.closedAt", {
-                    date: date(club.licensingClosedAt),
-                    coef: num(club.licensingCoefficient),
-                  })}
-                </span>
-              )}
-              {club.drafts.licensingVersion > 0 && !club.licensingClosedAt && (
-                <span>{t("licensing.draftOnly", { version: club.drafts.licensingVersion })}</span>
-              )}
-              <Link
-                href={`${base}/licencne-hodnotenie?season=${seasonSlug}`}
-                className="text-sm font-medium underline underline-offset-4"
-              >
-                {t("licensing.link")}
-              </Link>
-            </div>
-          )}
-        </section>
+        </Card>
       </div>
-      <p className="text-muted-foreground text-sm">{tLicensing("overallPending")}</p>
+      <p className="footnote text-(--ink-muted)">{tLicensing("overallPending")}</p>
     </div>
   );
 }

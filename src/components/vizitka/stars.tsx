@@ -1,11 +1,12 @@
+/** Both ratings on the SFZ blue scale (decision 28. 10. 2026); the label names which one it is. */
 const TONE = {
-  kompas: "text-blue-600 dark:text-blue-400",
-  licensing: "text-orange-700 dark:text-orange-400",
+  kompas: "text-(--brand-blue-ink)",
+  licensing: "text-(--brand-blue-deep) dark:text-(--brand-blue-ink)",
 } as const;
 
 /**
- * Five stars of a ranking (VK-b): filled ones in the colour of the rating (Kompas blue,
- * licensing orange), the rest muted; screen readers get `label` instead of the glyphs.
+ * Five stars of a ranking (VK-b): filled ones in SFZ blue, the rest muted;
+ * screen readers get `label` instead of the glyphs.
  */
 export function Stars({
   value,
@@ -22,7 +23,7 @@ export function Stars({
       <span className={TONE[tone]} aria-hidden>
         {"★".repeat(full)}
       </span>
-      <span className="text-muted-foreground/40" aria-hidden>
+      <span className="text-(--hairline)" aria-hidden>
         {"★".repeat(5 - full)}
       </span>
     </span>
