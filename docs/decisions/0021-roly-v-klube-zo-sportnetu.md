@@ -1,10 +1,11 @@
 # 0021 – Roly v klube zo sportnet.online (S2)
 
-- Stav: **návrh** – čaká na rozhodnutie Cyrila
+- Stav: **prijaté** – rozhodnutia 28. 10. 2026 (Ján Letko, SFZ); Cyril potvrdí zlúčením PR #103
 - Dátum: 2026-10-28
-- Pripravil: Ján Letko (Claude) · Rozhodne: Cyril Janoško
+- Pripravil: Ján Letko (Claude) · Rozhodol: Ján Letko · Potvrdí: Cyril Janoško
 - Nadväzuje na: 0002 (prihlásenie Sportnet), 0003 (tenant = klub), 0004 (roly ako väzby), 0005 (zdroj dát klubov)
-- Zadanie: `docs/sportnet/zadanie-s1-s3.md`, časť S2
+- Zadanie: `docs/sportnet/zadanie-s1-s3.md`, časť S2 · Otvorené otázky pre sportnet.online:
+  `docs/sportnet/otazky-sportnet-online.md`
 
 ## Kontext
 
@@ -13,56 +14,74 @@ ADR 0004). Zadanie S2 žiada, aby aplikácia rolu odvodila z príslušnosti osob
 Cieľové roly (Cyril, 26. 10., `docs/dizajn/analyza-obrazoviek.md` kap. 3): **Klubový manažér, Tréner,
 Tímový manažér, Hráč, Člen**; mentor a admin SFZ ostávajú z aplikácie.
 
-### Čo sportnet.online o osobe a klube vie (overené v dokumentácii 28. 10. 2026)
+Rozhodnutie 28. 10.: aplikácia pracuje **len s dátami CoreApi / CRM sportnet.online** (`api.sportnet.online/v1`).
+Synchronizačná služba issf-connector ani ISSF nie sú pre nás zdroj – to, ako dáta do Sportnetu prichádzajú,
+nás nezaujíma, len to, čo v Sportnete je.
 
-Zdroj: dokumentácia CoreApi (`api.sportnet.online/v1`), auth.sportnet.online, issf-connector a ISSF (P04, P31).
+### Typy osôb a funkcie (ISSF → sportnet.online)
 
-| Čo                                                                                      | Kde v sportnet.online                                                                                                                                                                                              | Ako čítať                                                                                                                                                                           |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Správca klubu (ISSF klubový manažér)                                                    | **Rola v aplikácii CRM pre appSpace klubu** (`appspaces` `CRM:{appSpace}`). issf-connector ju prideľuje manažérom klubu z ISSF pri synchronizácii klubu (`updateClub`).                                            | `GET /me/appspaces` (token používateľa) – aplikácie a organizácie, kde má rolu; filtrovať `app_id = CRM` a appSpace klubu.                                                          |
-| Tréner s licenciou, funkcionár, vedúci družstva, lekár… (ISSF klubová príslušnosť, P04) | `users.sport_expert_orgs[]` – `org_profile_id` (appSpace klubu), typ odborníka, `license_id`, `date_from`/`date_to`. Z ISSF ich píše issf-connector (`updatePerson`, `source: issf`).                              | `GET /me/sport-expert-orgs` (token používateľa) alebo verejne `GET /ppo/{appSpace}/users/{userId}/sport-expert-orgs`; za klub `GET /crm/{appSpace}/users` (CRM rola / `ppoApiKey`). |
-| Hráč (registrácia, prestup, hosťovanie)                                                 | `users.sport_orgs[]` – `org_profile_id`, `transfer_type` (`primary_registration`, `transfer`, `hosting`, `foreign_transfer`), `date_from`/`date_to`, `isActive` (počíta sa pri čítaní).                            | `GET /me/sport-orgs`, verejne `GET /ppo/{appSpace}/users/{userId}/sport-orgs`.                                                                                                      |
-| Tímový manažér (ISSF P31, `TIMOVY_ISSF_MANAZER`)                                        | **V sportnet.online nie je** – P31 je v analýze ISSF označený ako _Missing_. ISSF pozná aj typ odborníka „vedúci družstva / tímový manažér“ ako klubovú príslušnosť (P04) – ten sa do `sport_expert_orgs` zrkadlí. | Len cez `sport_expert_orgs` s typom vedúci družstva; samotná rola tímového ISSF manažéra sa odvodiť nedá.                                                                           |
-| Štatutár                                                                                | ISSF `Statutar` (P04/P51); v sportnet.online len `organizations.statutory` (text), nie väzba na používateľa.                                                                                                       | Neodvodzovať.                                                                                                                                                                       |
+ISSF rozlišuje **typy osôb** (Hráč, Tréner, Delegát, Pozorovateľ, Rozhodca) a **funkcie** v klube
+(Inštruktor, Masér, Terapeut, Psychológ, Lekár / Zdravotník, Ekonóm, Technický pracovník, Kontrolór, Cvičiteľ,
+Učiteľ, Usporiadateľ, Funkcionár, Časomerač, Zapisovateľ, Organizátor, Vedúci družstva, Bezpečnostný manažér,
+Hlavný usporiadateľ, Hlásateľ, Videotechnik, Kustod, Fyzioterapeut, Skaut – formulár ISSF „Registrácia
+osoby/príslušnosti“). Jedna osoba má bežne viac typov aj funkcií naraz (hráč + tréner + rozhodca). Roly
+v aplikácii sú iná vec – typy a funkcie len kopírujú tam, kde to dáva zmysel.
 
-Overené fakty o tokenoch: access token z auth.sportnet.online nesie `sub` (Sportnet ID), `rls` (roly len pre
-**našu** aplikáciu a jej detské aplikácie, nie CRM), platnosť 15 min; refresh token 24 h. `/me/*` používa schému
-`sportnet_user` (token ľubovoľnej aplikácie), nie `my_sportnet_user`. Rola správcu klubu v CRM sa preto do nášho
-tokenu nedostane – treba ju čítať cez `/me/appspaces`.
+### Čo sportnet.online o osobe a klube vie
 
-**Neoverené (treba potvrdiť na živom API alebo s tímom sportnet.online):**
+Overené 28. 10. 2026 v dokumentácii CoreApi a auth.sportnet.online **a na živom verejnom API** (bez tokenu,
+tri pilotné kluby: Slavoj Trebišov, ŠKM Liptovský Hrádok, MFK Dukla Banská Bystrica).
 
-1. Presné hodnoty typu odborníka v `sport_expert_orgs` (pole `competence_type`, číselník
-   `sport-expert-competence-type`) pre trénera, funkcionára a vedúceho družstva. issf-connector ich mapuje funkciou
-   `issfProfileType2SportExpertCompetenceType`; ISSF kódy: `TRENER`, `FUNKCIONAR`, `VEDUCI-DRUZSTVA/TIMOVY-MANAZER`.
-2. Názov CRM roly, ktorú issf-connector dáva klubovým manažérom (dokumentácia: „roly v CRM a Súťažiach“; CRM pozná
-   `admin`, `manager`, `matrikar`).
-3. Či `GET /me/appspaces` a `GET /me/sport-*` vyžadujú iný scope než `openid` (Better Auth dnes žiada len `openid`).
+| Čo                                          | Kde v sportnet.online                                                                                                                                                                                      | Ako čítať                                                                                                                                                                                 |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Správca klubu                               | **Rola v aplikácii CRM pre appSpace klubu** (`appspaces` `CRM:{appSpace}`, roly `admin`, `manager`, `matrikar`; číselník `organization-user-role` má len `manager`).                                       | `GET /me/appspaces` (token používateľa) – filtrovať `app_id = CRM` a appSpace klubu. Za klub: `GET /appgrant/CRM/{appSpace}` (vyžaduje rolu s `grant`/`readonly`, alebo aplikačný token). |
+| Funkcie v klube (vedúci družstva, lekár, …) | `users.sport_expert_orgs[]` – `org_profile_id` (appSpace klubu), `competence_type`, `legal_form`, `license_id`, `date_from`/`date_to`, `source: "issf"`.                                                   | `GET /me/sport-expert-orgs` (token) alebo verejne `GET /ppo/{appSpace}/users/{userId}/sport-expert-orgs` (všetky príslušnosti osoby, s rozbalenou licenciou).                             |
+| Hráč                                        | `users.sport_orgs[]` – `competence_type: "player"`, `transfer_type` (`primary_registration`, `transfer`, `hosting`, `foreign_transfer`, `foreign_hosting`), `date_from`/`date_to`, `sector`.               | `GET /me/sport-orgs`, verejne `GET /ppo/{appSpace}/users/{userId}/sport-orgs`.                                                                                                            |
+| Tréner                                      | **V klubových príslušnostiach troch pilotných klubov sa `competence_type: "coach"` nevyskytuje ani raz.** Trénerská licencia je v `sport_expert_orgs` s `org_profile_id = futbalsfz.sk` (zväz), nie klub.  | Otázka pre sportnet.online (`otazky-sportnet-online.md`, B1): kde je väzba tréner ↔ klub. Dovtedy `coach` z aplikácie.                                                                    |
+| Tímový manažér (ISSF P31)                   | Samotná rola tímového ISSF manažéra v Sportnete nie je. Klubová funkcia **„Vedúci družstva“** a **„Vedúci družstva / Tímový manažér“** je (v živých dátach najčastejšia funkcia: 34 + 26 osôb v Dukle BB). | Z `sport_expert_orgs` podľa `competence_type` (pozri normalizáciu nižšie).                                                                                                                |
+| Zoznam členov klubu                         | Verejný `GET /ppo/{appSpace}/users?affiliationCategory=sport_expert_orgs\|sport_orgs&limit=100` (stránkované, bez tokenu, bez licencií, bez `isActive`; filter `competenceTypes` sa verejne neuplatňuje).  | Pre S3 (osoby v kluboch) bez tokenu; CRM `GET /crm/{appSpace}/users` len s rolou CRM, aplikačným tokenom alebo `ppoApiKey`.                                                               |
+| Štatutár                                    | Len `organizations.statutory` (text), nie väzba na používateľa.                                                                                                                                            | Neodvodzovať.                                                                                                                                                                             |
 
-## Rozhodnutie (návrh)
+**Hodnoty `competence_type` v živých dátach** sú zmes kódov z globálneho číselníka
+`GET /codelist/sport-expert-competence-type` (41 položiek: `coach`, `functionary`, `matchmaker`, `organizer`,
+`security_manager`, `masseur`, `hlasatel`, `timekeeper`, `reporter`, `technical_worker`, …) a **slovenských
+názvov z ISSF uložených doslovne** (`Vedúci družstva`, `Vedúci družstva / Tímový manažér`, `Lekár / Zdravotník`,
+`Hlavný usporiadateľ`, `Videotechnik`, `Kustod`, `Fyzioterapeut`) – tie v číselníku nie sú. Mapovanie preto
+porovnáva hodnotu po normalizácii (malé písmená, bez diakritiky, orezané) a pre tímového manažéra používa
+prefix `veduci druzstva`.
+
+Tokeny: access token z auth.sportnet.online nesie `sub` (Sportnet ID), `rls` (roly len pre **našu**
+aplikáciu a jej detské aplikácie, nie CRM), platnosť 15 min; refresh token 24 h. `/me/*` používa schému
+`sportnet_user` (token ľubovoľnej aplikácie). Rola správcu klubu v CRM sa do nášho tokenu nedostane – treba ju
+čítať cez `/me/appspaces`. Verejné `/ppo/…` endpointy `isActive` nevracajú – aktivita sa počíta z `date_from`
+/ `date_to` (väčšina príslušností je bez `date_to`).
+
+## Rozhodnutie
 
 ### 1. Mapovanie sportnet.online → roly v klube
 
-| Rola v aplikácii | Kód (`CLUB_ROLES`) | Zdroj v sportnet.online                                                                                     | Platnosť                                 |
-| ---------------- | ------------------ | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| Klubový manažér  | `club_manager`     | rola v `CRM:{clubId}` z `/me/appspaces` (ľubovoľná rola CRM v appSpace klubu)                               | kým rola v CRM trvá (`validTo` appspace) |
-| Tréner           | `coach`            | `sport_expert_orgs` s `org_profile_id = clubId`, typ tréner, aktívna (`date_to` prázdne alebo v budúcnosti) | podľa `date_from`/`date_to`              |
-| Tímový manažér   | `team_manager`     | `sport_expert_orgs` s typom vedúci družstva / tímový manažér, aktívna                                       | podľa `date_from`/`date_to`              |
-| Hráč / hráčka    | `player`           | `sport_orgs` s `org_profile_id = clubId`, `isActive = true` (vrátane hosťovania)                            | podľa `date_from`/`date_to`              |
-| Člen             | `member`           | každá iná aktívna položka `sport_expert_orgs` pre klub (funkcionár, lekár, masér, …)                        | podľa `date_from`/`date_to`              |
-| Mentor zväzu     | `mentor`           | **aplikácia** (prideľuje admin SFZ) – bez zmeny                                                             | sezóna                                   |
-| Admin SFZ        | `user.role`        | **aplikácia** – bez zmeny                                                                                   | –                                        |
+| Rola v aplikácii | Kód (`CLUB_ROLES`) | Zdroj v sportnet.online                                                                                                                                      | Platnosť                                 |
+| ---------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| Klubový manažér  | `club_manager`     | rola **`admin` alebo `manager`** v `CRM:{clubId}` z `/me/appspaces` (rozhodnutie 28. 10.; `matrikar` ani iné roly nie)                                       | kým rola v CRM trvá (`validTo` appspace) |
+| Tréner           | `coach`            | **zatiaľ aplikácia** (prideľuje klubový manažér alebo admin SFZ); zo Sportnetu až po odpovedi na otázku B1 – potom `sport_expert_orgs` typu `coach` pre klub | sezóna / podľa `date_from`/`date_to`     |
+| Tímový manažér   | `team_manager`     | `sport_expert_orgs` s `org_profile_id = clubId`, `competence_type` normalizovaný s prefixom `veduci druzstva`, aktívna                                       | podľa `date_from`/`date_to`              |
+| Hráč / hráčka    | `player`           | `sport_orgs` s `org_profile_id = clubId`, `competence_type = player`, aktívna (vrátane hosťovania)                                                           | podľa `date_from`/`date_to`              |
+| Člen             | `member`           | každá iná aktívna položka `sport_expert_orgs` pre klub (funkcionár, lekár, usporiadateľ, …)                                                                  | podľa `date_from`/`date_to`              |
+| Mentor zväzu     | `mentor`           | **aplikácia** (prideľuje admin SFZ) – bez zmeny                                                                                                              | sezóna                                   |
+| Admin SFZ        | `user.role`        | **aplikácia** – bez zmeny                                                                                                                                    | –                                        |
 
 Pravidlá:
 
+- Aktívna príslušnosť = `date_from` ≤ dnes a (`date_to` prázdne alebo ≥ dnes).
 - Hierarchia práv ostáva podľa analýzy kap. 3.1: `club_manager` ⊃ `coach` = `team_manager` ⊃ `member`; `player` = `member`.
 - Dnešná rola `management` sa **premenuje** na `club_manager` (migrácia existujúcich väzieb pilotných klubov, len
   testovacie účty). Vo všetkých službách a testoch sa `management` nahradí.
-- Osoba môže mať v jednom klube viac rolí naraz (ADR 0004) – každá je samostatná väzba.
-- Tímový manažér: kým sportnet.online nepokryje P31, rolu môže **navyše** prideliť aj klubový manažér v aplikácii
-  (zdroj `app`). Rovnako klubový manažér môže v aplikácii pridať `member` osobe bez príslušnosti (pozvánka, F7).
+- Osoba môže mať v jednom klube viac rolí naraz (ADR 0004) – každá je samostatná väzba. Delegát, pozorovateľ
+  a rozhodca sú príslušnosti k zväzu, nie ku klubu – rolu v klube nedávajú.
+- Klubový manažér môže v aplikácii **navyše** prideliť `coach`, `team_manager` a `member` (zdroj `app`) – pre
+  trénerov, kým ich Sportnet nedá, a pre osoby bez príslušnosti (pozvánka, F7).
 
-### 2. Schéma `club_memberships` (zmena schémy – vyžaduje súhlas)
+### 2. Schéma `club_memberships` (súhlas 28. 10. 2026)
 
 Nové polia na väzbe:
 
@@ -86,62 +105,69 @@ interface ClubMembershipDoc {
 - Väzby so `source: "sportnet"` aplikácia nikdy needituje ručne – pri obnove sa prepíšu; väzby `source: "app"`
   obnova nechá tak.
 
-### 3. Kedy sa roly obnovujú
+### 3. Kedy sa roly obnovujú (rozhodnutie 28. 10.: pri prihlásení + ručne, bez cronu)
 
 1. **Pri každom prihlásení cez Sportnet** (hook Better Auth po prihlásení): zavolať `/me/appspaces`,
    `/me/sport-orgs`, `/me/sport-expert-orgs` access tokenom používateľa, prepočítať väzby `source: "sportnet"`
    pre aktuálnu sezónu, zapísať `syncedAt`.
-2. **Na pozadí raz denne** (Vercel Cron) pre používateľov so `sportnetId`, ktorí sa dlhšie neprihlásili – cez
-   verejné `GET /ppo/{clubId}/users/{userId}/sport-orgs` a `…/sport-expert-orgs` (bez tokenu; CRM rolu bez tokenu
-   používateľa overiť nevieme – zostáva do ďalšieho prihlásenia).
-3. **Ručne** tlačidlom „Obnoviť zo Sportnetu“ v administrácii (S3) – rovnaká služba.
-4. Access token Sportnetu má 15 min, refresh 24 h: Better Auth ukladá oba v `account`; služba použije refresh,
+2. **Ručne** tlačidlom „Obnoviť zo Sportnetu“ v administrácii (S3) – pre jednu osobu alebo celý klub cez verejné
+   `GET /ppo/{clubId}/users/{userId}/…` (CRM rolu bez tokenu používateľa overiť nevieme – ostáva do ďalšieho
+   prihlásenia).
+3. Access token Sportnetu má 15 min, refresh 24 h: Better Auth ukladá oba v `account`; služba použije refresh,
    keď access vypršal, inak sa obnova odloží na ďalšie prihlásenie (bez chyby pre používateľa).
+
+Prečo bez denného cronu: roly sa používajú len vtedy, keď je osoba v aplikácii – a vtedy sú čerstvé
+z prihlásenia. Cron by vedel obnoviť len `team_manager`, `player` a `member` z verejných endpointov; rolu
+`club_manager` (CRM) bez tokenu používateľa neobnoví, takže by aj tak nebol úplný. Jediné, čo cron rieši, je
+zoznam členov klubu pre iných (obrazovka „Členovia klubu“) – tam stačí ručná obnova klubu v administrácii.
+Ak sa neskôr ukáže, že zoznamy členov zastarávajú, pridá sa Vercel Cron nad verejnými endpointmi (lacný, bez
+tokenu) ako nové ADR.
 
 Používateľ prihlásený e-mailovým odkazom (bez `sportnetId`) roly zo Sportnetu nemá – môže mať len `app` väzby.
 
-### 4. Čo sa mení v kóde (S2, po súhlase)
+### 4. Čo sa mení v kóde (S2)
 
 - `src/server/db/types.ts` – `CLUB_ROLES`, nové polia; `ARCHITECTURE.md` – index.
 - `src/server/integrations/sportnet/` – klient pre `/me/appspaces`, `/me/sport-orgs`, `/me/sport-expert-orgs`
   a verejné `/ppo/{appSpace}/users/{userId}/…` (mockovaný v testoch).
 - `src/server/services/club-roles-sync.service.ts` – čistá funkcia `deriveClubRoles(appspaces, sportOrgs,
-sportExpertOrgs, clubIds, season)` → zoznam väzieb (testy na každý riadok tabuľky) + zápis do DB.
+sportExpertOrgs, clubIds, season, today)` → zoznam väzieb (testy na každý riadok tabuľky vrátane normalizácie
+  `competence_type`) + zápis do DB.
 - `club-access.ts`, `src/lib/navigation.ts`, `club-mentoring`, `kompas`, `club-plan`, `club-settings` – nahradiť
   `management` za `club_manager`, doplniť `team_manager`, `player`, `member` podľa matice kap. 3.2.
-- Administrácia: väzby zo Sportnetu len na čítanie, s označením zdroja; ručne len `mentor`, `team_manager`, `member`.
+- Administrácia: väzby zo Sportnetu len na čítanie, s označením zdroja; ručne `mentor`, `coach`, `team_manager`,
+  `member`.
 - Migrácia: `management` → `club_manager`, `source: "app"` pre existujúce väzby (skript, dry-run, so súhlasom).
 
 ## Dôsledky
 
 - Pilotné kluby majú roly zo Sportnetu až po tom, čo sa ľudia prihlásia Sportnet účtom (S1) – dovtedy ostávajú ručné
   väzby (`source: "app"`).
+- Tréneri sú do odpovede sportnet.online (B1) ručná rola – rovnako ako dnes.
 - Tenant filter `clubId` (ADR 0003) sa nemení; klub = appSpace PPO, čo sedí s `org_profile_id` v Sportnete.
 - Osoba s rolou vo viacerých kluboch dostane väzbu pre každý klub, ktorý je v aplikácii (`clubs`); kluby mimo pilotu
   sa ignorujú, kým S3 nenačíta kluby zo Sportnetu.
 - Zoznam členov klubu (obrazovka „Klub – členovia a roly“, redesign G2) sa dá postaviť z `club_memberships`
   (`clubId, season, source`), bez živého volania Sportnetu pri každom zobrazení.
 - Dáta o osobách v MongoDB sú len väzby a identifikátory (CLAUDE.md: osobné údaje živo zo Sportnetu).
+- Mapovanie `competence_type` je závislé od doslovných slovenských názvov z ISSF – ak ich Sportnet skodifikuje
+  (otázka B2), zmení sa len normalizačná tabuľka v `deriveClubRoles`.
 
 ## Zamietnuté alternatívy a prečo
 
 - **Čítať roly živo zo Sportnetu pri každom požiadavku** – `/me/*` vyžaduje platný token používateľa (15 min),
   verejné `/ppo/…` endpointy nedajú CRM rolu; pri každom requeste by to bolo pomalé a závislé od dostupnosti API.
   Cache vo väzbách s `syncedAt` je jednoduchšia a vysvetliteľná.
+- **Denný cron** (pôvodný návrh) – zamietnuté 28. 10., dôvody v časti 3.
 - **Roly z `rls` claimu v ID tokene** – nesie len roly našej aplikácie (a detských), nie CRM. Dalo by sa to obísť
-  registráciou našej aplikácie ako detskej aplikácie CRM v Sportnete – otázka pre tím sportnet.online (bod 8.2
-  zadania), zatiaľ nepočítame s tým.
-- **Register členov cez `GET /crm/{appSpace}/users` aplikačným tokenom alebo `ppoApiKey`** – vyžaduje kľúč za každý
-  klub alebo `sportnet_app` token s rolou CRM pre všetky kluby; vhodné pre S3 (číselníky, synchronizácia celého klubu),
-  pre roly prihláseného človeka stačí `/me/*`.
-- **Odvodiť tímového manažéra z ISSF** – Sportnet P31 nezrkadlí; čakať na Sportnet by blokovalo S2. Dočasne ručne.
+  registráciou našej aplikácie ako detskej aplikácie CRM v Sportnete – otázka A10 pre tím sportnet.online, zatiaľ
+  nepočítame s tým.
+- **Klubový manažér = ktokoľvek s rolou v CRM klubu** – zamietnuté 28. 10.; `matrikar` a prípadné ďalšie roly
+  nie sú vedenie klubu.
+- **Register členov cez `GET /crm/{appSpace}/users` aplikačným tokenom alebo `ppoApiKey`** – pre roly prihláseného
+  človeka stačí `/me/*`; pre S3 (zoznam osôb klubu) stačí verejný `/ppo/{appSpace}/users`. Aplikačný token sa
+  rieši v otázkach A9 a B7.
+- **Odvodiť tímového manažéra z ISSF** – Sportnet P31 nezrkadlí; funkcia „Vedúci družstva“ v `sport_expert_orgs`
+  stačí.
 - **Ponechať `management` ako kód** – názov by sa rozchádzal s cieľovou rolou „Klubový manažér“ a maticou prístupov;
   premenovanie je lacné, kým sú v DB len testovacie väzby.
-
-## Otázky pre Cyrila (a tím sportnet.online)
-
-1. Súhlas so zmenou schémy `club_memberships` a `CLUB_ROLES` podľa časti 2 (vrátane premenovania `management`).
-2. Frekvencia obnovy podľa časti 3 (pri prihlásení + denne + ručne) – stačí, alebo len pri prihlásení?
-3. Má byť `club_manager` každý s ľubovoľnou CRM rolou v appSpace klubu, alebo len `admin` / `manager`?
-4. Neoverené body vyššie (`competence_type`, názov CRM roly, scope) – overiť po registrácii OAuth klienta (S1) na
-   Preview s Cyrilovým účtom (má CRM rolu v Nižnom Žipove?), prípadne otázka na sportnet.online.

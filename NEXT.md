@@ -28,7 +28,10 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
   - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
-    - [ ] S2-a – zdroje rolí overené v dokumentácii, návrh ADR 0021 (`docs/decisions/0021-roly-v-klube-zo-sportnetu.md`) na vetve `feat/s2-roles-adr` – rozhodne Cyril (schéma `club_memberships`, `management` → `club_manager`, obnova rolí). Neoverené: `competence_type` v `sport_expert_orgs`, názov CRM roly správcu klubu, scope pre `/me/*`.
+    - [x] S2-a – zdroje rolí overené v dokumentácii aj na živom verejnom API, ADR 0021 prijaté 28. 10. (Ján): schéma `club_memberships` so `source`/`validTo`/`syncedAt`, `management` → `club_manager`, klubový manažér = CRM `admin`/`manager`, obnova pri prihlásení + ručne (bez cronu). Tréner ↔ klub sa v Sportnete nenašiel – otázka B1 v `docs/sportnet/otazky-sportnet-online.md`.
+    - [ ] S2-b – implementácia podľa ADR 0021 (typy, klient Sportnetu, `deriveClubRoles`, nahradenie `management`, migrácia s dry-run).
+    - [ ] OAuth klient Sportnetu – nastaví Cyril podľa `docs/sportnet/otazky-sportnet-online.md` časť A; otázky B1–B9 pre vývojárov sportnet.online.
+    - [ ] Preview DB `rozvojklubu_preview` založená (prázdna, indexy ako dev) – prepnúť vo Verceli `MONGODB_DB` pre Preview a naplniť obsah/kluby (Cyril).
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
 - [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – PR #83 (`6210a90`). Dependabot PR #85 (minor a patch) – rozhodne Cyril.
 

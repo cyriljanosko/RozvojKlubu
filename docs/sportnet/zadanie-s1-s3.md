@@ -112,11 +112,22 @@ desktope; texty cez next-intl; aktualizovaný `NEXT.md`, `CHANGELOG.md` a devlog
   príslušnosti, P31 – tímový manažér).
 - Vercel (tím cyro5) a Atlas (projekt RozvojKlubu) – podľa potreby pridá Cyril.
 
-## 8. Otvorené otázky (rozhodne Cyril, prípadne s tímom sportnet.online)
+## 8. Otvorené otázky – odpovede 28. 10. 2026 (Ján Letko, SFZ)
 
-1. Kto zaregistruje OAuth klienta v sportnet.online a pre ktoré adresy?
-2. Akým tokenom bude aplikácia čítať register členov klubov (aplikačný token `sportnet_app`, `ppoApiKey`
-   klubu)?
-3. Presné typy osôb a funkcie v sportnet.online pre Klubového manažéra, Trénera a Tímového manažéra.
-4. Ako často obnovovať roly a dáta klubov (pri prihlásení, raz denne, na požiadanie)?
-5. Vlastná databáza pre Preview pred prvými ostrými dátami (`NEXT.md`).
+1. **OAuth klient** – nastaví Cyril, prípadne po konzultácii s vývojármi sportnet.online. Čo treba
+   (client_id, hosty, redirect URI, granty, scope, claims): `docs/sportnet/otazky-sportnet-online.md`, časť A.
+2. **Token pre register členov** – nie JWT používateľa, ale aplikačný token (`client_credentials`, rovnaký
+   `client_id` a `secret`). Až v S3; pre zoznam osôb klubu zatiaľ stačí verejný `GET /ppo/{appSpace}/users`.
+   Potrebné app roly sú otázka B7 pre sportnet.online.
+3. **Typy osôb a funkcie** – typy osôb v ISSF: Hráč, Tréner, Delegát, Pozorovateľ, Rozhodca; funkcie v klube
+   (Vedúci družstva, Funkcionár, Lekár / Zdravotník, …) podľa formulára ISSF „Registrácia osoby/príslušnosti“.
+   Jedna osoba má bežne viac typov aj funkcií. Mapovanie na roly: ADR 0021, časť 1. Tréner ↔ klub sa
+   v Sportnete nenašiel – otázka B1.
+4. **Frekvencia obnovy rolí** – pri prihlásení + ručne v administrácii, bez cronu (ADR 0021, časť 3).
+   **Dáta klubov** (S3): odporúčanie – pri štarte raz ručne (import v administrácii zo Sportnetu), potom
+   týždenný Vercel Cron nad verejnými `/ppo/…` endpointmi (bez tokenu) + ručné tlačidlo; kluby sa menia
+   zriedka (zlúčenia, premenovania, nové kluby medzi sezónami), denný beh by bol zbytočný. Rozhodne Cyril v S3.
+5. **Databáza pre Preview** – založená 28. 10. 2026: `rozvojklubu_preview` na clustri `rozvojklubu-dev`,
+   prázdna, s rovnakými kolekciami a indexmi ako `rozvojklubu_dev`. Preview na ňu prepne Cyril vo Verceli
+   (`MONGODB_DB=rozvojklubu_preview` pre prostredie Preview); obsah (oblasti, Kompas) a kluby sa do nej
+   naimportujú cez administráciu alebo skopírujú z dev – rozhodne Cyril.
