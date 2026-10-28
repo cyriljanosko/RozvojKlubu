@@ -15,7 +15,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [ ] R3 – technický základ (postup schválený 26. 10., `docs/dizajn/plan-redesignu.md`): R3.1 vrstva `src/components/sfz`, R3.2 navigačný model, R3.3 rám aplikácie hneď pre celú appku, R3.4 lint + Playwright; PR do sfz-design-system s chýbajúcimi ikonami.
     - [x] R3.1 – vrstva `src/components/sfz` (PR #89): komponenty DS za klientskou hranicou, `AppNavBar`, `AppTabBar`, `LinkTabs`, akordeón, ukazovateľ postupu, pásma z tokenov.
     - [x] R3.2 – navigačný model `src/lib/navigation.ts` (PR #90). Stránky `/viac`, členovia a nastavenia klubu, číselníky a Sportnet v administrácii model zatiaľ nemá – pribudnú s R3.3, R4 a S3.
-    - [x] R3.3 – rám aplikácie (PR #91): `AppFrame` v root layoute, `/viac`, `klub/[clubId]/layout.tsx`, `admin/layout.tsx`. Starú `src/components/site-header.tsx` už nič nepoužíva – zmazať so súhlasom.
+    - [x] R3.3 – rám aplikácie (PR #91): `AppFrame` v root layoute, `/viac`, `klub/[clubId]/layout.tsx`, `admin/layout.tsx`. Stará `src/components/site-header.tsx` zmazaná so súhlasom 28. 10.
     - [x] R3.4 – lint pravidlá dizajnu a Playwright screenshoty v CI (PR #92, ADR 0019).
     - [ ] PR do sfz-design-system s chýbajúcimi ikonami (mapa, kompas, kniha, hviezda …) a návrhom akordeónu a ukazovateľa postupu.
   - [ ] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95), bod 5 (PR #96); bod 4 – admin SFZ mení súhlas s rebríčkom za klub (rozhodnutie Cyrila 28. 10., ADR 0020, PR #97).
