@@ -609,7 +609,9 @@
       "submittedAt": "Odoslané {date}",
       "draft": "Rozpracovaná verzia {version} ešte nie je odoslaná – vo Vizitke je posledná odoslaná.",
       "draftOnly": "Rozpracovaný Kompas (verzia {version}) ešte nie je odoslaný mentorovi.",
-      "link": "Otvoriť Kompas"
+      "link": "Otvoriť Kompas",
+      "short": "{total} b.",
+      "byArea": "Kompas podľa oblastí"
     },
     "licensing": {
       "title": "Licenčné hodnotenie",
@@ -617,9 +619,12 @@
       "none": "Zatiaľ neuzavreté.",
       "closedAt": "Uzavreté {date} · koeficient sídla {coef}",
       "draftOnly": "Rozpracované hodnotenie (verzia {version}) ešte nie je uzavreté.",
-      "link": "Otvoriť licenčné hodnotenie"
+      "link": "Otvoriť licenčné hodnotenie",
+      "short": "{banded} z {total}",
+      "banded": "oblastí s pásmom"
     },
-    "notFound": "Klub sa nenašiel."
+    "notFound": "Klub sa nenašiel.",
+    "back": "Kluby"
   },
   "academy": {
     "title": "Moja Akadémia",
@@ -1577,7 +1582,7 @@
     "external": "otvorí sa web SFZ v novom okne"
   },
   "vizitky": {
-    "title": "Vizitky klubov",
+    "title": "Kluby",
     "intro": "Kluby v Akadémii rozvoja klubov SFZ na mape Slovenska a ich rebríčky. Kliknite na zväz na mape alebo vyhľadajte klub a otvorte jeho Vizitku.",
     "map": {
       "title": "Mapa Slovenska",
@@ -1604,7 +1609,8 @@
       "obfz": "ObFZ",
       "size": "Veľkosť",
       "all": "Všetky",
-      "clear": "Zrušiť filtre"
+      "clear": "Zrušiť filtre",
+      "title": "Filtre a zoradenie"
     },
     "list": {
       "title": "Kluby",
@@ -1689,7 +1695,13 @@
         "position": "{name}: {position}. miesto z {of} – {size}, podľa hodnotenia {by}. Poradie je neverejné.",
         "notRanked": "{name} zatiaľ nie je v rebríčku. Vedenie klubu môže dať súhlas vo Vizitke klubu.",
         "noValue": "{name} je v rebríčku, ale zatiaľ bez hodnotenia {by}."
-      }
+      },
+      "topShort": "Top 3"
+    },
+    "views": {
+      "label": "Zobrazenie klubov",
+      "map": "Mapa",
+      "rankings": "Rebríčky"
     }
   },
   "milestones": {

@@ -19,6 +19,12 @@ export const REDESIGNED_FILES = [
   "src/app/oblasti/page.tsx",
   "src/app/prihlasenie/**",
   "src/components/areas/**",
+  // R4 G1d – Kluby a vizitka (verejná aj klubová); milestones.tsx waits for DS icons
+  "src/app/vizitka/**",
+  "src/components/vizitka/public-plan.tsx",
+  "src/components/vizitka/stars.tsx",
+  "src/components/vizitka/vizitka-view.tsx",
+  "src/components/vizitka/vizitky-explorer.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

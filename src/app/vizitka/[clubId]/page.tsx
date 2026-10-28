@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { Card, EmptyState, Icon, LinkButton } from "@/components/sfz";
 import { PublicPlan } from "@/components/vizitka/public-plan";
 import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
@@ -29,13 +31,25 @@ async function PublicVizitkaPage({ params, searchParams }: Props) {
     vizitka = await getPublicVizitka(vizitkaDeps, clubId, season);
   } catch (error) {
     if (error instanceof ApiError && error.code === "NOT_FOUND") {
-      return <p className="text-sm">{t("notFound")}</p>;
+      return (
+        <EmptyState
+          title={t("notFound")}
+          action={<LinkButton href="/vizitka">{t("back")}</LinkButton>}
+        />
+      );
     }
     throw error;
   }
   const base = `/vizitka/${encodeURIComponent(clubId)}`;
   return (
     <div className="flex flex-col gap-6">
+      <Link
+        href="/vizitka"
+        className="body inline-flex min-h-(--touch-target) items-center gap-1 self-start no-underline"
+      >
+        <Icon name="chevron-left" size={22} />
+        {t("back")}
+      </Link>
       <VizitkaView vizitka={vizitka} seasonHref={(s) => `${base}?season=${seasonToSlug(s)}`} />
       <MilestonesBlock clubId={clubId} season={vizitka.season} />
       <PublicPlan clubId={clubId} season={vizitka.season} />
@@ -49,26 +63,22 @@ async function MilestonesBlock({ clubId, season }: { clubId: string; season: str
   if (!milestones) return null;
   const t = await getTranslations("milestones");
   return (
-    <section
-      aria-labelledby="vizitka-milestones"
-      className="flex flex-col gap-3 rounded-xl border p-4"
-    >
-      <div>
-        <h2 id="vizitka-milestones" className="text-lg font-semibold">
-          {t("title", { season })}
-        </h2>
-        <p className="text-muted-foreground text-xs">
+    <Card
+      title={t("title", { season })}
+      footer={
+        <span className="footnote text-(--ink-muted)">
           {t("count", { count: milestones.length, total: 6 })}
-        </p>
-      </div>
+        </span>
+      }
+    >
       <Milestones reached={milestones} variant="list" />
-    </section>
+    </Card>
   );
 }
 
 export default function Page(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-10 sm:py-16">
+    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-10">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <PublicVizitkaPage {...props} />
       </Suspense>
