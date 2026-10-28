@@ -19,6 +19,12 @@ export const REDESIGNED_FILES = [
   "src/app/oblasti/page.tsx",
   "src/app/prihlasenie/**",
   "src/components/areas/**",
+  // R4 G1b – detail oblasti (Metodika, Prax); pin-button waits for the DS "star" icon
+  "src/app/oblasti/[[]area]/**",
+  "src/components/content/coach-education.tsx",
+  "src/components/content/markdown.tsx",
+  "src/components/content/practice-progress.tsx",
+  "src/components/content/practice-view.tsx",
   // R4 G1c – Kompas na vyskúšanie; the form is shared with the club Kompas (page itself in G2)
   "src/app/kompas/**",
   "src/app/klub/[[]clubId]/kompas/kompas-form.tsx",

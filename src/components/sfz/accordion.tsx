@@ -27,7 +27,10 @@ export function AccordionItem({ title, subtitle, defaultOpen, id, children }: Ac
           <span className="headline">{title}</span>
           {subtitle && <span className="footnote text-(--ink-muted)">{subtitle}</span>}
         </span>
-        <span className="text-(--ink-muted) transition-transform group-open:rotate-180" aria-hidden>
+        <span
+          className="inline-flex text-(--ink-muted) transition-transform group-open:rotate-180"
+          aria-hidden
+        >
           <Icon name="chevron-down" size={18} />
         </span>
       </summary>

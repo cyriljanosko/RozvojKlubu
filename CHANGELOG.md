@@ -13,6 +13,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 - Redesign Kompasu na vyskúšanie (R4 G1c, ADR 0018): oblasti v akordeóne s pásmom a počtom odpovedí, otázky ako `Checkbox` SFZ Design System, priebežné skóre v lište nad spodnou navigáciou s tlačidlom Výsledok, „Čo urobiť najbližšie“ v karte. Nový formulár používa aj Kompas klubu (stránka klubu sa prepíše v G2).
 - Redesign verejnej časti, prvá časť (R4 G1a, ADR 0018): Akadémia (úvod), Oblasti a Prihlásenie v SFZ Design System podľa schváleného návrhu. Oblasti sú zoskupené podľa línií jedenástky (brankár, obrana, stred, útok) v odtieňoch modrej SFZ; rola sa vyberá čipmi, „Začnite tu“ je zvýraznená karta, Kompas s výberom klubu v karte. Úvod je pre všetkých rovnaký – prehľad prihláseného je v Moja Akadémia (Domov). Prihlásenie: „Prihlásiť sa cez sportnet.online“ so symbolom sportnet.online.
+- Redesign detailu oblasti (R4 G1b): hlavička s číslom oblasti a pásmom, prepínač Metodika / Prax, rola čipmi. Sekcie Metodiky sú v akordeóne – najprv sekcie pre zvolenú rolu, potom „Ďalšie témy oblasti“. Prax na kartách SFZ Design System: postup klubu s ukazovateľom, prvý krok so zaškrtávaním, prehľad cesty (Stepper), kroky s možnosťami, knižnica vzorov v akordeóne; neprihlásenému oznam „Váš postup sa neukladá“. Vzdelávanie trénera (oblasť 3) ako zbaliteľný blok.
 
 ### Opravené
 
