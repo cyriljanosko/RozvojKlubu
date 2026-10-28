@@ -59,7 +59,7 @@ describe("club mentoring – pure", () => {
     const coach = mentoringView(doc, {
       clubId: A,
       season: "2026/2027",
-      role: "coach",
+      roles: ["coach"],
       current: true,
     });
     expect(coach.closingClub?.feedback).toBeNull();
@@ -68,7 +68,7 @@ describe("club mentoring – pure", () => {
     const old = mentoringView(doc, {
       clubId: A,
       season: "2025/2026",
-      role: "admin",
+      roles: ["admin"],
       current: false,
     });
     expect(old.writes).toEqual([]);
@@ -157,5 +157,22 @@ describe("club mentoring – service", () => {
     });
     // a past season is read-only
     expect((await getClubMentoring(deps, admin, A, "2020/2021")).writes).toEqual([]);
+  });
+
+  it("a mentor who is also the club's management writes both the club and the mentor parts", async () => {
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "mentor" });
+    const view = await getClubMentoring(deps, alice, A);
+    expect(view.role).toBe("mentor");
+    expect([...view.writes].sort()).toEqual(["closingClub", "closingMentor", "focus", "intro"]);
+    const v1 = await saveMentoringPart(deps, alice, A, "intro", { ...intro, expectedVersion: 0 });
+    const v2 = await saveMentoringPart(deps, alice, A, "focus", {
+      strengths: "Vedenie",
+      weaknesses: "Tréneri",
+      recommendations: "Nábor",
+      assessment: "Malý ambiciózny klub",
+      areas: [3],
+      expectedVersion: v1.version,
+    });
+    expect(v2.done).toMatchObject({ intro: true, focus: true });
   });
 });
