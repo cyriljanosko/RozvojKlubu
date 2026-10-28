@@ -11,6 +11,7 @@ import { pinAction, unpinAction } from "./actions";
 /**
  * "Pripnúť do Moja Akadémia" (MD-c): a star that pins or unpins the page or its part.
  * Rendered only for signed-in users; works inside a <summary> without toggling it.
+ * The star icon is still from lucide until the design system release with "star" (sfz-design-system PR #1).
  */
 export function PinButton({
   kind,
@@ -56,7 +57,7 @@ export function PinButton({
           e.stopPropagation();
           toggle();
         }}
-        className="hover:bg-muted text-muted-foreground inline-flex size-8 shrink-0 items-center justify-center rounded-md aria-pressed:text-amber-500"
+        className="inline-flex size-(--touch-target) shrink-0 items-center justify-center rounded-(--radius-sm) text-(--ink-muted) hover:bg-(--surface-raised) aria-pressed:text-(--brand-blue-ink)"
       >
         <Star aria-hidden className="size-4" fill={pinned ? "currentColor" : "none"} />
       </button>

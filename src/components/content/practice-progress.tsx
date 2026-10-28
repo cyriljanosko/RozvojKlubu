@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from "react";
 
 import { saveProgressAction } from "@/app/oblasti/[area]/actions";
+import { Badge, Button, Card, Checkbox, ProgressBar, Stepper } from "@/components/sfz";
 
 /** Club progress in the Prax of an area (F6d): state in the browser, every change saved at once. */
 export interface ProgressStep {
@@ -139,19 +140,25 @@ export function ProgressProvider({
 
 const useProgress = () => useContext(ProgressContext);
 
-/** Checkbox of a first-step task; plain number marker without progress. */
-export function TaskCheck({ taskId, label }: { taskId: string; label: string }) {
+/** Checkbox of a first-step task; null without progress (the caller shows a numbered list). */
+export function TaskCheck({
+  taskId,
+  label,
+  description,
+}: {
+  taskId: string;
+  label: string;
+  description?: string;
+}) {
   const p = useProgress();
   if (!p) return null;
-  const checked = p.state.tasks.includes(taskId);
   return (
-    <input
-      type="checkbox"
-      className="accent-primary mt-0.5 size-4 shrink-0"
-      checked={checked}
+    <Checkbox
+      label={label}
+      description={description}
+      checked={p.state.tasks.includes(taskId)}
       disabled={!p.editable}
       onChange={() => p.toggleTask(taskId)}
-      aria-label={label}
     />
   );
 }
@@ -164,20 +171,22 @@ export function OptionPick({ stepId, option }: { stepId: string; option: number 
   const chosen = p.state.steps.find((s) => s.stepId === stepId)?.option === option;
   if (!p.editable) {
     return chosen ? (
-      <span className="bg-primary text-primary-foreground self-start rounded-full px-2 py-0.5 text-xs">
+      <Badge tone="brand" className="self-start">
         {t("chosen")}
-      </span>
+      </Badge>
     ) : null;
   }
   return (
-    <button
-      type="button"
-      onClick={() => p.pickOption(stepId, option)}
+    <Button
+      size="sm"
+      variant={chosen ? "primary" : "secondary"}
+      icon={chosen ? "check" : undefined}
       aria-pressed={chosen}
-      className="aria-pressed:bg-primary aria-pressed:text-primary-foreground hover:bg-muted mt-1 self-start rounded-md border px-2.5 py-1 text-xs font-medium"
+      onClick={() => p.pickOption(stepId, option)}
+      className="self-start"
     >
-      {chosen ? `✓ ${t("chosen")}` : t("choose")}
-    </button>
+      {chosen ? t("chosen") : t("choose")}
+    </Button>
   );
 }
 
@@ -192,20 +201,35 @@ export function StepDone({ stepId }: { stepId: string }) {
     : "";
   if (!p.editable) {
     return step?.done ? (
-      <p className="text-sm font-medium text-green-700 dark:text-green-500">
-        ✓ {t("doneOn", { date })}
-      </p>
+      <Badge tone="success" className="self-start">
+        {t("doneOn", { date })}
+      </Badge>
     ) : null;
   }
   return (
-    <button
-      type="button"
-      onClick={() => p.toggleDone(stepId)}
+    <Button
+      variant={step?.done ? "secondary" : "primary"}
+      icon={step?.done ? "check-circle" : undefined}
       aria-pressed={step?.done ?? false}
-      className="hover:bg-muted self-start rounded-md border px-3 py-1.5 text-sm font-medium aria-pressed:border-green-700 aria-pressed:text-green-700 dark:aria-pressed:border-green-500 dark:aria-pressed:text-green-500"
+      onClick={() => p.toggleDone(stepId)}
+      className="self-start"
     >
-      {step?.done ? `✓ ${t("doneOn", { date })}` : t("markDone")}
-    </button>
+      {step?.done ? t("doneOn", { date }) : t("markDone")}
+    </Button>
+  );
+}
+
+/** Path overview of the shown role; with club progress the first step not done is the current one. */
+export function PathOverview({ steps }: { steps: { id: string; label: string; title: string }[] }) {
+  const p = useProgress();
+  const done = (id: string) => p?.state.steps.some((s) => s.stepId === id && s.done) ?? false;
+  const first = steps.findIndex((s) => !done(s.id));
+  return (
+    <Stepper
+      orientation="vertical"
+      current={first === -1 ? steps.length : first}
+      steps={steps.map((s) => ({ label: s.title, description: s.label }))}
+    />
   );
 }
 
@@ -224,28 +248,28 @@ export function RoleProgressBar({
   if (!p) return null;
   const tasks = taskIds.filter((id) => p.state.tasks.includes(id)).length;
   const steps = stepIds.filter((id) => p.state.steps.some((s) => s.stepId === id && s.done)).length;
-  const share = Math.round(((tasks + steps) / Math.max(1, taskIds.length + stepIds.length)) * 100);
+  const share = ((tasks + steps) / Math.max(1, taskIds.length + stepIds.length)) * 100;
+  const summary = t("summary", {
+    tasks,
+    tasksTotal: taskIds.length,
+    steps,
+    stepsTotal: stepIds.length,
+  });
   return (
-    <div className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
-      <p className="font-semibold break-words">{t("title", { club: clubName })}</p>
-      <div className="bg-muted h-2 overflow-hidden rounded-full" aria-hidden>
-        <div className="bg-primary h-full" style={{ width: `${share}%` }} />
+    <Card title={t("title", { club: clubName })}>
+      <div className="flex flex-col gap-2">
+        <ProgressBar value={share} label={t("title", { club: clubName })} valueText={summary} />
+        <p className="footnote text-(--ink-muted)">
+          {summary}
+          {!p.editable && ` · ${t("readOnly")}`}
+        </p>
+        <p className="footnote" role="status" aria-live="polite">
+          {p.status === "saving" && t("saving")}
+          {p.status === "saved" && t("saved")}
+          {p.status === "conflict" && <span className="text-(--danger)">{t("conflict")}</span>}
+          {p.status === "error" && <span className="text-(--danger)">{t("error")}</span>}
+        </p>
       </div>
-      <p className="text-muted-foreground text-xs">
-        {t("summary", {
-          tasks,
-          tasksTotal: taskIds.length,
-          steps,
-          stepsTotal: stepIds.length,
-        })}
-        {!p.editable && ` · ${t("readOnly")}`}
-      </p>
-      <p className="text-xs" role="status" aria-live="polite">
-        {p.status === "saving" && t("saving")}
-        {p.status === "saved" && t("saved")}
-        {p.status === "conflict" && <span className="text-destructive">{t("conflict")}</span>}
-        {p.status === "error" && <span className="text-destructive">{t("error")}</span>}
-      </p>
-    </div>
+    </Card>
   );
 }

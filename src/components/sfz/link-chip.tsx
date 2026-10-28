@@ -18,7 +18,11 @@ export function LinkChip({
     <Link
       href={href}
       aria-current={selected ? "true" : undefined}
-      className={selected ? "sfz-chip is-selected no-underline" : "sfz-chip no-underline"}
+      className={
+        selected
+          ? "sfz-chip is-selected shrink-0 whitespace-nowrap no-underline"
+          : "sfz-chip shrink-0 whitespace-nowrap no-underline"
+      }
     >
       <span>{children}</span>
     </Link>
