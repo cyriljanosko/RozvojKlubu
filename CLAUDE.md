@@ -116,7 +116,7 @@ Sekcia „Nefungovalo“ je povinná, keď sa niečo zamietlo – z git logu sa 
 
 ## 9. Definition of Done
 
-`format:check`, lint, `typecheck`, `npm run test` a `build` prejdú → oprava bugu má reprodukujúci test → rozhranie overené mobile-first → texty cez i18n (zatiaľ SK) → aktualizovaný `NEXT.md`, `CHANGELOG.md` a devlog → commit podľa konvencie → PR s odôvodnením a funkčným preview deploymentom.
+`format:check`, lint (vrátane pravidiel dizajnu), `typecheck`, `npm run test`, `build` a vizuálne testy `npm run test:e2e` (ADR 0019) prejdú → oprava bugu má reprodukujúci test → rozhranie overené mobile-first → texty cez i18n (zatiaľ SK) → aktualizovaný `NEXT.md`, `CHANGELOG.md` a devlog → commit podľa konvencie → PR s odôvodnením a funkčným preview deploymentom.
 
 ## 10. Špecifiká prostredia
 

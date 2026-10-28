@@ -31,4 +31,5 @@ Plán prepisu a stav skupín obrazoviek: `docs/dizajn/plan-redesignu.md`, analý
 ## Pred označením za hotové
 
 - Overené na 375 px a na desktope, vo svetlej aj tmavej téme (`prefers-color-scheme`).
-- Lint bez porušení pravidiel dizajnu; Definition of Done podľa `CLAUDE.md`.
+- Lint bez porušení pravidiel dizajnu – nové priečinky pridaj do `REDESIGNED_FILES` v `eslint.config.mjs`;
+  vizuálne testy `npm run test:e2e` (ADR 0019); Definition of Done podľa `CLAUDE.md`.

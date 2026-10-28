@@ -29,6 +29,24 @@ Nastavenia projektu Vercel: Framework **Next.js**, Node 24.x, región funkcií *
 - Vercel → Deployments → posledné funkčné produkčné nasadenie → **Promote to Production** (okamžité).
 - Potom revert commitu v `main` cez PR, aby sa chyba nevrátila pri ďalšom nasadení.
 
+## Vizuálne regresné testy (Playwright, ADR 0019)
+
+- Lokálne: `npm run build`, potom `npm run test:e2e` (server s `ENABLE_DEV_PAGES=1` spustí Playwright sám). Na macOS
+  sa vytvoria len lokálne screenshoty `*-darwin.png` (necommitujú sa).
+- CI porovnáva s Linux screenshotmi v `e2e/__screenshots__/*-linux.png`. Pri rozdiele CI zlyhá a priloží artefakt
+  `playwright-report` (porovnanie aj nové obrázky).
+- **Nový screenshot** (nový test alebo prvý beh): CI ho vytvorí, nahrá v artefakte `playwright-report`
+  (priečinok `e2e/__screenshots__/`) a zámerne zlyhá, kým sa nový obrázok necommitne:
+
+  ```bash
+  gh run download <id-behu> -n playwright-report -D /tmp/pw
+  cp /tmp/pw/e2e/__screenshots__/*-linux.png e2e/__screenshots__/
+  ```
+
+- **Zámerná zmena vzhľadu:** zmazať dotknutý `*-linux.png` v tej istej vetve, nechať CI vytvoriť nový a stiahnuť
+  ho rovnako ako vyššie. Porovnanie starého a nového je v `playwright-report` neúspešného behu.
+  Nový základ sa commituje v tom istom PR ako zmena, s vysvetlením v popise PR.
+
 ## Keď to spadne
 
 | Príznak                                                        | Pravdepodobná príčina                                                     | Riešenie                                                                                                                                                                                        |
