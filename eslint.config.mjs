@@ -19,6 +19,9 @@ export const REDESIGNED_FILES = [
   "src/app/oblasti/page.tsx",
   "src/app/prihlasenie/**",
   "src/components/areas/**",
+  // R4 G1c – Kompas na vyskúšanie; the form is shared with the club Kompas (page itself in G2)
+  "src/app/kompas/**",
+  "src/app/klub/[[]clubId]/kompas/kompas-form.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */
