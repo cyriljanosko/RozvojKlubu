@@ -45,3 +45,8 @@ next-env.d.ts
 
 # allow committed env template
 !.env.example
+
+# Playwright (R3.4) – reports, and local macOS screenshots (baselines are Linux, from CI)
+/test-results/
+/playwright-report/
+/e2e/__screenshots__/*-darwin.png
