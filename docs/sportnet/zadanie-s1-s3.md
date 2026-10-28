@@ -127,7 +127,5 @@ desktope; texty cez next-intl; aktualizovaný `NEXT.md`, `CHANGELOG.md` a devlog
    **Dáta klubov** (S3): odporúčanie – pri štarte raz ručne (import v administrácii zo Sportnetu), potom
    týždenný Vercel Cron nad verejnými `/ppo/…` endpointmi (bez tokenu) + ručné tlačidlo; kluby sa menia
    zriedka (zlúčenia, premenovania, nové kluby medzi sezónami), denný beh by bol zbytočný. Rozhodne Cyril v S3.
-5. **Databáza pre Preview** – založená 28. 10. 2026: `rozvojklubu_preview` na clustri `rozvojklubu-dev`,
-   prázdna, s rovnakými kolekciami a indexmi ako `rozvojklubu_dev`. Preview na ňu prepne Cyril vo Verceli
-   (`MONGODB_DB=rozvojklubu_preview` pre prostredie Preview); obsah (oblasti, Kompas) a kluby sa do nej
-   naimportujú cez administráciu alebo skopírujú z dev – rozhodne Cyril.
+5. **Databáza pre Preview** – nateraz netreba, Preview ďalej používa `rozvojklubu_dev` (rozhodnutie Jána 28. 10. 2026). Prázdna `rozvojklubu_preview` založená v ten deň bola hneď zrušená. Platí odchýlka
+   v CLAUDE.md, časť 7: pred prvými ostrými dátami vlastná databáza.

@@ -31,7 +31,6 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] S2-a – zdroje rolí overené v dokumentácii aj na živom verejnom API, ADR 0021 prijaté 28. 10. (Ján): schéma `club_memberships` so `source`/`validTo`/`syncedAt`, `management` → `club_manager`, klubový manažér = CRM `admin`/`manager`, obnova pri prihlásení + ručne (bez cronu). Tréner ↔ klub sa v Sportnete nenašiel – otázka B1 v `docs/sportnet/otazky-sportnet-online.md`.
     - [ ] S2-b – implementácia podľa ADR 0021 (typy, klient Sportnetu, `deriveClubRoles`, nahradenie `management`, migrácia s dry-run).
     - [ ] OAuth klient Sportnetu – nastaví Cyril podľa `docs/sportnet/otazky-sportnet-online.md` časť A; otázky B1–B9 pre vývojárov sportnet.online.
-    - [ ] Preview DB `rozvojklubu_preview` založená (prázdna, indexy ako dev) – prepnúť vo Verceli `MONGODB_DB` pre Preview a naplniť obsah/kluby (Cyril).
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
 - [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – PR #83 (`6210a90`). Dependabot PR #85 (minor a patch) – rozhodne Cyril.
 
