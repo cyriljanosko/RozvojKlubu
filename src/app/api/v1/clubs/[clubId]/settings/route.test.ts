@@ -51,6 +51,16 @@ describe("club settings API (MR-a)", () => {
     });
   });
 
+  it("admin_sfz changes the consent for the club (ADR 0020)", async () => {
+    getCurrentUser.mockResolvedValue(admin);
+    const res = await put({ given: true, expectedVersion: 0 });
+    expect(res.status).toBe(200);
+    expect((await res.json()).data).toMatchObject({
+      rankingConsent: { given: true },
+      canEdit: true,
+    });
+  });
+
   it("refuses coaches, anonymous users and bad input", async () => {
     getCurrentUser.mockResolvedValue(bob);
     expect((await put({ given: true, expectedVersion: 0 })).status).toBe(403);

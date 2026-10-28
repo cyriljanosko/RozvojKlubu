@@ -164,7 +164,7 @@ async function MentoringLine({ clubId, season }: { clubId: string; season: strin
   );
 }
 
-/** Consent to the public rankings (MR-c, ADR 0015): management decides, other roles see the state. */
+/** Consent to the public rankings (MR-c, ADR 0015, ADR 0020): management or admin_sfz decides, other roles see the state. */
 async function RankingConsent({ clubId }: { clubId: string }) {
   const user = await getCurrentUser(await headers());
   const t = await getTranslations("ranking.consent");

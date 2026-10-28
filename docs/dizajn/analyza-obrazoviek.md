@@ -133,7 +133,7 @@ Pravidlo zo zadania: **hodnotenia a zbery dát sa ukladajú len po prihlásení*
 2. Používateľ, ktorý je v klube mentor aj vedenie, nemôže písať časti klubu v Mentoringu – `roleFor` uprednostní
    mentora (`club-mentoring.service.ts:93`).
 3. `/mentor` pustí len admina, hoci služba podporuje aj mentora (`mentor/page.tsx:21`).
-4. Súhlas s rebríčkom nemôže meniť ani admin (`club-settings.service.ts:69`) – ak je to zámer, zapísať do ADR 0015.
+4. Súhlas s rebríčkom nemôže meniť ani admin (`club-settings.service.ts:69`) – ak je to zámer, zapísať do ADR 0015. → Rozhodnuté 27. 10.: admin SFZ súhlas meniť môže (ADR 0020).
 5. `?season=` v Mentoringu očakáva `2025/2026`, ostatné stránky `2025-2026` (`club-mentoring.service.ts:147`).
 
 ## 4. Informačná architektúra
