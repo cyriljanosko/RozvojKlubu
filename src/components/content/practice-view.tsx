@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 
 import {
   OptionPick,
+  PathOverview,
   ProgressProvider,
   RoleProgressBar,
   StepDone,
@@ -12,6 +13,15 @@ import {
 } from "@/components/content/practice-progress";
 import { LinkedText } from "@/components/content/linked-text";
 import { PinButton } from "@/components/favorites/pin-button";
+import {
+  Accordion,
+  AccordionItem,
+  Alert,
+  Badge,
+  Card,
+  LinkButton,
+  LinkChip,
+} from "@/components/sfz";
 import type { SfzLink } from "@/lib/sfz-links";
 import type { PracticeContent } from "@/server/services/practice.schema";
 
@@ -60,9 +70,7 @@ export async function PracticeView({
   const templates = new Map(practice.templates.map((tpl) => [tpl.key, tpl]));
   const modules = new Map(practice.mentorModules.map((m) => [m.key, m]));
   const tag = (value?: string) =>
-    value && value !== "all" ? (
-      <span className="bg-muted rounded px-1.5 py-0.5 text-[11px]">{t(`tags.${value}`)}</span>
-    ) : null;
+    value && value !== "all" ? <Badge tone="neutral">{t(`tags.${value}`)}</Badge> : null;
   const tplTitle = (key?: string) => (key ? (templates.get(key)?.title ?? key) : null);
   // one set per step: an SFZ page is linked once in a step (why, options, branch B)
   const scopes = new Map<string, Set<string>>();
@@ -73,28 +81,30 @@ export async function PracticeView({
   const linked = (text: string, scopeId: string) => (
     <LinkedText text={text} links={links} used={scope(scopeId)} />
   );
+  const pin = (kind: "practice" | "pattern", href: string, label: string) =>
+    pins ? <PinButton kind={kind} href={href} label={label} pinned={pinned.has(href)} /> : null;
 
   const OptionCard = ({ o, pick, at }: { o: Option; pick?: ReactNode; at: string }) => (
-    <li className="flex flex-col gap-1.5 rounded-lg border p-3 text-sm">
-      <span className="flex flex-wrap items-center gap-2 font-semibold">
+    <li className="flex flex-col gap-1.5 rounded-(--radius-sm) bg-(--surface) p-3">
+      <span className="headline flex flex-wrap items-center gap-2">
         {o.name} {tag(o.tag)}
       </span>
-      <span>{linked(o.what, at)}</span>
-      <span className="text-muted-foreground text-xs">
+      <span className="callout">{linked(o.what, at)}</span>
+      <span className="footnote text-(--ink-muted)">
         {t("byWhom")}: {o.who} · {t("time")}: {o.time}
       </span>
-      <span className="text-xs">
-        <span className="text-muted-foreground">{t("result")}: </span>
+      <span className="footnote">
+        <span className="text-(--ink-muted)">{t("result")}: </span>
         {linked(o.result, at)}
       </span>
       {o.template && (
-        <span className="text-xs">
-          <span className="text-muted-foreground">{t("template")}: </span>
+        <span className="footnote">
+          <span className="text-(--ink-muted)">{t("template")}: </span>
           {tplTitle(o.template)}
         </span>
       )}
       {o.copyText && (
-        <pre className="bg-muted/50 mt-1 rounded-md p-2 text-xs whitespace-pre-wrap">
+        <pre className="footnote mt-1 rounded-(--radius-sm) bg-(--surface-raised) p-2 whitespace-pre-wrap">
           {o.copyText}
         </pre>
       )}
@@ -102,20 +112,17 @@ export async function PracticeView({
     </li>
   );
 
+  const library = role.library.map((key) => templates.get(key)).filter((tpl) => tpl !== undefined);
+
   const body = (
     <div className="flex flex-col gap-6">
       <nav aria-label={t("chooseRole")} className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold">{t("chooseRole")}</h2>
-        <div className="flex flex-wrap gap-2">
+        <h2 className="footnote text-(--ink-muted)">{t("chooseRole")}</h2>
+        <div className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1">
           {practice.roles.map((r) => (
-            <Link
-              key={r.id}
-              href={hrefForRole(r.id)}
-              aria-current={r.id === role.id ? "page" : undefined}
-              className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground rounded-md border px-3 py-1.5 text-sm"
-            >
+            <LinkChip key={r.id} href={hrefForRole(r.id)} selected={r.id === role.id}>
               {r.label}
-            </Link>
+            </LinkChip>
           ))}
         </div>
       </nav>
@@ -126,188 +133,184 @@ export async function PracticeView({
           taskIds={role.firstStep.tasks.map((x) => x.id)}
           stepIds={role.steps.map((x) => x.id)}
         />
+      ) : signedIn ? (
+        <Alert tone="info">{t("progress.noClub")}</Alert>
       ) : (
-        <p className="text-muted-foreground rounded-xl border border-dashed p-3 text-sm">
-          {signedIn ? (
-            t("progress.noClub")
-          ) : (
-            <>
-              {t("progress.signIn")}{" "}
-              <Link href="/prihlasenie" className="font-medium underline underline-offset-4">
-                {t("progress.signInLink")}
-              </Link>
-            </>
-          )}
-        </p>
+        <Alert
+          tone="info"
+          title={t("progress.signInTitle")}
+          action={
+            <LinkButton href="/prihlasenie" variant="secondary" size="sm">
+              {t("progress.signInLink")}
+            </LinkButton>
+          }
+        >
+          {t("progress.signIn")}
+        </Alert>
       )}
 
-      <section className="flex flex-col gap-3 rounded-xl border p-4 sm:p-6">
-        <h2 className="text-lg font-semibold break-words">{role.label}</h2>
-        {role.description && <p className="text-sm">{role.description}</p>}
-        <dl className="grid gap-3 text-sm sm:grid-cols-3">
-          {role.who && <Def label={t("who")}>{role.who}</Def>}
-          {role.does && <Def label={t("does")}>{role.does}</Def>}
-          {role.gain && <Def label={t("gain")}>{role.gain}</Def>}
-        </dl>
-        <div className="grid gap-4 text-sm sm:grid-cols-2">
-          <List title={t("responsibilities")} items={role.responsibilities} />
-          <List title={t("notThis")} items={role.notThis} />
-        </div>
-        <p className="text-muted-foreground text-xs">
-          {t("time")}: {role.time} · {t("withWhom")}: {role.withWhom}
-        </p>
-      </section>
-
-      <section
-        id="first-step"
-        className="flex scroll-mt-6 flex-col gap-3 rounded-xl border p-4 sm:p-6"
-      >
-        <h2 className="text-lg font-semibold">{t("firstStep")}</h2>
-        <p className="font-medium">{role.firstStep.title}</p>
-        <p className="text-muted-foreground text-xs">
-          {t("byWhom")}: {role.firstStep.who} · {t("time")}: {role.firstStep.time} · {t("result")}:{" "}
-          {linked(role.firstStep.result, "first")}
-        </p>
-        {progress ? (
-          <ul className="space-y-1.5 text-sm">
-            {role.firstStep.tasks.map((task) => (
-              <li key={task.id}>
-                <label className="flex items-start gap-2">
-                  <TaskCheck taskId={task.id} label={task.title} />
-                  <span>
-                    {task.title}
-                    {task.note && <span className="text-muted-foreground"> – {task.note}</span>}
-                  </span>
-                </label>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <ol className="list-decimal space-y-1.5 pl-5 text-sm">
-            {role.firstStep.tasks.map((task) => (
-              <li key={task.id}>
-                {task.title}
-                {task.note && <span className="text-muted-foreground"> – {task.note}</span>}
-              </li>
-            ))}
-          </ol>
-        )}
-        <div className="bg-muted/50 rounded-md p-3 text-sm">
-          <p className="font-semibold">{role.firstStep.aside.title}</p>
-          <pre className="mt-2 font-sans text-sm whitespace-pre-wrap">
-            {linked(role.firstStep.aside.text, "first")}
-          </pre>
-          <p className="text-muted-foreground mt-2 text-xs">{role.firstStep.aside.note}</p>
-        </div>
-        {role.firstStep.template && (
-          <p className="text-xs">
-            <span className="text-muted-foreground">{t("template")}: </span>
-            {tplTitle(role.firstStep.template)}
+      <Card title={role.label}>
+        <div className="flex flex-col gap-3">
+          {role.description && <p className="callout">{role.description}</p>}
+          <dl className="grid gap-3 sm:grid-cols-3">
+            {role.who && <Def label={t("who")}>{role.who}</Def>}
+            {role.does && <Def label={t("does")}>{role.does}</Def>}
+            {role.gain && <Def label={t("gain")}>{role.gain}</Def>}
+          </dl>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <List title={t("responsibilities")} items={role.responsibilities} />
+            <List title={t("notThis")} items={role.notThis} />
+          </div>
+          <p className="footnote text-(--ink-muted)">
+            {t("time")}: {role.time} · {t("withWhom")}: {role.withWhom}
           </p>
-        )}
-      </section>
+        </div>
+      </Card>
 
-      <section className="flex flex-col gap-4">
-        <header>
-          <h2 className="text-lg font-semibold">
-            {t("path")}: {role.pathTitle}
-          </h2>
-          <p className="text-muted-foreground text-sm">{role.pathSubtitle}</p>
-        </header>
-        <ol className="flex flex-col gap-4">
-          {role.steps.map((step) => (
-            <li
-              key={step.id}
-              id={`step-${step.id}`}
-              className="flex scroll-mt-6 flex-col gap-3 rounded-xl border p-4 sm:p-6"
+      <Card id="first-step" title={t("firstStep")} variant="highlight" className="scroll-mt-6">
+        <div className="flex flex-col gap-3">
+          <p className="headline">{role.firstStep.title}</p>
+          <p className="footnote text-(--ink-muted)">
+            {t("byWhom")}: {role.firstStep.who} · {t("time")}: {role.firstStep.time} · {t("result")}
+            : {linked(role.firstStep.result, "first")}
+          </p>
+          {progress ? (
+            <div className="flex flex-col">
+              {role.firstStep.tasks.map((task) => (
+                <TaskCheck
+                  key={task.id}
+                  taskId={task.id}
+                  label={task.title}
+                  description={task.note}
+                />
+              ))}
+            </div>
+          ) : (
+            <ol className="callout list-decimal space-y-1.5 pl-5">
+              {role.firstStep.tasks.map((task) => (
+                <li key={task.id}>
+                  {task.title}
+                  {task.note && <span className="text-(--ink-muted)"> – {task.note}</span>}
+                </li>
+              ))}
+            </ol>
+          )}
+          <div className="rounded-(--radius-sm) bg-(--surface) p-3">
+            <p className="subheadline font-semibold">{role.firstStep.aside.title}</p>
+            <pre className="callout mt-2 font-(family-name:--font-sans) whitespace-pre-wrap">
+              {linked(role.firstStep.aside.text, "first")}
+            </pre>
+            <p className="footnote mt-2 text-(--ink-muted)">{role.firstStep.aside.note}</p>
+          </div>
+          {role.firstStep.template && (
+            <p className="footnote">
+              <span className="text-(--ink-muted)">{t("template")}: </span>
+              {tplTitle(role.firstStep.template)}
+            </p>
+          )}
+        </div>
+      </Card>
+
+      <Card title={`${t("path")}: ${role.pathTitle}`}>
+        <div className="flex flex-col gap-3">
+          <p className="subheadline text-(--ink-muted)">{role.pathSubtitle}</p>
+          <PathOverview
+            steps={role.steps.map((step) => ({
+              id: step.id,
+              label: step.label,
+              title: step.title,
+            }))}
+          />
+        </div>
+      </Card>
+
+      <ol className="flex flex-col gap-4">
+        {role.steps.map((step, index) => (
+          <li key={step.id} id={`step-${step.id}`} className="scroll-mt-6">
+            <Card
+              title={step.title}
+              action={pin(
+                "practice",
+                `${pins?.base}&role=${role.id}#step-${step.id}`,
+                tFav("practice", { area: pins?.area ?? 0, title: step.title }),
+              )}
             >
-              <p className="text-muted-foreground text-xs">{step.label}</p>
-              <div className="flex items-start gap-1">
-                <h3 className="font-semibold break-words">{step.title}</h3>
-                {pins && (
-                  <PinButton
-                    kind="practice"
-                    href={`${pins.base}&role=${role.id}#step-${step.id}`}
-                    label={tFav("practice", { area: pins.area, title: step.title })}
-                    pinned={pinned.has(`${pins.base}&role=${role.id}#step-${step.id}`)}
-                    className="-mt-1.5"
-                  />
+              <div className="flex flex-col gap-3">
+                <p className="footnote text-(--ink-muted)">
+                  {t("stepOf", { n: index + 1, total: role.steps.length })} · {step.label}
+                </p>
+                <p className="callout">
+                  <span className="text-(--ink-muted)">{t("why")}: </span>
+                  {linked(step.why, step.id)}
+                </p>
+                <ul className="grid gap-2 lg:grid-cols-3" aria-label={t("options")}>
+                  {step.options.map((o, i) => (
+                    <OptionCard
+                      key={o.name}
+                      o={o}
+                      at={step.id}
+                      pick={progress ? <OptionPick stepId={step.id} option={i} /> : undefined}
+                    />
+                  ))}
+                </ul>
+                {step.branchB && (
+                  <Accordion>
+                    <AccordionItem title={`${t("branchB")}: ${step.branchB.title}`}>
+                      <p className="callout">{linked(step.branchB.why, step.id)}</p>
+                      <ul className="mt-2 grid gap-2 lg:grid-cols-3">
+                        {step.branchB.options.map((o) => (
+                          <OptionCard key={o.name} o={o} at={step.id} />
+                        ))}
+                      </ul>
+                    </AccordionItem>
+                  </Accordion>
                 )}
+                {step.mentor && (
+                  <div className="rounded-(--radius-sm) border border-dashed border-(--hairline) p-3">
+                    <p className="label text-(--brand-blue-ink) uppercase">{t("mentor")}</p>
+                    <p className="subheadline mt-1 font-semibold">{step.mentor.title}</p>
+                    <ul className="callout mt-1 list-disc pl-5">
+                      {step.mentor.practice.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                    {step.mentor.modules.map((key) => {
+                      const m = modules.get(key);
+                      return m ? (
+                        <p key={key} className="footnote mt-2 text-(--ink-muted)">
+                          {m.title} · {m.meta.join(" · ")}
+                        </p>
+                      ) : null;
+                    })}
+                  </div>
+                )}
+                {progress && <StepDone stepId={step.id} />}
               </div>
-              <p className="text-sm">
-                <span className="text-muted-foreground">{t("why")}: </span>
-                {linked(step.why, step.id)}
-              </p>
-              <ul className="grid gap-2 lg:grid-cols-3">
-                {step.options.map((o, i) => (
-                  <OptionCard
-                    key={o.name}
-                    o={o}
-                    at={step.id}
-                    pick={progress ? <OptionPick stepId={step.id} option={i} /> : undefined}
-                  />
-                ))}
-              </ul>
-              {step.branchB && (
-                <details className="rounded-lg border p-3">
-                  <summary className="cursor-pointer text-sm font-semibold">
-                    {t("branchB")}: {step.branchB.title}
-                  </summary>
-                  <p className="mt-2 text-sm">{linked(step.branchB.why, step.id)}</p>
-                  <ul className="mt-2 grid gap-2 lg:grid-cols-3">
-                    {step.branchB.options.map((o) => (
-                      <OptionCard key={o.name} o={o} at={step.id} />
-                    ))}
-                  </ul>
-                </details>
-              )}
-              {step.mentor && (
-                <div className="rounded-lg border border-dashed p-3 text-sm">
-                  <p className="text-xs font-semibold">{t("mentor")}</p>
-                  <p className="mt-1 font-medium">{step.mentor.title}</p>
-                  <ul className="mt-1 list-disc pl-5">
-                    {step.mentor.practice.map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
-                  </ul>
-                  {step.mentor.modules.map((key) => {
-                    const m = modules.get(key);
-                    return m ? (
-                      <p key={key} className="text-muted-foreground mt-2 text-xs">
-                        {m.title} · {m.meta.join(" · ")}
-                      </p>
-                    ) : null;
-                  })}
-                </div>
-              )}
-              {progress && <StepDone stepId={step.id} />}
-            </li>
-          ))}
-        </ol>
-      </section>
+            </Card>
+          </li>
+        ))}
+      </ol>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <section className="rounded-xl border p-4 text-sm">
-          <h2 className="font-semibold">{t("backlog")}</h2>
-          <ul className="mt-2 flex flex-col gap-1.5">
+        <Card title={t("backlog")}>
+          <ul className="callout flex flex-col gap-1.5">
             {role.backlog.map((b) => (
               <li key={b.text} className="flex flex-wrap items-center gap-2">
                 {b.text} {tag(b.tag)}
               </li>
             ))}
           </ul>
-        </section>
-        <section className="rounded-xl border p-4 text-sm">
-          <h2 className="font-semibold">{t("indicators")}</h2>
-          <ul className="mt-2 list-disc space-y-1.5 pl-5">
+        </Card>
+        <Card title={t("indicators")}>
+          <ul className="callout list-disc space-y-1.5 pl-5">
             {role.indicators.map((i) => (
               <li key={i}>{i}</li>
             ))}
           </ul>
           {role.mentorNumbers && (
             <>
-              <h3 className="mt-3 text-xs font-semibold">{t("mentorNumbers")}</h3>
-              <ul className="mt-1 list-disc pl-5 text-xs">
+              <h4 className="subheadline mt-3 font-semibold">{t("mentorNumbers")}</h4>
+              <ul className="footnote mt-1 list-disc pl-5">
                 {role.mentorNumbers.map((n) => (
                   <li key={n.key}>
                     {n.label}
@@ -317,68 +320,56 @@ export async function PracticeView({
               </ul>
             </>
           )}
-        </section>
+        </Card>
       </div>
 
       {role.next.length > 0 && (
-        <section className="rounded-xl border p-4 text-sm">
-          <h2 className="font-semibold">{t("next")}</h2>
-          <ul className="mt-2 flex flex-col gap-2">
+        <Card title={t("next")}>
+          <ul className="callout flex flex-col gap-2">
             {role.next.map((n) => (
               <li key={`${n.area}-${n.title}`}>
-                <Link
-                  href={`/oblasti/${n.area}`}
-                  className="font-medium underline underline-offset-4"
-                >
+                <Link href={`/oblasti/${n.area}`} className="font-semibold">
                   {n.area}. {n.title}
                 </Link>
-                <span className="text-muted-foreground"> – {n.why}</span>
+                <span className="text-(--ink-muted)"> – {n.why}</span>
               </li>
             ))}
           </ul>
-        </section>
+        </Card>
       )}
 
-      <section className="rounded-xl border p-4 text-sm">
-        <h2 className="font-semibold">{t("library")}</h2>
-        <ul className="mt-2 flex flex-col gap-2">
-          {role.library
-            .map((key) => templates.get(key))
-            .filter((tpl) => tpl !== undefined)
-            .map((tpl) => (
-              <li key={tpl.key}>
-                <details
+      {library.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h2 className="label text-(--ink-muted) uppercase">{t("library")}</h2>
+          <Accordion>
+            {library.map((tpl) => {
+              const href = `${pins?.base}&role=${role.id}&open=tpl-${tpl.key}#tpl-${tpl.key}`;
+              return (
+                <AccordionItem
+                  key={tpl.key}
                   id={`tpl-${tpl.key}`}
-                  open={openKey === `tpl-${tpl.key}`}
-                  className="scroll-mt-6 rounded-lg border p-3"
+                  defaultOpen={openKey === `tpl-${tpl.key}`}
+                  subtitle={tpl.description}
+                  title={
+                    <span className="flex items-center gap-1">
+                      <span className="min-w-0 flex-1 break-words">{tpl.title}</span>
+                      {pin("pattern", href, tFav("pattern", { title: tpl.title }))}
+                    </span>
+                  }
                 >
-                  <summary className="cursor-pointer font-medium">
-                    {tpl.title}
-                    {pins && (
-                      <PinButton
-                        kind="pattern"
-                        href={`${pins.base}&role=${role.id}&open=tpl-${tpl.key}#tpl-${tpl.key}`}
-                        label={tFav("pattern", { title: tpl.title })}
-                        pinned={pinned.has(
-                          `${pins.base}&role=${role.id}&open=tpl-${tpl.key}#tpl-${tpl.key}`,
-                        )}
-                        className="ml-1 align-middle"
-                      />
-                    )}
-                  </summary>
-                  <p className="text-muted-foreground mt-1 text-xs">{tpl.description}</p>
                   {tpl.text ? (
-                    <pre className="bg-muted/50 mt-2 rounded-md p-2 text-xs whitespace-pre-wrap">
+                    <pre className="footnote rounded-(--radius-sm) bg-(--surface) p-3 whitespace-pre-wrap">
                       {tpl.text}
                     </pre>
                   ) : (
-                    <p className="mt-2 text-xs">{t("inMethodology")}</p>
+                    <p className="footnote">{t("inMethodology")}</p>
                   )}
-                </details>
-              </li>
-            ))}
-        </ul>
-      </section>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
+        </section>
+      )}
     </div>
   );
 
@@ -401,8 +392,8 @@ export async function PracticeView({
 function Def({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <dt className="text-muted-foreground text-xs">{label}</dt>
-      <dd>{children}</dd>
+      <dt className="footnote text-(--ink-muted)">{label}</dt>
+      <dd className="callout">{children}</dd>
     </div>
   );
 }
@@ -410,8 +401,8 @@ function Def({ label, children }: { label: string; children: React.ReactNode }) 
 function List({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
-      <h3 className="text-xs font-semibold">{title}</h3>
-      <ul className="mt-1 list-disc space-y-1 pl-5">
+      <h4 className="subheadline font-semibold">{title}</h4>
+      <ul className="callout mt-1 list-disc space-y-1 pl-5">
         {items.map((i) => (
           <li key={i}>{i}</li>
         ))}
