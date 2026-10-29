@@ -378,14 +378,22 @@
       "line": "Riadok pre zbernú tabuľku (SFZ-KOMPAS-1)",
       "copy": "Skopírovať riadok",
       "copied": "Skopírované.",
-      "withdrawn": "zrušené"
+      "withdrawn": "zrušené",
+      "rowTitle": "{total} z 220 bodov · {filled} z 11 oblastí",
+      "rowDate": "Odoslané {date}",
+      "confirmed": "Potvrdený"
     },
     "submission": {
       "title": "Odoslaný Kompas",
       "meta": "Odoslané {date} · sezóna {season}",
       "frozen": "Toto je zmrazená kópia z času odoslania.",
       "checked": "Platí v klube",
-      "back": "Späť na Kompas klubu"
+      "back": "Späť na Kompas klubu",
+      "total": "Spolu",
+      "points": "{total} b.",
+      "filledLabel": "Vyplnené oblasti",
+      "filledValue": "{filled} z 11",
+      "export": "Pre zbernú tabuľku"
     },
     "withdraw": {
       "button": "Zrušiť odoslanie",
@@ -401,7 +409,11 @@
       "undo": "Zrušiť potvrdenie",
       "hint": "Potvrdenie mentorom je odznak pri Kompase vo Vizitke a v rebríčku; body sa nemenia.",
       "error": "Nepodarilo sa uložiť, skúste to znova.",
-      "confirmed": "Potvrdené mentorom {date}"
+      "confirmed": "Potvrdené mentorom {date}",
+      "cardTitle": "Potvrdenie mentora",
+      "modalTitle": "Potvrdiť Kompas klubu?",
+      "modalBody": "Potvrdenie uvidí klub aj verejnosť pri Kompase vo vizitke a v rebríčku. Zrušiť ho môžete neskôr v tomto detaile.",
+      "cancel": "Späť"
     },
     "areas": "Oblasti",
     "filledShort": "vyplnené {filled} z 11",
@@ -415,7 +427,8 @@
       "take": "Prevziať odpovede",
       "dismiss": "Zahodiť",
       "saveNow": "Odpovede z vyskúšania sú vo formulári. Uložte ich, aby sa zapísali do Kompasu klubu."
-    }
+    },
+    "titleSeason": "Kompas {season}"
   },
   "mentor": {
     "title": "Moje kluby v kohorte",
