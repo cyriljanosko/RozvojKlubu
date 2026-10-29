@@ -649,7 +649,11 @@
       "no": "Nie",
       "error": "Otvorenie sa nepodarilo. Obnovte stránku a skúste to znova.",
       "adminOnly": "Len pre admina SFZ."
-    }
+    },
+    "seatTitle": "Sídlo klubu",
+    "seasonTitle": "Sezóna {season}",
+    "stateOpen": "Otvorené",
+    "stateClosed": "Uzavreté"
   },
   "vizitka": {
     "title": "Vizitka klubu",
@@ -1299,7 +1303,7 @@
     "summary": "Splnené {done} z {goals}",
     "confirmedOn": "✓ dohodnuté s mentorom {date}",
     "editedAfter": "upravené po potvrdení {date}",
-    "introNew": "Vyberte 1–3 oblasti, na ktorých bude klub túto sezónu naozaj pracovať. Ponúkame dve najslabšie podľa Kompasu, ďalší cieľ pridáte tlačidlom.",
+    "introNew": "Vyberte 1–3 oblasti, na ktorých bude klub túto sezónu naozaj pracovať. Ponúkame najslabšie podľa Kompasu (alebo zameranie od mentora).",
     "introEdit": "Upravte ciele plánu. Stav cieľa môže meniť aj ten, kto zaň zodpovedá.",
     "suggested": "Najslabšie podľa Kompasu: {areas}",
     "empty": "Klub zatiaľ nemá plán na túto sezónu.",
@@ -1340,7 +1344,8 @@
       "FORBIDDEN": "Na túto zmenu nemáte oprávnenie.",
       "BAD_REQUEST": "Niektorý údaj nie je správny.",
       "NOT_FOUND": "Cieľ sa nenašiel.",
-      "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova."
+      "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova.",
+      "requiredOne": "Vyplňte cieľ, text pre verejnú Vizitku a kto zodpovedá."
     },
     "vizitka": {
       "title": "Na čom klub tento rok pracuje",
@@ -1348,7 +1353,19 @@
       "confirmed": "dohodnuté s mentorom",
       "none": "Plán sezóny zatiaľ nie je",
       "rowTitle": "Plán sezóny"
-    }
+    },
+    "headingShort": "Plán rozvoja",
+    "seasonBadge": "Sezóna {season}",
+    "confirmedBadge": "Potvrdený mentorom {date}",
+    "addGoalShort": "Cieľ",
+    "addInArea": "Cieľ v oblasti {area} · {name}",
+    "newGoal": "Nový cieľ",
+    "editGoal": "Upraviť cieľ",
+    "editGoalShort": "Upraviť",
+    "saveGoal": "Uložiť cieľ",
+    "confirmTitle": "Potvrdenie mentora",
+    "confirmHint": "Potvrdením mentor dohodne s klubom plán sezóny. Klub vidí, kedy bol plán upravený po potvrdení.",
+    "rights": "Verejnú vetu cieľa uvidia ľudia vo vizitke klubu. Plán upravuje vedenie klubu a mentor, stav svojho cieľa mení aj ten, kto zaň zodpovedá."
   },
   "analytics": {
     "title": "Analýza",
