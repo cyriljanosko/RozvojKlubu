@@ -38,7 +38,7 @@ export function PrepCheck({
       <label className="flex items-center gap-2 text-sm">
         <input
           type="checkbox"
-          className="accent-primary size-4"
+          className="size-4 accent-(--brand-blue)"
           checked={done}
           disabled={pending}
           onChange={(e) => toggle(e.target.checked)}
@@ -46,7 +46,7 @@ export function PrepCheck({
         {t("tick")}
       </label>
       {error && (
-        <p role="status" className="text-destructive text-xs">
+        <p role="status" className="text-xs text-(--danger)">
           {t("error")}
         </p>
       )}

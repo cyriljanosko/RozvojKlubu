@@ -16,7 +16,7 @@ export async function VisitContext({
   const date = (iso: string) =>
     format.dateTime(new Date(`${iso}T12:00:00Z`), { dateStyle: "medium" });
   return (
-    <aside className="flex flex-col gap-2 rounded-xl border-l-4 border-l-amber-600 bg-amber-50 p-4 text-sm dark:bg-amber-950/30">
+    <aside className="flex flex-col gap-2 rounded-(--radius-md) border-l-4 border-l-(--warning) bg-(--warning-tint) p-4 text-sm">
       {data.previous ? (
         <>
           <p className="font-semibold">
@@ -47,13 +47,13 @@ export async function VisitContext({
             {data.planGoals.map((g, i) => (
               <li key={i}>
                 {g.status === "done" ? "✓" : "○"} {g.area} · {g.title}{" "}
-                <span className="text-muted-foreground">· {tPlan(`status.${g.status}`)}</span>
+                <span className="text-(--ink-muted)">· {tPlan(`status.${g.status}`)}</span>
               </li>
             ))}
           </ul>
         </div>
       )}
-      <p className="text-muted-foreground text-xs">
+      <p className="text-xs text-(--ink-muted)">
         {data.weakest.length > 0
           ? t("weakest", {
               areas: data.weakest.map((w) => `${w.area} ${areaName(w.area)}`).join(" · "),

@@ -34,6 +34,9 @@ export const REDESIGNED_FILES = [
   "src/components/vizitka/stars.tsx",
   "src/components/vizitka/vizitka-view.tsx",
   "src/components/vizitka/vizitky-explorer.tsx",
+  // R4 G2d – mentoring a návštevy
+  "src/app/klub/[[]clubId]/mentoring/**",
+  "src/app/klub/[[]clubId]/navstevy/**",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

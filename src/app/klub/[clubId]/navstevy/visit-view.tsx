@@ -1,5 +1,6 @@
 import { getFormatter, getTranslations } from "next-intl/server";
 
+import { Badge } from "@/components/sfz";
 import type { StoredVisit } from "@/server/services/mentor-visit.service";
 
 import { ActionChecklist } from "./action-checklist";
@@ -32,9 +33,9 @@ export async function VisitView({
   const tRating = await getTranslations("visits.ratings");
   const rating = (value: string | null) =>
     value ? (
-      <span className="rounded-full border px-1.5 py-0.5 text-[11px]">
+      <Badge tone={value === "done" ? "success" : value === "partial" ? "warning" : "danger"}>
         {tRating(`values.${value}`)}
-      </span>
+      </Badge>
     ) : null;
   const prep = visit.prepTask;
   const format = await getFormatter();
@@ -46,7 +47,7 @@ export async function VisitView({
   ];
   return (
     <div className="flex flex-col gap-4 text-sm">
-      <p className="text-muted-foreground">
+      <p className="text-(--ink-muted)">
         {t(`form.forms.${visit.form}`)}
         {present.length > 0 && ` · ${t("present")}: ${present.join(", ")}`}
       </p>
@@ -58,13 +59,13 @@ export async function VisitView({
         </p>
       )}
       {prep && (
-        <section className="flex flex-col gap-2 rounded-lg border p-3">
+        <section className="flex flex-col gap-2 rounded-(--radius-sm) border border-(--hairline) p-3">
           <h2 className="flex flex-wrap items-center gap-2 font-semibold">
             {t("prep.title")} {rating(prep.rating)}
           </h2>
           <p className="whitespace-pre-wrap">{prep.text}</p>
           {prep.dueDate && (
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-(--ink-muted)">
               {t("prep.due", { date: date(prep.dueDate) })}
             </p>
           )}
@@ -77,7 +78,7 @@ export async function VisitView({
               done={prep.done}
             />
           ) : null}
-          <p className="text-muted-foreground text-xs">
+          <p className="text-xs text-(--ink-muted)">
             {prep.done && prep.doneAt
               ? t("prep.done", {
                   date: format.dateTime(new Date(prep.doneAt), { dateStyle: "medium" }),
@@ -90,14 +91,17 @@ export async function VisitView({
         <section className="flex flex-col gap-3">
           <h2 className="font-semibold">{t("form.assessment")}</h2>
           {visit.assessment.topics.map((b) => (
-            <div key={b.area ?? "general"} className="flex flex-col gap-2 rounded-lg border p-3">
+            <div
+              key={b.area ?? "general"}
+              className="flex flex-col gap-2 rounded-(--radius-sm) border border-(--hairline) p-3"
+            >
               <h3 className="text-sm font-semibold">
                 {b.area === null ? t("form.generalBlock") : `${b.area} · ${areaName(b.area)}`}
               </h3>
               <dl className="grid gap-2 sm:grid-cols-3">
                 {BLOCK.filter((k) => b[k].trim()).map((k) => (
                   <div key={k}>
-                    <dt className="text-muted-foreground text-xs">
+                    <dt className="text-xs text-(--ink-muted)">
                       {t(`form.assessmentFields.${k}`)}
                     </dt>
                     <dd className="whitespace-pre-wrap">{b[k]}</dd>
@@ -107,8 +111,8 @@ export async function VisitView({
             </div>
           ))}
           {visit.assessment.overall.trim() && (
-            <div className="bg-muted/40 rounded-lg p-3">
-              <p className="text-muted-foreground text-xs">{t("form.overallTitle")}</p>
+            <div className="rounded-lg bg-(--surface-raised) p-3">
+              <p className="text-xs text-(--ink-muted)">{t("form.overallTitle")}</p>
               <p className="whitespace-pre-wrap">{visit.assessment.overall}</p>
             </div>
           )}
@@ -120,8 +124,8 @@ export async function VisitView({
           <h2 className="font-semibold">{t("form.findings")}</h2>
           <ul className="flex flex-col gap-2">
             {visit.findings.map((f) => (
-              <li key={f.area} className="rounded-lg border p-3">
-                <p className="text-muted-foreground text-xs">
+              <li key={f.area} className="rounded-(--radius-sm) border border-(--hairline) p-3">
+                <p className="text-xs text-(--ink-muted)">
                   {f.area} · {areaName(f.area)}
                 </p>
                 <p className="whitespace-pre-wrap">{f.text}</p>
@@ -162,13 +166,16 @@ export async function VisitView({
             <h2 className="font-semibold">{t("form.actions")}</h2>
             <ul className="flex flex-col gap-2">
               {visit.actions.map((a) => (
-                <li key={a.id} className="flex gap-2 rounded-lg border p-3">
+                <li
+                  key={a.id}
+                  className="flex gap-2 rounded-(--radius-sm) border border-(--hairline) p-3"
+                >
                   <span aria-hidden>{a.done ? "✓" : "○"}</span>
                   <span className="flex flex-col">
                     <span className={a.done ? "line-through" : ""}>
                       {a.text} {rating(a.rating)}
                     </span>
-                    <span className="text-muted-foreground text-xs">
+                    <span className="text-xs text-(--ink-muted)">
                       {[
                         a.owner,
                         a.area ? `${a.area} · ${areaName(a.area)}` : null,
