@@ -52,6 +52,8 @@ export const REDESIGNED_FILES = [
   "src/components/analytics/panel-board.tsx",
   "src/components/analytics/charts.tsx",
   "src/components/favorites/favorites-list.tsx",
+  // R4 G3b – účet a vzhľad
+  "src/app/ucet/page.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

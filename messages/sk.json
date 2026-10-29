@@ -60,14 +60,23 @@
     "title": "Môj účet",
     "role": "Rola",
     "sportnetAccount": "Účet Sportnet",
-    "sportnetLinked": "Prepojený",
-    "sportnetNotLinked": "Neprepojený",
+    "sportnetLinked": "Prepojené so sportnet.online",
+    "sportnetNotLinked": "Bez prepojenia so sportnet.online",
     "roleHint": "Klub a rolu v klube vám pridelí administrátor SFZ.",
     "signOut": "Odhlásiť sa",
     "myClubs": "Moje kluby",
     "allClubs": "Všetky kluby",
     "noClubs": "Zatiaľ nemáte pridelený žiadny klub.",
-    "areasLink": "Oblasti Akadémie"
+    "areasLink": "Oblasti Akadémie",
+    "myClubsRoles": "Moje kluby a roly",
+    "rolesSource": "Roly v kluboch prideľuje admin SFZ; po prepojení so sportnet.online ich budeme preberať odtiaľ.",
+    "settings": "Nastavenia",
+    "theme": {
+      "label": "Vzhľad",
+      "system": "Podľa zariadenia",
+      "light": "Svetlý",
+      "dark": "Tmavý"
+    }
   },
   "roles": {
     "admin_sfz": "Administrátor SFZ",
