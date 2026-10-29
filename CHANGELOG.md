@@ -6,11 +6,13 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Voľba vzhľadu v účte: podľa zariadenia, svetlý alebo tmavý (R4 G3b). Uloží sa v prehliadači a nastaví sa ešte pred vykreslením stránky, takže tmavá téma nebliká.
 - Kompas na vyskúšanie bez klubu: na `/kompas` sa dá vybrať „Bez klubu – len sa otestujem“, platia potom všetky otázky (všetky vekové kategórie). Výber klubu je priamo na stránke.
 - Prenos odpovedí z vyskúšania: klubový manažér, ktorý si Kompas vyskúšal v tom istom prehliadači, dostane v Kompase klubu ponuku odpovede prevziať (len otázky platné pre klub); uložia sa až tlačidlom Uložiť, potom sa z prehliadača zmažú.
 
 ### Zmenené
 
+- Redesign účtu (R4 G3b, ADR 0018): iniciály, meno, e-mail, prepojenie so sportnet.online, kluby a roly ako zoznam, odkazy pre mentora a admina, nastavenia a odhlásenie.
 - Redesign prehľadu klubu (R4 G2a, ADR 0018): hlavička klubu s iniciálami, rolami a prepínačom klubu; dlaždice stavu sezóny (Kompas, licenčné hodnotenie, plán, mentoring) s odkazmi; „Ďalšie kroky klubu“ z úloh Mojej Akadémie; klub v číslach a družstvá v akordeóne; odkaz na vizitku so stavom rebríčka. Klubová vizitka: odkaz na verejnú vizitku, plán, návštevy a mentoring v karte „Len pre klub“, súhlas s rebríčkom v karte.
 - Redesign Kompasu klubu a odoslaného Kompasu (R4 G2b, ADR 0018): nadpis so sezónou, odoslané verzie ako zoznam so štítkom „Potvrdený“ / „zrušené“, riadok pre zbernú tabuľku v akordeóne. Odoslaný Kompas: dlaždice bodov a vyplnených oblastí, oblasti v akordeóne s pásmom a zaškrtnutými otázkami, potvrdenie mentora v zvýraznenej karte s dialógom, zrušenie odoslania adminom v dialógu.
 - Redesign plánu klubu a licenčného hodnotenia (R4 G2c, ADR 0018): plán ako karty cieľov s ukazovateľom splnenia; cieľ sa pridáva a upravuje v bočnom paneli (ukladá sa celý plán ako doteraz), prázdny plán ponúkne ciele v najslabších oblastiach Kompasu alebo v zameraní od mentora; potvrdenie mentora v zvýraznenej karte. Licenčné hodnotenie: stav sezóny v zvýraznenej karte, sídlo klubu v karte, prehľad oblastí a oblasti v akordeóne s pásmom, uloženie v lište dole, uzavretie a znovuotvorenie sezóny v dialógu. Odkaz `?upravit=1` sa už nepoužíva.
