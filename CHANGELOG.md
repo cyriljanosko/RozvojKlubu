@@ -12,6 +12,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Redesign Mojej Akadémie (R4 G3a, ADR 0018): pozdrav so sezónou, výber klubu čipmi, karta „Váš ďalší krok“ (najnaliehavejšia úloha) a zoznam úloh pevne hore, pre mentora odkaz na pracovisko; pod tým nastaviteľné dlaždice (ADR 0012) v novom vzhľade. Tabuľa dlaždíc, grafy (farby z tokenov `--chart-*`) a obľúbené sú zdieľané aj s Analýzou.
 - Redesign účtu (R4 G3b, ADR 0018): iniciály, meno, e-mail, prepojenie so sportnet.online, kluby a roly ako zoznam, odkazy pre mentora a admina, nastavenia a odhlásenie.
 - Redesign prehľadu klubu (R4 G2a, ADR 0018): hlavička klubu s iniciálami, rolami a prepínačom klubu; dlaždice stavu sezóny (Kompas, licenčné hodnotenie, plán, mentoring) s odkazmi; „Ďalšie kroky klubu“ z úloh Mojej Akadémie; klub v číslach a družstvá v akordeóne; odkaz na vizitku so stavom rebríčka. Klubová vizitka: odkaz na verejnú vizitku, plán, návštevy a mentoring v karte „Len pre klub“, súhlas s rebríčkom v karte.
 - Redesign Kompasu klubu a odoslaného Kompasu (R4 G2b, ADR 0018): nadpis so sezónou, odoslané verzie ako zoznam so štítkom „Potvrdený“ / „zrušené“, riadok pre zbernú tabuľku v akordeóne. Odoslaný Kompas: dlaždice bodov a vyplnených oblastí, oblasti v akordeóne s pásmom a zaškrtnutými otázkami, potvrdenie mentora v zvýraznenej karte s dialógom, zrušenie odoslania adminom v dialógu.

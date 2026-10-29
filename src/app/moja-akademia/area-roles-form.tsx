@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Save } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
+import { Button, Checkbox } from "@/components/sfz";
 
 import { saveAreaRolesAction } from "./actions";
 
@@ -38,11 +37,14 @@ export function AreaRolesForm(props: {
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-muted-foreground text-sm">{t("hint")}</p>
+      <p className="footnote text-(--ink-muted)">{t("hint")}</p>
       <div className="grid gap-3 sm:grid-cols-2">
         {areas.map((area) => (
-          <fieldset key={area} className="flex flex-col gap-1 rounded-md border p-2">
-            <legend className="px-1 text-xs font-semibold">
+          <fieldset
+            key={area}
+            className="flex flex-col rounded-(--radius-sm) border border-(--hairline) px-3 pb-1"
+          >
+            <legend className="label px-1">
               {area}. {props.areaNames[area] ?? t("area", { area })}
             </legend>
             {props.options
@@ -50,20 +52,13 @@ export function AreaRolesForm(props: {
               .map((o) => {
                 const id = `${o.area}.${o.key}`;
                 return (
-                  <label key={id} className="flex items-start gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      className="mt-0.5 size-4 shrink-0"
-                      checked={chosen.has(id)}
-                      onChange={() => toggle(id)}
-                    />
-                    <span>
-                      {o.name}
-                      {o.status === "proposal" && (
-                        <span className="text-muted-foreground text-xs"> · {t("proposal")}</span>
-                      )}
-                    </span>
-                  </label>
+                  <Checkbox
+                    key={id}
+                    label={o.name}
+                    description={o.status === "proposal" ? t("proposal") : undefined}
+                    checked={chosen.has(id)}
+                    onChange={() => toggle(id)}
+                  />
                 );
               })}
           </fieldset>
@@ -71,9 +66,9 @@ export function AreaRolesForm(props: {
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <Button
-          type="button"
           size="sm"
-          disabled={pending}
+          icon="check"
+          loading={pending}
           onClick={() =>
             startTransition(async () => {
               const res = await saveAreaRolesAction(props.clubId, [...chosen]);
@@ -81,12 +76,11 @@ export function AreaRolesForm(props: {
             })
           }
         >
-          <Save aria-hidden />
           {t("save")}
         </Button>
-        <span role="status" className="text-xs">
+        <span role="status" className="footnote">
           {message === "saved" && t("saved")}
-          {message === "error" && <span className="text-destructive">{t("error")}</span>}
+          {message === "error" && <span className="text-(--danger)">{t("error")}</span>}
         </span>
       </div>
     </div>
