@@ -47,6 +47,8 @@ export const REDESIGNED_FILES = [
   // R4 G2d – mentoring a návštevy
   "src/app/klub/[[]clubId]/mentoring/**",
   "src/app/klub/[[]clubId]/navstevy/**",
+  // R4 G3b – účet a vzhľad
+  "src/app/ucet/page.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

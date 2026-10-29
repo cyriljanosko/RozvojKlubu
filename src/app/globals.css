@@ -5,8 +5,17 @@
 /* Component styles in the components layer, so Tailwind layout utilities can still adjust them (ADR 0018). */
 @import "@slovensky-futbalovy-zvaz/design-system/components.css" layer(components);
 
-/* Dark theme follows the device, as tokens.css defines it (ADR 0016). */
-@custom-variant dark (@media (prefers-color-scheme: dark));
+/* Dark theme as tokens.css defines it (ADR 0016): the device, unless the viewer chose a theme (data-theme on <html>, G3b). */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
 
 /*
  * App theme (shadcn/ui variables) mapped to SFZ Design System tokens (ADR 0016).
