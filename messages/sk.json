@@ -870,7 +870,13 @@
         "consent": "Verejný rebríček klubov"
       }
     },
-    "favorites": "★ Obľúbené"
+    "favorites": "★ Obľúbené",
+    "greeting": "Dobrý deň, {name}",
+    "nextStep": "Váš ďalší krok",
+    "nextStepGo": "Pokračovať",
+    "mentorDesk": "Pracovisko mentora",
+    "boardTitle": "Prehľad",
+    "noRolesTitle": "Zatiaľ nemáte rolu v klube"
   },
   "trialKompas": {
     "title": "Kompas",
