@@ -34,6 +34,9 @@ export const REDESIGNED_FILES = [
   "src/components/vizitka/stars.tsx",
   "src/components/vizitka/vizitka-view.tsx",
   "src/components/vizitka/vizitky-explorer.tsx",
+  // R4 G2c – plán a licenčné hodnotenie
+  "src/app/klub/[[]clubId]/plan/**",
+  "src/app/klub/[[]clubId]/licencne-hodnotenie/**",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */
