@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/sfz";
 
 /** Shows the SFZ-KOMPAS-1 line with a copy button. */
 export function CopyLine({ line }: { line: string }) {
@@ -12,24 +11,23 @@ export function CopyLine({ line }: { line: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-muted-foreground text-xs">{t("line")}</span>
-      <code className="bg-muted/50 block overflow-x-auto rounded-md p-2 text-xs whitespace-nowrap">
+      <span className="footnote text-(--ink-muted)">{t("line")}</span>
+      <code className="footnote block overflow-x-auto rounded-(--radius-sm) bg-(--surface) p-2 whitespace-nowrap">
         {line}
       </code>
       <div className="flex items-center gap-3">
         <Button
-          type="button"
-          variant="outline"
+          variant="secondary"
           size="sm"
+          icon={copied ? "check" : undefined}
           onClick={async () => {
             await navigator.clipboard.writeText(line);
             setCopied(true);
           }}
         >
-          <Copy aria-hidden />
           {t("copy")}
         </Button>
-        <span role="status" className="text-xs">
+        <span role="status" className="footnote">
           {copied && t("copied")}
         </span>
       </div>

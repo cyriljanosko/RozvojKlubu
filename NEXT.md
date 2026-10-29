@@ -25,6 +25,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] G1c – Kompas na vyskúšanie (PR #102): nový formulár Kompasu (spoločný s Kompasom klubu), vyskúšanie bez klubu, prenos odpovedí do Kompasu klubu (Cyril 28. 10.).
     - [x] G1d – Kluby (`/vizitka`) a vizitka klubu (PR #104): záložky Mapa / Rebríčky so všetkými funkciami, zoznam až po hľadaní, hviezdičky v modrej SFZ, vizitka spoločná pre verejnú aj klubovú (Cyril 28. 10.).
     - [ ] G2a – prehľad klubu a klubová vizitka (vetva `feat/g2a-club-overview`): hlavička klubu s rolami a prepínačom klubu, dlaždice stavu sezóny, ďalšie kroky klubu, klub v číslach. G2b Kompas klubu + odoslaný Kompas, G2c plán + licenčné hodnotenie, G2d mentoring + návštevy (rozdelenie – Cyril 29. 10.). Členovia a Nastavenia klubu až po S2 (Cyril 29. 10.).
+    - [ ] G2b – Kompas klubu a odoslaný Kompas (vetva `feat/g2b-club-kompas`): pravidlo odoslania bez zmeny (aspoň jedna oblasť – Cyril 29. 10.), potvrdenie mentora a zrušenie adminom v dialógu.
     - [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Ikony míľnikov a hviezda pinu po vydaní DS.
     - [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
