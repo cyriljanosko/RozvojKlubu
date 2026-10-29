@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { Suspense } from "react";
 
 import { AppFrame, AppFrameFallback } from "@/components/app-frame/app-frame";
+import { THEME_SCRIPT } from "@/components/app-frame/theme-script";
 import { DEFAULT_LOCALE, defaultMessages } from "@/i18n/config";
 
 import "./globals.css";
@@ -17,7 +18,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang={DEFAULT_LOCALE} className="h-full scroll-pt-16 antialiased">
+    // data-theme is set before hydration by THEME_SCRIPT when the viewer chose a theme
+    <html
+      lang={DEFAULT_LOCALE}
+      className="h-full scroll-pt-16 antialiased"
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col bg-(--surface) font-sans text-(--ink)">
         <NextIntlClientProvider locale={DEFAULT_LOCALE} messages={defaultMessages}>
           {/* App frame of the redesign (R3.3, ADR 0018): NavBar from 768 px, TabBar below it */}

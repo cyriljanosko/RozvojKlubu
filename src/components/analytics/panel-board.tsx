@@ -1,10 +1,9 @@
 "use client";
 
-import { ArrowDown, ArrowUp, EyeOff } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useSyncExternalStore, type ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, Chip, IconButton } from "@/components/sfz";
 
 export interface BoardPanel {
   id: string;
@@ -113,43 +112,37 @@ export function BoardView({
         {visible.map((p, i) => (
           <section
             key={p.id}
-            className="flex min-w-0 flex-col gap-3 rounded-xl border p-4 print:mb-4 print:break-inside-avoid"
+            className="flex min-w-0 flex-col gap-3 rounded-(--radius-lg) bg-(--surface-raised) p-4 print:mb-4 print:break-inside-avoid"
           >
             <div className="flex items-start gap-2">
               <div className="min-w-0 flex-1">
-                <h2 className="font-semibold">{p.title}</h2>
-                {p.note && <p className="text-muted-foreground text-xs">{p.note}</p>}
+                <h2 className="headline">{p.title}</h2>
+                {p.note && <p className="footnote text-(--ink-muted)">{p.note}</p>}
               </div>
-              <div className="-mt-1 -mr-2 flex shrink-0 print:hidden">
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="size-8"
+              <div className="-mt-2 -mr-2 flex shrink-0 print:hidden">
+                <IconButton
+                  icon="chevron-up"
+                  variant="tertiary"
+                  size="sm"
                   disabled={i === 0}
-                  aria-label={t("up", { title: p.title })}
+                  label={t("up", { title: p.title })}
                   onClick={() => move(i, -1)}
-                >
-                  <ArrowUp aria-hidden />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="size-8"
+                />
+                <IconButton
+                  icon="chevron-down"
+                  variant="tertiary"
+                  size="sm"
                   disabled={i === visible.length - 1}
-                  aria-label={t("down", { title: p.title })}
+                  label={t("down", { title: p.title })}
                   onClick={() => move(i, 1)}
-                >
-                  <ArrowDown aria-hidden />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="size-8"
-                  aria-label={t("hide", { title: p.title })}
+                />
+                <IconButton
+                  icon="x"
+                  variant="tertiary"
+                  size="sm"
+                  label={t("hide", { title: p.title })}
                   onClick={() => update({ ...layout, hidden: [...layout.hidden, p.id] })}
-                >
-                  <EyeOff aria-hidden />
-                </Button>
+                />
               </div>
             </div>
             {p.content}
@@ -157,22 +150,21 @@ export function BoardView({
         ))}
       </div>
       {(hidden.length > 0 || layout.order.length > 0) && (
-        <div className="flex flex-wrap items-center gap-2 text-sm print:hidden">
-          {hidden.length > 0 && <span className="text-muted-foreground">{t("hidden")}</span>}
+        <div className="flex flex-wrap items-center gap-2 print:hidden">
+          {hidden.length > 0 && <span className="footnote text-(--ink-muted)">{t("hidden")}</span>}
           {hidden.map((p) => (
-            <Button
+            <Chip
               key={p.id}
-              size="sm"
-              variant="outline"
+              icon="plus"
               aria-label={t("show", { title: p.title })}
               onClick={() =>
                 update({ ...layout, hidden: layout.hidden.filter((id) => id !== p.id) })
               }
             >
               {p.title}
-            </Button>
+            </Chip>
           ))}
-          <Button size="sm" variant="ghost" onClick={() => update(null)}>
+          <Button size="sm" variant="tertiary" onClick={() => update(null)}>
             {t("reset")}
           </Button>
         </div>
@@ -184,7 +176,7 @@ export function BoardView({
 /** Opens the browser's print dialog – "Save as PDF" gives the PDF export. */
 export function PrintButton({ label }: { label: string }) {
   return (
-    <Button type="button" size="sm" variant="outline" onClick={() => window.print()}>
+    <Button size="sm" variant="secondary" icon="download" onClick={() => window.print()}>
       {label}
     </Button>
   );

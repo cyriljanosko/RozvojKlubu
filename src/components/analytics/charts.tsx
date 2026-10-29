@@ -13,8 +13,8 @@ import {
   YAxis,
 } from "recharts";
 
-/** Recharts wrappers for the analysis panels (DA-b); colours follow the app's palette. */
-const COLORS = ["#2563eb", "#d97706", "#16a34a", "#71717a"];
+/** Recharts wrappers for the analysis panels (DA-b); colours are the design system's chart tokens. */
+const COLORS = ["var(--chart-1)", "var(--chart-4)", "var(--chart-2)", "var(--chart-3)"];
 
 export function GroupedBars({
   data,

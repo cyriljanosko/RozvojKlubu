@@ -1,12 +1,11 @@
 "use client";
 
-import { ArrowDown, ArrowUp, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/sfz";
 import type { FavoriteKind } from "@/server/db/types";
 
 import { orderFavoritesAction, unpinAction } from "./actions";
@@ -49,50 +48,47 @@ export function FavoritesList({ favorites: initial }: { favorites: FavoriteItem[
     enqueue(() => unpinAction({ id }));
   };
 
-  if (items.length === 0) return <p className="text-muted-foreground text-sm">{t("tile.empty")}</p>;
+  if (items.length === 0) return <p className="callout text-(--ink-muted)">{t("tile.empty")}</p>;
   return (
     <>
-      <ul className="flex flex-col divide-y rounded-md border">
+      <ul className="flex flex-col">
         {items.map((f, i) => (
-          <li key={f.id} className="flex items-center gap-1 py-1 pr-1 pl-3 text-sm">
-            <Link href={f.href} className="min-w-0 flex-1 py-1 hover:underline">
-              <span className="block break-words">{f.label}</span>
-              <span className="text-muted-foreground text-xs">{t(`tile.kind.${f.kind}`)}</span>
+          <li
+            key={f.id}
+            className="flex items-center gap-1 border-t border-(--hairline) py-1 first:border-t-0"
+          >
+            <Link href={f.href} className="min-w-0 flex-1 py-1 text-(--ink) no-underline">
+              <span className="subheadline block font-semibold break-words">{f.label}</span>
+              <span className="footnote text-(--ink-muted)">{t(`tile.kind.${f.kind}`)}</span>
             </Link>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="size-8"
+            <IconButton
+              icon="chevron-up"
+              variant="tertiary"
+              size="sm"
               disabled={i === 0}
-              aria-label={t("tile.up", { label: f.label })}
+              label={t("tile.up", { label: f.label })}
               onClick={() => move(i, -1)}
-            >
-              <ArrowUp aria-hidden />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="size-8"
+            />
+            <IconButton
+              icon="chevron-down"
+              variant="tertiary"
+              size="sm"
               disabled={i === items.length - 1}
-              aria-label={t("tile.down", { label: f.label })}
+              label={t("tile.down", { label: f.label })}
               onClick={() => move(i, 1)}
-            >
-              <ArrowDown aria-hidden />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="size-8"
-              aria-label={t("tile.remove", { label: f.label })}
+            />
+            <IconButton
+              icon="x"
+              variant="tertiary"
+              size="sm"
+              label={t("tile.remove", { label: f.label })}
               onClick={() => remove(f.id)}
-            >
-              <X aria-hidden />
-            </Button>
+            />
           </li>
         ))}
       </ul>
       {error && (
-        <p role="status" className="text-destructive text-sm">
+        <p role="status" className="footnote text-(--danger)">
           {t("error")}
         </p>
       )}

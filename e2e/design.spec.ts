@@ -19,6 +19,9 @@ for (const colorScheme of ["light", "dark"] as const) {
     test("sign-in", async ({ page }) => {
       await page.goto("/prihlasenie");
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+      // The form streams in behind a Suspense boundary – wait for it, otherwise the
+      // screenshot captures the empty fallback (the dark mobile baseline was once taken that way).
+      await expect(page.getByLabel("E-mail")).toBeVisible();
       await expect(page).toHaveScreenshot(`prihlasenie-${colorScheme}.png`, { fullPage: true });
     });
   });
