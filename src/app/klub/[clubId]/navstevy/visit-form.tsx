@@ -3,9 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { Plus, Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, IconButton } from "@/components/sfz";
 import type {
   MentorAssessment,
   MentorTopicAssessment,
@@ -57,7 +56,7 @@ const hasText = (b: MentorTopicAssessment | undefined) =>
 const MAX_TOPICS = 3;
 const OTHER = "__other";
 const field =
-  "border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none";
+  "w-full rounded-(--radius-sm) border border-(--border) bg-(--surface) px-3 py-2 text-(--ink) focus-visible:shadow-(--shadow-focus) focus-visible:outline-none";
 
 /**
  * The mentor's visit form (MV-b, MC-b): plan a meeting (date, topic, task before it – the club sees
@@ -209,20 +208,20 @@ export function VisitForm({
       {!visitId && (
         <fieldset className="flex flex-col gap-1 text-sm">
           <legend className="mb-1 font-medium">{t("mode")}</legend>
-          <div className="grid grid-cols-2 overflow-hidden rounded-md border">
+          <div className="grid grid-cols-2 overflow-hidden rounded-(--radius-sm) border border-(--border)">
             {(["plan", "record"] as const).map((m) => (
               <button
                 key={m}
                 type="button"
                 aria-pressed={planning === (m === "plan")}
                 onClick={() => setPlanning(m === "plan")}
-                className="aria-pressed:bg-primary aria-pressed:text-primary-foreground px-2 py-2 text-sm"
+                className="px-2 py-2 text-sm aria-pressed:bg-(--brand-blue) aria-pressed:text-(--on-brand)"
               >
                 {t(`modes.${m}`)}
               </button>
             ))}
           </div>
-          {planning && <p className="text-muted-foreground text-xs">{t("planHint")}</p>}
+          {planning && <p className="text-xs text-(--ink-muted)">{t("planHint")}</p>}
         </fieldset>
       )}
 
@@ -239,14 +238,14 @@ export function VisitForm({
         </label>
         <fieldset className="flex flex-col gap-1 text-sm">
           <legend className="mb-1 font-medium">{t("form")}</legend>
-          <div className="grid grid-cols-3 overflow-hidden rounded-md border">
+          <div className="grid grid-cols-3 overflow-hidden rounded-(--radius-sm) border border-(--border)">
             {FORMS.map((f) => (
               <button
                 key={f}
                 type="button"
                 aria-pressed={v.form === f}
                 onClick={() => set("form", f)}
-                className="aria-pressed:bg-primary aria-pressed:text-primary-foreground px-2 py-2 text-sm"
+                className="px-2 py-2 text-sm aria-pressed:bg-(--brand-blue) aria-pressed:text-(--on-brand)"
               >
                 {t(`forms.${f}`)}
               </button>
@@ -257,8 +256,7 @@ export function VisitForm({
 
       <fieldset className="flex flex-col gap-2 text-sm">
         <legend className="mb-1 font-medium">
-          {t("topics")}{" "}
-          <span className="text-muted-foreground font-normal">· {t("topicsHint")}</span>
+          {t("topics")} <span className="font-normal text-(--ink-muted)">· {t("topicsHint")}</span>
         </legend>
         <div className="flex flex-wrap gap-1.5">
           {areas.map((a) => {
@@ -270,7 +268,7 @@ export function VisitForm({
                 aria-pressed={on}
                 disabled={!on && v.topics.length >= MAX_TOPICS}
                 onClick={() => toggleTopic(a.number)}
-                className="aria-pressed:bg-primary aria-pressed:text-primary-foreground rounded-full border px-3 py-1 text-xs disabled:opacity-40"
+                className="rounded-full border px-3 py-1 text-xs disabled:opacity-40 aria-pressed:bg-(--brand-blue) aria-pressed:text-(--on-brand)"
               >
                 {a.number} · {a.name}
               </button>
@@ -278,13 +276,16 @@ export function VisitForm({
           })}
         </div>
         {removing !== null && (
-          <div className="flex flex-col gap-2 rounded-md border border-amber-500 p-3" role="alert">
+          <div
+            className="flex flex-col gap-2 rounded-(--radius-sm) border border-(--border) border-(--warning) p-3"
+            role="alert"
+          >
             <p>{t("removeTopicConfirm", { area: removing })}</p>
             <div className="flex flex-wrap gap-2">
               <Button type="button" size="sm" onClick={() => toggleTopic(removing)}>
                 {t("removeTopic")}
               </Button>
-              <Button type="button" size="sm" variant="outline" onClick={() => setRemoving(null)}>
+              <Button type="button" size="sm" variant="secondary" onClick={() => setRemoving(null)}>
                 {t("keepTopic")}
               </Button>
             </div>
@@ -292,10 +293,9 @@ export function VisitForm({
         )}
       </fieldset>
 
-      <section className="flex flex-col gap-2 rounded-xl border p-4 text-sm">
+      <section className="flex flex-col gap-2 rounded-(--radius-md) bg-(--surface-raised) p-4 text-sm">
         <h2 className="font-semibold">
-          {t("prepTask")}{" "}
-          <span className="text-muted-foreground font-normal">· {t("optional")}</span>
+          {t("prepTask")} <span className="font-normal text-(--ink-muted)">· {t("optional")}</span>
         </h2>
         <textarea
           value={v.prepTask.text}
@@ -307,7 +307,7 @@ export function VisitForm({
           className={field}
         />
         <label className="flex items-center gap-2">
-          <span className="text-muted-foreground shrink-0">{t("prepDue")}</span>
+          <span className="shrink-0 text-(--ink-muted)">{t("prepDue")}</span>
           <input
             type="date"
             value={v.prepTask.dueDate ?? ""}
@@ -325,10 +325,10 @@ export function VisitForm({
               <ul className="grid gap-1 sm:grid-cols-2">
                 {members.map((m) => (
                   <li key={m.userId}>
-                    <label className="hover:bg-muted/50 flex items-start gap-2 rounded-md px-1 py-1">
+                    <label className="flex items-start gap-2 rounded-md px-1 py-1">
                       <input
                         type="checkbox"
-                        className="accent-primary mt-0.5 size-4"
+                        className="mt-0.5 size-4 accent-(--brand-blue)"
                         checked={v.participantIds.includes(m.userId)}
                         onChange={(e) =>
                           set(
@@ -341,7 +341,7 @@ export function VisitForm({
                       />
                       <span>
                         {m.name}{" "}
-                        <span className="text-muted-foreground text-xs">
+                        <span className="text-xs text-(--ink-muted)">
                           · {m.roles.map((r) => tRoles(r)).join(", ")}
                         </span>
                       </span>
@@ -350,7 +350,7 @@ export function VisitForm({
                 ))}
               </ul>
             ) : (
-              <p className="text-muted-foreground text-xs">{t("noMembers")}</p>
+              <p className="text-xs text-(--ink-muted)">{t("noMembers")}</p>
             )}
             <input
               value={v.participants}
@@ -362,7 +362,7 @@ export function VisitForm({
             />
           </fieldset>
 
-          <section className="flex flex-col gap-4 rounded-xl border p-4">
+          <section className="flex flex-col gap-4 rounded-(--radius-md) bg-(--surface-raised) p-4">
             <h2 className="text-sm font-semibold">{t("assessment")}</h2>
             {blockAreas.map((area) => {
               const block = blockFor(area);
@@ -416,10 +416,10 @@ export function VisitForm({
           )}
 
           {legacyFindings && (
-            <section className="flex flex-col gap-3 rounded-xl border p-4">
+            <section className="flex flex-col gap-3 rounded-(--radius-md) bg-(--surface-raised) p-4">
               <h2 className="text-sm font-semibold">
                 {t("findings")}{" "}
-                <span className="text-muted-foreground font-normal">· {t("optional")}</span>
+                <span className="font-normal text-(--ink-muted)">· {t("optional")}</span>
               </h2>
               {v.findings.map((f, i) => (
                 <div key={i} className="flex flex-col gap-2">
@@ -445,20 +445,17 @@ export function VisitForm({
                           </option>
                         ))}
                     </select>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("remove")}
+                    <IconButton
+                      icon="trash"
+                      variant="tertiary"
+                      label={t("remove")}
                       onClick={() =>
                         set(
                           "findings",
                           v.findings.filter((_, j) => j !== i),
                         )
                       }
-                    >
-                      <Trash2 aria-hidden />
-                    </Button>
+                    />
                   </div>
                   <textarea
                     value={f.text}
@@ -478,20 +475,21 @@ export function VisitForm({
               {freeArea && (
                 <Button
                   type="button"
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
+                  icon="plus"
                   className="self-start"
                   onClick={() =>
                     set("findings", [...v.findings, { area: freeArea.number, text: "" }])
                   }
                 >
-                  <Plus aria-hidden /> {t("addFinding")}
+                  {t("addFinding")}
                 </Button>
               )}
             </section>
           )}
 
-          <section className="flex flex-col gap-3 rounded-xl border p-4">
+          <section className="flex flex-col gap-3 rounded-(--radius-md) bg-(--surface-raised) p-4">
             <h2 className="text-sm font-semibold">{t("actions")}</h2>
             {v.actions.map((a, i) => {
               const update = (patch: Partial<VisitFormValue["actions"][number]>) =>
@@ -513,20 +511,17 @@ export function VisitForm({
                       maxLength={500}
                       className={field}
                     />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      aria-label={t("remove")}
+                    <IconButton
+                      icon="trash"
+                      variant="tertiary"
+                      label={t("remove")}
                       onClick={() =>
                         set(
                           "actions",
                           v.actions.filter((_, j) => j !== i),
                         )
                       }
-                    >
-                      <Trash2 aria-hidden />
-                    </Button>
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <select
@@ -576,7 +571,7 @@ export function VisitForm({
                     />
                   )}
                   <label className="flex items-center gap-2 text-sm">
-                    <span className="text-muted-foreground shrink-0">{t("due")}</span>
+                    <span className="shrink-0 text-(--ink-muted)">{t("due")}</span>
                     <input
                       type="date"
                       value={a.dueDate ?? ""}
@@ -589,8 +584,9 @@ export function VisitForm({
             })}
             <Button
               type="button"
-              variant="outline"
+              variant="secondary"
               size="sm"
+              icon="plus"
               className="self-start"
               onClick={() =>
                 set("actions", [
@@ -599,7 +595,7 @@ export function VisitForm({
                 ])
               }
             >
-              <Plus aria-hidden /> {t("addAction")}
+              {t("addAction")}
             </Button>
           </section>
         </>
@@ -607,25 +603,25 @@ export function VisitForm({
 
       <div className="flex flex-col gap-2">
         {confirm === "send" ? (
-          <div className="flex flex-col gap-2 rounded-xl border p-3 text-sm">
+          <div className="flex flex-col gap-2 rounded-(--radius-md) bg-(--surface-raised) p-3 text-sm">
             <p>{t("confirmSend")}</p>
             <div className="flex flex-wrap gap-2">
               <Button type="button" disabled={pending} onClick={() => save("send")}>
                 {t("yesSend")}
               </Button>
-              <Button type="button" variant="outline" onClick={() => setConfirm(null)}>
+              <Button type="button" variant="secondary" onClick={() => setConfirm(null)}>
                 {t("no")}
               </Button>
             </div>
           </div>
         ) : confirm === "withdraw" ? (
-          <div className="flex flex-col gap-2 rounded-xl border p-3 text-sm">
+          <div className="flex flex-col gap-2 rounded-(--radius-md) bg-(--surface-raised) p-3 text-sm">
             <p>{t("confirmWithdraw")}</p>
             <div className="flex flex-wrap gap-2">
               <Button type="button" disabled={pending} onClick={withdraw}>
                 {t("yesWithdraw")}
               </Button>
-              <Button type="button" variant="outline" onClick={() => setConfirm(null)}>
+              <Button type="button" variant="secondary" onClick={() => setConfirm(null)}>
                 {t("no")}
               </Button>
             </div>
@@ -634,7 +630,7 @@ export function VisitForm({
           <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
             <Button
               type="submit"
-              variant={status === "sent" || planning ? "default" : "outline"}
+              variant={status === "sent" || planning ? "primary" : "secondary"}
               disabled={pending}
             >
               {planning
@@ -651,7 +647,7 @@ export function VisitForm({
             {visitId && (
               <Button
                 type="button"
-                variant="ghost"
+                variant="tertiary"
                 disabled={pending}
                 onClick={() => setConfirm("withdraw")}
               >
@@ -660,7 +656,7 @@ export function VisitForm({
             )}
           </div>
         )}
-        <p className="text-muted-foreground text-xs">
+        <p className="text-xs text-(--ink-muted)">
           {status === "sent"
             ? t("sentHint")
             : status === "planned" || planning

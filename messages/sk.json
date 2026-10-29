@@ -1294,7 +1294,8 @@
       "save": "Uložiť hodnotenie",
       "saved": "Hodnotenie uložené.",
       "error": "Uloženie sa nepodarilo. Obnovte stránku a skúste znova."
-    }
+    },
+    "backToMentoring": "Mentoring a návštevy"
   },
   "plan": {
     "pageTitle": "Plán klubu na sezónu",
@@ -1590,23 +1591,23 @@
     },
     "parts": {
       "intro": {
-        "title": "① Úvodné sebahodnotenie klubu",
+        "title": "1 · Úvodné sebahodnotenie klubu",
         "who": "Vypĺňa vedenie klubu na začiatku sezóny."
       },
       "focus": {
-        "title": "② Zameranie rozvoja",
+        "title": "2 · Zameranie rozvoja",
         "who": "Vypĺňa mentor po úvodnom stretnutí."
       },
       "visits": {
-        "title": "③ Stretnutia",
+        "title": "3 · Návštevy",
         "who": "Návštevy mentora v tejto sezóne."
       },
       "closingClub": {
-        "title": "④ Záver sezóny – klub",
+        "title": "4 · Záver sezóny – klub",
         "who": "Vypĺňa vedenie klubu na konci sezóny."
       },
       "closingMentor": {
-        "title": "④ Záver sezóny – mentor",
+        "title": "4 · Záver sezóny – mentor",
         "who": "Vypĺňa mentor na konci sezóny."
       }
     },
@@ -1638,19 +1639,37 @@
       "closingAssessment": "Ako sa klub v sezóne posunul",
       "nextPlan": "Na čo sa zamerať budúcu sezónu"
     },
-    "toPlan": "Zostaviť plán sezóny z prioritných oblastí →",
+    "toPlan": "Zostaviť plán sezóny z prioritných oblastí",
     "visits": {
       "none": "V tejto sezóne zatiaľ žiadne stretnutie.",
       "plan": "Naplánovať stretnutie",
       "all": "Všetky návštevy →",
       "steps": "kroky {done}/{total}",
       "prep": "úloha vopred: {rating}",
-      "rated": "hodnotenie krokov: {done} splnené, {partial} čiastočne, {not} nesplnené"
+      "rated": "hodnotenie krokov: {done} splnené, {partial} čiastočne, {not} nesplnené",
+      "new": "Návšteva",
+      "who": "Návštevu plánuje a zapisuje mentor. Klub vidí naplánované a odoslané návštevy a odškrtáva dohodnuté kroky.",
+      "prepText": "príprava: {text}"
     },
     "vizitka": {
       "title": "Mentoring klubu",
       "line": "{done} z 4 častí cyklu",
       "none": "cyklus sezóny zatiaľ nezačal"
+    },
+    "headingShort": "Mentoring {season}",
+    "done": "Hotové",
+    "stepsTitle": "Sezóna v 4 krokoch",
+    "steps": {
+      "intro": "Predstavenie klubu",
+      "introWho": "Vypĺňa vedenie klubu",
+      "focus": "Zameranie mentora",
+      "focusWho": "Vypĺňa mentor",
+      "focusAreas": "{count, plural, one {# prioritná oblasť} few {# prioritné oblasti} other {# prioritných oblastí}}",
+      "visits": "Návštevy počas sezóny",
+      "visitsCount": "{count, plural, =0 {zatiaľ žiadna odoslaná} one {# odoslaná návšteva} few {# odoslané návštevy} other {# odoslaných návštev}}",
+      "closing": "Záver sezóny",
+      "closingWhen": "Klub aj mentor · v máji a júni",
+      "done": "hotové"
     }
   },
   "coachEducation": {
@@ -1862,7 +1881,6 @@
     "clubPlan": "Plán",
     "clubLicensing": "Licenčné hodnotenie",
     "clubMentoring": "Mentoring",
-    "clubVisits": "Návštevy",
     "adminClubs": "Kluby",
     "adminContent": "Obsah",
     "adminRoles": "Katalóg rolí",

@@ -105,9 +105,12 @@ describe("clubMenu", () => {
       "clubPlan",
       "clubLicensing",
       "clubMentoring",
-      "clubVisits",
     ]);
     expect(menu[0]).toMatchObject({ href: "/klub/c1", match: "exact" });
+  });
+
+  it("has no separate visits item – visits live in the mentoring page (29. 10. 2026)", () => {
+    expect(ids(clubMenu("c1", ["mentor"], false))).not.toContain("clubVisits");
   });
 
   it("hides the club's own Kompas from a mentor (they see only submitted ones)", () => {

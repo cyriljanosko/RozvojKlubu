@@ -167,8 +167,8 @@ export function clubMenu(clubId: string, roles: readonly ClubRole[], isAdmin: bo
     isAdmin || has(roles, KOMPAS_ROLES) ? item("clubKompas", `${base}/kompas`) : null,
     item("clubPlan", `${base}/plan`),
     item("clubLicensing", `${base}/licencne-hodnotenie`),
+    // visits are part of the mentoring page (decision 29. 10. 2026)
     item("clubMentoring", `${base}/mentoring`),
-    item("clubVisits", `${base}/navstevy`),
   ].filter((entry): entry is NavItem => entry !== null);
 }
 

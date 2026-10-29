@@ -27,6 +27,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] G2a – prehľad klubu a klubová vizitka (vetva `feat/g2a-club-overview`): hlavička klubu s rolami a prepínačom klubu, dlaždice stavu sezóny, ďalšie kroky klubu, klub v číslach. G2b Kompas klubu + odoslaný Kompas, G2c plán + licenčné hodnotenie, G2d mentoring + návštevy (rozdelenie – Cyril 29. 10.). Členovia a Nastavenia klubu až po S2 (Cyril 29. 10.).
     - [ ] G2b – Kompas klubu a odoslaný Kompas (vetva `feat/g2b-club-kompas`): pravidlo odoslania bez zmeny (aspoň jedna oblasť – Cyril 29. 10.), potvrdenie mentora a zrušenie adminom v dialógu.
     - [ ] G2c – plán a licenčné hodnotenie (vetva `feat/g2c-plan-licensing`): ciele v bočnom paneli (Drawer), licenčné oblasti v akordeóne, uzavretie a znovuotvorenie sezóny v dialógu (Cyril 29. 10.).
+    - [ ] G2d – mentoring a návštevy (vetva `feat/g2d-mentoring-visits`): zoznam návštev je krok 3 na stránke Mentoring, `/navstevy` presmeruje, podmenu klubu bez položky Návštevy; formulár návštevy ostáva jeden so sekciami (Cyril 29. 10.).
     - [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Ikony míľnikov a hviezda pinu po vydaní DS.
     - [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
