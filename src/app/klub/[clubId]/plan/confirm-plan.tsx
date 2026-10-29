@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/sfz";
 
 import { confirmPlanAction } from "./actions";
 
@@ -23,11 +23,10 @@ export function ConfirmPlan({
   return (
     <div className="flex flex-col gap-1">
       <Button
-        type="button"
-        variant={confirmed ? "outline" : "default"}
-        size="sm"
+        variant={confirmed ? "secondary" : "primary"}
+        icon={confirmed ? undefined : "check-circle"}
         className="self-start"
-        disabled={pending}
+        loading={pending}
         onClick={() =>
           startTransition(async () => {
             const res = await confirmPlanAction(clubId, !confirmed, version);
@@ -37,7 +36,7 @@ export function ConfirmPlan({
       >
         {confirmed ? t("unconfirm") : t("confirm")}
       </Button>
-      {error && <p className="text-destructive text-xs">{t("errors.INTERNAL")}</p>}
+      {error && <p className="footnote text-(--danger)">{t("errors.INTERNAL")}</p>}
     </div>
   );
 }

@@ -3,13 +3,14 @@
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
+import { Select } from "@/components/sfz";
 import type { PlanGoalStatus } from "@/server/db/types";
 
 import { setGoalStatusAction } from "./actions";
 
 const STATUSES: PlanGoalStatus[] = ["todo", "doing", "done"];
 
-/** Status of one goal on one tap – management, the mentor, admin_sfz or the goal's owner. */
+/** Status of one goal – management, the mentor, admin_sfz or the goal's owner. */
 export function GoalStatus({
   clubId,
   goalId,
@@ -27,37 +28,27 @@ export function GoalStatus({
   const [error, setError] = useState<string | null>(null);
   return (
     <div className="flex flex-col gap-1">
-      <div
-        className="grid grid-cols-3 overflow-hidden rounded-md border text-xs"
-        role="group"
-        aria-label={t("statusLabel")}
-      >
-        {STATUSES.map((s) => (
-          <button
-            key={s}
-            type="button"
-            aria-pressed={current === s}
-            disabled={pending}
-            onClick={() =>
-              startTransition(async () => {
-                const before = current;
-                setCurrent(s);
-                setError(null);
-                const res = await setGoalStatusAction(clubId, goalId, s, version);
-                if (res.status === "error") {
-                  setCurrent(before);
-                  setError(res.code === "CONFLICT" ? t("errors.CONFLICT") : t("errors.INTERNAL"));
-                }
-              })
+      <Select
+        label={t("statusLabel")}
+        value={current}
+        disabled={pending}
+        onChange={(e) => {
+          const s = e.target.value as PlanGoalStatus;
+          startTransition(async () => {
+            const before = current;
+            setCurrent(s);
+            setError(null);
+            const res = await setGoalStatusAction(clubId, goalId, s, version);
+            if (res.status === "error") {
+              setCurrent(before);
+              setError(res.code === "CONFLICT" ? t("errors.CONFLICT") : t("errors.INTERNAL"));
             }
-            className="aria-pressed:bg-primary aria-pressed:text-primary-foreground px-2 py-1.5"
-          >
-            {t(`status.${s}`)}
-          </button>
-        ))}
-      </div>
+          });
+        }}
+        options={STATUSES.map((s) => ({ value: s, label: t(`status.${s}`) }))}
+      />
       {error && (
-        <p role="status" className="text-destructive text-xs">
+        <p role="status" className="footnote text-(--danger)">
           {error}
         </p>
       )}

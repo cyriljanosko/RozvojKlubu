@@ -6,6 +6,17 @@ import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { CopyLine } from "@/components/content/copy-line";
+import {
+  Accordion,
+  AccordionItem,
+  Alert,
+  Badge,
+  Card,
+  EmptyState,
+  Icon,
+  KompasBandBadge,
+  LinkButton,
+} from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
@@ -37,9 +48,12 @@ async function Submission({ params }: PageProps<"/klub/[clubId]/kompas/odoslane/
   } catch (error) {
     if (error instanceof ApiError && (error.code === "FORBIDDEN" || error.code === "NOT_FOUND")) {
       return (
-        <p className="text-sm">
-          {error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
-        </p>
+        <EmptyState
+          title={error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
+          action={
+            <LinkButton href={`/klub/${encodeURIComponent(clubId)}`}>{tClub("back")}</LinkButton>
+          }
+        />
       );
     }
     throw error;
@@ -60,90 +74,129 @@ async function Submission({ params }: PageProps<"/klub/[clubId]/kompas/odoslane/
     timeZone: "Europe/Bratislava",
   });
 
+  const valid = isValidSubmission(sub);
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
         <Link
           href={`/klub/${encodeURIComponent(clubId)}/kompas`}
-          className="text-muted-foreground text-sm underline underline-offset-4"
+          className="body inline-flex min-h-(--touch-target) items-center gap-1 self-start no-underline"
         >
+          <Icon name="chevron-left" size={22} />
           {t("submission.back")}
         </Link>
-        <h1 className="text-2xl font-semibold tracking-tight break-words">
-          {t("submission.title")} · {club.club.name}
-        </h1>
-        <p className="text-muted-foreground text-sm">
-          {t("submission.meta", { date, season: sub.season })}
+        <p className="subheadline text-(--ink-muted)">
+          {club.club.name} · {t("season", { season: sub.season })}
         </p>
-        <p className="text-sm">{t("submission.frozen")}</p>
-        {!isValidSubmission(sub) && sub.withdrawnAt && (
-          <p className="bg-muted rounded-md p-3 text-sm">
-            {t("withdraw.withdrawn", {
-              date: sub.withdrawnAt.toLocaleString("sk", {
-                dateStyle: "medium",
-                timeStyle: "short",
-                timeZone: "Europe/Bratislava",
-              }),
-            })}
-          </p>
-        )}
-        {isValidSubmission(sub) && sub.confirmedAt && (
-          <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
-            {t("confirm.confirmed", {
-              date: sub.confirmedAt.toLocaleDateString("sk", {
-                dateStyle: "medium",
-                timeZone: "Europe/Bratislava",
-              }),
-            })}
-          </p>
-        )}
-        {isValidSubmission(sub) && canConfirm && (
+        <h1 className="title-1">{t("submission.title")}</h1>
+        <p className="footnote text-(--ink-muted)">
+          {t("submission.meta", { date, season: sub.season })} · {t("submission.frozen")}
+        </p>
+        <div className="flex flex-wrap gap-2">
+          {valid && sub.confirmedAt && (
+            <Badge tone="success" dot>
+              {t("confirm.confirmed", {
+                date: sub.confirmedAt.toLocaleDateString("sk", {
+                  dateStyle: "medium",
+                  timeZone: "Europe/Bratislava",
+                }),
+              })}
+            </Badge>
+          )}
+          {!valid && sub.withdrawnAt && <Badge tone="danger">{t("submit.withdrawn")}</Badge>}
+        </div>
+      </header>
+
+      {!valid && sub.withdrawnAt && (
+        <Alert tone="warning">
+          {t("withdraw.withdrawn", {
+            date: sub.withdrawnAt.toLocaleString("sk", {
+              dateStyle: "medium",
+              timeStyle: "short",
+              timeZone: "Europe/Bratislava",
+            }),
+          })}
+        </Alert>
+      )}
+
+      {valid && canConfirm && (
+        <Card variant="highlight" title={t("confirm.cardTitle")}>
           <ConfirmSubmission
             clubId={clubId}
             submissionId={sub.id}
             confirmed={Boolean(sub.confirmedAt)}
           />
-        )}
-        {isValidSubmission(sub) && isAdmin(user) && (
-          <WithdrawSubmission clubId={clubId} submissionId={sub.id} />
-        )}
-      </header>
-      <section className="bg-primary text-primary-foreground flex flex-col gap-1 rounded-xl p-4">
-        <p className="text-2xl font-semibold tabular-nums">{t("total", { total: result.total })}</p>
-        <p className="text-sm opacity-90">{t("filled", { filled: result.filledAreas })}</p>
-      </section>
-      <CopyLine line={sub.line} />
-      <ol className="flex flex-col gap-3">
+        </Card>
+      )}
+
+      <div className="grid grid-cols-2 gap-2">
+        <div className="flex flex-col gap-1 rounded-(--radius-md) bg-(--surface-raised) p-4">
+          <span className="label text-(--ink-muted)">{t("submission.total")}</span>
+          <span className="title-1 tabular-nums">
+            {t("submission.points", { total: result.total })}
+          </span>
+        </div>
+        <div className="flex flex-col gap-1 rounded-(--radius-md) bg-(--surface-raised) p-4">
+          <span className="label text-(--ink-muted)">{t("submission.filledLabel")}</span>
+          <span className="title-1 tabular-nums">
+            {t("submission.filledValue", { filled: result.filledAreas })}
+          </span>
+        </div>
+      </div>
+
+      <Accordion>
         {result.areas.map((a) => {
           const name = areas.find((x) => x.number === a.area)?.name ?? "";
           const hits = sub.questions.filter(
             (q) => checked.has(q.questionId) && q.questionId.startsWith(`${a.area}.`),
           );
           return (
-            <li key={a.area} className="rounded-xl border p-4">
-              <h2 className="flex flex-wrap items-baseline justify-between gap-2 font-semibold">
-                <span className="break-words">
-                  {a.area}. {name}
+            <AccordionItem
+              key={a.area}
+              title={
+                <span className="flex items-center gap-3">
+                  <span className="w-6 shrink-0 font-bold text-(--ink-muted)">{a.area}</span>
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="break-words">{name}</span>
+                    <span className="footnote font-normal text-(--ink-muted)">
+                      {a.points !== null
+                        ? t("areaScore", { points: a.points })
+                        : a.status === "few"
+                          ? t("areaFew")
+                          : t("areaEmpty")}
+                    </span>
+                  </span>
+                  {a.band && (
+                    <KompasBandBadge band={a.band}>{t(`bands.${a.band}`)}</KompasBandBadge>
+                  )}
                 </span>
-                <span className="text-sm tabular-nums">
-                  {a.points !== null
-                    ? t("areaScore", { points: a.points })
-                    : a.status === "few"
-                      ? t("areaFew")
-                      : t("areaEmpty")}
-                </span>
-              </h2>
-              {hits.length > 0 && (
-                <ul className="text-muted-foreground mt-2 list-disc pl-5 text-sm">
-                  {hits.map((q) => (
-                    <li key={q.questionId}>{q.text}</li>
-                  ))}
-                </ul>
+              }
+            >
+              {hits.length > 0 ? (
+                <>
+                  <p className="label mb-1 text-(--ink-muted) uppercase">
+                    {t("submission.checked")}
+                  </p>
+                  <ul className="callout list-disc space-y-1 pl-5">
+                    {hits.map((q) => (
+                      <li key={q.questionId}>{q.text}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p className="callout text-(--ink-muted)">{t("areaEmpty")}</p>
               )}
-            </li>
+            </AccordionItem>
           );
         })}
-      </ol>
+      </Accordion>
+
+      <Card title={t("submission.export")}>
+        <CopyLine line={sub.line} />
+      </Card>
+
+      {valid && isAdmin(user) && <WithdrawSubmission clubId={clubId} submissionId={sub.id} />}
     </div>
   );
 }
@@ -152,7 +205,7 @@ export default function SubmissionPage(
   props: PageProps<"/klub/[clubId]/kompas/odoslane/[submissionId]">,
 ) {
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-10 sm:py-16">
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <Submission {...props} />
       </Suspense>

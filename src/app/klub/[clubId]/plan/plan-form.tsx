@@ -3,9 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
-import { Plus, Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, Drawer, Input, Select, Textarea } from "@/components/sfz";
 import type { PlanGoalStatus } from "@/server/db/types";
 
 import { savePlanAction } from "./actions";
@@ -26,228 +25,184 @@ export interface GoalValue {
 
 const STATUSES: PlanGoalStatus[] = ["todo", "doing", "done"];
 const OTHER = "__other";
-const MAX_GOALS = 10;
-const field =
-  "border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none";
+export const MAX_GOALS = 10;
 
-/** Management and the mentor compose the season's plan (CP-b). */
-export function PlanForm({
+/** A new goal in `area`, empty otherwise. */
+export const blankGoal = (area: number): GoalValue => ({
+  area,
+  title: "",
+  publicText: "",
+  indicator: "",
+  owner: "",
+  ownerId: null,
+  dueDate: null,
+  status: "todo",
+});
+
+const toInput = (g: GoalValue) => ({
+  id: g.id,
+  area: g.area,
+  title: g.title,
+  publicText: g.publicText,
+  indicator: g.indicator,
+  owner: g.owner,
+  ownerId: g.ownerId,
+  dueDate: g.dueDate || null,
+  status: g.status,
+});
+
+/**
+ * One goal of the season's plan in a side panel (CP-b, design "Klub – plán rozvoja"):
+ * management and the mentor add, edit or remove a goal; the whole plan is saved, as before.
+ */
+export function GoalDrawer({
   clubId,
   version,
-  initial,
+  goals,
+  editing,
+  onClose,
   members,
   areas,
-  planHref,
 }: {
   clubId: string;
   version: number;
-  initial: GoalValue[];
+  /** all goals of the plan as saved */
+  goals: GoalValue[];
+  /** index in `goals`, or a new goal; null = closed */
+  editing: number | GoalValue | null;
+  onClose: () => void;
   members: { userId: string; name: string }[];
   areas: { number: number; name: string }[];
-  planHref: string;
 }) {
   const t = useTranslations("plan");
   const router = useRouter();
-  const [goals, setGoals] = useState(initial);
+  const isNew = typeof editing === "object" && editing !== null;
+  const start = editing === null ? null : isNew ? editing : goals[editing];
+  const [goal, setGoal] = useState<GoalValue | null>(start);
   const [pending, startTransition] = useTransition();
   const [message, setMessage] = useState<string | null>(null);
 
-  const update = (i: number, patch: Partial<GoalValue>) =>
-    setGoals((s) => s.map((g, j) => (j === i ? { ...g, ...patch } : g)));
+  if (!goal) return null;
+  const update = (patch: Partial<GoalValue>) => setGoal((g) => (g ? { ...g, ...patch } : g));
 
-  const save = () =>
+  const persist = (next: GoalValue[]) =>
     startTransition(async () => {
-      if (goals.some((g) => !g.title.trim() || !g.publicText.trim() || !g.owner.trim())) {
-        return setMessage(t("errors.required"));
-      }
       setMessage(null);
       const res = await savePlanAction(clubId, {
-        goals: goals.map((g) => ({
-          id: g.id,
-          area: g.area,
-          title: g.title,
-          publicText: g.publicText,
-          indicator: g.indicator,
-          owner: g.owner,
-          ownerId: g.ownerId,
-          dueDate: g.dueDate || null,
-          status: g.status,
-        })),
+        goals: next.map(toInput),
         expectedVersion: version,
       });
       if (res.status === "error") return setMessage(t(`errors.${res.code}`));
-      router.push(planHref);
+      onClose();
+      router.refresh();
     });
 
+  const save = () => {
+    if (!goal.title.trim() || !goal.publicText.trim() || !goal.owner.trim()) {
+      return setMessage(t("errors.requiredOne"));
+    }
+    persist(isNew ? [...goals, goal] : goals.map((g, i) => (i === editing ? goal : g)));
+  };
+
+  const remove = () => persist(goals.filter((_, i) => i !== editing));
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        save();
-      }}
-      className="flex flex-col gap-4"
+    <Drawer
+      open
+      onClose={onClose}
+      side="right"
+      width={420}
+      title={isNew ? t("newGoal") : t("editGoal")}
     >
-      {goals.map((g, i) => (
-        <fieldset key={g.id ?? `new-${i}`} className="flex flex-col gap-3 rounded-xl border p-4">
-          <legend className="px-1 text-sm font-semibold">{t("goalN", { n: i + 1 })}</legend>
-          <div className="flex gap-2">
-            <select
-              value={g.area}
-              aria-label={t("area")}
-              onChange={(e) => update(i, { area: Number(e.target.value) })}
-              className={field}
-            >
-              {areas.map((a) => (
-                <option key={a.number} value={a.number}>
-                  {a.number} · {a.name}
-                </option>
-              ))}
-            </select>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={t("remove")}
-              onClick={() => setGoals((s) => s.filter((_, j) => j !== i))}
-            >
-              <Trash2 aria-hidden />
-            </Button>
-          </div>
-          <label className="flex flex-col gap-1 text-sm">
-            <span className="font-medium">{t("title")}</span>
-            <input
-              value={g.title}
-              onChange={(e) => update(i, { title: e.target.value })}
-              placeholder={t("titlePlaceholder")}
-              maxLength={300}
-              className={field}
-            />
-          </label>
-          <label className="flex flex-col gap-1 text-sm">
-            <span className="font-medium">{t("publicText")}</span>
-            <textarea
-              value={g.publicText}
-              onChange={(e) => update(i, { publicText: e.target.value })}
-              placeholder={t("publicPlaceholder")}
-              rows={2}
-              maxLength={300}
-              className={field}
-            />
-            <span className="rounded-md bg-blue-50 px-2 py-1.5 text-xs text-blue-900 dark:bg-blue-950/40 dark:text-blue-200">
-              {t("publicHint")}
-            </span>
-          </label>
-          <div className="grid gap-2 sm:grid-cols-2">
-            <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium">{t("owner")}</span>
-              <select
-                value={g.ownerId ?? (g.ownerOther || g.owner ? OTHER : "")}
-                onChange={(e) => {
-                  const m = members.find((x) => x.userId === e.target.value);
-                  if (m) update(i, { ownerId: m.userId, owner: m.name, ownerOther: false });
-                  else if (e.target.value === OTHER)
-                    update(i, { ownerId: null, owner: "", ownerOther: true });
-                  else update(i, { ownerId: null, owner: "", ownerOther: false });
-                }}
-                className={field}
-              >
-                <option value="">{t("ownerPick")}</option>
-                {members.map((m) => (
-                  <option key={m.userId} value={m.userId}>
-                    {m.name}
-                  </option>
-                ))}
-                <option value={OTHER}>{t("ownerOther")}</option>
-              </select>
-            </label>
-            <label className="flex flex-col gap-1 text-sm">
-              <span className="font-medium">{t("due")}</span>
-              <input
-                type="date"
-                value={g.dueDate ?? ""}
-                onChange={(e) => update(i, { dueDate: e.target.value || null })}
-                className={field}
-              />
-            </label>
-          </div>
-          {g.ownerId === null && (g.ownerOther || g.owner) && (
-            <input
-              value={g.owner}
-              onChange={(e) => update(i, { owner: e.target.value })}
-              placeholder={t("ownerName")}
-              aria-label={t("ownerName")}
-              maxLength={120}
-              className={field}
-            />
-          )}
-          <label className="flex flex-col gap-1 text-sm">
-            <span className="font-medium">
-              {t("indicator")}{" "}
-              <span className="text-muted-foreground font-normal">· {t("optional")}</span>
-            </span>
-            <input
-              value={g.indicator}
-              onChange={(e) => update(i, { indicator: e.target.value })}
-              placeholder={t("indicatorPlaceholder")}
-              maxLength={500}
-              className={field}
-            />
-          </label>
-          <div className="flex flex-col gap-1 text-sm">
-            <span className="font-medium">{t("statusLabel")}</span>
-            <div className="grid grid-cols-3 overflow-hidden rounded-md border text-xs">
-              {STATUSES.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  aria-pressed={g.status === s}
-                  onClick={() => update(i, { status: s })}
-                  className="aria-pressed:bg-primary aria-pressed:text-primary-foreground px-2 py-1.5"
-                >
-                  {t(`status.${s}`)}
-                </button>
-              ))}
-            </div>
-          </div>
-        </fieldset>
-      ))}
-      {goals.length < MAX_GOALS && (
-        <Button
-          type="button"
-          variant="outline"
-          className="self-start"
-          onClick={() =>
-            setGoals((s) => [
-              ...s,
-              {
-                area: areas.find((a) => !s.some((g) => g.area === a.number))?.number ?? 1,
-                title: "",
-                publicText: "",
-                indicator: "",
-                owner: "",
-                ownerId: null,
-                dueDate: null,
-                status: "todo",
-              },
-            ])
-          }
-        >
-          <Plus aria-hidden /> {t("addGoal")}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          save();
+        }}
+        className="flex flex-col gap-4"
+      >
+        <Select
+          label={t("area")}
+          value={String(goal.area)}
+          onChange={(e) => update({ area: Number(e.target.value) })}
+          options={areas.map((a) => ({
+            value: String(a.number),
+            label: `${a.number} · ${a.name}`,
+          }))}
+        />
+        <Input
+          label={t("title")}
+          value={goal.title}
+          onChange={(e) => update({ title: e.target.value })}
+          placeholder={t("titlePlaceholder")}
+          maxLength={300}
+          required
+        />
+        <Textarea
+          label={t("publicText")}
+          hint={t("publicHint")}
+          value={goal.publicText}
+          onChange={(e) => update({ publicText: e.target.value })}
+          placeholder={t("publicPlaceholder")}
+          rows={3}
+          maxLength={300}
+          required
+        />
+        <Select
+          label={t("owner")}
+          value={goal.ownerId ?? (goal.ownerOther || goal.owner ? OTHER : "")}
+          onChange={(e) => {
+            const m = members.find((x) => x.userId === e.target.value);
+            if (m) update({ ownerId: m.userId, owner: m.name, ownerOther: false });
+            else if (e.target.value === OTHER)
+              update({ ownerId: null, owner: "", ownerOther: true });
+            else update({ ownerId: null, owner: "", ownerOther: false });
+          }}
+          options={[
+            { value: "", label: t("ownerPick") },
+            ...members.map((m) => ({ value: m.userId, label: m.name })),
+            { value: OTHER, label: t("ownerOther") },
+          ]}
+        />
+        {goal.ownerId === null && (goal.ownerOther || goal.owner) && (
+          <Input
+            label={t("ownerName")}
+            value={goal.owner}
+            onChange={(e) => update({ owner: e.target.value })}
+            maxLength={120}
+          />
+        )}
+        <Input
+          label={t("due")}
+          type="date"
+          value={goal.dueDate ?? ""}
+          onChange={(e) => update({ dueDate: e.target.value || null })}
+        />
+        <Input
+          label={`${t("indicator")} · ${t("optional")}`}
+          value={goal.indicator}
+          onChange={(e) => update({ indicator: e.target.value })}
+          placeholder={t("indicatorPlaceholder")}
+          maxLength={500}
+        />
+        <Select
+          label={t("statusLabel")}
+          value={goal.status}
+          onChange={(e) => update({ status: e.target.value as PlanGoalStatus })}
+          options={STATUSES.map((s) => ({ value: s, label: t(`status.${s}`) }))}
+        />
+        <Button type="submit" block loading={pending}>
+          {t("saveGoal")}
         </Button>
-      )}
-      <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={pending}>
-          {t("save")}
-        </Button>
-        {version > 0 && (
-          <Button type="button" variant="ghost" onClick={() => router.push(planHref)}>
-            {t("cancel")}
+        {!isNew && (
+          <Button variant="danger" block disabled={pending} onClick={remove}>
+            {t("remove")}
           </Button>
         )}
-      </div>
-      <p role="status" aria-live="polite" className="text-sm">
-        {message}
-      </p>
-    </form>
+        <p role="status" aria-live="polite" className="footnote text-(--danger)">
+          {message}
+        </p>
+      </form>
+    </Drawer>
   );
 }
