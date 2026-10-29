@@ -5,14 +5,26 @@ import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { TaskList } from "@/components/academy/task-list";
+import {
+  Accordion,
+  AccordionItem,
+  Badge,
+  Card,
+  EmptyState,
+  Icon,
+  LinkButton,
+  LinkChip,
+} from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
-import { clubDeps } from "@/server/clubs/deps";
+import { academyDeps, clubDeps } from "@/server/clubs/deps";
+import { getMyAcademy, type AcademyClub } from "@/server/services/academy.service";
 import { isAdmin } from "@/server/services/club-access";
 import { getClubOverview, type ClubOverview } from "@/server/services/clubs.service";
-import { seasonFromSlug, seasonToSlug } from "@/server/services/season";
+import { currentSeason, seasonFromSlug, seasonToSlug } from "@/server/services/season";
+import type { CurrentUser } from "@/server/services/users.service";
 
 export const metadata: Metadata = { title: defaultMessages.club.title };
 
@@ -22,7 +34,9 @@ async function loadOverview(
   clubId: string,
   seasonSlug: string | undefined,
 ): Promise<
-  (ClubOverview & { canKompas: boolean; canLicensing: boolean }) | "forbidden" | "notFound"
+  | (ClubOverview & { canKompas: boolean; canLicensing: boolean; user: CurrentUser })
+  | "forbidden"
+  | "notFound"
 > {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
@@ -33,6 +47,7 @@ async function loadOverview(
     // Licensing evaluation: management and mentor edit, coaches read (ADR 0006)
     return {
       ...overview,
+      user,
       canKompas: isAdmin(user) || overview.roles.some((r) => r !== "mentor"),
       canLicensing: isAdmin(user) || overview.roles.length > 0,
     };
@@ -43,118 +58,197 @@ async function loadOverview(
   }
 }
 
+const isoDate = (iso: string) =>
+  new Date(`${iso}T12:00:00Z`).toLocaleDateString("sk", { timeZone: "Europe/Bratislava" });
+
+type Tone = "neutral" | "info" | "success" | "warning";
+interface Tile {
+  key: string;
+  href: string;
+  value: string;
+  state: string;
+  tone: Tone;
+}
+
+/** Status tiles of the season from the user's academy view (Kompas, licensing, plan, mentoring). */
+async function statusTiles(
+  club: AcademyClub,
+  base: string,
+  can: { kompas: boolean; licensing: boolean },
+): Promise<Tile[]> {
+  const t = await getTranslations("club.overview.tiles");
+  const tiles: Tile[] = [];
+  if (can.kompas) {
+    const k = club.kompas;
+    tiles.push({
+      key: "kompas",
+      href: `${base}/kompas`,
+      value: k ? t("kompasValue", { filled: k.filledAreas }) : "–",
+      ...(!k || k.version === 0
+        ? { state: t("kompasEmpty"), tone: "neutral" as const }
+        : k.submittedAt
+          ? { state: t("kompasSent"), tone: "success" as const }
+          : { state: t("kompasDraft"), tone: "warning" as const }),
+    });
+  }
+  if (!can.licensing) return tiles;
+  tiles.push({
+    key: "licensing",
+    href: `${base}/licencne-hodnotenie`,
+    value: club.licensingClosedAt
+      ? t("licensingClosedOn", {
+          date: club.licensingClosedAt.toLocaleDateString("sk", {
+            timeZone: "Europe/Bratislava",
+          }),
+        })
+      : t("licensingSeason"),
+    ...(club.licensingClosedAt
+      ? { state: t("licensingClosed"), tone: "success" as const }
+      : { state: t("licensingOpen"), tone: "info" as const }),
+  });
+  const p = club.plan;
+  tiles.push({
+    key: "plan",
+    href: `${base}/plan`,
+    value: p.goals > 0 ? t("planValue", { done: p.done, goals: p.goals }) : t("planNone"),
+    ...(p.confirmed
+      ? { state: t("planConfirmed"), tone: "success" as const }
+      : p.goals > 0
+        ? { state: t("planDraft"), tone: "info" as const }
+        : { state: t("planMissing"), tone: "warning" as const }),
+  });
+  const v = club.visits;
+  tiles.push({
+    key: "mentoring",
+    href: `${base}/navstevy`,
+    value: v.nextPlanned
+      ? t("visitNext", { date: isoDate(v.nextPlanned) })
+      : v.lastDate
+        ? t("visitLast", { date: isoDate(v.lastDate) })
+        : t("visitNone"),
+    ...(v.overdue > 0
+      ? { state: t("visitOverdue", { count: v.overdue }), tone: "warning" as const }
+      : v.nextPlanned
+        ? { state: t("visitPlanned"), tone: "info" as const }
+        : club.mentoring
+          ? { state: t("mentoringActive"), tone: "success" as const }
+          : { state: t("mentoringNone"), tone: "neutral" as const }),
+  });
+  return tiles;
+}
+
 async function ClubDetail({ params, searchParams }: Props) {
   const { clubId: rawId } = await params;
   const { season } = await searchParams;
   const clubId = decodeURIComponent(rawId);
   const result = await loadOverview(clubId, typeof season === "string" ? season : undefined);
   const t = await getTranslations("club");
-  const tClubRoles = await getTranslations("clubRoles");
   const format = await getFormatter();
-  const tKompas = await getTranslations("kompas");
-  const tLicensing = await getTranslations("licensing");
-  const tVizitka = await getTranslations("vizitka");
-  const tVisits = await getTranslations("visits");
-  const tPlan = await getTranslations("plan");
 
   if (result === "forbidden" || result === "notFound") {
     return (
-      <Card>
-        <CardContent className="flex flex-col gap-4 text-sm">
-          <p>{result === "forbidden" ? t("forbidden") : t("notFound")}</p>
-          <Link href="/ucet" className="font-medium underline underline-offset-4">
-            {t("back")}
-          </Link>
-        </CardContent>
-      </Card>
+      <EmptyState
+        title={result === "forbidden" ? t("forbidden") : t("notFound")}
+        action={<LinkButton href="/moja-akademia">{t("back")}</LinkButton>}
+      />
     );
   }
 
   const { club, stats, teams } = result;
-  const href = (s: string) => `/klub/${encodeURIComponent(club.clubId)}?season=${seasonToSlug(s)}`;
+  const base = `/klub/${encodeURIComponent(club.clubId)}`;
+  const href = (s: string) => `${base}?season=${seasonToSlug(s)}`;
+  // the season's status and tasks come from the user's academy view (only for own clubs, current season)
+  const academy =
+    result.season === currentSeason()
+      ? (await getMyAcademy(academyDeps, result.user)).clubs.find((c) => c.clubId === club.clubId)
+      : undefined;
+  const tiles = academy
+    ? await statusTiles(academy, base, { kompas: result.canKompas, licensing: result.canLicensing })
+    : [];
 
   return (
-    <div className="flex flex-col gap-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl break-words">{club.name}</CardTitle>
-          <CardDescription>
-            {t("union")}: {club.union} · {t("region")}: {club.region}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4 text-sm">
-          {(result.canKompas || result.canLicensing) && (
-            <div className="flex flex-wrap gap-2">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
+      <div className="flex min-w-0 flex-col gap-6">
+        {result.seasons.length > 1 && (
+          <nav
+            aria-label={t("season")}
+            className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1"
+          >
+            {result.seasons.map((s) => (
+              <LinkChip key={s} href={href(s)} selected={s === result.season}>
+                {s}
+              </LinkChip>
+            ))}
+          </nav>
+        )}
+        {tiles.length > 0 && (
+          <section
+            aria-label={t("overview.status", { season: result.season })}
+            className="grid grid-cols-2 gap-2 sm:grid-cols-[repeat(auto-fit,minmax(180px,1fr))] sm:gap-3"
+          >
+            {tiles.map((tile) => (
               <Link
-                href={`/klub/${encodeURIComponent(club.clubId)}/vizitka?season=${seasonToSlug(result.season)}`}
-                className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
+                key={tile.key}
+                href={tile.href}
+                className="flex min-h-28 flex-col gap-1.5 rounded-(--radius-md) bg-(--surface-raised) p-3.5 text-(--ink) no-underline sm:p-4"
               >
-                {tVizitka("open")}
+                <span className="label text-(--ink-muted)">{t(`overview.tiles.${tile.key}`)}</span>
+                <span className="headline">{tile.value}</span>
+                <Badge tone={tile.tone} dot className="mt-auto self-start">
+                  {tile.state}
+                </Badge>
               </Link>
-              {result.canKompas && (
-                <Link
-                  href={`/klub/${encodeURIComponent(club.clubId)}/kompas`}
-                  className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
-                >
-                  {tKompas("open")}
-                </Link>
-              )}
-              {result.canLicensing && (
-                <Link
-                  href={`/klub/${encodeURIComponent(club.clubId)}/licencne-hodnotenie?season=${seasonToSlug(result.season)}`}
-                  className="bg-primary text-primary-foreground rounded-md px-3 py-2 text-sm font-medium"
-                >
-                  {tLicensing("open")}
-                </Link>
-              )}
-              {result.canLicensing && (
-                <Link
-                  href={`/klub/${encodeURIComponent(club.clubId)}/navstevy`}
-                  className="rounded-md border px-3 py-2 text-sm font-medium"
-                >
-                  {tVisits("open")}
-                </Link>
-              )}
-              {result.canLicensing && (
-                <Link
-                  href={`/klub/${encodeURIComponent(club.clubId)}/plan`}
-                  className="rounded-md border px-3 py-2 text-sm font-medium"
-                >
-                  {tPlan("open")}
-                </Link>
-              )}
-              {result.canLicensing && (
-                <Link
-                  href={`/klub/${encodeURIComponent(club.clubId)}/mentoring`}
-                  className="rounded-md border px-3 py-2 text-sm font-medium"
-                >
-                  {t("mentoring")}
-                </Link>
-              )}
-            </div>
-          )}
-          {result.roles.length > 0 && (
-            <p>
-              <span className="text-muted-foreground">{t("myRoles")}: </span>
-              {result.roles.map((r) => tClubRoles(r)).join(", ")}
-            </p>
-          )}
-          {result.seasons.length > 0 && (
-            <nav aria-label={t("season")} className="flex flex-wrap gap-2">
-              {result.seasons.map((s) => (
-                <Link
-                  key={s}
-                  href={href(s)}
-                  aria-current={s === result.season ? "page" : undefined}
-                  className="aria-[current=page]:bg-primary aria-[current=page]:text-primary-foreground rounded-md border px-3 py-1.5"
-                >
-                  {s}
-                </Link>
-              ))}
-            </nav>
-          )}
+            ))}
+          </section>
+        )}
+        {academy && <TaskList title={t("overview.next")} tasks={academy.tasks} limit={5} />}
+        {teams.length > 0 && (
+          <Accordion>
+            <AccordionItem
+              title={t("teams.title")}
+              subtitle={t("overview.teamsCount", { count: teams.length })}
+            >
+              <ul className="flex flex-col">
+                {teams.map((team, i) => (
+                  <li
+                    key={`${team.name}-${team.gender}-${i}`}
+                    className="flex flex-col gap-0.5 border-t border-(--hairline) py-2.5 first:border-t-0"
+                  >
+                    <span className="subheadline font-semibold break-words">
+                      {team.name}{" "}
+                      <span className="font-normal text-(--ink-muted)">
+                        ({t(`gender.${team.gender}`)})
+                      </span>
+                    </span>
+                    <span className="footnote break-words text-(--ink-muted)">
+                      {team.competitions.length > 0
+                        ? team.competitions.join(", ")
+                        : t("teams.noCompetition")}{" "}
+                      · {t("teams.players", { count: team.playerCount })}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </AccordionItem>
+          </Accordion>
+        )}
+      </div>
+
+      <aside className="flex min-w-0 flex-col gap-4">
+        <Card
+          title={t("overview.numbers")}
+          footer={
+            result.dataAsOf ? (
+              <span className="footnote text-(--ink-muted)">
+                {t("dataAsOf", {
+                  date: format.dateTime(new Date(result.dataAsOf), { dateStyle: "long" }),
+                })}
+              </span>
+            ) : undefined
+          }
+        >
           {stats ? (
-            <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <dl className="grid grid-cols-3 gap-2 text-center">
               <Stat label={t("stats.teams")} value={stats.teams}>
                 {stats.teamsInCompetition} {t("stats.teamsInCompetition")}
               </Stat>
@@ -164,50 +258,38 @@ async function ClubDetail({ params, searchParams }: Props) {
               <Stat label={t("stats.coaches")} value={stats.coaches} />
             </dl>
           ) : (
-            <p className="text-muted-foreground">{t("noData")}</p>
+            <p className="callout text-(--ink-muted)">{t("noData")}</p>
           )}
-          {result.dataAsOf && (
-            <p className="text-muted-foreground text-xs">
-              {t("dataAsOf", {
-                date: format.dateTime(new Date(result.dataAsOf), { dateStyle: "long" }),
-              })}
-            </p>
-          )}
-        </CardContent>
-      </Card>
-
-      {teams.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("teams.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="divide-y text-sm">
-              {teams.map((team, i) => (
-                <li
-                  key={`${team.name}-${team.gender}-${i}`}
-                  className="flex flex-col gap-0.5 py-2.5"
-                >
-                  <span className="font-medium break-words">
-                    {team.name}{" "}
-                    <span className="text-muted-foreground">({t(`gender.${team.gender}`)})</span>
-                  </span>
-                  <span className="text-muted-foreground text-xs break-words">
-                    {team.competitions.length > 0
-                      ? team.competitions.join(", ")
-                      : t("teams.noCompetition")}{" "}
-                    · {t("teams.players", { count: team.playerCount })}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
         </Card>
-      )}
-
-      <Link href="/ucet" className="text-sm font-medium underline underline-offset-4">
-        {t("back")}
-      </Link>
+        {(result.canKompas || result.canLicensing) && (
+          <Link
+            href={`${base}/vizitka?season=${seasonToSlug(result.season)}`}
+            className="flex items-center gap-3 rounded-(--radius-md) bg-(--surface-raised) p-4 text-(--ink) no-underline"
+          >
+            <span className="text-(--brand-blue-ink)" aria-hidden>
+              <Icon name="trophy" size={24} />
+            </span>
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="headline">{t("overview.vizitka")}</span>
+              <span className="footnote text-(--ink-muted)">
+                {academy
+                  ? t("overview.ranking", {
+                      state:
+                        academy.rankingConsent === null
+                          ? "undecided"
+                          : academy.rankingConsent
+                            ? "yes"
+                            : "no",
+                    })
+                  : t("overview.vizitkaHint")}
+              </span>
+            </span>
+            <span className="text-(--ink-muted)" aria-hidden>
+              <Icon name="chevron-right" size={18} />
+            </span>
+          </Link>
+        )}
+      </aside>
     </div>
   );
 }
@@ -222,17 +304,17 @@ function Stat({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="rounded-md border p-3">
-      <dt className="text-muted-foreground text-xs">{label}</dt>
-      <dd className="text-2xl font-semibold tabular-nums">{value}</dd>
-      {children && <dd className="text-muted-foreground text-xs">{children}</dd>}
+    <div className="flex flex-col gap-0.5">
+      <dd className="title-2 order-1 tabular-nums">{value}</dd>
+      <dt className="footnote order-2 text-(--ink-muted)">{label}</dt>
+      {children && <dd className="caption-1 order-3 text-(--ink-muted)">{children}</dd>}
     </div>
   );
 }
 
 export default function ClubPage(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:py-16">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <ClubDetail {...props} />
       </Suspense>

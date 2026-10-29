@@ -114,8 +114,43 @@
       "M": "mužské",
       "F": "ženské"
     },
-    "back": "Späť na môj účet",
-    "mentoring": "Mentoring klubu"
+    "back": "Späť na Moju Akadémiu",
+    "mentoring": "Mentoring klubu",
+    "overview": {
+      "status": "Stav sezóny {season}",
+      "next": "Ďalšie kroky klubu",
+      "numbers": "Klub v číslach",
+      "teamsCount": "{count, plural, one {# družstvo} few {# družstvá} other {# družstiev}}",
+      "vizitka": "Vizitka klubu",
+      "vizitkaHint": "Ako klub vidia ostatní",
+      "ranking": "Ako klub vidia ostatní · v rebríčku: {state, select, yes {áno} no {nie} other {zatiaľ nerozhodnuté}}",
+      "tiles": {
+        "kompas": "Kompas",
+        "licensing": "Licenčné hodnotenie",
+        "plan": "Plán rozvoja",
+        "mentoring": "Mentoring",
+        "kompasValue": "{filled} z 11 oblastí",
+        "kompasEmpty": "Nezačatý",
+        "kompasDraft": "Rozpracovaný",
+        "kompasSent": "Odoslaný",
+        "licensingSeason": "Táto sezóna",
+        "licensingClosedOn": "Uzavreté {date}",
+        "licensingOpen": "Otvorené",
+        "licensingClosed": "Uzavreté",
+        "planValue": "{done} z {goals} cieľov",
+        "planNone": "Bez plánu",
+        "planConfirmed": "Potvrdený",
+        "planDraft": "Rozpracovaný",
+        "planMissing": "Chýba",
+        "visitNext": "Návšteva {date}",
+        "visitLast": "Posledná {date}",
+        "visitNone": "Bez návštevy",
+        "visitPlanned": "Naplánovaná",
+        "visitOverdue": "{count, plural, one {# úloha po termíne} few {# úlohy po termíne} other {# úloh po termíne}}",
+        "mentoringActive": "Prebieha",
+        "mentoringNone": "Bez mentora"
+      }
+    }
   },
   "admin": {
     "title": "Administrácia",
@@ -645,7 +680,8 @@
       "banded": "oblastí s pásmom"
     },
     "notFound": "Klub sa nenašiel.",
-    "back": "Kluby"
+    "back": "Kluby",
+    "clubOnly": "Len pre klub"
   },
   "academy": {
     "title": "Moja Akadémia",
@@ -691,7 +727,11 @@
       "club_no_focus": "Bez zamerania rozvoja: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
       "club_no_closing": "Bez záveru mentoringu: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
       "ranking_consent": "Rozhodnúť, či sa klub zapojí do verejného rebríčka",
-      "club_kompas_unconfirmed": "Potvrdiť Kompas – {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}"
+      "club_kompas_unconfirmed": "Potvrdiť Kompas – {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
+      "severity": {
+        "crit": "Dôležité",
+        "warn": "Čoskoro"
+      }
     },
     "roles": {
       "title": "Moje roly v oblastiach",
@@ -1293,7 +1333,8 @@
       "title": "Na čom klub tento rok pracuje",
       "line": "Plán sezóny: splnené {done} z {goals}",
       "confirmed": "dohodnuté s mentorom",
-      "none": "Plán sezóny zatiaľ nie je"
+      "none": "Plán sezóny zatiaľ nie je",
+      "rowTitle": "Plán sezóny"
     }
   },
   "analytics": {
@@ -1795,7 +1836,8 @@
     "adminClubs": "Kluby",
     "adminContent": "Obsah",
     "adminRoles": "Katalóg rolí",
-    "moreTitle": "Viac"
+    "moreTitle": "Viac",
+    "switchClub": "Zmeniť klub"
   },
   "showcase": {
     "title": "Ukážky SFZ Design System",

@@ -3,9 +3,10 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 
 import { ClubPin } from "@/components/favorites/club-pin";
+import { Card, EmptyState, Icon, LinkButton } from "@/components/sfz";
 import { VizitkaView } from "@/components/vizitka/vizitka-view";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
@@ -44,7 +45,10 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
   } catch (error) {
     if (error instanceof ApiError && (error.code === "FORBIDDEN" || error.code === "NOT_FOUND")) {
       return (
-        <p className="text-sm">{error.code === "FORBIDDEN" ? tClub("forbidden") : t("notFound")}</p>
+        <EmptyState
+          title={error.code === "FORBIDDEN" ? tClub("forbidden") : t("notFound")}
+          action={<LinkButton href="/moja-akademia">{tClub("back")}</LinkButton>}
+        />
       );
     }
     throw error;
@@ -52,26 +56,21 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
   const base = `/klub/${encodeURIComponent(clubId)}/vizitka`;
   const seasonQuery = `?season=${seasonToSlug(vizitka.season)}`;
   return (
-    <div className="flex flex-col gap-4">
-      <nav className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-        <Link
-          href={`/klub/${encodeURIComponent(clubId)}`}
-          className="text-muted-foreground underline underline-offset-4"
-        >
-          {vizitka.club.name}
-        </Link>
-        <Link
+    <div className="flex flex-col gap-6">
+      <nav className="flex items-center gap-2">
+        <LinkButton
           href={`/vizitka/${encodeURIComponent(clubId)}${seasonQuery}`}
-          className="text-muted-foreground underline underline-offset-4"
+          variant="secondary"
+          size="sm"
         >
           {t("publicLink")}
-        </Link>
+        </LinkButton>
         <ClubPin
           user={user}
           kind="vizitka"
           clubId={clubId}
           clubName={vizitka.club.name}
-          className="-my-1.5 ml-auto"
+          className="ml-auto"
         />
       </nav>
       <VizitkaView
@@ -79,12 +78,36 @@ async function ClubVizitkaPage({ params, searchParams }: Props) {
         club={vizitka}
         seasonHref={(s) => `${base}?season=${seasonToSlug(s)}`}
       />
-      <PlanLine clubId={clubId} season={vizitka.season} />
-      <VisitLine clubId={clubId} season={vizitka.season} />
-      <MentoringLine clubId={clubId} season={vizitka.season} />
+      <Card title={t("clubOnly")} flush>
+        <ul>
+          <PlanLine clubId={clubId} season={vizitka.season} />
+          <VisitLine clubId={clubId} season={vizitka.season} />
+          <MentoringLine clubId={clubId} season={vizitka.season} />
+        </ul>
+      </Card>
       <RankingConsent clubId={clubId} />
       <PublicPlan clubId={clubId} season={vizitka.season} />
     </div>
+  );
+}
+
+/** One row of the club-only list: title, detail and a chevron. */
+function Row({ href, title, detail }: { href: string; title: string; detail: ReactNode }) {
+  return (
+    <li className="border-t border-(--hairline) first:border-t-0">
+      <Link
+        href={href}
+        className="flex min-h-14 items-center gap-3 px-4 py-2 text-(--ink) no-underline"
+      >
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="headline">{title}</span>
+          <span className="footnote text-(--ink-muted)">{detail}</span>
+        </span>
+        <span className="text-(--ink-muted)" aria-hidden>
+          <Icon name="chevron-right" size={18} />
+        </span>
+      </Link>
+    </li>
   );
 }
 
@@ -101,15 +124,16 @@ async function PlanLine({ clubId, season }: { clubId: string; season: string }) 
   if (view.season !== season) return null;
   const s = summarizePlan(view.plan);
   return (
-    <Link
+    <Row
       href={`/klub/${encodeURIComponent(clubId)}/plan`}
-      className="hover:bg-muted/50 flex flex-wrap items-center gap-x-2 rounded-xl border p-3 text-sm"
-    >
-      <span className="font-medium">
-        {s.goals > 0 ? t("line", { done: s.done, goals: s.goals }) : t("none")}
-      </span>
-      {s.confirmed && <span className="text-muted-foreground">· {t("confirmed")}</span>}
-    </Link>
+      title={t("rowTitle")}
+      detail={
+        <>
+          {s.goals > 0 ? t("line", { done: s.done, goals: s.goals }) : t("none")}
+          {s.confirmed && ` · ${t("confirmed")}`}
+        </>
+      }
+    />
   );
 }
 
@@ -127,18 +151,18 @@ async function VisitLine({ clubId, season }: { clubId: string; season: string })
   const date = (iso: string) =>
     new Date(`${iso}T12:00:00Z`).toLocaleDateString("sk", { timeZone: "Europe/Bratislava" });
   return (
-    <Link
+    <Row
       href={`/klub/${encodeURIComponent(clubId)}/navstevy`}
-      className="hover:bg-muted/50 flex flex-wrap items-center gap-x-2 rounded-xl border p-3 text-sm"
-    >
-      <span className="font-medium">{t("title")}</span>
-      <span className="text-muted-foreground">
-        {s.lastDate ? t("line", { date: date(s.lastDate), open: s.open }) : t("none")}
-      </span>
-      {s.overdue > 0 && (
-        <span className="text-destructive text-xs">· {t("overdue", { count: s.overdue })}</span>
-      )}
-    </Link>
+      title={t("title")}
+      detail={
+        <>
+          {s.lastDate ? t("line", { date: date(s.lastDate), open: s.open }) : t("none")}
+          {s.overdue > 0 && (
+            <span className="text-(--danger)"> · {t("overdue", { count: s.overdue })}</span>
+          )}
+        </>
+      }
+    />
   );
 }
 
@@ -154,13 +178,11 @@ async function MentoringLine({ clubId, season }: { clubId: string; season: strin
   }
   const done = Object.values(view.done).filter(Boolean).length;
   return (
-    <Link
+    <Row
       href={`/klub/${encodeURIComponent(clubId)}/mentoring`}
-      className="hover:bg-muted/50 flex flex-wrap items-center gap-x-2 rounded-xl border p-3 text-sm"
-    >
-      <span className="font-medium">{t("title")}</span>
-      <span className="text-muted-foreground">{done > 0 ? t("line", { done }) : t("none")}</span>
-    </Link>
+      title={t("title")}
+      detail={done > 0 ? t("line", { done }) : t("none")}
+    />
   );
 }
 
@@ -178,41 +200,36 @@ async function RankingConsent({ clubId }: { clubId: string }) {
   const date = (d: Date) =>
     d.toLocaleDateString("sk", { dateStyle: "medium", timeZone: "Europe/Bratislava" });
   return (
-    <section
-      id="rebricek"
-      aria-labelledby="ranking-consent"
-      className="flex scroll-mt-20 flex-col gap-2 rounded-xl border p-4"
-    >
-      <h2 id="ranking-consent" className="font-semibold">
-        {t("title")}
-      </h2>
-      <p className="text-sm">{t("intro")}</p>
-      <p className="text-sm font-medium">
-        {consent === null
-          ? t("undecided")
-          : consent.given
-            ? t("given", { date: date(consent.at) })
-            : t("declined", { date: date(consent.at) })}
-      </p>
-      {settings.canEdit ? (
-        <RankingConsentToggle
-          clubId={clubId}
-          given={consent?.given ?? null}
-          version={settings.version}
-        />
-      ) : (
-        <p className="text-muted-foreground text-xs">{t("managementOnly")}</p>
-      )}
-      <Link href="/vizitka" className="self-start text-xs underline underline-offset-4">
-        {t("see")}
-      </Link>
-    </section>
+    <Card id="rebricek" title={t("title")} className="scroll-mt-20">
+      <div className="flex flex-col gap-3">
+        <p className="callout">{t("intro")}</p>
+        <p className="headline">
+          {consent === null
+            ? t("undecided")
+            : consent.given
+              ? t("given", { date: date(consent.at) })
+              : t("declined", { date: date(consent.at) })}
+        </p>
+        {settings.canEdit ? (
+          <RankingConsentToggle
+            clubId={clubId}
+            given={consent?.given ?? null}
+            version={settings.version}
+          />
+        ) : (
+          <p className="footnote text-(--ink-muted)">{t("managementOnly")}</p>
+        )}
+        <Link href="/vizitka" className="subheadline self-start">
+          {t("see")}
+        </Link>
+      </div>
+    </Card>
   );
 }
 
 export default function Page(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-4 py-10 sm:py-16">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <ClubVizitkaPage {...props} />
       </Suspense>

@@ -34,6 +34,10 @@ export const REDESIGNED_FILES = [
   "src/components/vizitka/stars.tsx",
   "src/components/vizitka/vizitka-view.tsx",
   "src/components/vizitka/vizitky-explorer.tsx",
+  // R4 G2a – prehľad klubu a klubová vizitka
+  "src/app/klub/[[]clubId]/page.tsx",
+  "src/app/klub/[[]clubId]/vizitka/**",
+  "src/components/academy/**",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */
