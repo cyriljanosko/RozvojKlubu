@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/sfz";
 
 import { setRankingConsentAction } from "./actions";
 
@@ -31,23 +31,17 @@ export function RankingConsentToggle({
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap gap-2">
         {given !== true && (
-          <Button type="button" size="sm" disabled={pending} onClick={() => save(true)}>
+          <Button size="sm" loading={pending} onClick={() => save(true)}>
             {t("give")}
           </Button>
         )}
         {given !== false && (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            disabled={pending}
-            onClick={() => save(false)}
-          >
+          <Button size="sm" variant="secondary" disabled={pending} onClick={() => save(false)}>
             {given === true ? t("withdraw") : t("decline")}
           </Button>
         )}
       </div>
-      <span role="status" className="text-destructive text-xs">
+      <span role="status" className="footnote text-(--danger)">
         {error}
       </span>
     </div>

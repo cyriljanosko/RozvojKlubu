@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { BadgeCheck } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
+import { Button, Modal } from "@/components/sfz";
 
 import { confirmSubmissionAction } from "./actions";
 
@@ -19,6 +18,7 @@ export function ConfirmSubmission({
   confirmed: boolean;
 }) {
   const t = useTranslations("kompas.confirm");
+  const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const [pending, startTransition] = useTransition();
   const run = (value: boolean) =>
@@ -26,29 +26,41 @@ export function ConfirmSubmission({
       setError(false);
       const res = await confirmSubmissionAction(clubId, submissionId, value);
       if (res.status === "error") setError(true);
+      else setOpen(false);
     });
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col gap-3">
+      <p className="callout">{t("hint")}</p>
       {confirmed ? (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={pending}
-          onClick={() => run(false)}
-        >
+        <Button variant="secondary" loading={pending} onClick={() => run(false)}>
           {t("undo")}
         </Button>
       ) : (
-        <Button type="button" size="sm" disabled={pending} onClick={() => run(true)}>
-          <BadgeCheck aria-hidden />
+        <Button icon="check-circle" block onClick={() => setOpen(true)}>
           {t("button")}
         </Button>
       )}
-      <span className="text-muted-foreground text-xs">{t("hint")}</span>
-      <span role="status" className="text-destructive text-xs">
+      <span role="status" className="footnote text-(--danger)">
         {error && t("error")}
       </span>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t("modalTitle")}
+        size="sm"
+        footer={
+          <>
+            <Button block loading={pending} onClick={() => run(true)}>
+              {t("button")}
+            </Button>
+            <Button variant="tertiary" block onClick={() => setOpen(false)}>
+              {t("cancel")}
+            </Button>
+          </>
+        }
+      >
+        <p className="callout">{t("modalBody")}</p>
+      </Modal>
     </div>
   );
 }
