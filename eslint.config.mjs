@@ -54,6 +54,8 @@ export const REDESIGNED_FILES = [
   "src/components/favorites/favorites-list.tsx",
   // R4 G3b – účet a vzhľad
   "src/app/ucet/page.tsx",
+  // R4 G3c – pracovisko mentora
+  "src/app/mentor/**",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

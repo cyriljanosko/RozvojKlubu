@@ -38,107 +38,6 @@ const isoDate = (iso: string) =>
 const date = (d: Date) =>
   d.toLocaleDateString("sk", { dateStyle: "medium", timeZone: "Europe/Bratislava" });
 
-async function MentorClubs({
-  rows,
-}: {
-  rows: NonNullable<Awaited<ReturnType<typeof getMyAcademy>>["mentor"]>["rows"];
-}) {
-  const t = await getTranslations("academy");
-  const tM = await getTranslations("academy.dashboard.mentoring");
-  return (
-    <ul
-      id="mentor-clubs"
-      className="scroll-mt-4 overflow-hidden rounded-(--radius-sm) border border-(--hairline)"
-    >
-      {rows.map((r) => (
-        <li key={r.clubId} className="flex flex-col gap-1 px-3 py-2.5 text-sm">
-          <Link
-            href={`/klub/${encodeURIComponent(r.clubId)}/vizitka`}
-            className="font-medium break-words"
-          >
-            {r.name}
-          </Link>
-          <span className="text-xs text-(--ink-muted)">
-            {r.union} ·{" "}
-            {r.latest
-              ? t("mentor.latest", {
-                  date: date(r.latest.submittedAt),
-                  total: r.latest.total,
-                  filled: r.latest.filledAreas,
-                })
-              : t("mentor.none")}
-            {r.latest &&
-              ` · ${r.latest.confirmedAt ? t("mentor.confirmed") : t("mentor.unconfirmed")}`}{" "}
-            · {r.licensingClosed ? t("mentor.licensingClosed") : t("mentor.licensingOpen")}
-          </span>
-          <span className="text-xs text-(--ink-muted)">
-            {r.visits.lastDate
-              ? t("mentor.visitLine", {
-                  date: isoDate(r.visits.lastDate),
-                  open: r.visits.open,
-                })
-              : t("mentor.noVisit")}
-            {r.visits.overdue > 0 && (
-              <Badge tone="danger" className="ml-1.5">
-                {t("mentor.overdue", { count: r.visits.overdue })}
-              </Badge>
-            )}
-          </span>
-          <span className="text-xs text-(--ink-muted)">
-            {r.plan.goals > 0
-              ? t("mentor.planLine", { done: r.plan.done, goals: r.plan.goals }) +
-                (r.plan.confirmed
-                  ? ` · ${t("mentor.planConfirmed")}`
-                  : ` · ${t("mentor.planUnconfirmed")}`)
-              : t("mentor.noPlan")}
-          </span>
-          <span className="text-xs text-(--ink-muted)">
-            {t("mentor.mentoringLine", {
-              parts: (["intro", "focus", "closingClub", "closingMentor"] as const)
-                .map((k) => `${tM(k)} ${r.mentoring[k] ? "✓" : "–"}`)
-                .join(" · "),
-            })}
-          </span>
-          <span className="flex flex-wrap gap-x-3 text-xs">
-            {r.latest && !r.latest.confirmedAt && (
-              <Link
-                href={`/klub/${encodeURIComponent(r.clubId)}/kompas/odoslane/${r.latest.id}`}
-                className="font-medium underline underline-offset-4"
-              >
-                {t("mentor.confirm")}
-              </Link>
-            )}
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/mentoring`}
-              className="underline underline-offset-4"
-            >
-              {tM("title")}
-            </Link>
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/plan`}
-              className="underline underline-offset-4"
-            >
-              {t("mentor.plan")}
-            </Link>
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/navstevy/nova`}
-              className="font-medium underline underline-offset-4"
-            >
-              {t("mentor.newVisit")}
-            </Link>
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/navstevy`}
-              className="underline underline-offset-4"
-            >
-              {t("mentor.visits")}
-            </Link>
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 const link = "subheadline self-start";
 
 /** Kompas of the club against the anonymous average of same-size clubs (club roles only, DA-a). */
@@ -460,19 +359,6 @@ async function Academy({ searchParams }: Props) {
         ),
       },
     );
-  }
-  if (view.mentor) {
-    panels.push({
-      id: "mentor-clubs",
-      title: t("mentor.title"),
-      note: t("mentor.intro"),
-      content: (
-        <>
-          <MentorClubs rows={view.mentor.rows} />
-          <p className="rounded-(--radius-sm) bg-(--surface) p-3 text-xs">{t("sees.mentor")}</p>
-        </>
-      ),
-    });
   }
   if (view.admin) {
     const noKompas = view.admin.rows.filter((r) => !r.latest);

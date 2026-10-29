@@ -34,6 +34,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] G2c – plán a licenčné hodnotenie (vetva `feat/g2c-plan-licensing`): ciele v bočnom paneli (Drawer), licenčné oblasti v akordeóne, uzavretie a znovuotvorenie sezóny v dialógu (Cyril 29. 10.).
     - [ ] G2d – mentoring a návštevy (vetva `feat/g2d-mentoring-visits`): zoznam návštev je krok 3 na stránke Mentoring, `/navstevy` presmeruje, podmenu klubu bez položky Návštevy; formulár návštevy ostáva jeden so sekciami (Cyril 29. 10.).
     - [ ] G3b – účet a vzhľad (vetva `feat/g3b-account`): účet podľa návrhu, voľba vzhľadu (podľa zariadenia / svetlý / tmavý) uložená v prehliadači. E-mailové upozornenia až s týždenným súhrnom (EM). `src/app/ucet/sign-out-button.tsx` už nič nepoužíva – zmazať so súhlasom.
+    - [ ] G3c – pracovisko mentora na `/mentor` (vetva `feat/g3c-mentor-desk`): čísla sezóny, na potvrdenie (Kompas, plán), najbližšie návštevy, kluby so stavom. Dlaždica „Moje kluby v kohorte“ z Mojej Akadémie je odstránená (presunula sa sem).
     - [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Ikony míľnikov a hviezda pinu po vydaní DS.
     - [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.

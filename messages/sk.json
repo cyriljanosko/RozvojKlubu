@@ -481,7 +481,32 @@
     "latest": "{date} · {total} z 220 · vyplnené {filled} z 11",
     "open": "Otvoriť",
     "forbidden": "Nie ste mentor žiadneho klubu.",
-    "link": "Moje kluby v kohorte"
+    "link": "Moje kluby v kohorte",
+    "titleShort": "Moje kluby",
+    "season": "Mentor · sezóna {season}",
+    "back": "Späť na Moju Akadémiu",
+    "tasks": "Úlohy mentora",
+    "toConfirm": "Na potvrdenie",
+    "kompasOf": "Kompas – {club}",
+    "planOf": "Plán rozvoja – {club}",
+    "sentOn": "Odoslaný {date}",
+    "planEdited": "Upravený po potvrdení",
+    "planNotConfirmed": "Zatiaľ nepotvrdený",
+    "nextVisits": "Najbližšie návštevy",
+    "clubs": "Kluby",
+    "stats": {
+      "label": "Prehľad sezóny",
+      "clubs": "klubov",
+      "toConfirm": "na potvrdenie",
+      "visits": "návštevy"
+    },
+    "state": {
+      "noKompas": "Bez Kompasu",
+      "kompasToConfirm": "Kompas na potvrdenie",
+      "planToConfirm": "Plán na potvrdenie",
+      "overdue": "Kroky po termíne",
+      "ok": "V poriadku"
+    }
   },
   "licensing": {
     "title": "Licenčné hodnotenie",
