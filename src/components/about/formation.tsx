@@ -1,4 +1,4 @@
-import Link from "next/link";
+// eslint-disable-next-line no-restricted-imports -- area icons until the design system has them (Cyril 30. 10. 2026)
 import {
   CalendarDays,
   ChartColumn,
@@ -10,11 +10,11 @@ import {
   Scale,
   ShieldCheck,
   Shirt,
-  X,
   type LucideIcon,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
+import { AREA_LINE_CLASS, Icon, LinkButton } from "@/components/sfz";
 import type { AreaDto } from "@/server/services/content.service";
 
 import { PITCH_TALL, PITCH_WIDE, project, toPolygon, type PitchGeometry } from "./pitch";
@@ -39,13 +39,12 @@ export const FORMATION: { area: number; line: Line; x: number; y: number }[] = [
   { area: 1, line: "goalkeeper", x: 50, y: 87 },
 ];
 
-/** Line colours (pin, popover icon, legend); the goalkeeper stands apart in violet. */
-export const LINE_COLOR: Record<Line, string> = {
-  goalkeeper: "bg-violet-600",
-  midfield: "bg-blue-600",
-  defense: "bg-zinc-600",
-  attack: "bg-amber-600",
-};
+/** Line colours (pin, popover icon, legend): the SFZ blue scale, as everywhere in the app (26. 10.). */
+export const LINE_COLOR: Record<Line, string> = AREA_LINE_CLASS;
+
+/* eslint-disable no-restricted-syntax -- the pitch is an illustration and keeps its grass green (Cyril 30. 10. 2026) */
+const GRASS = { light: "#4a9e38", dark: "#3b8c2e", edge: "#2e6b24", line: "#ffffff" };
+/* eslint-enable no-restricted-syntax */
 
 /** Icon of each area; area 1 (Vedenie klubu) wears the captain's armband instead. */
 const ICON: Record<number, LucideIcon> = {
@@ -68,7 +67,7 @@ function AreaIcon({ area, className }: { area: number; className: string }) {
     return (
       <span
         aria-hidden
-        className="rounded border-2 border-white px-1 text-xs leading-none font-bold sm:text-sm"
+        className="rounded border-2 border-current px-1 text-xs leading-none font-bold sm:text-sm"
       >
         C
       </span>
@@ -79,7 +78,7 @@ function AreaIcon({ area, className }: { area: number; className: string }) {
 
 /** Striped grass, lines and the pitch edge in perspective (SVG in the geometry's box). */
 function PitchDrawing({ g }: { g: PitchGeometry }) {
-  const line = { stroke: "#ffffff", strokeWidth: 2, fill: "none", opacity: 0.85 };
+  const line = { stroke: GRASS.line, strokeWidth: 2, fill: "none", opacity: 0.85 };
   const poly = (points: [number, number][]) => toPolygon(g, points);
   const centre = project(g, 50, 50);
   const rx = (project(g, 100, 50)[0] - project(g, 0, 50)[0]) * 0.11;
@@ -94,7 +93,7 @@ function PitchDrawing({ g }: { g: PitchGeometry }) {
             [100, i * 10 + 10],
             [0, i * 10 + 10],
           ])}
-          fill={i % 2 ? "#3b8c2e" : "#4a9e38"}
+          fill={i % 2 ? GRASS.dark : GRASS.light}
         />
       ))}
       <polygon
@@ -102,7 +101,7 @@ function PitchDrawing({ g }: { g: PitchGeometry }) {
           [0, 100],
           [100, 100],
         ])} ${g.nearRight},${g.height - 4} ${g.nearLeft},${g.height - 4}`}
-        fill="#2e6b24"
+        fill={GRASS.edge}
       />
       <polygon
         points={poly([
@@ -179,12 +178,12 @@ function Board({
             className="group absolute flex origin-[50%_calc(var(--pin)+6px)] -translate-x-1/2 -translate-y-[calc(var(--pin)+6px)] flex-col items-center"
           >
             <span
-              className={`flex size-[var(--pin)] items-center justify-center rounded-xl text-white shadow-md ring-2 ring-white transition-transform group-hover:-translate-y-0.5 ${LINE_COLOR[line]}`}
+              className={`flex size-[var(--pin)] items-center justify-center rounded-(--radius-md) ring-2 ring-(--surface) transition-transform group-hover:-translate-y-0.5 ${LINE_COLOR[line]}`}
             >
               <AreaIcon area={a.number} className="size-4 sm:size-6" />
             </span>
             <span aria-hidden className={`-mt-1.5 size-2.5 rotate-45 ${LINE_COLOR[line]}`} />
-            <span className="mt-1 max-w-[5rem] rounded bg-white/90 px-1 text-center text-[10px] leading-tight font-medium text-zinc-900 sm:max-w-32 sm:text-xs">
+            <span className="mt-1 max-w-[5rem] rounded-(--radius-sm) bg-(--surface) px-1 text-center text-[10px] leading-tight font-medium text-(--ink) sm:max-w-32 sm:text-xs">
               {a.shortName}
             </span>
             <span className="sr-only">{lineTitle(line)}</span>
@@ -224,45 +223,42 @@ export async function Formation({ areas }: { areas: AreaDto[] }) {
           className="hidden sm:block"
         />
       </div>
-      <p className="text-muted-foreground text-center text-sm">{t("hint")}</p>
+      <p className="footnote text-center text-(--ink-muted)">{t("hint")}</p>
 
       {players.map(({ a, line }) => (
         <div
           key={a.number}
           id={`area-pop-${a.number}`}
           popover="auto"
-          className="bg-background text-foreground m-auto w-[min(22rem,calc(100vw-2rem))] rounded-xl border p-5 shadow-xl backdrop:bg-black/40"
+          className="m-auto w-[min(22rem,calc(100vw-2rem))] rounded-(--radius-lg) border border-(--hairline) bg-(--surface) p-5 text-(--ink) backdrop:bg-(--overlay)"
         >
           <div className="flex items-start gap-3">
             <span
-              className={`flex size-10 shrink-0 items-center justify-center rounded-lg text-white ${LINE_COLOR[line]}`}
+              className={`flex size-10 shrink-0 items-center justify-center rounded-(--radius-sm) ${LINE_COLOR[line]}`}
             >
               <AreaIcon area={a.number} className="size-5" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-muted-foreground text-xs font-medium">
-                {t(`lines.${line}.title`)}
-              </p>
-              <h3 className="text-lg font-semibold break-words">{a.name}</h3>
+              <p className="footnote text-(--ink-muted)">{t(`lines.${line}.title`)}</p>
+              <h3 className="title-3 break-words">{a.name}</h3>
             </div>
             <button
               type="button"
               popoverTarget={`area-pop-${a.number}`}
               popoverTargetAction="hide"
               aria-label={t("close")}
-              className="hover:bg-muted -mt-1 -mr-2 rounded-md p-1.5"
+              className="sfz-btn sfz-btn--icon sfz-btn--tertiary sfz-btn--sm -mt-1 -mr-2"
             >
-              <X aria-hidden className="size-4" />
+              <Icon name="x" size={16} />
             </button>
           </div>
-          <p className="mt-3 text-sm">{a.description}</p>
-          <p className="text-muted-foreground mt-2 text-xs">{t(`lines.${line}.text`)}</p>
-          <Link
-            href={`/oblasti/${a.number}`}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 inline-flex rounded-md px-3 py-2 text-sm font-medium"
-          >
-            {t("detail")} →
-          </Link>
+          <p className="callout mt-3">{a.description}</p>
+          <p className="footnote mt-2 text-(--ink-muted)">{t(`lines.${line}.text`)}</p>
+          <div className="mt-4">
+            <LinkButton href={`/oblasti/${a.number}`} size="sm" icon="chevron-right">
+              {t("detail")}
+            </LinkButton>
+          </div>
         </div>
       ))}
     </div>
