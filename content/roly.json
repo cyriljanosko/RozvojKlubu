@@ -604,14 +604,24 @@
           "name": "Predseda a štatutár",
           "who": "zakladajúci alebo najaktívnejší člen, podpisuje za klub",
           "does": "dať funkciám mandát a zástupcu, rozdeliť agendy výboru",
-          "baseRoles": ["management"]
+          "baseRoles": ["management"],
+          "practiceRole": "p"
         },
         {
           "key": "board_member",
           "name": "Člen výboru",
           "who": "3–7 ľudí, často tréneri a rodičia",
           "does": "prevziať jednu agendu, pravidelná schôdza so zápisom",
-          "baseRoles": ["management"]
+          "baseRoles": ["management"],
+          "practiceRole": "c"
+        },
+        {
+          "key": "new_board",
+          "name": "Nové vedenie po voľbách",
+          "who": "novozvolený predseda a výbor alebo zakladatelia nového klubu",
+          "does": "zapísať štatutára, prevziať účet a prístupy, odovzdanie, prvý výbor",
+          "baseRoles": ["management"],
+          "practiceRole": "nv"
         },
         {
           "key": "economist",
@@ -639,7 +649,8 @@
           "name": "Mentor zväzu",
           "who": "mentor ObFZ alebo krajského zväzu",
           "does": "tri čísla na začiatku a po 14 dňoch, kohorta, overenie",
-          "baseRoles": ["mentor"]
+          "baseRoles": ["mentor"],
+          "practiceRole": "m"
         }
       ],
       "sections": {
