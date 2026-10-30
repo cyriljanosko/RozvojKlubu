@@ -1559,6 +1559,21 @@
       "openTask": "Otvoriť →",
       "list": "Zoznam uzlov (textová podoba grafu)",
       "links": "prepojení"
+    },
+    "back": "Späť na Moju Akadémiu",
+    "scopeBadge": {
+      "all": "Celý pilot · admin SFZ",
+      "mentor": "Moje kluby · mentor",
+      "club": "Môj klub"
+    },
+    "kpi": {
+      "label": "Prehľad sezóny",
+      "clubs": "Klubov",
+      "kompas": "Odoslaný Kompas",
+      "licensing": "Uzavreté licencie",
+      "plan": "S plánom sezóny",
+      "clubsNote": "{unions, plural, one {# zväz} few {# zväzy} other {# zväzov}}",
+      "ofClubs": "z {count} klubov"
     }
   },
   "board": {

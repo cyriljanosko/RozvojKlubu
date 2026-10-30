@@ -28,13 +28,14 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] G2b – Kompas klubu a odoslaný Kompas (PR #106): pravidlo odoslania bez zmeny (aspoň jedna oblasť – Cyril 29. 10.), potvrdenie mentora a zrušenie adminom v dialógu.
     - [x] G2c – plán a licenčné hodnotenie (PR #107): ciele v bočnom paneli (Drawer), licenčné oblasti v akordeóne, uzavretie a znovuotvorenie sezóny v dialógu (Cyril 29. 10.).
     - [x] G2d – mentoring a návštevy (PR #108): zoznam návštev je krok 3 na stránke Mentoring, `/navstevy` presmeruje, podmenu klubu bez položky Návštevy; formulár návštevy ostáva jeden so sekciami (Cyril 29. 10.).
-    - [ ] G3a – Moja Akadémia (vetva `feat/g3a-my-academy`): pevný vrch (pozdrav, výber klubu, „Váš ďalší krok“, úlohy) a nastaviteľné dlaždice v novom vzhľade (Cyril 29. 10.). Ďalej G3b účet, vzhľad a menu Viac; G3c pracovisko mentora na `/mentor` (dlaždica „Moje kluby“ sa presunie tam).
+    - [x] G3a – Moja Akadémia (PR #109): pevný vrch (pozdrav, výber klubu, „Váš ďalší krok“, úlohy) a nastaviteľné dlaždice v novom vzhľade (Cyril 29. 10.). Ďalej G3b účet, vzhľad a menu Viac; G3c pracovisko mentora na `/mentor` (dlaždica „Moje kluby“ sa presunie tam).
     - [ ] G2a – prehľad klubu a klubová vizitka (vetva `feat/g2a-club-overview`): hlavička klubu s rolami a prepínačom klubu, dlaždice stavu sezóny, ďalšie kroky klubu, klub v číslach. G2b Kompas klubu + odoslaný Kompas, G2c plán + licenčné hodnotenie, G2d mentoring + návštevy (rozdelenie – Cyril 29. 10.). Členovia a Nastavenia klubu až po S2 (Cyril 29. 10.).
     - [ ] G2b – Kompas klubu a odoslaný Kompas (vetva `feat/g2b-club-kompas`): pravidlo odoslania bez zmeny (aspoň jedna oblasť – Cyril 29. 10.), potvrdenie mentora a zrušenie adminom v dialógu.
     - [ ] G2c – plán a licenčné hodnotenie (vetva `feat/g2c-plan-licensing`): ciele v bočnom paneli (Drawer), licenčné oblasti v akordeóne, uzavretie a znovuotvorenie sezóny v dialógu (Cyril 29. 10.).
     - [ ] G2d – mentoring a návštevy (vetva `feat/g2d-mentoring-visits`): zoznam návštev je krok 3 na stránke Mentoring, `/navstevy` presmeruje, podmenu klubu bez položky Návštevy; formulár návštevy ostáva jeden so sekciami (Cyril 29. 10.).
-    - [ ] G3b – účet a vzhľad (vetva `feat/g3b-account`): účet podľa návrhu, voľba vzhľadu (podľa zariadenia / svetlý / tmavý) uložená v prehliadači. E-mailové upozornenia až s týždenným súhrnom (EM). `src/app/ucet/sign-out-button.tsx` už nič nepoužíva – zmazať so súhlasom.
-    - [ ] G3c – pracovisko mentora na `/mentor` (vetva `feat/g3c-mentor-desk`): čísla sezóny, na potvrdenie (Kompas, plán), najbližšie návštevy, kluby so stavom. Dlaždica „Moje kluby v kohorte“ z Mojej Akadémie je odstránená (presunula sa sem).
+    - [x] G3b – účet a vzhľad (PR #110): účet podľa návrhu, voľba vzhľadu (podľa zariadenia / svetlý / tmavý) uložená v prehliadači. E-mailové upozornenia až s týždenným súhrnom (EM). `src/app/ucet/sign-out-button.tsx` už nič nepoužíva – zmazať so súhlasom.
+    - [x] G3c – pracovisko mentora na `/mentor` (PR #111): čísla sezóny, na potvrdenie (Kompas, plán), najbližšie návštevy, kluby so stavom. Dlaždica „Moje kluby v kohorte“ z Mojej Akadémie je odstránená (presunula sa sem).
+    - [ ] G4 – Analýza (vetva `feat/g4-analytics`): hlavička so štítkom rozsahu, filtre a porovnanie klubov v DS, prehľad sezóny (4 čísla), tepelná mapa a sieťový graf z tokenov. Po G4 ostáva odstrániť shadcn (`src/components/ui`) – so súhlasom. Obrazovky po prihlásení (G2–G4) overiť, keď bude hotové S1 (prihlásenie cez sportnet.online – Cyril 30. 10.).
     - [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Ikony míľnikov a hviezda pinu po vydaní DS.
     - [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
     - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
@@ -102,7 +103,7 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] DA-b – stránka `/analyza`, 4 panely, filtre, mobil (PR #60).
     - [x] DA-c – porovnanie klubov, usporiadanie panelov, export (PR #62).
     - [x] DA-d – sieťový graf (PR #63). Ťuknutie prstom na skutočnom telefóne overí Cyril.
-    - [ ] Sieťový graf: Cytoscape odmieta farbu menoviek `lab(…)` z CSS (menovky môžu mať náhradnú farbu) a hlási vlastnú citlivosť kolieska – opraviť (navrhnuté ako samostatná úloha).
+    - [ ] Sieťový graf: farby sa od G4 čítajú z tokenov a prevádzajú na hex (problém s `lab(…)` by mal zmiznúť – overiť v prehliadači); varovanie o vlastnej citlivosti kolieska ostáva.
   - [x] Moja Akadémia ako nástenka (rozhodnuté 22. 10., ADR 0012): dlaždice s posúvaním a skrytím, pripínanie obľúbených hviezdičkou (oblasť, sekcia Metodiky, krok a vzor Praxe, Vizitka, plán a návštevy klubu), prepínač klubu pri viacerých kluboch, malý graf Kompasu, vlastné dlaždice pre admina a mentora; uložené v účte (kolekcia `user_preferences`, súhlas).
     - [x] MD-a – kolekcia `user_preferences`, služba, API (PR #64).
     - [x] MD-b – nástenka v Moja Akadémia (PR #65). Dva stĺpce od 1024 px overiť na počítači.

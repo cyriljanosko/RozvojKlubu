@@ -12,6 +12,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Redesign Analýzy (R4 G4, ADR 0018): hlavička so štítkom rozsahu (celý pilot / moje kluby / môj klub), export CSV a tlač, filtre a výber klubov na porovnanie v DS, prehľad sezóny (kluby, odoslaný Kompas, uzavreté licencie, plán sezóny). Tepelná mapa Kompasu a sieťový graf používajú farby z tokenov (pásma ako stavové farby DS, oblasti v odtieňoch modrej SFZ) – fungujú aj v tmavej téme.
 - Redesign Mojej Akadémie (R4 G3a, ADR 0018): pozdrav so sezónou, výber klubu čipmi, karta „Váš ďalší krok“ (najnaliehavejšia úloha) a zoznam úloh pevne hore, pre mentora odkaz na pracovisko; pod tým nastaviteľné dlaždice (ADR 0012) v novom vzhľade. Tabuľa dlaždíc, grafy (farby z tokenov `--chart-*`) a obľúbené sú zdieľané aj s Analýzou.
 - Redesign účtu (R4 G3b, ADR 0018): iniciály, meno, e-mail, prepojenie so sportnet.online, kluby a roly ako zoznam, odkazy pre mentora a admina, nastavenia a odhlásenie.
 - Pracovisko mentora na `/mentor` (R4 G3c, ADR 0018): počet klubov, čo čaká na potvrdenie (odoslaný Kompas, plán nepotvrdený alebo upravený po potvrdení), najbližšie návštevy a kluby so stavom (bez Kompasu, na potvrdenie, kroky po termíne, v poriadku); úlohy mentora.

@@ -2,15 +2,14 @@ import { getTranslations } from "next-intl/server";
 
 import type { ClubAnalytics } from "@/server/services/analytics.service";
 
-/** Colour of an area score by Kompas band (0–4, 5–8, 9–12, 13–16, 17–20). */
+/** Colour of an area score by Kompas band (0–4, 5–8, 9–12, 13–16, 17–20), from the status tokens. */
 function bandClass(points: number | null): string {
-  if (points === null) return "bg-muted text-muted-foreground";
-  if (points <= 4) return "bg-red-200 text-red-950 dark:bg-red-900/60 dark:text-red-100";
-  if (points <= 8) return "bg-amber-200 text-amber-950 dark:bg-amber-900/60 dark:text-amber-100";
-  if (points <= 12)
-    return "bg-yellow-100 text-yellow-950 dark:bg-yellow-900/50 dark:text-yellow-100";
-  if (points <= 16) return "bg-green-200 text-green-950 dark:bg-green-900/60 dark:text-green-100";
-  return "bg-green-600 text-white";
+  if (points === null) return "bg-(--surface) text-(--ink-muted)";
+  if (points <= 4) return "bg-(--danger-tint) text-(--danger-ink)";
+  if (points <= 8) return "bg-(--warning-tint) text-(--warning-ink)";
+  if (points <= 12) return "bg-(--surface) text-(--ink) shadow-[inset_0_0_0_1px_var(--hairline)]";
+  if (points <= 16) return "bg-(--info-tint) text-(--info-ink)";
+  return "bg-(--success-tint) text-(--success-ink)";
 }
 
 /** Kompas as a map clubs × areas (admin, mentor): weak spots show at a glance (DA-b). */
@@ -31,9 +30,9 @@ export async function KompasHeatmap({
       <table className="w-full min-w-[34rem] border-separate border-spacing-0.5 text-xs">
         <thead>
           <tr>
-            <th className="text-muted-foreground w-32 text-left font-medium">{t("club")}</th>
+            <th className="w-32 text-left font-medium text-(--ink-muted)">{t("club")}</th>
             {Array.from({ length: 11 }, (_, i) => (
-              <th key={i} className="text-muted-foreground font-medium">
+              <th key={i} className="font-medium text-(--ink-muted)">
                 {i + 1}
               </th>
             ))}
@@ -52,7 +51,7 @@ export async function KompasHeatmap({
               {r.areas.map((p, i) => (
                 <td
                   key={i}
-                  className={`rounded px-1 py-1 text-center tabular-nums ${bandClass(p)}`}
+                  className={`rounded-(--radius-sm) px-1 py-1.5 text-center font-semibold tabular-nums ${bandClass(p)}`}
                   title={t("cell", { area: i + 1, points: p ?? "–" })}
                 >
                   {p ?? "–"}
@@ -62,7 +61,7 @@ export async function KompasHeatmap({
           ))}
         </tbody>
       </table>
-      <p className="text-muted-foreground mt-2 text-xs">{t("legend")}</p>
+      <p className="mt-2 text-xs text-(--ink-muted)">{t("legend")}</p>
     </div>
   );
 }
