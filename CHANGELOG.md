@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Oblasť 1 Vedenie – Predpisy SFZ: sekcia Metodiky, ktorý predpis SFZ otvoriť v akej situácii (s odkazmi na kategórie na futbalsfz.sk), krok k predpisom v Praxi predsedu, nového vedenia a mentora, vzor „Predpisy, ktoré sleduje výbor“; názvy predpisov v texte oblasti 1 sú automaticky prelinkované.
 - Voľba vzhľadu v účte: podľa zariadenia, svetlý alebo tmavý (R4 G3b). Uloží sa v prehliadači a nastaví sa ešte pred vykreslením stránky, takže tmavá téma nebliká.
 - Kompas na vyskúšanie bez klubu: na `/kompas` sa dá vybrať „Bez klubu – len sa otestujem“, platia potom všetky otázky (všetky vekové kategórie). Výber klubu je priamo na stránke.
 - Prenos odpovedí z vyskúšania: klubový manažér, ktorý si Kompas vyskúšal v tom istom prehliadači, dostane v Kompase klubu ponuku odpovede prevziať (len otázky platné pre klub); uložia sa až tlačidlom Uložiť, potom sa z prehliadača zmažú.
