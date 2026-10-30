@@ -59,6 +59,10 @@ export const REDESIGNED_FILES = [
   // R4 G4 – analýza
   "src/app/analyza/**",
   "src/components/analytics/**",
+  // O Akadémii (návrh schválený 30. 10.) – ikony z lucide a zelený trávnik ako výnimky v súbore
+  "src/app/o-akademii/**",
+  "src/components/about/**",
+  "src/components/content/youtube-video.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */
