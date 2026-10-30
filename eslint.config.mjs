@@ -56,6 +56,9 @@ export const REDESIGNED_FILES = [
   "src/app/ucet/page.tsx",
   // R4 G3c – pracovisko mentora
   "src/app/mentor/**",
+  // R4 G4 – analýza
+  "src/app/analyza/**",
+  "src/components/analytics/**",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */
