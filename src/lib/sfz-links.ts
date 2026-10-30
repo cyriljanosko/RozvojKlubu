@@ -4,10 +4,12 @@ import data from "../../content/odkazy-sfz.json";
  * Links to the SFZ website (decision 22. 10. 2026): where area texts mention a course, a licence or
  * continuing education, the first mention in each section links to the page on futbalsfz.sk; the
  * coach education hub of area 3 uses the same list. Content lives in `content/odkazy-sfz.json`
- * (changed by a PR); for now only area 3.
+ * (changed by a PR). A link applies to its own `areas`, otherwise to the file's default `areas`
+ * (area 3); SFZ regulations (Predpisy SFZ) apply to area 1 (decision 30. 10. 2026).
  */
 export interface SfzLink {
   id: string;
+  areas?: number[];
   terms: string[];
   url: string;
   label: string;
@@ -22,8 +24,9 @@ export const SFZ_HUB: { key: string; links: SfzLink[] }[] = data.hub.map((g) => 
     .filter((l): l is SfzLink => l !== undefined),
 }));
 
-/** Pure: links that apply to an area's texts (empty outside the chosen areas). */
-export const sfzLinksFor = (area: number) => (SFZ_LINK_AREAS.includes(area) ? SFZ_LINKS : []);
+/** Pure: links that apply to an area's texts (a link's own areas, else the default areas). */
+export const sfzLinksFor = (area: number) =>
+  SFZ_LINKS.filter((l) => (l.areas ?? SFZ_LINK_AREAS).includes(area));
 
 export type Segment = { text: string; link?: SfzLink };
 
