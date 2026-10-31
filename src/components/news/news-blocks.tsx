@@ -32,12 +32,10 @@ export async function HomeNews() {
   );
 }
 
-/** Area detail: "Ako to robia iné kluby" – club stories and tips of the area. */
+/** Area detail: "Novinky k oblasti" – the newest academy news, club stories and tips of the area. */
 export async function AreaNews({ area, areaName }: { area: number; areaName: string }) {
-  const page = await listPublishedNews(newsDeps, { area, limit: 10 });
-  const items = [...(page.pinned ? [page.pinned] : []), ...page.items]
-    .filter((p) => p.kind !== "academy")
-    .slice(0, 3);
+  const page = await listPublishedNews(newsDeps, { area, limit: 3 });
+  const items = [...(page.pinned ? [page.pinned] : []), ...page.items].slice(0, 3);
   if (items.length === 0) return null;
   const [t, labels] = await Promise.all([getTranslations("news"), newsLabels()]);
   return (

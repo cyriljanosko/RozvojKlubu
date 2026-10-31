@@ -396,7 +396,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
         </>
       )}
 
-      {/* "Ako to robia iné kluby" (ADR 0023); hidden while the area has no club posts */}
+      {/* "Novinky k oblasti" (ADR 0023); hidden while the area has no published posts */}
       <Suspense fallback={null}>
         <AreaNews area={area.number} areaName={area.name} />
       </Suspense>
