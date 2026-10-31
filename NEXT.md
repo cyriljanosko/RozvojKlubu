@@ -31,6 +31,11 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
 - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
 - [ ] Knižnica oblasti (ADR 0022, PR #114 – navrhnuté) a úložisko súborov; potom dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice.
+  - [x] Dokumenty oblasti 1 (31. 10.): 14 dokumentov v brandingu SFZ (Word alebo Excel podľa typu + PDF) z vzorov Praxe a sekcie „Založenie klubu“, pripravené mimo repa v `~/Documents/Knižnica SFZ/Oblasť 01 – Vedenie klubu/`.
+  - [ ] Cyril: skontrolovať dokumenty oblasti 1 a nahrať ich do SharePointu SFZ; doplniť originál UEFA Grassroots Club Development Framework 2022.
+  - [ ] Pri nahratí do knižnice určiť prístup každého dokumentu (verejný / po prihlásení); „Rozhovor o vedení pri návšteve mentora“ je pre mentora zväzu.
+  - [ ] Dokumenty oblastí 2 – 4 (vzory v Metodike a Praxi, spolu asi 35); oblasti 5 – 11 zatiaľ vzory nemajú.
+  - [ ] Pri zmene textu vzoru v Metodike alebo Praxi treba pregenerovať aj súbor – zdroj pravdy je obsah v aplikácii.
 - [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, vetva `content/area1-municipality-school`): po zlúčení zapísať sekciu do DB a odkazy do existujúcich sekcií oblastí 2, 6, 11 (súhlas Cyrila); overiť na 375 px; rozhodnúť `reviewedAt` (sekciu nekontrolovalo právne oddelenie); overiť McDonald's Cup a termíny zápisov s právnym oddelením. Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
 
 ### Obsah
