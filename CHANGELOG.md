@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Novinky: odkazy v texte novinky sú klikateľné – `[text](https://…)` alebo holá adresa, otvoria sa v novom okne so značkou ↗ ako v Metodike; nápoveda vo formulári.
 - Novinky – návrhy klubov a administrácia (ADR 0023, N3): vedenie klubu navrhuje príbeh alebo odporúčanie v klube (Novinky klubu – zoznam návrhov so stavmi, formulár so štyrmi časťami a súhlasmi, odoslanie SFZ, potvrdenie úprav SFZ), mentor návrhy vidí. Administrácia → Novinky: záložky podľa stavu, posúdenie (úprava textu, vrátenie s poznámkou, zverejnenie, stiahnutie, pripnutie, balík pre komunikáciu SFZ na skopírovanie, odkaz na článok na futbalsfz.sk) a nová novinka SFZ. Výzva „Má váš klub čo povedať?“ na Novinkách a stav vlastného návrhu v dlaždici Mojej Akadémie.
 - Novinky – verejné obrazovky (ADR 0023, N2): `/novinky` s filtrom typu a oblasti, pripnutou novinkou a staršími stranami; detail novinky so štruktúrou príbehu, odporúčaním v zvýraznenej karte, odkazom na oblasť, zdieľaním (odkaz, Facebook, WhatsApp, e-mail) a náhľadom pre sociálne siete; blok Novinky na úvode Akadémie, „Ako to robia iné kluby“ v detaile oblasti a dlaždica Novinky v Mojej Akadémii (k najslabšej oblasti Kompasu a cieľom plánu). Položka Novinky v menu Viac. Bloky sa skryjú, kým nie je čo ukázať.
 - Novinky – služba a API (ADR 0023, N1): verejný zoznam a detail zverejnených príspevkov, návrhy príbehov a odporúčaní vedením klubu (koncept, úprava, odoslanie so súhlasmi), schvaľovanie adminom SFZ (vrátenie s poznámkou, úprava s potvrdením klubom, zverejnenie, skrytie, pripnutie, balík pre komunikáciu SFZ, odkaz na futbalsfz.sk) a novinky Akadémie. Obrazovky prídu v ďalších PR.
@@ -32,6 +33,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Opravené
 
+- Úryvok novinky (zoznam, náhľad pri zdieľaní) sa už neodreže pri dátume („20. 11. 2026“) a ukazuje text odkazu bez zápisu `[…](…)`.
 - Vizitka klubu: mentor už nevidí odkaz „Otvoriť Kompas“ na pracovnú verziu, ktorá mu vrátila „bez prístupu“ – odkaz ho vedie na posledný platný odoslaný Kompas; kým klub nič neodoslal, odkaz sa mentorovi nezobrazí (analýza obrazoviek, kap. 3.3, bod 1).
 - Mentoring klubu: kto je v klube mentor aj vedenie, píše časti klubu (úvodné sebahodnotenie, záver klubu) aj časti mentora (zameranie, záver mentora) – doteraz mal len práva mentora (analýza obrazoviek, kap. 3.3, bod 2).
 - `/mentor` („Moje kluby v kohorte“): mentor vidí svoje kluby sezóny s posledným odoslaným Kompasom namiesto presmerovania do Moja Akadémia; admin SFZ ďalej všetky kluby, ostatní prihlásení hlášku „Nie ste mentor žiadneho klubu.“ (analýza obrazoviek, kap. 3.3, bod 3). Odkazy na `/mentor` v novej navigácii tak vedú tam, kam sľubujú.

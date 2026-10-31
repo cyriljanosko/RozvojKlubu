@@ -135,6 +135,8 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
         - [x] N2 – verejné obrazovky (PR #119): `/novinky`, detail so zdieľaním, blok na úvode, pri oblasti, dlaždica v Moja Akadémia, položka v menu Viac. S obsahom overiť po zverejnení prvej novinky.
         - [x] N3 – návrh klubu a Administrácia → Novinky (PR #120): `/klub/:clubId/novinky` (Moje návrhy, formulár so súhlasmi), `/admin/novinky` (záložky podľa stavu, posúdenie, zverejnenie, pripnutie, balík pre komunikáciu, odkaz na futbalsfz.sk), výzva na `/novinky`, stav návrhu v dlaždici. Obrazovky po prihlásení overiť v preview (Claude sa prihlásiť nevie).
         - [ ] Prvá novinka Akadémie „Oblasť 1 Vedenie klubu má nové sekcie o založení a smerovaní klubu“ – koncept SFZ založený 31. 10. (Administrácia → Novinky → Koncepty SFZ); zverejní Cyril, potom overiť zoznam, detail, blok na úvode a pri oblasti 1.
+        - [x] Prvá zverejnená novinka: školenie UEFA A (oblasť 3), 31. 10.
+        - [ ] Rozhodnúť: majú sa novinky Akadémie ukazovať aj v bloku pri oblasti (teraz len príbehy a odporúčania klubov)?
         - [ ] Fotky a dokumenty po rozhodnutí úložiska.
       - [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
       - [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.

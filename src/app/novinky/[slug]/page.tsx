@@ -7,6 +7,7 @@ import { Suspense } from "react";
 
 import { NEWS_KIND_TONE, NewsList } from "@/components/news/news-items";
 import { newsLabels } from "@/components/news/news-labels";
+import { splitLinks } from "@/components/news/news-text";
 import { ShareButton } from "@/components/news/share-button";
 import { Badge, Card, Icon } from "@/components/sfz";
 import { ApiError } from "@/server/api/errors";
@@ -46,7 +47,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-/** Text in paragraphs (empty line) with simple "- " lists. */
+/** A line with its links: [label](https://…) or a bare address, opened in a new tab. */
+function Line({ text }: { text: string }) {
+  return splitLinks(text).map((part, i) =>
+    "href" in part ? (
+      <a
+        key={i}
+        href={part.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-medium break-words text-(--brand-blue-ink) underline underline-offset-4"
+      >
+        {part.text}
+        {/* links out of the Academy are marked, as in the Metodika */}
+        <span aria-hidden> ↗</span>
+      </a>
+    ) : (
+      part.text
+    ),
+  );
+}
+
+/** Text in paragraphs (empty line) with simple "- " lists and links. */
 function Paragraphs({ text }: { text: string }) {
   return text
     .split(/\n\s*\n/)
@@ -58,14 +80,16 @@ function Paragraphs({ text }: { text: string }) {
         return (
           <ul key={i} className="body flex list-disc flex-col gap-1 pl-5">
             {lines.map((l, j) => (
-              <li key={j}>{l.slice(2)}</li>
+              <li key={j}>
+                <Line text={l.slice(2)} />
+              </li>
             ))}
           </ul>
         );
       }
       return (
         <p key={i} className="body whitespace-pre-line">
-          {block}
+          <Line text={block} />
         </p>
       );
     });

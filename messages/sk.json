@@ -2064,7 +2064,7 @@
       "done": "Kroky, ktoré ste urobili – kto, kedy, ako.",
       "result": "Čo sa zmenilo – čísla, ľudia, čas.",
       "advice": "Jedna–dve rady pre klub, ktorý chce urobiť to isté.",
-      "body": "Odseky oddeľte prázdnym riadkom, odrážky začnite pomlčkou."
+      "body": "Odseky oddeľte prázdnym riadkom, odrážky začnite pomlčkou. Odkaz: [text odkazu](https://…)."
     },
     "save": "Uložiť koncept",
     "saved": "Uložené",

@@ -54,6 +54,21 @@ describe("pure helpers (ADR 0023)", () => {
     expect(
       missingParts({ kind: "story", title: "Krátky", sections: story.sections.slice(0, 2) }),
     ).toEqual(["result", "advice"]);
+    expect(
+      excerptOf({
+        kind: "academy",
+        sections: [
+          { key: "body", text: "Prihláste sa na [školenie UEFA A](https://futbalsfz.sk/x). Viac." },
+        ],
+      }),
+    ).toBe("Prihláste sa na školenie UEFA A.");
+    // bug 31. 10. 2026: a date cut the excerpt at "20."
+    expect(
+      excerptOf({
+        kind: "academy",
+        sections: [{ key: "body", text: "Školenie sa otvorí 20. 11. 2026. Prihláste trénerov." }],
+      }),
+    ).toBe("Školenie sa otvorí 20. 11. 2026.");
     expect(missingParts({ kind: "academy", title: "Nová oblasť", sections: [] })).toEqual(["body"]);
     const t = (s: string) => new Date(s);
     expect(awaitsClubConfirmation({ sfzEditedAt: null, submittedAt: t("2026-10-01") })).toBe(false);
