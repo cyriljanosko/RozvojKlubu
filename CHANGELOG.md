@@ -17,6 +17,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Novinky v detaile oblasti: blok „Ako to robia iné kluby“ je teraz „Novinky k oblasti“ a okrem príbehov a odporúčaní klubov ukazuje aj novinky Akadémie (3 najnovšie).
 - Redesign stránky O Akadémii podľa návrhu schváleného 30. 10.: úvod, video, jedenástka na ihrisku s líniami v odtieňoch modrej SFZ (trávnik ostáva zelený ako ilustrácia), línie a tematické sekcie ako zoznamy, výzva v zvýraznenej karte; okno oblasti po ťuknutí na hráča v DS.
 - Redesign Analýzy (R4 G4, ADR 0018): hlavička so štítkom rozsahu (celý pilot / moje kluby / môj klub), export CSV a tlač, filtre a výber klubov na porovnanie v DS, prehľad sezóny (kluby, odoslaný Kompas, uzavreté licencie, plán sezóny). Tepelná mapa Kompasu a sieťový graf používajú farby z tokenov (pásma ako stavové farby DS, oblasti v odtieňoch modrej SFZ) – fungujú aj v tmavej téme.
 - Redesign Mojej Akadémie (R4 G3a, ADR 0018): pozdrav so sezónou, výber klubu čipmi, karta „Váš ďalší krok“ (najnaliehavejšia úloha) a zoznam úloh pevne hore, pre mentora odkaz na pracovisko; pod tým nastaviteľné dlaždice (ADR 0012) v novom vzhľade. Tabuľa dlaždíc, grafy (farby z tokenov `--chart-*`) a obľúbené sú zdieľané aj s Analýzou.
