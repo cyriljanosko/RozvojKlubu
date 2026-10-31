@@ -1,6 +1,6 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
@@ -127,7 +127,11 @@ Aktualizované: 27. 10. 2026. Overuj proti `git log` – môže byť zastarané.
       - [x] MR-b – pravidlá (rozhodnuté 26. 10.): kluby bez súhlasu v zozname neutrálne bez hviezd, verejne všetkých 6 míľnikov, posun v bodoch aj hviezdach, top 3 vždy (aj menej klubov); `GET /api/v1/vizitky` – vetva `feat/mr-b-ranking-rules`, PR #80 (v produkcii `51f7f4a`). Top 3 a posun s ozajstnými dátami overiť po prvom súhlase klubu.
       - [x] MR-c – rozhranie (rozhodnuté 26. 10.): súhlas vo Vizitke klubu + úloha vedenia, kým nerozhodne; „Potvrdiť Kompas“ na detaile odoslaného Kompasu + úloha mentora; odznak „potvrdené mentorom“ v rebríčku aj vo verejnej Vizitke (pri každom klube); míľniky v rebríčku, vo verejnej Vizitke (so súhlasom) a dlaždica v Moja Akadémia – PR #81 (v produkcii `38c20da`). Prepínač súhlasu a tlačidlo potvrdenia overiť v preview s účtom vedenia a mentora.
     - [ ] DK – karta „Váš ďalší krok“ v Moja Akadémia a sprievodca „Prvých 30 dní v Akadémii“.
-    - [ ] ZK – sekcia „Zo života klubov“: príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
+    - [ ] ZK – sekcia **Novinky** (pôvodne „Zo života klubov“, premenované 31. 10.): príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
+      - [x] Návrh na plátne (riadok „ZK – Novinky“, 5 obrazoviek) schválený Cyrilom 31. 10. okrem úložiska.
+      - [ ] ADR 0023 – Novinky (navrhnuté, vetva `docs/news-adr`): kolekcia `news_posts`, stavy a schvaľovanie, súhlasy klubu, zdieľanie a balík pre komunikáciu SFZ. Prijať a schváliť novú kolekciu.
+      - [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
+      - [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.
     - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.
     - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
   - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
