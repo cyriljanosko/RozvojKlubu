@@ -10,6 +10,7 @@ import type { BoardPanel } from "@/components/analytics/panel-board";
 import { TaskList } from "@/components/academy/task-list";
 import { CoachEducation } from "@/components/content/coach-education";
 import { FavoritesList } from "@/components/favorites/favorites-list";
+import { NewsTile } from "@/components/news/news-blocks";
 import { Badge, Card, EmptyState, Icon, LinkButton, LinkChip } from "@/components/sfz";
 import { Milestones } from "@/components/vizitka/milestones";
 import { defaultMessages } from "@/i18n/config";
@@ -87,6 +88,7 @@ async function Academy({ searchParams }: Props) {
   const t = await getTranslations("academy");
   const tD = await getTranslations("academy.dashboard");
   const tClubRoles = await getTranslations("clubRoles");
+  const tNews = await getTranslations("news");
   const tPlan = await getTranslations("plan.status");
   const tTasks = await getTranslations("academy.tasks");
   const [view, areas, prefs] = await Promise.all([
@@ -310,6 +312,18 @@ async function Academy({ searchParams }: Props) {
               {tD("milestones.consent")}
             </Link>
           </>
+        ),
+      },
+      {
+        id: "news",
+        title: tNews("tileTitle"),
+        content: (
+          <Suspense fallback={<div className="h-24" aria-hidden />}>
+            <NewsTile
+              weakAreas={weak.map((w) => w.area)}
+              planAreas={[...new Set(club.planGoals.map((g) => g.area))]}
+            />
+          </Suspense>
         ),
       },
       {

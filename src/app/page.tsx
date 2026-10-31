@@ -6,6 +6,7 @@ import { Suspense } from "react";
 
 import { AreaLineList, AreaRow, type AreaRowData } from "@/components/areas/area-lines";
 import { HubMemory } from "@/components/hub/hub-memory";
+import { HomeNews } from "@/components/news/news-blocks";
 import {
   Accordion,
   AccordionItem,
@@ -305,6 +306,11 @@ async function Hub({ searchParams }: Props) {
           </div>
         </Card>
       </section>
+
+      {/* Novinky under the Kompas card (ADR 0023); hidden while nothing is published */}
+      <Suspense fallback={null}>
+        <HomeNews />
+      </Suspense>
 
       <section aria-labelledby="hub-search" className="flex flex-col gap-2">
         <h2 id="hub-search" className="title-3">

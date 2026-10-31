@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Novinky – verejné obrazovky (ADR 0023, N2): `/novinky` s filtrom typu a oblasti, pripnutou novinkou a staršími stranami; detail novinky so štruktúrou príbehu, odporúčaním v zvýraznenej karte, odkazom na oblasť, zdieľaním (odkaz, Facebook, WhatsApp, e-mail) a náhľadom pre sociálne siete; blok Novinky na úvode Akadémie, „Ako to robia iné kluby“ v detaile oblasti a dlaždica Novinky v Mojej Akadémii (k najslabšej oblasti Kompasu a cieľom plánu). Položka Novinky v menu Viac. Bloky sa skryjú, kým nie je čo ukázať.
 - Novinky – služba a API (ADR 0023, N1): verejný zoznam a detail zverejnených príspevkov, návrhy príbehov a odporúčaní vedením klubu (koncept, úprava, odoslanie so súhlasmi), schvaľovanie adminom SFZ (vrátenie s poznámkou, úprava s potvrdením klubom, zverejnenie, skrytie, pripnutie, balík pre komunikáciu SFZ, odkaz na futbalsfz.sk) a novinky Akadémie. Obrazovky prídu v ďalších PR.
 - Oblasť 1 Vedenie – Predpisy SFZ: sekcia Metodiky, ktorý predpis SFZ otvoriť v akej situácii (s odkazmi na kategórie na futbalsfz.sk), krok k predpisom v Praxi predsedu, nového vedenia a mentora, vzor „Predpisy, ktoré sleduje výbor“; názvy predpisov v texte oblasti 1 sú automaticky prelinkované.
 - Voľba vzhľadu v účte: podľa zariadenia, svetlý alebo tmavý (R4 G3b). Uloží sa v prehliadači a nastaví sa ešte pred vykreslením stránky, takže tmavá téma nebliká.
