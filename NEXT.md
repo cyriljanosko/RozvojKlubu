@@ -133,8 +133,8 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
       - [ ] Implementácia bez súborov v 3 PR (Cyril 31. 10.); e-maily klubu až s EM:
         - [x] N1 – dáta, služba `news.service.ts`, API a testy (PR #118).
         - [x] N2 – verejné obrazovky (PR #119): `/novinky`, detail so zdieľaním, blok na úvode, pri oblasti, dlaždica v Moja Akadémia, položka v menu Viac. S obsahom overiť po zverejnení prvej novinky.
-        - [ ] N3 – návrh klubu a Administrácia → Novinky (vetva `feat/news-n3-club-admin`): `/klub/:clubId/novinky` (Moje návrhy, formulár so súhlasmi), `/admin/novinky` (záložky podľa stavu, posúdenie, zverejnenie, pripnutie, balík pre komunikáciu, odkaz na futbalsfz.sk), výzva na `/novinky`, stav návrhu v dlaždici. Obrazovky po prihlásení overiť v preview (Claude sa prihlásiť nevie).
-        - [ ] Prvá novinka Akadémie „Oblasť 1 Vedenie má nové sekcie“ ako koncept (text v PR N3) – založiť po zlúčení N3, zverejní Cyril.
+        - [x] N3 – návrh klubu a Administrácia → Novinky (PR #120): `/klub/:clubId/novinky` (Moje návrhy, formulár so súhlasmi), `/admin/novinky` (záložky podľa stavu, posúdenie, zverejnenie, pripnutie, balík pre komunikáciu, odkaz na futbalsfz.sk), výzva na `/novinky`, stav návrhu v dlaždici. Obrazovky po prihlásení overiť v preview (Claude sa prihlásiť nevie).
+        - [ ] Prvá novinka Akadémie „Oblasť 1 Vedenie klubu má nové sekcie o založení a smerovaní klubu“ – koncept SFZ založený 31. 10. (Administrácia → Novinky → Koncepty SFZ); zverejní Cyril, potom overiť zoznam, detail, blok na úvode a pri oblasti 1.
         - [ ] Fotky a dokumenty po rozhodnutí úložiska.
       - [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
       - [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.
