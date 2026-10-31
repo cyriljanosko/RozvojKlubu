@@ -31,7 +31,7 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
 - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
 - [ ] Knižnica oblasti (ADR 0022, PR #114 – navrhnuté) a úložisko súborov; potom dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice.
-- [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, vetva `content/area1-municipality-school`): po zlúčení zapísať sekciu do DB a odkazy do existujúcich sekcií oblastí 2, 6, 11 (súhlas Cyrila); overiť na 375 px; rozhodnúť `reviewedAt` (sekciu nekontrolovalo právne oddelenie); overiť McDonald's Cup a termíny zápisov s právnym oddelením. Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
+- [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, PR #126 zlúčený 31. 10., v DB aj s odkazmi v oblastiach 2, 6, 11): termíny zápisov do 1. ročníka a materskej školy overiť s právnym oddelením (sekcia je bez `reviewedAt`). Príručku v knižnici zosúladiť so sekciou (školské súťaže → EduPage, Školský pohár SFZ). Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
 
 ### Obsah
 
