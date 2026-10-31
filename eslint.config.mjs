@@ -50,6 +50,9 @@ export const REDESIGNED_FILES = [
   // Novinky (ADR 0023) – public screens N2
   "src/app/novinky/**",
   "src/components/news/**",
+  // Novinky – club proposals and administration N3
+  "src/app/klub/[[]clubId]/novinky/**",
+  "src/app/admin/novinky/**",
   // R4 G3a – Moja Akadémia; the board and charts are shared with the analysis (G4)
   "src/app/moja-akademia/**",
   "src/components/analytics/panel-board.tsx",

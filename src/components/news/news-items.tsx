@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { Badge, Icon } from "@/components/sfz";
-import type { NewsKind } from "@/server/db/types";
+import type { NewsKind, NewsStatus } from "@/server/db/types";
 import type { NewsListItem } from "@/server/services/news.service";
 
 /** Badge tone per kind (design ZK – Novinky, approved 31. 10. 2026). */
@@ -9,6 +9,15 @@ export const NEWS_KIND_TONE: Record<NewsKind, "brand" | "success" | "info"> = {
   story: "brand",
   tip: "success",
   academy: "info",
+};
+
+/** Badge tone per state of a proposal (club "Moje návrhy", administration). */
+export const NEWS_STATUS_TONE: Record<NewsStatus, "neutral" | "warning" | "danger" | "success"> = {
+  draft: "neutral",
+  submitted: "warning",
+  returned: "danger",
+  published: "success",
+  hidden: "neutral",
 };
 
 export interface NewsLabels {

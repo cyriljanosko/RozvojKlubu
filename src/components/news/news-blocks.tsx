@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import { LinkButton } from "@/components/sfz";
+import { Badge, LinkButton } from "@/components/sfz";
 import { newsDeps } from "@/server/clubs/deps";
-import { listPublishedNews, type NewsListItem } from "@/server/services/news.service";
+import { listClubNews, listPublishedNews, type NewsListItem } from "@/server/services/news.service";
+import type { CurrentUser } from "@/server/services/users.service";
 
-import { NewsCard, NewsList } from "./news-items";
+import { NEWS_STATUS_TONE, NewsCard, NewsList } from "./news-items";
 import { newsLabels } from "./news-labels";
 
 /** Academy home: the pinned or newest post as a card and two more; nothing while there are none. */
@@ -62,11 +63,23 @@ export async function AreaNews({ area, areaName }: { area: number; areaName: str
 export async function NewsTile({
   weakAreas,
   planAreas,
+  proposals,
 }: {
   weakAreas: readonly number[];
   planAreas: readonly number[];
+  /** club management sees the state of the club's latest unpublished proposal */
+  proposals?: { user: CurrentUser; clubId: string } | null;
 }) {
-  const [t, labels] = await Promise.all([getTranslations("news"), newsLabels()]);
+  const [t, tStatus, labels] = await Promise.all([
+    getTranslations("news"),
+    getTranslations("clubNews.status"),
+    newsLabels(),
+  ]);
+  const proposal = proposals
+    ? ((await listClubNews(newsDeps, proposals.user, proposals.clubId)).items.find((p) =>
+        ["draft", "submitted", "returned"].includes(p.status),
+      ) ?? null)
+    : null;
   const picked: { item: NewsListItem; reason: string }[] = [];
   const seen = new Set<string>();
   const add = (items: readonly NewsListItem[], reason: string, max: number) => {
@@ -85,8 +98,26 @@ export async function NewsTile({
   }
   add((await listPublishedNews(newsDeps, { limit: 3 })).items, t("tileLatest"), 3);
 
+  const proposalRow = proposal && proposals && (
+    <Link
+      href={`/klub/${encodeURIComponent(proposals.clubId)}/novinky/${proposal.id}`}
+      className="flex items-center gap-3 rounded-(--radius-md) bg-(--brand-blue-tint) p-3 text-(--ink) no-underline"
+    >
+      <span className="headline min-w-0 flex-1 break-words">
+        {t("tileProposal", { title: proposal.title || "…" })}
+      </span>
+      <Badge tone={NEWS_STATUS_TONE[proposal.status]} dot className="shrink-0">
+        {tStatus(proposal.status)}
+      </Badge>
+    </Link>
+  );
   if (picked.length === 0) {
-    return <p className="subheadline text-(--ink-muted)">{t("tileNone")}</p>;
+    return (
+      <>
+        <p className="subheadline text-(--ink-muted)">{t("tileNone")}</p>
+        {proposalRow}
+      </>
+    );
   }
   return (
     <>
@@ -102,6 +133,7 @@ export async function NewsTile({
           </li>
         ))}
       </ul>
+      {proposalRow}
       <Link href="/novinky" className="subheadline self-start">
         {t("tileAll")}
       </Link>
