@@ -147,10 +147,14 @@ export function missingParts(post: Pick<StoredNews, "kind" | "title" | "sections
   return missing;
 }
 
-/** Pure: the first sentence of the first part, at most 200 characters. */
+/** Pure: the first sentence of the first part, at most 200 characters; links keep only their label. */
 export function excerptOf(post: Pick<StoredNews, "kind" | "sections">): string {
-  const text = (cleanSections(post.kind, post.sections)[0]?.text ?? "").replace(/\s+/g, " ").trim();
-  const sentence = text.match(/^.+?[.!?](?=\s|$)/)?.[0] ?? text;
+  const text = (cleanSections(post.kind, post.sections)[0]?.text ?? "")
+    .replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+  // a sentence ends before a capital letter, so dates like "20. 11. 2026" stay whole
+  const sentence = text.match(/^.+?[.!?](?=\s+\p{Lu}|$)/u)?.[0] ?? text;
   return sentence.length > 200 ? `${sentence.slice(0, 199).trimEnd()}…` : sentence;
 }
 
