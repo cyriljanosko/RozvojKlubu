@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { EmptyState, Icon, LinkButton } from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
@@ -31,9 +32,10 @@ async function NewVisit({ params }: PageProps<"/klub/[clubId]/navstevy/nova">) {
   } catch (error) {
     if (error instanceof ApiError && (error.code === "FORBIDDEN" || error.code === "NOT_FOUND")) {
       return (
-        <p className="text-sm">
-          {error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
-        </p>
+        <EmptyState
+          title={error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
+          action={<LinkButton href="/moja-akademia">{tClub("back")}</LinkButton>}
+        />
       );
     }
     throw error;
@@ -47,15 +49,17 @@ async function NewVisit({ params }: PageProps<"/klub/[clubId]/navstevy/nova">) {
 
   return (
     <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1">
+      <header className="flex flex-col gap-2">
         <Link
-          href={`/klub/${encodeURIComponent(clubId)}/navstevy`}
-          className="text-muted-foreground text-sm underline underline-offset-4"
+          href={`/klub/${encodeURIComponent(clubId)}/mentoring#navstevy`}
+          className="body inline-flex min-h-(--touch-target) items-center gap-1 self-start no-underline"
         >
-          {club.club.name} · {t("title")}
+          <Icon name="chevron-left" size={22} />
+          {t("backToMentoring")}
         </Link>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("newTitle")}</h1>
-        <p className="text-muted-foreground text-sm">{t("season", { season: data.season })}</p>
+        <p className="subheadline text-(--ink-muted)">{club.club.name}</p>
+        <h1 className="title-1">{t("newTitle")}</h1>
+        <p className="text-sm text-(--ink-muted)">{t("season", { season: data.season })}</p>
       </header>
       <VisitContext data={data} areaName={areaName} />
       <VisitForm
@@ -84,7 +88,7 @@ async function NewVisit({ params }: PageProps<"/klub/[clubId]/navstevy/nova">) {
 
 export default function NewVisitPage(props: PageProps<"/klub/[clubId]/navstevy/nova">) {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:py-14">
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <NewVisit {...props} />
       </Suspense>

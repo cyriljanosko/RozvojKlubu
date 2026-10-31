@@ -7,18 +7,17 @@ import { Suspense } from "react";
 
 import { GroupedBars } from "@/components/analytics/charts";
 import type { BoardPanel } from "@/components/analytics/panel-board";
+import { TaskList } from "@/components/academy/task-list";
 import { CoachEducation } from "@/components/content/coach-education";
 import { FavoritesList } from "@/components/favorites/favorites-list";
+import { NewsTile } from "@/components/news/news-blocks";
+import { Badge, Card, EmptyState, Icon, LinkButton, LinkChip } from "@/components/sfz";
 import { Milestones } from "@/components/vizitka/milestones";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { academyDeps, analyticsDeps, preferencesDeps } from "@/server/clubs/deps";
 import { mongoContentStore } from "@/server/db/content.store";
-import {
-  getMyAcademy,
-  type AcademyClub,
-  type AcademyTask,
-} from "@/server/services/academy.service";
+import { getMyAcademy, type AcademyClub } from "@/server/services/academy.service";
 import { getAnalytics } from "@/server/services/analytics.service";
 import { listAreas } from "@/server/services/content.service";
 import { getPreferences } from "@/server/services/preferences.service";
@@ -31,11 +30,8 @@ export const metadata: Metadata = { title: defaultMessages.academy.title };
 
 type Props = PageProps<"/moja-akademia">;
 
-const SEVERITY: Record<AcademyTask["severity"], string> = {
-  crit: "border-l-red-600",
-  warn: "border-l-amber-500",
-  info: "border-l-blue-600",
-};
+const SEVERITY_ORDER = { crit: 0, warn: 1, info: 2 } as const;
+const PLAN_TONE = { todo: "neutral", doing: "warning", done: "success" } as const;
 
 const isoDate = (iso: string) =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString("sk", { timeZone: "Europe/Bratislava" });
@@ -43,137 +39,7 @@ const isoDate = (iso: string) =>
 const date = (d: Date) =>
   d.toLocaleDateString("sk", { dateStyle: "medium", timeZone: "Europe/Bratislava" });
 
-async function TaskList({ tasks }: { tasks: AcademyTask[] }) {
-  const t = await getTranslations("academy.tasks");
-  if (tasks.length === 0) return <p className="text-muted-foreground text-sm">{t("none")}</p>;
-  return (
-    <ul className="flex flex-col gap-2">
-      {tasks.map((task, i) => (
-        <li key={`${task.key}-${task.area ?? task.clubName ?? i}`}>
-          <Link
-            href={task.href}
-            className={`hover:bg-muted/50 flex items-center justify-between gap-3 rounded-md border border-l-4 p-3 text-sm ${SEVERITY[task.severity]}`}
-          >
-            <span>
-              {t(task.key, {
-                count: task.count ?? 0,
-                area: task.area ?? 0,
-                points: task.points ?? 0,
-                club: task.clubName ?? "",
-                step: task.step ?? "",
-              })}
-              {task.practice &&
-                ` · ${t("practiceProgress", { done: task.practice.stepsDone, total: task.practice.stepsTotal })}`}
-              {task.due?.date &&
-                ` · ${t(task.due.overdue ? "overdue" : "dueBy", { date: isoDate(task.due.date) })}`}
-            </span>
-            <span className="text-muted-foreground shrink-0 text-xs">{t("open")} →</span>
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-async function MentorClubs({
-  rows,
-}: {
-  rows: NonNullable<Awaited<ReturnType<typeof getMyAcademy>>["mentor"]>["rows"];
-}) {
-  const t = await getTranslations("academy");
-  const tM = await getTranslations("academy.dashboard.mentoring");
-  return (
-    <ul id="mentor-clubs" className="scroll-mt-4 divide-y rounded-md border">
-      {rows.map((r) => (
-        <li key={r.clubId} className="flex flex-col gap-1 px-3 py-2.5 text-sm">
-          <Link
-            href={`/klub/${encodeURIComponent(r.clubId)}/vizitka`}
-            className="font-medium break-words hover:underline"
-          >
-            {r.name}
-          </Link>
-          <span className="text-muted-foreground text-xs">
-            {r.union} ·{" "}
-            {r.latest
-              ? t("mentor.latest", {
-                  date: date(r.latest.submittedAt),
-                  total: r.latest.total,
-                  filled: r.latest.filledAreas,
-                })
-              : t("mentor.none")}
-            {r.latest &&
-              ` · ${r.latest.confirmedAt ? t("mentor.confirmed") : t("mentor.unconfirmed")}`}{" "}
-            · {r.licensingClosed ? t("mentor.licensingClosed") : t("mentor.licensingOpen")}
-          </span>
-          <span className="text-muted-foreground text-xs">
-            {r.visits.lastDate
-              ? t("mentor.visitLine", {
-                  date: isoDate(r.visits.lastDate),
-                  open: r.visits.open,
-                })
-              : t("mentor.noVisit")}
-            {r.visits.overdue > 0 && (
-              <span className="text-destructive ml-1.5 rounded-full border px-1.5">
-                {t("mentor.overdue", { count: r.visits.overdue })}
-              </span>
-            )}
-          </span>
-          <span className="text-muted-foreground text-xs">
-            {r.plan.goals > 0
-              ? t("mentor.planLine", { done: r.plan.done, goals: r.plan.goals }) +
-                (r.plan.confirmed
-                  ? ` · ${t("mentor.planConfirmed")}`
-                  : ` · ${t("mentor.planUnconfirmed")}`)
-              : t("mentor.noPlan")}
-          </span>
-          <span className="text-muted-foreground text-xs">
-            {t("mentor.mentoringLine", {
-              parts: (["intro", "focus", "closingClub", "closingMentor"] as const)
-                .map((k) => `${tM(k)} ${r.mentoring[k] ? "✓" : "–"}`)
-                .join(" · "),
-            })}
-          </span>
-          <span className="flex flex-wrap gap-x-3 text-xs">
-            {r.latest && !r.latest.confirmedAt && (
-              <Link
-                href={`/klub/${encodeURIComponent(r.clubId)}/kompas/odoslane/${r.latest.id}`}
-                className="font-medium underline underline-offset-4"
-              >
-                {t("mentor.confirm")}
-              </Link>
-            )}
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/mentoring`}
-              className="underline underline-offset-4"
-            >
-              {tM("title")}
-            </Link>
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/plan`}
-              className="underline underline-offset-4"
-            >
-              {t("mentor.plan")}
-            </Link>
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/navstevy/nova`}
-              className="font-medium underline underline-offset-4"
-            >
-              {t("mentor.newVisit")}
-            </Link>
-            <Link
-              href={`/klub/${encodeURIComponent(r.clubId)}/navstevy`}
-              className="underline underline-offset-4"
-            >
-              {t("mentor.visits")}
-            </Link>
-          </span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-const link = "self-start text-sm underline underline-offset-4";
+const link = "subheadline self-start";
 
 /** Kompas of the club against the anonymous average of same-size clubs (club roles only, DA-a). */
 async function KompasTile({ club, user }: { club: AcademyClub; user: CurrentUser }) {
@@ -182,7 +48,7 @@ async function KompasTile({ club, user }: { club: AcademyClub; user: CurrentUser
   if (!kompas || kompas.filledAreas === 0) {
     return (
       <>
-        <p className="text-muted-foreground text-sm">{t("empty")}</p>
+        <p className="text-sm text-(--ink-muted)">{t("empty")}</p>
         <Link href={`/klub/${encodeURIComponent(club.clubId)}/kompas`} className={link}>
           {t("fill")}
         </Link>
@@ -208,7 +74,7 @@ async function KompasTile({ club, user }: { club: AcademyClub; user: CurrentUser
         max={20}
         height={200}
       />
-      <p className="text-muted-foreground text-xs">
+      <p className="text-xs text-(--ink-muted)">
         {benchmark ? t("benchmark", { count: benchmark.clubs }) : t("note")}
       </p>
     </>
@@ -222,7 +88,9 @@ async function Academy({ searchParams }: Props) {
   const t = await getTranslations("academy");
   const tD = await getTranslations("academy.dashboard");
   const tClubRoles = await getTranslations("clubRoles");
+  const tNews = await getTranslations("news");
   const tPlan = await getTranslations("plan.status");
+  const tTasks = await getTranslations("academy.tasks");
   const [view, areas, prefs] = await Promise.all([
     getMyAcademy(academyDeps, user),
     listAreas(mongoContentStore, user),
@@ -258,11 +126,6 @@ async function Academy({ searchParams }: Props) {
       .slice(0, 3);
     const practiceTasks = club.tasks.filter((task) => task.key.startsWith("practice_"));
     panels.push(
-      {
-        id: "tasks",
-        title: t("tasks.title"),
-        content: <TaskList tasks={club.tasks} />,
-      },
       {
         id: "standing",
         title: t("standing.title"),
@@ -311,7 +174,7 @@ async function Academy({ searchParams }: Props) {
         note: weak.length > 0 ? tD("weak.note") : undefined,
         content:
           weak.length === 0 ? (
-            <p className="text-muted-foreground text-sm">{tD("weak.none")}</p>
+            <p className="text-sm text-(--ink-muted)">{tD("weak.none")}</p>
           ) : (
             <ul className="flex flex-col gap-1.5 text-sm">
               {weak.map((w) => (
@@ -344,18 +207,18 @@ async function Academy({ searchParams }: Props) {
         content: (
           <>
             {club.planGoals.length === 0 ? (
-              <p className="text-muted-foreground text-sm">{tD("plan.none")}</p>
+              <p className="text-sm text-(--ink-muted)">{tD("plan.none")}</p>
             ) : (
               <ul className="flex flex-col gap-1.5 text-sm">
                 {club.planGoals.map((g) => (
                   <li key={g.id} className="flex items-start justify-between gap-3">
-                    <span className={g.status === "done" ? "line-through" : ""}>
-                      <span className="text-muted-foreground">{g.area} · </span>
+                    <span className="subheadline">
+                      <span className="text-(--ink-muted)">{g.area} · </span>
                       {g.title}
                     </span>
-                    <span className="shrink-0 rounded-full border px-2 py-0.5 text-xs">
+                    <Badge tone={PLAN_TONE[g.status]} className="shrink-0">
                       {tPlan(g.status)}
-                    </span>
+                    </Badge>
                   </li>
                 ))}
               </ul>
@@ -380,13 +243,13 @@ async function Academy({ searchParams }: Props) {
               <p className="text-sm">
                 {tD("visits.open", { count: club.visits.open })}
                 {club.visits.overdue > 0 && (
-                  <span className="text-destructive ml-1.5 rounded-full border px-1.5 text-xs">
+                  <Badge tone="danger" className="ml-1.5">
                     {tD("visits.overdue", { count: club.visits.overdue })}
-                  </span>
+                  </Badge>
                 )}
               </p>
             )}
-            <Link href={`${base}/navstevy`} className={link}>
+            <Link href={`${base}/mentoring#navstevy`} className={link}>
               {tD("visits.list")}
             </Link>
           </>
@@ -434,11 +297,11 @@ async function Academy({ searchParams }: Props) {
                 kompas: `${base}/kompas`,
                 plan: `${base}/plan`,
                 goal: `${base}/plan`,
-                visit: `${base}/navstevy`,
+                visit: `${base}/mentoring#navstevy`,
                 licensing: `${base}/licencne-hodnotenie`,
               }}
             />
-            <p className="text-muted-foreground text-xs">
+            <p className="text-xs text-(--ink-muted)">
               {club.rankingConsent === true
                 ? tD("milestones.ranked")
                 : club.rankingConsent === false
@@ -449,6 +312,19 @@ async function Academy({ searchParams }: Props) {
               {tD("milestones.consent")}
             </Link>
           </>
+        ),
+      },
+      {
+        id: "news",
+        title: tNews("tileTitle"),
+        content: (
+          <Suspense fallback={<div className="h-24" aria-hidden />}>
+            <NewsTile
+              weakAreas={weak.map((w) => w.area)}
+              planAreas={[...new Set(club.planGoals.map((g) => g.area))]}
+              proposals={club.roles.includes("management") ? { user, clubId: club.clubId } : null}
+            />
+          </Suspense>
         ),
       },
       {
@@ -464,7 +340,7 @@ async function Academy({ searchParams }: Props) {
             <TaskList tasks={practiceTasks} />
           ) : (
             <>
-              <p className="text-muted-foreground text-sm">{tD("practice.none")}</p>
+              <p className="text-sm text-(--ink-muted)">{tD("practice.none")}</p>
               <Link href="/oblasti" className={link}>
                 {tD("practice.browse")}
               </Link>
@@ -488,32 +364,12 @@ async function Academy({ searchParams }: Props) {
                 areaNames={areaNames}
               />
             )}
-            <div className="bg-muted/60 flex flex-col gap-1 rounded-md p-3 text-xs">
+            <div className="flex flex-col gap-1 rounded-(--radius-sm) bg-(--surface) p-3 text-xs">
               <span className="font-semibold">{t("sees.title")}</span>
               {club.roles.map((r) => (
                 <span key={r}>{t(`sees.${r}`)}</span>
               ))}
             </div>
-          </>
-        ),
-      },
-    );
-  }
-  if (view.mentor) {
-    panels.push(
-      {
-        id: "mentor-tasks",
-        title: tD("mentorTasks.title"),
-        content: <TaskList tasks={view.mentor.tasks} />,
-      },
-      {
-        id: "mentor-clubs",
-        title: t("mentor.title"),
-        note: t("mentor.intro"),
-        content: (
-          <>
-            <MentorClubs rows={view.mentor.rows} />
-            <p className="bg-muted/60 rounded-md p-3 text-xs">{t("sees.mentor")}</p>
           </>
         ),
       },
@@ -530,18 +386,18 @@ async function Academy({ searchParams }: Props) {
         note: tD("adminKompas.note", { count: noKompas.length }),
         content:
           noKompas.length === 0 ? (
-            <p className="text-muted-foreground text-sm">{tD("adminKompas.none")}</p>
+            <p className="text-sm text-(--ink-muted)">{tD("adminKompas.none")}</p>
           ) : (
-            <ul className="divide-y rounded-md border text-sm">
+            <ul className="overflow-hidden rounded-(--radius-sm) border border-(--hairline) text-sm">
               {noKompas.map((r) => (
                 <li key={r.clubId} className="flex flex-col px-3 py-2">
                   <Link
                     href={`/klub/${encodeURIComponent(r.clubId)}/vizitka`}
-                    className="font-medium break-words hover:underline"
+                    className="font-medium break-words"
                   >
                     {r.name}
                   </Link>
-                  <span className="text-muted-foreground text-xs">{r.union}</span>
+                  <span className="text-xs text-(--ink-muted)">{r.union}</span>
                 </li>
               ))}
             </ul>
@@ -580,26 +436,26 @@ async function Academy({ searchParams }: Props) {
         content: (
           <>
             {overdue.length === 0 ? (
-              <p className="text-muted-foreground text-sm">{tD("adminOverdue.none")}</p>
+              <p className="text-sm text-(--ink-muted)">{tD("adminOverdue.none")}</p>
             ) : (
-              <ul className="divide-y rounded-md border text-sm">
+              <ul className="overflow-hidden rounded-(--radius-sm) border border-(--hairline) text-sm">
                 {overdue.map((r) => (
                   <li key={r.clubId} className="flex items-center justify-between gap-3 px-3 py-2">
                     <Link
                       href={`/klub/${encodeURIComponent(r.clubId)}/navstevy`}
-                      className="font-medium break-words hover:underline"
+                      className="font-medium break-words"
                     >
                       {r.name}
                     </Link>
-                    <span className="text-destructive shrink-0 rounded-full border px-1.5 text-xs">
+                    <Badge tone="danger" className="shrink-0">
                       {t("mentor.overdue", { count: r.visits.overdue })}
-                    </span>
+                    </Badge>
                   </li>
                 ))}
               </ul>
             )}
             {noVisit > 0 && (
-              <p className="text-muted-foreground text-xs">
+              <p className="text-xs text-(--ink-muted)">
                 {tD("adminOverdue.noVisit", { count: noVisit })}
               </p>
             )}
@@ -609,60 +465,102 @@ async function Academy({ searchParams }: Props) {
     );
   }
 
+  const firstName = user.name?.trim().split(/\s+/)[0] ?? "";
+  const tasks = [...(club?.tasks ?? []), ...(view.mentor?.tasks ?? [])].sort(
+    (a, b) => SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity],
+  );
+  const [next, ...rest] = tasks;
+
   return (
-    <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground text-sm">
-          {[user.name, t("season", { season: view.season })].filter(Boolean).join(" · ")}
-        </p>
-        <p className="text-sm">{t("intro")}</p>
-        {(view.clubs.length > 0 || view.mentor) && (
-          <Link
-            href="/analyza"
-            className="self-start text-sm font-medium underline underline-offset-4"
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-col gap-2">
+        <p className="subheadline text-(--ink-muted)">{t("season", { season: view.season })}</p>
+        <h1 className="large-title break-words">
+          {firstName ? t("greeting", { name: firstName }) : t("title")}
+        </h1>
+        {view.clubs.length > 1 && club && (
+          <nav
+            aria-label={tD("club")}
+            className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1"
           >
-            {t("analytics")} →
+            {view.clubs.map((c) => (
+              <LinkChip
+                key={c.clubId}
+                href={`/moja-akademia?klub=${encodeURIComponent(c.clubId)}`}
+                selected={c.clubId === club.clubId}
+              >
+                {[c.name, ...c.roles.map((r) => tClubRoles(r))].join(" · ")}
+              </LinkChip>
+            ))}
+          </nav>
+        )}
+        {club && view.clubs.length === 1 && (
+          <Link href={base} className="subheadline self-start">
+            {club.name} · {club.roles.map((r) => tClubRoles(r)).join(", ")}
           </Link>
         )}
       </header>
+
       {view.clubs.length === 0 && !view.mentor && (
-        <p className="text-muted-foreground rounded-md border p-3 text-sm">{t("noRoles")}</p>
+        <EmptyState title={t("noRolesTitle")} description={t("noRoles")} />
       )}
-      {club && (
-        <div className="flex flex-col gap-2">
-          {view.clubs.length > 1 ? (
-            <nav aria-label={tD("club")} className="flex flex-wrap gap-2">
-              {view.clubs.map((c) => (
-                <Link
-                  key={c.clubId}
-                  href={`/moja-akademia?klub=${encodeURIComponent(c.clubId)}`}
-                  aria-current={c.clubId === club.clubId ? "page" : undefined}
-                  className="aria-[current]:bg-primary aria-[current]:text-primary-foreground rounded-full border px-3 py-1 text-sm"
-                >
-                  {c.name}
-                </Link>
-              ))}
-            </nav>
-          ) : null}
-          <h2 className="text-lg font-semibold break-words">
-            <Link href={base} className="hover:underline">
-              {club.name}
-            </Link>
-            <span className="text-muted-foreground ml-2 text-xs font-normal">{club.union}</span>
-          </h2>
-        </div>
+
+      {next && (
+        <Card variant="highlight" title={t("nextStep")}>
+          <div className="flex flex-col gap-3">
+            <p className="callout">
+              {tTasks(next.key, {
+                count: next.count ?? 0,
+                area: next.area ?? 0,
+                points: next.points ?? 0,
+                club: next.clubName ?? "",
+                step: next.step ?? "",
+              })}
+            </p>
+            <LinkButton href={next.href} block>
+              {t("nextStepGo")}
+            </LinkButton>
+          </div>
+        </Card>
       )}
+
+      {(club || view.mentor) && <TaskList title={t("tasks.title")} tasks={rest} />}
+
+      {view.mentor && (
+        <Link
+          href="/mentor"
+          className="flex items-center gap-3 rounded-(--radius-md) bg-(--surface-raised) p-4 text-(--ink) no-underline"
+        >
+          <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="headline">{t("mentorDesk")}</span>
+            <span className="footnote text-(--ink-muted)">{t("mentor.intro")}</span>
+          </span>
+          <span className="text-(--ink-muted)" aria-hidden>
+            <Icon name="chevron-right" size={18} />
+          </span>
+        </Link>
+      )}
+
       {panels.length > 0 && (
-        <>
-          <p className="text-muted-foreground text-xs">{tD("hint")}</p>
+        <section className="flex flex-col gap-3" aria-labelledby="board-title">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 id="board-title" className="title-3">
+              {t("boardTitle")}
+            </h2>
+            {(view.clubs.length > 0 || view.mentor) && (
+              <Link href="/analyza" className="subheadline">
+                {t("analytics")}
+              </Link>
+            )}
+          </div>
+          <p className="footnote text-(--ink-muted)">{tD("hint")}</p>
           <DashboardBoard
             key={prefs.version}
             panels={panels}
             layout={prefs.dashboard}
             version={prefs.version}
           />
-        </>
+        </section>
       )}
     </div>
   );
@@ -670,7 +568,7 @@ async function Academy({ searchParams }: Props) {
 
 export default function AcademyPage(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-10 sm:px-6 sm:py-14">
+    <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-10">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <Academy {...props} />
       </Suspense>

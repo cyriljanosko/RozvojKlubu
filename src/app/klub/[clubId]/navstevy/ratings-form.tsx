@@ -3,14 +3,14 @@
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/sfz";
 import type { MentorRating } from "@/server/db/types";
 
 import { rateVisitAction } from "./actions";
 
 const VALUES: MentorRating[] = ["done", "partial", "not"];
 const field =
-  "border-input bg-background w-full rounded-md border px-2 py-1.5 text-sm sm:w-40 sm:shrink-0";
+  "border-input bg-background w-full rounded-(--radius-sm) border border-(--border) px-2 py-1.5 text-sm sm:w-40 sm:shrink-0";
 
 /** The mentor rates the task before the visit and the agreed steps (MC-b, like the EYA mentoring). */
 export function RatingsForm({
@@ -69,16 +69,16 @@ export function RatingsForm({
     });
 
   return (
-    <section className="flex flex-col gap-3 rounded-xl border p-4 text-sm">
+    <section className="flex flex-col gap-3 rounded-(--radius-md) bg-(--surface-raised) p-4 text-sm">
       <div>
         <h2 className="font-semibold">{t("title")}</h2>
-        <p className="text-muted-foreground text-xs">{t("hint")}</p>
+        <p className="text-xs text-(--ink-muted)">{t("hint")}</p>
       </div>
       <ul className="flex flex-col gap-2">
         {prep && (
           <li className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
             <span className="min-w-0 flex-1">
-              <span className="text-muted-foreground">{t("prep")}: </span>
+              <span className="text-(--ink-muted)">{t("prep")}: </span>
               {prep.text}
             </span>
             {select(`${t("prep")}: ${prep.text}`, prepRating, setPrepRating)}

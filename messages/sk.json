@@ -60,14 +60,23 @@
     "title": "Môj účet",
     "role": "Rola",
     "sportnetAccount": "Účet Sportnet",
-    "sportnetLinked": "Prepojený",
-    "sportnetNotLinked": "Neprepojený",
+    "sportnetLinked": "Prepojené so sportnet.online",
+    "sportnetNotLinked": "Bez prepojenia so sportnet.online",
     "roleHint": "Klub a rolu v klube vám pridelí administrátor SFZ.",
     "signOut": "Odhlásiť sa",
     "myClubs": "Moje kluby",
     "allClubs": "Všetky kluby",
     "noClubs": "Zatiaľ nemáte pridelený žiadny klub.",
-    "areasLink": "Oblasti Akadémie"
+    "areasLink": "Oblasti Akadémie",
+    "myClubsRoles": "Moje kluby a roly",
+    "rolesSource": "Roly v kluboch prideľuje admin SFZ; po prepojení so sportnet.online ich budeme preberať odtiaľ.",
+    "settings": "Nastavenia",
+    "theme": {
+      "label": "Vzhľad",
+      "system": "Podľa zariadenia",
+      "light": "Svetlý",
+      "dark": "Tmavý"
+    }
   },
   "roles": {
     "admin_sfz": "Administrátor SFZ",
@@ -114,8 +123,43 @@
       "M": "mužské",
       "F": "ženské"
     },
-    "back": "Späť na môj účet",
-    "mentoring": "Mentoring klubu"
+    "back": "Späť na Moju Akadémiu",
+    "mentoring": "Mentoring klubu",
+    "overview": {
+      "status": "Stav sezóny {season}",
+      "next": "Ďalšie kroky klubu",
+      "numbers": "Klub v číslach",
+      "teamsCount": "{count, plural, one {# družstvo} few {# družstvá} other {# družstiev}}",
+      "vizitka": "Vizitka klubu",
+      "vizitkaHint": "Ako klub vidia ostatní",
+      "ranking": "Ako klub vidia ostatní · v rebríčku: {state, select, yes {áno} no {nie} other {zatiaľ nerozhodnuté}}",
+      "tiles": {
+        "kompas": "Kompas",
+        "licensing": "Licenčné hodnotenie",
+        "plan": "Plán rozvoja",
+        "mentoring": "Mentoring",
+        "kompasValue": "{filled} z 11 oblastí",
+        "kompasEmpty": "Nezačatý",
+        "kompasDraft": "Rozpracovaný",
+        "kompasSent": "Odoslaný",
+        "licensingSeason": "Táto sezóna",
+        "licensingClosedOn": "Uzavreté {date}",
+        "licensingOpen": "Otvorené",
+        "licensingClosed": "Uzavreté",
+        "planValue": "{done} z {goals} cieľov",
+        "planNone": "Bez plánu",
+        "planConfirmed": "Potvrdený",
+        "planDraft": "Rozpracovaný",
+        "planMissing": "Chýba",
+        "visitNext": "Návšteva {date}",
+        "visitLast": "Posledná {date}",
+        "visitNone": "Bez návštevy",
+        "visitPlanned": "Naplánovaná",
+        "visitOverdue": "{count, plural, one {# úloha po termíne} few {# úlohy po termíne} other {# úloh po termíne}}",
+        "mentoringActive": "Prebieha",
+        "mentoringNone": "Bez mentora"
+      }
+    }
   },
   "admin": {
     "title": "Administrácia",
@@ -378,14 +422,22 @@
       "line": "Riadok pre zbernú tabuľku (SFZ-KOMPAS-1)",
       "copy": "Skopírovať riadok",
       "copied": "Skopírované.",
-      "withdrawn": "zrušené"
+      "withdrawn": "zrušené",
+      "rowTitle": "{total} z 220 bodov · {filled} z 11 oblastí",
+      "rowDate": "Odoslané {date}",
+      "confirmed": "Potvrdený"
     },
     "submission": {
       "title": "Odoslaný Kompas",
       "meta": "Odoslané {date} · sezóna {season}",
       "frozen": "Toto je zmrazená kópia z času odoslania.",
       "checked": "Platí v klube",
-      "back": "Späť na Kompas klubu"
+      "back": "Späť na Kompas klubu",
+      "total": "Spolu",
+      "points": "{total} b.",
+      "filledLabel": "Vyplnené oblasti",
+      "filledValue": "{filled} z 11",
+      "export": "Pre zbernú tabuľku"
     },
     "withdraw": {
       "button": "Zrušiť odoslanie",
@@ -401,7 +453,11 @@
       "undo": "Zrušiť potvrdenie",
       "hint": "Potvrdenie mentorom je odznak pri Kompase vo Vizitke a v rebríčku; body sa nemenia.",
       "error": "Nepodarilo sa uložiť, skúste to znova.",
-      "confirmed": "Potvrdené mentorom {date}"
+      "confirmed": "Potvrdené mentorom {date}",
+      "cardTitle": "Potvrdenie mentora",
+      "modalTitle": "Potvrdiť Kompas klubu?",
+      "modalBody": "Potvrdenie uvidí klub aj verejnosť pri Kompase vo vizitke a v rebríčku. Zrušiť ho môžete neskôr v tomto detaile.",
+      "cancel": "Späť"
     },
     "areas": "Oblasti",
     "filledShort": "vyplnené {filled} z 11",
@@ -415,7 +471,8 @@
       "take": "Prevziať odpovede",
       "dismiss": "Zahodiť",
       "saveNow": "Odpovede z vyskúšania sú vo formulári. Uložte ich, aby sa zapísali do Kompasu klubu."
-    }
+    },
+    "titleSeason": "Kompas {season}"
   },
   "mentor": {
     "title": "Moje kluby v kohorte",
@@ -424,7 +481,32 @@
     "latest": "{date} · {total} z 220 · vyplnené {filled} z 11",
     "open": "Otvoriť",
     "forbidden": "Nie ste mentor žiadneho klubu.",
-    "link": "Moje kluby v kohorte"
+    "link": "Moje kluby v kohorte",
+    "titleShort": "Moje kluby",
+    "season": "Mentor · sezóna {season}",
+    "back": "Späť na Moju Akadémiu",
+    "tasks": "Úlohy mentora",
+    "toConfirm": "Na potvrdenie",
+    "kompasOf": "Kompas – {club}",
+    "planOf": "Plán rozvoja – {club}",
+    "sentOn": "Odoslaný {date}",
+    "planEdited": "Upravený po potvrdení",
+    "planNotConfirmed": "Zatiaľ nepotvrdený",
+    "nextVisits": "Najbližšie návštevy",
+    "clubs": "Kluby",
+    "stats": {
+      "label": "Prehľad sezóny",
+      "clubs": "klubov",
+      "toConfirm": "na potvrdenie",
+      "visits": "návštevy"
+    },
+    "state": {
+      "noKompas": "Bez Kompasu",
+      "kompasToConfirm": "Kompas na potvrdenie",
+      "planToConfirm": "Plán na potvrdenie",
+      "overdue": "Kroky po termíne",
+      "ok": "V poriadku"
+    }
   },
   "licensing": {
     "title": "Licenčné hodnotenie",
@@ -601,7 +683,11 @@
       "no": "Nie",
       "error": "Otvorenie sa nepodarilo. Obnovte stránku a skúste to znova.",
       "adminOnly": "Len pre admina SFZ."
-    }
+    },
+    "seatTitle": "Sídlo klubu",
+    "seasonTitle": "Sezóna {season}",
+    "stateOpen": "Otvorené",
+    "stateClosed": "Uzavreté"
   },
   "vizitka": {
     "title": "Vizitka klubu",
@@ -645,7 +731,8 @@
       "banded": "oblastí s pásmom"
     },
     "notFound": "Klub sa nenašiel.",
-    "back": "Kluby"
+    "back": "Kluby",
+    "clubOnly": "Len pre klub"
   },
   "academy": {
     "title": "Moja Akadémia",
@@ -691,7 +778,11 @@
       "club_no_focus": "Bez zamerania rozvoja: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
       "club_no_closing": "Bez záveru mentoringu: {count, plural, one {# klub} few {# kluby} other {# klubov}} – {club}",
       "ranking_consent": "Rozhodnúť, či sa klub zapojí do verejného rebríčka",
-      "club_kompas_unconfirmed": "Potvrdiť Kompas – {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}"
+      "club_kompas_unconfirmed": "Potvrdiť Kompas – {count, plural, one {# klub} few {# kluby} other {# klubov}}: {club}",
+      "severity": {
+        "crit": "Dôležité",
+        "warn": "Čoskoro"
+      }
     },
     "roles": {
       "title": "Moje roly v oblastiach",
@@ -813,7 +904,13 @@
         "consent": "Verejný rebríček klubov"
       }
     },
-    "favorites": "★ Obľúbené"
+    "favorites": "★ Obľúbené",
+    "greeting": "Dobrý deň, {name}",
+    "nextStep": "Váš ďalší krok",
+    "nextStepGo": "Pokračovať",
+    "mentorDesk": "Pracovisko mentora",
+    "boardTitle": "Prehľad",
+    "noRolesTitle": "Zatiaľ nemáte rolu v klube"
   },
   "trialKompas": {
     "title": "Kompas",
@@ -1237,7 +1334,8 @@
       "save": "Uložiť hodnotenie",
       "saved": "Hodnotenie uložené.",
       "error": "Uloženie sa nepodarilo. Obnovte stránku a skúste znova."
-    }
+    },
+    "backToMentoring": "Mentoring a návštevy"
   },
   "plan": {
     "pageTitle": "Plán klubu na sezónu",
@@ -1246,7 +1344,7 @@
     "summary": "Splnené {done} z {goals}",
     "confirmedOn": "✓ dohodnuté s mentorom {date}",
     "editedAfter": "upravené po potvrdení {date}",
-    "introNew": "Vyberte 1–3 oblasti, na ktorých bude klub túto sezónu naozaj pracovať. Ponúkame dve najslabšie podľa Kompasu, ďalší cieľ pridáte tlačidlom.",
+    "introNew": "Vyberte 1–3 oblasti, na ktorých bude klub túto sezónu naozaj pracovať. Ponúkame najslabšie podľa Kompasu (alebo zameranie od mentora).",
     "introEdit": "Upravte ciele plánu. Stav cieľa môže meniť aj ten, kto zaň zodpovedá.",
     "suggested": "Najslabšie podľa Kompasu: {areas}",
     "empty": "Klub zatiaľ nemá plán na túto sezónu.",
@@ -1287,14 +1385,28 @@
       "FORBIDDEN": "Na túto zmenu nemáte oprávnenie.",
       "BAD_REQUEST": "Niektorý údaj nie je správny.",
       "NOT_FOUND": "Cieľ sa nenašiel.",
-      "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova."
+      "INTERNAL": "Uloženie sa nepodarilo. Skúste to znova.",
+      "requiredOne": "Vyplňte cieľ, text pre verejnú Vizitku a kto zodpovedá."
     },
     "vizitka": {
       "title": "Na čom klub tento rok pracuje",
       "line": "Plán sezóny: splnené {done} z {goals}",
       "confirmed": "dohodnuté s mentorom",
-      "none": "Plán sezóny zatiaľ nie je"
-    }
+      "none": "Plán sezóny zatiaľ nie je",
+      "rowTitle": "Plán sezóny"
+    },
+    "headingShort": "Plán rozvoja",
+    "seasonBadge": "Sezóna {season}",
+    "confirmedBadge": "Potvrdený mentorom {date}",
+    "addGoalShort": "Cieľ",
+    "addInArea": "Cieľ v oblasti {area} · {name}",
+    "newGoal": "Nový cieľ",
+    "editGoal": "Upraviť cieľ",
+    "editGoalShort": "Upraviť",
+    "saveGoal": "Uložiť cieľ",
+    "confirmTitle": "Potvrdenie mentora",
+    "confirmHint": "Potvrdením mentor dohodne s klubom plán sezóny. Klub vidí, kedy bol plán upravený po potvrdení.",
+    "rights": "Verejnú vetu cieľa uvidia ľudia vo vizitke klubu. Plán upravuje vedenie klubu a mentor, stav svojho cieľa mení aj ten, kto zaň zodpovedá."
   },
   "analytics": {
     "title": "Analýza",
@@ -1447,6 +1559,21 @@
       "openTask": "Otvoriť →",
       "list": "Zoznam uzlov (textová podoba grafu)",
       "links": "prepojení"
+    },
+    "back": "Späť na Moju Akadémiu",
+    "scopeBadge": {
+      "all": "Celý pilot · admin SFZ",
+      "mentor": "Moje kluby · mentor",
+      "club": "Môj klub"
+    },
+    "kpi": {
+      "label": "Prehľad sezóny",
+      "clubs": "Klubov",
+      "kompas": "Odoslaný Kompas",
+      "licensing": "Uzavreté licencie",
+      "plan": "S plánom sezóny",
+      "clubsNote": "{unions, plural, one {# zväz} few {# zväzy} other {# zväzov}}",
+      "ofClubs": "z {count} klubov"
     }
   },
   "board": {
@@ -1519,23 +1646,23 @@
     },
     "parts": {
       "intro": {
-        "title": "① Úvodné sebahodnotenie klubu",
+        "title": "1 · Úvodné sebahodnotenie klubu",
         "who": "Vypĺňa vedenie klubu na začiatku sezóny."
       },
       "focus": {
-        "title": "② Zameranie rozvoja",
+        "title": "2 · Zameranie rozvoja",
         "who": "Vypĺňa mentor po úvodnom stretnutí."
       },
       "visits": {
-        "title": "③ Stretnutia",
+        "title": "3 · Návštevy",
         "who": "Návštevy mentora v tejto sezóne."
       },
       "closingClub": {
-        "title": "④ Záver sezóny – klub",
+        "title": "4 · Záver sezóny – klub",
         "who": "Vypĺňa vedenie klubu na konci sezóny."
       },
       "closingMentor": {
-        "title": "④ Záver sezóny – mentor",
+        "title": "4 · Záver sezóny – mentor",
         "who": "Vypĺňa mentor na konci sezóny."
       }
     },
@@ -1567,19 +1694,37 @@
       "closingAssessment": "Ako sa klub v sezóne posunul",
       "nextPlan": "Na čo sa zamerať budúcu sezónu"
     },
-    "toPlan": "Zostaviť plán sezóny z prioritných oblastí →",
+    "toPlan": "Zostaviť plán sezóny z prioritných oblastí",
     "visits": {
       "none": "V tejto sezóne zatiaľ žiadne stretnutie.",
       "plan": "Naplánovať stretnutie",
       "all": "Všetky návštevy →",
       "steps": "kroky {done}/{total}",
       "prep": "úloha vopred: {rating}",
-      "rated": "hodnotenie krokov: {done} splnené, {partial} čiastočne, {not} nesplnené"
+      "rated": "hodnotenie krokov: {done} splnené, {partial} čiastočne, {not} nesplnené",
+      "new": "Návšteva",
+      "who": "Návštevu plánuje a zapisuje mentor. Klub vidí naplánované a odoslané návštevy a odškrtáva dohodnuté kroky.",
+      "prepText": "príprava: {text}"
     },
     "vizitka": {
       "title": "Mentoring klubu",
       "line": "{done} z 4 častí cyklu",
       "none": "cyklus sezóny zatiaľ nezačal"
+    },
+    "headingShort": "Mentoring {season}",
+    "done": "Hotové",
+    "stepsTitle": "Sezóna v 4 krokoch",
+    "steps": {
+      "intro": "Predstavenie klubu",
+      "introWho": "Vypĺňa vedenie klubu",
+      "focus": "Zameranie mentora",
+      "focusWho": "Vypĺňa mentor",
+      "focusAreas": "{count, plural, one {# prioritná oblasť} few {# prioritné oblasti} other {# prioritných oblastí}}",
+      "visits": "Návštevy počas sezóny",
+      "visitsCount": "{count, plural, =0 {zatiaľ žiadna odoslaná} one {# odoslaná návšteva} few {# odoslané návštevy} other {# odoslaných návštev}}",
+      "closing": "Záver sezóny",
+      "closingWhen": "Klub aj mentor · v máji a júni",
+      "done": "hotové"
     }
   },
   "coachEducation": {
@@ -1776,6 +1921,7 @@
     "areas": "Oblasti",
     "kompas": "Kompas",
     "clubs": "Kluby",
+    "news": "Novinky",
     "about": "O Akadémii",
     "signIn": "Prihlásiť",
     "search": "Hľadať",
@@ -1791,11 +1937,13 @@
     "clubPlan": "Plán",
     "clubLicensing": "Licenčné hodnotenie",
     "clubMentoring": "Mentoring",
-    "clubVisits": "Návštevy",
+    "clubNews": "Novinky",
     "adminClubs": "Kluby",
     "adminContent": "Obsah",
     "adminRoles": "Katalóg rolí",
-    "moreTitle": "Viac"
+    "adminNews": "Novinky",
+    "moreTitle": "Viac",
+    "switchClub": "Zmeniť klub"
   },
   "showcase": {
     "title": "Ukážky SFZ Design System",
@@ -1829,5 +1977,190 @@
     "inputValue": "Získať trénera pre prípravku",
     "optionLeadership": "1 · Vedenie klubu",
     "optionCoaches": "3 · Tréneri"
+  },
+  "news": {
+    "title": "Novinky",
+    "eyebrow": "Akadémia rozvoja klubov",
+    "lead": "Príbehy a odporúčania z klubov a čo je nové v Akadémii.",
+    "kinds": {
+      "all": "Všetko",
+      "story": "Príbehy klubov",
+      "tip": "Odporúčania",
+      "academy": "Novinky Akadémie"
+    },
+    "kind": {
+      "story": "Príbeh klubu",
+      "tip": "Odporúčanie",
+      "academy": "Novinka Akadémie"
+    },
+    "filterKind": "Typ novinky",
+    "area": "Oblasť",
+    "allAreas": "Všetky oblasti",
+    "areaOption": "{number} · {name}",
+    "areaBadge": "{number} · {name}",
+    "sfz": "SFZ",
+    "pinned": "Pripnuté",
+    "older": "Staršie novinky",
+    "newest": "Späť na najnovšie",
+    "emptyTitle": "Zatiaľ tu nič nie je",
+    "empty": "Prvé príbehy klubov a novinky Akadémie pribudnú čoskoro.",
+    "emptyFiltered": "Pre tento výber zatiaľ nič nie je.",
+    "showAll": "Zobraziť všetko",
+    "back": "Novinky",
+    "share": "Zdieľať",
+    "shareTitle": "Zdieľať novinku",
+    "copyLink": "Kopírovať odkaz",
+    "copied": "Odkaz je skopírovaný",
+    "facebook": "Facebook",
+    "whatsapp": "WhatsApp",
+    "email": "E-mail",
+    "shareNote": "Odkaz ukáže názov a prvú vetu novinky.",
+    "close": "Zavrieť",
+    "clubProfile": "Vizitka klubu",
+    "sections": {
+      "start": "S čím sme začínali",
+      "done": "Čo sme urobili",
+      "result": "Výsledok",
+      "advice": "Čo by sme odporučili iným klubom"
+    },
+    "byClub": "Pripravil klub {club}",
+    "byClubEdited": "Pripravil klub {club}, upravila redakcia SFZ",
+    "bySfz": "Pripravila redakcia SFZ",
+    "onSfzWeb": "Uverejnené aj na futbalsfz.sk",
+    "moreInArea": "Viac v oblasti {number} · {name}",
+    "related": "Ďalšie novinky",
+    "all": "Všetko",
+    "homeTitle": "Novinky",
+    "areaTitle": "Novinky k oblasti",
+    "areaLead": "Novinky Akadémie, príbehy a odporúčania klubov k oblasti {name}.",
+    "areaAll": "Všetky novinky k oblasti {number}",
+    "tileTitle": "Novinky",
+    "tileWeak": "K vašej najslabšej oblasti Kompasu",
+    "tilePlan": "K cieľu z vášho plánu",
+    "tileLatest": "Najnovšie",
+    "tileNone": "Zatiaľ žiadne novinky.",
+    "tileAll": "Všetky novinky",
+    "ctaTitle": "Má váš klub čo povedať?",
+    "ctaText": "Podarilo sa vám niečo, čo by pomohlo aj iným klubom? Pošlite príbeh – SFZ ho pred zverejnením prejde a ozve sa vám.",
+    "ctaButton": "Navrhnúť príbeh klubu",
+    "ctaSignIn": "Navrhnúť príbeh môže po prihlásení vedenie klubu.",
+    "tileProposal": "Váš návrh „{title}“"
+  },
+  "newsEditor": {
+    "kind": "Typ",
+    "title": "Názov",
+    "titleHint": "Krátko a konkrétne, napr. „Za rok päť nových trénerov z radov rodičov“.",
+    "areas": "Oblasti (najviac 3)",
+    "areasHint": "Pri ktorých oblastiach sa novinka ukáže.",
+    "sections": {
+      "start": "S čím ste začínali?",
+      "done": "Čo ste urobili?",
+      "result": "Aký je výsledok?",
+      "advice": "Čo by ste odporučili iným klubom?",
+      "body": "Text novinky"
+    },
+    "hints": {
+      "start": "Aký problém alebo príležitosť ste mali.",
+      "done": "Kroky, ktoré ste urobili – kto, kedy, ako.",
+      "result": "Čo sa zmenilo – čísla, ľudia, čas.",
+      "advice": "Jedna–dve rady pre klub, ktorý chce urobiť to isté.",
+      "body": "Odseky oddeľte prázdnym riadkom, odrážky začnite pomlčkou. Odkaz: [text odkazu](https://…)."
+    },
+    "save": "Uložiť koncept",
+    "saved": "Uložené",
+    "photosLater": "Fotky a dokumenty bude možné pridať čoskoro.",
+    "errors": {
+      "CONFLICT": "Novinku medzitým zmenil niekto iný. Obnovte stránku.",
+      "FORBIDDEN": "Na túto akciu nemáte oprávnenie.",
+      "BAD_REQUEST": "Skontrolujte vyplnené údaje.",
+      "NOT_FOUND": "Novinka sa nenašla.",
+      "INCOMPLETE": "Doplňte názov (aspoň 5 znakov) a všetky časti textu.",
+      "INTERNAL": "Niečo sa pokazilo. Skúste to znova."
+    }
+  },
+  "clubNews": {
+    "title": "Novinky klubu",
+    "lead": "Návrhy príbehov a odporúčaní, ktoré klub posiela SFZ na zverejnenie v Novinkách.",
+    "readOnly": "Návrhy píše vedenie klubu. Vy ich vidíte ako mentor.",
+    "mine": "Moje návrhy",
+    "empty": "Klub zatiaľ nič nenavrhol.",
+    "newStory": "Navrhnúť príbeh",
+    "newTip": "Navrhnúť odporúčanie",
+    "status": {
+      "draft": "Koncept",
+      "submitted": "Na schválení",
+      "returned": "Vrátené",
+      "published": "Zverejnené",
+      "hidden": "Stiahnuté"
+    },
+    "updated": "Upravené {date}",
+    "untitled": "Bez názvu",
+    "back": "Novinky klubu",
+    "editTitle": "Návrh novinky",
+    "returnedTitle": "SFZ vrátilo návrh na úpravu",
+    "confirmTitle": "SFZ upravilo text",
+    "confirmText": "Prečítajte si upravený text. Ak súhlasíte, odošlite ho znova – zverejní sa až potom.",
+    "submittedText": "Návrh je u SFZ. Ozve sa vám do 10 pracovných dní.",
+    "publishedText": "Novinka je zverejnená.",
+    "open": "Otvoriť novinku",
+    "consentsTitle": "Súhlasy",
+    "consentPublication": "Súhlasíme so zverejnením v Akadémii rozvoja klubov.",
+    "consentPhotoPeople": "Ľudia na fotkách súhlasili so zverejnením (za deti zákonný zástupca).",
+    "consentExternal": "SFZ môže novinku zdieľať aj mimo Akadémie (futbalsfz.sk, sociálne siete SFZ).",
+    "consentExternalHint": "Nepovinné.",
+    "submit": "Odoslať SFZ na schválenie",
+    "submitInfo": "SFZ návrh prejde do 10 pracovných dní. Môže ho vrátiť s poznámkou alebo upraviť – úpravy potom potvrdíte.",
+    "forbidden": "K návrhom tohto klubu nemáte prístup."
+  },
+  "adminNews": {
+    "title": "Novinky",
+    "lead": "Príbehy a odporúčania klubov na schválenie a novinky Akadémie.",
+    "new": "Nová novinka SFZ",
+    "tabs": {
+      "submitted": "Na schválenie",
+      "returned": "Vrátené",
+      "published": "Zverejnené",
+      "draft": "Koncepty SFZ",
+      "hidden": "Stiahnuté"
+    },
+    "empty": "Nič tu nie je.",
+    "review": "Posúdiť",
+    "edit": "Upraviť",
+    "club": "Klub",
+    "views": "{count, plural, one {# zobrazenie} few {# zobrazenia} other {# zobrazení}}",
+    "submittedAt": "Odoslané {date}",
+    "publishedAt": "Zverejnené {date}",
+    "back": "Novinky",
+    "awaits": "Čaká na potvrdenie úprav klubom",
+    "missing": "Chýba: {parts}",
+    "text": "Text",
+    "textClubHint": "Ak text upravíte, klub ho musí potvrdiť – vráťte mu ho potom s poznámkou.",
+    "consents": "Súhlasy klubu",
+    "consentPublication": "Zverejnenie v Akadémii",
+    "consentPhotoPeople": "Súhlas ľudí na fotkách",
+    "consentExternal": "Zdieľanie mimo Akadémie",
+    "yes": "áno",
+    "no": "nie",
+    "decision": "Rozhodnutie",
+    "note": "Poznámka pre klub",
+    "noteHint": "Povinná pri vrátení. Klub ju uvidí pri návrhu.",
+    "returnToClub": "Vrátiť klubu na úpravu",
+    "publish": "Zverejniť",
+    "republish": "Znova zverejniť",
+    "hide": "Stiahnuť zo zverejnenia",
+    "pin": "Pripnúť na úvod Akadémie a Noviniek",
+    "pinHint": "Pripnutá môže byť len jedna novinka.",
+    "comms": "Komunikácia SFZ",
+    "commsText": "Balík pre futbalsfz.sk a sociálne siete: názov, text a odkaz. Pošlite ho komunikácii SFZ a označte to tu.",
+    "commsNoConsent": "Klub nesúhlasil so zdieľaním mimo Akadémie.",
+    "commsMark": "Označiť ako odovzdané komunikácii",
+    "commsDone": "Odovzdané komunikácii {date}",
+    "copyPackage": "Kopírovať balík",
+    "copied": "Skopírované",
+    "externalUrl": "Článok na futbalsfz.sk",
+    "externalUrlHint": "Adresa článku, ak ho redakcia uverejnila. Novinka potom ukáže „Uverejnené aj na futbalsfz.sk“.",
+    "saveUrl": "Uložiť odkaz",
+    "openPublic": "Otvoriť zverejnenú novinku",
+    "forbidden": "Novinky spravuje admin SFZ."
   }
 }

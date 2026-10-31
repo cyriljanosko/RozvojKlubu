@@ -1,6 +1,5 @@
 "use client";
 
-import { Play } from "lucide-react";
 import { useState } from "react";
 
 /**
@@ -20,7 +19,7 @@ export function YouTubeVideo({
 }) {
   const [playing, setPlaying] = useState(false);
   return (
-    <div className="bg-muted relative aspect-video w-full overflow-hidden rounded-xl border">
+    <div className="relative aspect-video w-full overflow-hidden rounded-(--radius-lg) bg-(--surface-raised)">
       {playing ? (
         <iframe
           src={`https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0`}
@@ -36,11 +35,13 @@ export function YouTubeVideo({
           onClick={() => setPlaying(true)}
           className="group absolute inset-0 flex flex-col items-center justify-center gap-3 p-4 text-center"
         >
-          <span className="bg-primary text-primary-foreground flex size-16 items-center justify-center rounded-full transition-transform group-hover:scale-105">
-            <Play aria-hidden className="ml-1 size-7" />
+          <span className="flex size-14 items-center justify-center rounded-full bg-(--brand-blue) text-(--on-brand) transition-transform group-hover:scale-105">
+            <svg aria-hidden width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
           </span>
-          <span className="font-semibold">{playLabel}</span>
-          <span className="text-muted-foreground max-w-sm text-xs">{note}</span>
+          <span className="headline">{playLabel}</span>
+          <span className="footnote max-w-sm text-(--ink-muted)">{note}</span>
         </button>
       )}
     </div>

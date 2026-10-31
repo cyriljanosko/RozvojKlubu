@@ -5,14 +5,14 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SignOut } from "@/components/app-frame/sign-out";
+import { ThemeSelect } from "@/components/app-frame/theme";
+import { Avatar, Badge, Card, Icon } from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { clubDeps } from "@/server/clubs/deps";
 import { isAdmin } from "@/server/services/club-access";
 import { listMyClubs } from "@/server/services/clubs.service";
-
-import { SignOutButton } from "./sign-out-button";
 
 export const metadata: Metadata = { title: defaultMessages.account.title };
 
@@ -29,77 +29,95 @@ async function Account() {
   const tMentor = await getTranslations("mentor");
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-xl break-words">{user.name}</CardTitle>
-        <CardDescription className="break-all">{user.email}</CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4">
-        <dl className="grid gap-3 text-sm">
-          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-muted-foreground">{t("role")}</dt>
-            <dd className="font-medium">{tRoles(user.role)}</dd>
-          </div>
-          <div className="flex flex-col gap-0.5 sm:flex-row sm:justify-between">
-            <dt className="text-muted-foreground">{t("sportnetAccount")}</dt>
-            <dd className="font-medium">
-              {user.sportnetId ? t("sportnetLinked") : t("sportnetNotLinked")}
-            </dd>
-          </div>
-        </dl>
-        <section className="flex flex-col gap-2" aria-labelledby="my-clubs">
-          <h2 id="my-clubs" className="text-sm font-semibold">
-            {admin ? t("allClubs") : t("myClubs")}
-          </h2>
-          {clubs.length > 0 ? (
-            <ul className="divide-y rounded-md border">
-              {clubs.map((club) => (
-                <li key={club.clubId}>
-                  <Link
-                    href={`/klub/${encodeURIComponent(club.clubId)}`}
-                    className="hover:bg-muted/50 flex flex-col gap-0.5 px-3 py-2.5 text-sm"
-                  >
-                    <span className="font-medium break-words">{club.name}</span>
-                    <span className="text-muted-foreground text-xs">
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-col items-center gap-2 text-center">
+        <Avatar name={user.name || user.email} size="xl" />
+        <h1 className="title-2 break-words">{user.name || user.email}</h1>
+        {user.name && (
+          <span className="subheadline break-all text-(--ink-muted)">{user.email}</span>
+        )}
+        <div className="flex flex-wrap justify-center gap-2">
+          {user.sportnetId ? (
+            <Badge tone="success" dot>
+              {t("sportnetLinked")}
+            </Badge>
+          ) : (
+            <Badge tone="neutral">{t("sportnetNotLinked")}</Badge>
+          )}
+          {user.role !== "public" && <Badge tone="brand">{tRoles(user.role)}</Badge>}
+        </div>
+      </header>
+
+      <section className="flex flex-col gap-2" aria-labelledby="my-clubs">
+        <h2 id="my-clubs" className="label text-(--ink-muted) uppercase">
+          {admin ? t("allClubs") : t("myClubsRoles")}
+        </h2>
+        {clubs.length > 0 ? (
+          <ul className="overflow-hidden rounded-(--radius-md) bg-(--surface-raised)">
+            {clubs.map((club) => (
+              <li key={club.clubId} className="border-t border-(--hairline) first:border-t-0">
+                <Link
+                  href={`/klub/${encodeURIComponent(club.clubId)}`}
+                  className="flex min-h-15 items-center gap-3 px-4 py-2 text-(--ink) no-underline"
+                >
+                  <Avatar name={club.name} size="sm" />
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="body break-words">{club.name}</span>
+                    <span className="footnote text-(--ink-muted)">
                       {[club.union, ...club.roles.map((r) => tClubRoles(r))].join(" · ")}
                     </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-muted-foreground rounded-md border p-3 text-sm">
-              {t("noClubs")} {t("roleHint")}
-            </p>
-          )}
-        </section>
-        <Link href="/oblasti" className="text-sm font-medium underline underline-offset-4">
-          {t("areasLink")}
-        </Link>
-        {mentor && (
-          <Link href="/mentor" className="text-sm font-medium underline underline-offset-4">
-            {tMentor("link")}
-          </Link>
+                  </span>
+                  <span className="text-(--ink-muted)" aria-hidden>
+                    <Icon name="chevron-right" size={18} />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="callout rounded-(--radius-md) bg-(--surface-raised) p-4 text-(--ink-muted)">
+            {t("noClubs")} {t("roleHint")}
+          </p>
         )}
-        {admin && (
-          <nav className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
-            <Link href="/admin/kluby" className="underline underline-offset-4">
-              {tHeader("admin")}
-            </Link>
-            <Link href="/admin/obsah" className="underline underline-offset-4">
-              {tHeader("content")}
-            </Link>
-          </nav>
-        )}
-        <SignOutButton />
-      </CardContent>
-    </Card>
+        {clubs.length > 0 && <p className="footnote text-(--ink-muted)">{t("rolesSource")}</p>}
+      </section>
+
+      {(mentor || admin) && (
+        <ul className="overflow-hidden rounded-(--radius-md) bg-(--surface-raised)">
+          {mentor && <Row href="/mentor" label={tMentor("link")} />}
+          {admin && <Row href="/admin/kluby" label={tHeader("admin")} />}
+          {admin && <Row href="/admin/obsah" label={tHeader("content")} />}
+        </ul>
+      )}
+
+      <Card title={t("settings")}>
+        <ThemeSelect />
+      </Card>
+
+      <SignOut />
+    </div>
+  );
+}
+
+function Row({ href, label }: { href: string; label: string }) {
+  return (
+    <li className="border-t border-(--hairline) first:border-t-0">
+      <Link
+        href={href}
+        className="flex min-h-13 items-center gap-3 px-4 py-2 text-(--ink) no-underline"
+      >
+        <span className="body flex-1">{label}</span>
+        <span className="text-(--ink-muted)" aria-hidden>
+          <Icon name="chevron-right" size={18} />
+        </span>
+      </Link>
+    </li>
   );
 }
 
 export default function AccountPage() {
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 py-10 sm:py-16">
+    <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 py-6 sm:py-10">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <Account />
       </Suspense>

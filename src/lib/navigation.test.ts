@@ -105,9 +105,19 @@ describe("clubMenu", () => {
       "clubPlan",
       "clubLicensing",
       "clubMentoring",
-      "clubVisits",
+      "clubNews",
     ]);
     expect(menu[0]).toMatchObject({ href: "/klub/c1", match: "exact" });
+  });
+
+  it("has no separate visits item – visits live in the mentoring page (29. 10. 2026)", () => {
+    expect(ids(clubMenu("c1", ["mentor"], false))).not.toContain("clubVisits");
+  });
+
+  it("shows Novinky proposals to management and the mentor, not to coaches (ADR 0023)", () => {
+    expect(ids(clubMenu("c1", ["mentor"], false))).toContain("clubNews");
+    expect(ids(clubMenu("c1", ["coach"], false))).not.toContain("clubNews");
+    expect(ids(clubMenu("c1", [], true))).toContain("clubNews");
   });
 
   it("hides the club's own Kompas from a mentor (they see only submitted ones)", () => {
@@ -118,6 +128,6 @@ describe("clubMenu", () => {
 
 describe("adminMenu", () => {
   it("lists the existing admin screens", () => {
-    expect(ids(adminMenu())).toEqual(["adminClubs", "adminContent", "adminRoles"]);
+    expect(ids(adminMenu())).toEqual(["adminClubs", "adminContent", "adminRoles", "adminNews"]);
   });
 });

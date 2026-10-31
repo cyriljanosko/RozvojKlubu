@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
 import { ClubPin } from "@/components/favorites/club-pin";
-import { Button } from "@/components/ui/button";
+import { Badge, Card, EmptyState, LinkButton, ProgressBar } from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
@@ -17,21 +16,17 @@ import { getClubOverview } from "@/server/services/clubs.service";
 import { listAreas } from "@/server/services/content.service";
 
 import { ConfirmPlan } from "./confirm-plan";
-import { GoalStatus } from "./goal-status";
-import { PlanForm, type GoalValue } from "./plan-form";
+import { PlanBoard, type GoalCard } from "./plan-board";
 
 export const metadata: Metadata = { title: defaultMessages.plan.pageTitle };
 
 type Props = PageProps<"/klub/[clubId]/plan">;
-
-const SUGGESTED = 2;
 
 async function Plan({ params, searchParams }: Props) {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
   const clubId = decodeURIComponent((await params).clubId);
   const query = await searchParams;
-  const editRequested = query.upravit === "1";
   // priority areas of the mentor's development focus (MC-c) replace the Kompas suggestion
   const focus =
     typeof query.oblasti === "string"
@@ -53,9 +48,10 @@ async function Plan({ params, searchParams }: Props) {
   } catch (error) {
     if (error instanceof ApiError && (error.code === "FORBIDDEN" || error.code === "NOT_FOUND")) {
       return (
-        <p className="text-sm">
-          {error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
-        </p>
+        <EmptyState
+          title={error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
+          action={<LinkButton href="/moja-akademia">{tClub("back")}</LinkButton>}
+        />
       );
     }
     throw error;
@@ -65,170 +61,110 @@ async function Plan({ params, searchParams }: Props) {
     listAreas(mongoContentStore, user),
   ]);
   const areaName = (n: number) => areas.find((a) => a.number === n)?.name ?? "";
-  const base = `/klub/${encodeURIComponent(clubId)}/plan`;
   const goals = view.plan?.goals ?? [];
-  const editing = view.access === "edit" && (goals.length === 0 || editRequested);
   const summary = summarizePlan(view.plan);
   const date = (d: Date | string) =>
     format.dateTime(typeof d === "string" ? new Date(`${d}T12:00:00Z`) : new Date(d), {
       dateStyle: "medium",
     });
-
-  // an empty plan offers 2 goals in the weakest Kompas areas (decision 21. 10. 2026)
-  const blank = (area: number): GoalValue => ({
-    area,
-    title: "",
-    publicText: "",
-    indicator: "",
-    owner: "",
-    ownerId: null,
-    dueDate: null,
-    status: "todo",
-  });
-  const initial: GoalValue[] =
-    goals.length > 0
-      ? goals.map((g) => ({
-          id: g.id,
-          area: g.area,
-          title: g.title,
-          publicText: g.publicText,
-          indicator: g.indicator,
-          owner: g.owner,
-          ownerId: g.ownerId,
-          dueDate: g.dueDate,
-          status: g.status,
-        }))
-      : focus.length > 0
-        ? focus.map(blank)
-        : Array.from({ length: SUGGESTED }, (_, i) =>
-            blank(
-              view.suggestions[i] ??
-                areas.find((a) => !view.suggestions.includes(a.number))?.number ??
-                1,
-            ),
-          );
+  // an empty plan offers goals in the focus areas (MC-c) or the weakest Kompas areas (21. 10. 2026)
+  const suggestions = (focus.length > 0 ? focus : view.suggestions).slice(0, 3);
+  const cards: GoalCard[] = goals.map((g) => ({
+    id: g.id,
+    area: g.area,
+    title: g.title,
+    publicText: g.publicText,
+    indicator: g.indicator,
+    owner: g.owner,
+    ownerId: g.ownerId,
+    dueDate: g.dueDate,
+    status: g.status,
+    meta: [
+      g.owner,
+      g.dueDate ? t("dueOn", { date: date(g.dueDate) }) : null,
+      g.status === "done" && g.doneAt ? t("doneOn", { date: date(g.doneAt) }) : null,
+    ]
+      .filter(Boolean)
+      .join(" · "),
+  }));
+  const share = summary.goals > 0 ? (summary.done / summary.goals) * 100 : 0;
 
   return (
-    <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1">
-        <Link
-          href={`/klub/${encodeURIComponent(clubId)}`}
-          className="text-muted-foreground text-sm underline underline-offset-4"
-        >
-          {club.club.name}
-        </Link>
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-col gap-3">
         <div className="flex items-start gap-1">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t("heading", { season: view.season })}
-          </h1>
+          <h1 className="title-1 min-w-0 flex-1">{t("headingShort")}</h1>
           <ClubPin user={user} kind="plan" clubId={clubId} clubName={club.club.name} />
         </div>
-        {goals.length > 0 && !editing && (
-          <p className="text-muted-foreground text-sm">
-            {t("summary", { done: summary.done, goals: summary.goals })}
-            {view.plan?.confirmedAt &&
-              ` · ${t("confirmedOn", { date: date(view.plan.confirmedAt) })}`}
-            {summary.editedAfterConfirm &&
-              view.plan?.editedAt &&
-              ` · ${t("editedAfter", { date: date(view.plan.editedAt) })}`}
-          </p>
+        <div className="flex flex-wrap gap-2">
+          {view.plan?.confirmedAt && (
+            <Badge tone="success" dot>
+              {t("confirmedBadge", { date: date(view.plan.confirmedAt) })}
+            </Badge>
+          )}
+          {summary.editedAfterConfirm && view.plan?.editedAt && (
+            <Badge tone="warning">{t("editedAfter", { date: date(view.plan.editedAt) })}</Badge>
+          )}
+          <Badge tone="neutral">{t("seasonBadge", { season: view.season })}</Badge>
+        </div>
+        {summary.goals > 0 && (
+          <div className="flex flex-col gap-1.5">
+            <div className="flex justify-between gap-3">
+              <span className="subheadline">
+                {t("summary", { done: summary.done, goals: summary.goals })}
+              </span>
+              <span className="subheadline text-(--ink-muted)">{Math.round(share)} %</span>
+            </div>
+            <ProgressBar
+              value={share}
+              tone="success"
+              label={t("summary", { done: summary.done, goals: summary.goals })}
+            />
+          </div>
         )}
-      </header>
-
-      {editing ? (
-        <>
-          <p className="text-sm">{goals.length === 0 ? t("introNew") : t("introEdit")}</p>
-          {goals.length === 0 && focus.length === 0 && view.suggestions.length > 0 && (
-            <p className="text-muted-foreground text-sm">
+        {view.access === "edit" &&
+          summary.goals === 0 &&
+          view.suggestions.length > 0 &&
+          focus.length === 0 && (
+            <p className="footnote text-(--ink-muted)">
               {t("suggested", {
                 areas: view.suggestions.map((a) => `${a} ${areaName(a)}`).join(" · "),
               })}
             </p>
           )}
-          <PlanForm
-            clubId={clubId}
-            version={view.plan?.version ?? 0}
-            initial={initial}
-            members={view.members}
-            areas={areas.map((a) => ({ number: a.number, name: a.name }))}
-            planHref={base}
-          />
-        </>
-      ) : goals.length === 0 ? (
-        <p className="text-muted-foreground rounded-xl border border-dashed p-4 text-sm">
-          {t("empty")}
-        </p>
-      ) : (
-        <>
-          <ul className="flex flex-col gap-3">
-            {goals.map((g) => (
-              <li key={g.id} className="flex flex-col gap-2 rounded-xl border p-4">
-                <p className="text-muted-foreground text-xs">
-                  {g.area} · {areaName(g.area)}
-                </p>
-                <p className={`font-semibold ${g.status === "done" ? "line-through" : ""}`}>
-                  {g.title}
-                </p>
-                <p className="text-muted-foreground text-xs">
-                  {[
-                    g.owner,
-                    g.dueDate ? t("dueOn", { date: date(g.dueDate) }) : null,
-                    g.status === "done" && g.doneAt ? t("doneOn", { date: date(g.doneAt) }) : null,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </p>
-                {g.indicator && (
-                  <p className="text-sm">
-                    <span className="text-muted-foreground">{t("indicator")}: </span>
-                    {g.indicator}
-                  </p>
-                )}
-                <p className="bg-muted/50 rounded-md px-2 py-1.5 text-xs">
-                  <span className="text-muted-foreground">{t("publicShort")}: </span>
-                  {g.publicText}
-                </p>
-                {view.access === "edit" || g.ownerId === view.viewerId ? (
-                  <GoalStatus
-                    key={`${g.id}-${view.plan?.version}`}
-                    clubId={clubId}
-                    goalId={g.id}
-                    status={g.status}
-                    version={view.plan?.version ?? 0}
-                  />
-                ) : (
-                  <p className="text-xs">
-                    <span className="rounded-full border px-2 py-0.5">
-                      {t(`status.${g.status}`)}
-                    </span>
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
-          <div className="flex flex-wrap items-start gap-3">
-            {view.access === "edit" && (
-              <Button asChild variant="outline" size="sm">
-                <Link href={`${base}?upravit=1`}>{t("edit")}</Link>
-              </Button>
-            )}
-            {view.canConfirm && view.plan && (
-              <ConfirmPlan
-                clubId={clubId}
-                confirmed={view.plan.confirmedAt !== null}
-                version={view.plan.version}
-              />
-            )}
+      </header>
+
+      <PlanBoard
+        clubId={clubId}
+        version={view.plan?.version ?? 0}
+        goals={cards}
+        canEdit={view.access === "edit"}
+        viewerId={view.viewerId}
+        members={view.members}
+        areas={areas.map((a) => ({ number: a.number, name: a.name }))}
+        suggestions={suggestions}
+      />
+
+      {view.canConfirm && view.plan && goals.length > 0 && (
+        <Card variant="highlight" title={t("confirmTitle")}>
+          <div className="flex flex-col gap-3">
+            <p className="callout">{t("confirmHint")}</p>
+            <ConfirmPlan
+              clubId={clubId}
+              confirmed={view.plan.confirmedAt !== null}
+              version={view.plan.version}
+            />
           </div>
-        </>
+        </Card>
       )}
+      <p className="footnote text-(--ink-muted)">{t("rights")}</p>
     </div>
   );
 }
 
 export default function PlanPage(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:py-14">
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <Plan {...props} />
       </Suspense>

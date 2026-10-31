@@ -54,22 +54,22 @@ export function ActionChecklist({
         {items.map((a) => (
           <li key={a.id}>
             <label
-              className={`flex gap-3 rounded-lg border p-3 ${a.overdue && !a.done ? "border-destructive" : ""}`}
+              className={`flex gap-3 rounded-(--radius-sm) border border-(--hairline) p-3 ${a.overdue && !a.done ? "border-destructive" : ""}`}
             >
               <input
                 type="checkbox"
-                className="accent-primary mt-0.5 size-5 shrink-0"
+                className="mt-0.5 size-5 shrink-0 accent-(--brand-blue)"
                 checked={a.done}
                 disabled={pending}
                 onChange={(e) => toggle(a.id, e.target.checked)}
               />
               <span className="flex flex-col">
                 <span className={a.done ? "line-through" : ""}>{a.text}</span>
-                <span className="text-muted-foreground text-xs">
+                <span className="text-xs text-(--ink-muted)">
                   {a.meta}
                   {a.done && a.doneNote && ` · ${a.doneNote}`}
                   {!a.done && a.overdue && (
-                    <span className="text-destructive"> · {t("overdue")}</span>
+                    <span className="text-(--danger)"> · {t("overdue")}</span>
                   )}
                 </span>
               </span>
@@ -77,7 +77,7 @@ export function ActionChecklist({
           </li>
         ))}
       </ul>
-      <p role="status" aria-live="polite" className="text-destructive text-sm">
+      <p role="status" aria-live="polite" className="text-sm text-(--danger)">
         {error}
       </p>
     </section>

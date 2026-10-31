@@ -3,13 +3,11 @@
 import { useTranslations } from "next-intl";
 import { useState, useTransition } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, Chip, Textarea } from "@/components/sfz";
 import type { MentoringPartKey } from "@/server/services/club-mentoring.service";
 
 import { saveMentoringPartAction } from "./actions";
 
-const field =
-  "border-input bg-background focus-visible:ring-ring w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none";
 const MAX_AREAS = 3;
 
 export interface PartField {
@@ -52,9 +50,9 @@ export function PartForm({
   if (!open) {
     return (
       <Button
-        type="button"
-        variant="outline"
+        variant="secondary"
         size="sm"
+        icon={filled ? "edit" : undefined}
         className="self-start print:hidden"
         onClick={() => setOpen(true)}
       >
@@ -93,54 +91,50 @@ export function PartForm({
       className="flex flex-col gap-3 print:hidden"
     >
       {fields.map((f) => (
-        <label key={f.key} className="flex flex-col gap-1 text-sm">
-          <span className="font-medium">{t(`fields.${f.label}`)}</span>
-          {f.hint && <span className="text-muted-foreground text-xs">{t(`fields.${f.hint}`)}</span>}
-          <textarea
-            value={values[f.key] ?? ""}
-            onChange={(e) => setValues((s) => ({ ...s, [f.key]: e.target.value }))}
-            placeholder={t(`placeholders.${f.label}`)}
-            rows={3}
-            maxLength={3000}
-            className={field}
-          />
-        </label>
+        <Textarea
+          key={f.key}
+          label={t(`fields.${f.label}`)}
+          hint={f.hint ? t(`fields.${f.hint}`) : undefined}
+          value={values[f.key] ?? ""}
+          onChange={(e) => setValues((s) => ({ ...s, [f.key]: e.target.value }))}
+          placeholder={t(`placeholders.${f.label}`)}
+          rows={3}
+          maxLength={3000}
+        />
       ))}
       {areas && (
-        <fieldset className="flex flex-col gap-1 text-sm">
-          <legend className="mb-1 font-medium">{t("fields.areas")}</legend>
-          <div className="flex flex-wrap gap-1.5">
+        <fieldset className="flex flex-col gap-2">
+          <legend className="label mb-1">{t("fields.areas")}</legend>
+          <div className="flex flex-wrap gap-2">
             {areas.options.map((a) => {
               const on = chosen.includes(a.number);
               return (
-                <button
+                <Chip
                   key={a.number}
-                  type="button"
-                  aria-pressed={on}
+                  selected={on}
                   disabled={!on && chosen.length >= MAX_AREAS}
                   onClick={() =>
                     setChosen((s) => (on ? s.filter((x) => x !== a.number) : [...s, a.number]))
                   }
-                  className="aria-pressed:bg-primary aria-pressed:text-primary-foreground rounded-full border px-3 py-1 text-xs disabled:opacity-40"
                 >
                   {a.number} · {a.name}
-                </button>
+                </Chip>
               );
             })}
           </div>
         </fieldset>
       )}
       <div className="flex flex-wrap gap-2">
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" loading={pending}>
           {t("save")}
         </Button>
         {(filled || !startOpen) && (
-          <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
+          <Button variant="tertiary" onClick={() => setOpen(false)}>
             {t("cancel")}
           </Button>
         )}
       </div>
-      <p role="status" aria-live="polite" className="text-sm">
+      <p role="status" aria-live="polite" className="footnote">
         {message}
       </p>
     </form>

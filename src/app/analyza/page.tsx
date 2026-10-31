@@ -8,7 +8,19 @@ import { GroupedBars, TrendLines } from "@/components/analytics/charts";
 import { KompasHeatmap } from "@/components/analytics/kompas-heatmap";
 import { NetworkGraph } from "@/components/analytics/network-graph";
 import { PanelBoard, PrintButton, type BoardPanel } from "@/components/analytics/panel-board";
-import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionItem,
+  Alert,
+  Badge,
+  Button,
+  Checkbox,
+  EmptyState,
+  Icon,
+  LinkButton,
+  LinkChip,
+  Select,
+} from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
@@ -58,7 +70,12 @@ async function Analysis({ searchParams }: Props) {
     });
   } catch (error) {
     if (error instanceof ApiError && error.code === "FORBIDDEN") {
-      return <p className="text-sm">{t("forbidden")}</p>;
+      return (
+        <EmptyState
+          title={t("forbidden")}
+          action={<LinkButton href="/moja-akademia">{t("back")}</LinkButton>}
+        />
+      );
     }
     throw error;
   }
@@ -146,12 +163,12 @@ async function Analysis({ searchParams }: Props) {
                   height={260}
                 />
                 <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                  <table className="subheadline w-full">
                     <thead>
-                      <tr className="text-muted-foreground text-left text-xs">
-                        <th className="py-1 pr-2 font-normal">{t("compare.metric")}</th>
+                      <tr className="footnote text-left text-(--ink-muted)">
+                        <th className="py-1.5 pr-2 font-normal">{t("compare.metric")}</th>
                         {compared.map((c) => (
-                          <th key={c.clubId} className="max-w-28 px-2 py-1 font-medium">
+                          <th key={c.clubId} className="max-w-28 px-2 py-1.5 font-semibold">
                             <span className="line-clamp-2">{c.name}</span>
                           </th>
                         ))}
@@ -182,8 +199,8 @@ async function Analysis({ searchParams }: Props) {
                           (c: (typeof compared)[number]) => string | number | null,
                         ])[]
                       ).map(([key, value]) => (
-                        <tr key={key} className="border-t">
-                          <td className="text-muted-foreground py-1.5 pr-2 text-xs">
+                        <tr key={key} className="border-t border-(--hairline)">
+                          <td className="footnote py-1.5 pr-2 text-(--ink-muted)">
                             {t(`compare.${key}`)}
                           </td>
                           {compared.map((c) => (
@@ -237,7 +254,7 @@ async function Analysis({ searchParams }: Props) {
       note: t("licensing.note", { count: lic.clubs }),
       content:
         lic.clubs === 0 ? (
-          <p className="text-muted-foreground text-sm">{t("licensing.none")}</p>
+          <p className="callout text-(--ink-muted)">{t("licensing.none")}</p>
         ) : (
           <GroupedBars
             layout="vertical"
@@ -258,9 +275,9 @@ async function Analysis({ searchParams }: Props) {
               [t("activity.actions"), `${act.actionsDone}/${act.actionsTotal}`],
               [t("activity.goals"), `${act.planDone}/${act.planGoals}`],
             ].map(([label, value]) => (
-              <div key={label} className="bg-muted/50 rounded-lg p-2">
-                <p className="text-muted-foreground text-xs">{label}</p>
-                <p className="text-lg font-semibold tabular-nums">{value}</p>
+              <div key={label} className="rounded-(--radius-sm) bg-(--surface) p-2">
+                <p className="footnote text-(--ink-muted)">{label}</p>
+                <p className="title-3 tabular-nums">{value}</p>
               </div>
             ))}
           </div>
@@ -289,20 +306,19 @@ async function Analysis({ searchParams }: Props) {
             : tNet("noteClubNoPeople"),
       content: (
         <>
-          <div className="flex flex-wrap items-end gap-2 text-sm print:hidden">
-            <div className="grid grid-cols-2 overflow-hidden rounded-md border text-xs">
+          <div className="flex flex-wrap items-end gap-2 print:hidden">
+            <div className="flex gap-2">
               {(["academy", "club"] as const).map((m) => (
-                <a
+                <LinkChip
                   key={m}
                   href={keep({
                     mapa: m === "club" ? "klub" : "akademia",
                     ...(m === "club" && networkClub ? { klub: networkClub.clubId } : {}),
                   })}
-                  aria-current={map === m ? "true" : undefined}
-                  className="aria-[current]:bg-primary aria-[current]:text-primary-foreground px-3 py-1.5 text-center"
+                  selected={map === m}
                 >
                   {tNet(m)}
-                </a>
+                </LinkChip>
               ))}
             </div>
             {map === "club" && !own && view.options.length > 1 && (
@@ -315,19 +331,13 @@ async function Analysis({ searchParams }: Props) {
                       )),
                 )}
                 <input type="hidden" name="mapa" value="klub" />
-                <select
+                <Select
                   name="klub"
-                  aria-label={tNet("pickClub")}
+                  label={tNet("pickClub")}
                   defaultValue={networkClub?.clubId}
-                  className="max-w-48 rounded-md border px-2 py-1.5 text-xs"
-                >
-                  {view.options.map((c) => (
-                    <option key={c.clubId} value={c.clubId}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-                <Button type="submit" size="sm" variant="outline">
+                  options={view.options.map((c) => ({ value: c.clubId, label: c.name }))}
+                />
+                <Button type="submit" size="sm" variant="secondary">
                   {tNet("show")}
                 </Button>
               </form>
@@ -341,7 +351,7 @@ async function Analysis({ searchParams }: Props) {
               club={network.map === "club"}
             />
           ) : (
-            <p className="text-muted-foreground text-sm">{tNet("unavailable")}</p>
+            <p className="callout text-(--ink-muted)">{tNet("unavailable")}</p>
           )}
         </>
       ),
@@ -352,7 +362,7 @@ async function Analysis({ searchParams }: Props) {
       note: t("sportnet.note"),
       content:
         trend.length === 0 ? (
-          <p className="text-muted-foreground text-sm">{t("sportnet.none")}</p>
+          <p className="callout text-(--ink-muted)">{t("sportnet.none")}</p>
         ) : (
           <TrendLines
             data={trend}
@@ -366,124 +376,150 @@ async function Analysis({ searchParams }: Props) {
     },
   ];
 
+  const kpis = [
+    { key: "clubs", value: String(act.clubs) },
+    { key: "kompas", value: String(act.kompasSubmitted) },
+    { key: "licensing", value: String(act.licensingClosed) },
+    { key: "plan", value: String(act.withPlan) },
+  ];
+
   return (
-    <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
-        <p className="text-muted-foreground text-sm">
-          {t(`scope.${view.scope}`, { count: view.clubs.length })}
-        </p>
-        <p className="text-muted-foreground hidden text-xs print:block">{printed}</p>
-        <div className="mt-1 flex flex-wrap gap-2 print:hidden">
-          <Button asChild size="sm" variant="outline">
-            <a href={`/api/v1/analytics?${exportQuery}`} download>
-              {t("export.csv")}
-            </a>
-          </Button>
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-wrap items-center gap-4">
+        <div className="flex min-w-0 flex-[1_1_360px] flex-col gap-1.5">
+          <h1 className="large-title">{t("title")}</h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge tone="brand">{t(`scopeBadge.${view.scope}`)}</Badge>
+            <span className="footnote text-(--ink-muted)">
+              {t(`scope.${view.scope}`, { count: view.clubs.length })}
+            </span>
+          </div>
+          <p className="footnote hidden text-(--ink-muted) print:block">{printed}</p>
+        </div>
+        <div className="flex flex-wrap gap-2 print:hidden">
+          <a
+            href={`/api/v1/analytics?${exportQuery}`}
+            download
+            className="sfz-btn sfz-btn--secondary sfz-btn--sm no-underline"
+          >
+            <Icon name="download" size={16} />
+            {t("export.csv")}
+          </a>
           <PrintButton label={t("export.print")} />
         </div>
       </header>
 
       <form
         method="get"
-        className="flex flex-wrap items-end gap-2 rounded-xl border p-3 text-sm print:hidden"
+        className="flex flex-wrap items-end gap-3 rounded-(--radius-md) bg-(--surface-raised) p-4 print:hidden"
       >
-        <label className="flex flex-col gap-1">
-          <span className="text-muted-foreground text-xs">{t("filters.season")}</span>
-          <select
+        <div className="min-w-0 flex-[1_1_160px]">
+          <Select
             name="season"
+            label={t("filters.season")}
             defaultValue={view.season}
-            className="rounded-md border px-2 py-1.5"
-          >
-            {seasons.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-        </label>
+            options={seasons.map((s) => ({ value: s, label: s }))}
+          />
+        </div>
         {!own && (
-          <label className="flex flex-col gap-1">
-            <span className="text-muted-foreground text-xs">{t("filters.union")}</span>
-            <select
+          <div className="min-w-0 flex-[1_1_160px]">
+            <Select
               name="union"
+              label={t("filters.union")}
               defaultValue={str(q.union) ?? ""}
-              className="max-w-48 rounded-md border px-2 py-1.5"
-            >
-              <option value="">{t("filters.all")}</option>
-              {view.unions.map((u) => (
-                <option key={u} value={u}>
-                  {u}
-                </option>
-              ))}
-            </select>
-          </label>
+              options={[
+                { value: "", label: t("filters.all") },
+                ...view.unions.map((u) => ({ value: u, label: u })),
+              ]}
+            />
+          </div>
         )}
         {!own && (
-          <label className="flex flex-col gap-1">
-            <span className="text-muted-foreground text-xs">{t("filters.size")}</span>
-            <select name="size" defaultValue={size ?? ""} className="rounded-md border px-2 py-1.5">
-              <option value="">{t("filters.all")}</option>
-              {SIZES.map((s) => (
-                <option key={s} value={s}>
-                  {t(`sizes.${s}`)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div className="min-w-0 flex-[1_1_160px]">
+            <Select
+              name="size"
+              label={t("filters.size")}
+              defaultValue={size ?? ""}
+              options={[
+                { value: "", label: t("filters.all") },
+                ...SIZES.map((s) => ({ value: s, label: t(`sizes.${s}`) })),
+              ]}
+            />
+          </div>
         )}
-        <Button type="submit" size="sm">
-          {t("filters.apply")}
-        </Button>
+        <Button type="submit">{t("filters.apply")}</Button>
         {!own && view.options.length > 1 && (
-          <details className="w-full" open={comparing}>
-            <summary className="cursor-pointer py-1 font-medium">
-              {t("compare.pick")}{" "}
-              <span className="text-muted-foreground font-normal">
-                · {t("compare.picked", { count: compare.length })}
-              </span>
-            </summary>
-            <p className="text-muted-foreground text-xs">{t("compare.pickHint")}</p>
-            <div className="mt-2 grid gap-1 sm:grid-cols-2 lg:grid-cols-3">
-              {view.options.map((c) => (
-                <label key={c.clubId} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    name="clubs"
-                    value={c.clubId}
-                    defaultChecked={compare.includes(c.clubId)}
-                    className="size-4"
-                  />
-                  <span className="min-w-0 truncate">
-                    {c.name} <span className="text-muted-foreground text-xs">· {c.union}</span>
-                  </span>
-                </label>
-              ))}
-            </div>
-            <Button type="submit" size="sm" variant="outline" className="mt-2 mr-3">
-              {t("compare.submit")}
-            </Button>
-            {comparing && (
-              <a
-                href={`/analyza?season=${encodeURIComponent(view.season)}`}
-                className="text-muted-foreground mt-2 inline-block text-xs underline underline-offset-4"
+          <div className="w-full">
+            <Accordion>
+              <AccordionItem
+                title={t("compare.pick")}
+                subtitle={t("compare.picked", { count: compare.length })}
+                defaultOpen={comparing}
               >
-                {t("compare.clear")}
-              </a>
-            )}
-          </details>
+                <div className="flex flex-col gap-2">
+                  <p className="footnote text-(--ink-muted)">{t("compare.pickHint")}</p>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3">
+                    {view.options.map((c) => (
+                      <Checkbox
+                        key={c.clubId}
+                        name="clubs"
+                        value={c.clubId}
+                        defaultChecked={compare.includes(c.clubId)}
+                        label={c.name}
+                        description={c.union}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button type="submit" size="sm" variant="secondary">
+                      {t("compare.submit")}
+                    </Button>
+                    {comparing && (
+                      <a
+                        href={`/analyza?season=${encodeURIComponent(view.season)}`}
+                        className="subheadline"
+                      >
+                        {t("compare.clear")}
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </AccordionItem>
+            </Accordion>
+          </div>
         )}
       </form>
       {requested.length > MAX_COMPARE && !own && (
-        <p className="text-sm text-amber-700 dark:text-amber-400">{t("compare.tooMany")}</p>
+        <Alert tone="warning">{t("compare.tooMany")}</Alert>
       )}
 
       {view.clubs.length === 0 ? (
-        <p className="text-muted-foreground rounded-xl border border-dashed p-4 text-sm">
-          {t("empty")}
-        </p>
+        <EmptyState title={t("empty")} />
       ) : (
-        <PanelBoard panels={panels} />
+        <>
+          {!own && (
+            <section
+              className="grid grid-cols-2 gap-2 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] sm:gap-3"
+              aria-label={t("kpi.label")}
+            >
+              {kpis.map((k) => (
+                <div
+                  key={k.key}
+                  className="flex flex-col gap-1 rounded-(--radius-lg) bg-(--surface-raised) p-4"
+                >
+                  <span className="label text-(--ink-muted)">{t(`kpi.${k.key}`)}</span>
+                  <span className="large-title tabular-nums">{k.value}</span>
+                  <span className="footnote text-(--ink-muted)">
+                    {k.key === "clubs"
+                      ? t("kpi.clubsNote", { unions: new Set(view.clubs.map((c) => c.union)).size })
+                      : t("kpi.ofClubs", { count: act.clubs })}
+                  </span>
+                </div>
+              ))}
+            </section>
+          )}
+          <PanelBoard panels={panels} />
+        </>
       )}
     </div>
   );
@@ -491,7 +527,7 @@ async function Analysis({ searchParams }: Props) {
 
 export default function AnalysisPage(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-10 sm:px-6 sm:py-14">
+    <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-10">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <Analysis {...props} />
       </Suspense>

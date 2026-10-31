@@ -28,12 +28,47 @@ export const REDESIGNED_FILES = [
   // R4 G1c – Kompas na vyskúšanie; the form is shared with the club Kompas (page itself in G2)
   "src/app/kompas/**",
   "src/app/klub/[[]clubId]/kompas/kompas-form.tsx",
+  // R4 G2b – Kompas klubu a odoslaný Kompas
+  "src/app/klub/[[]clubId]/kompas/**",
+  "src/components/content/copy-line.tsx",
   // R4 G1d – Kluby a vizitka (verejná aj klubová); milestones.tsx waits for DS icons
   "src/app/vizitka/**",
   "src/components/vizitka/public-plan.tsx",
   "src/components/vizitka/stars.tsx",
   "src/components/vizitka/vizitka-view.tsx",
   "src/components/vizitka/vizitky-explorer.tsx",
+  // R4 G2a – prehľad klubu a klubová vizitka
+  "src/app/klub/[[]clubId]/page.tsx",
+  "src/app/klub/[[]clubId]/vizitka/**",
+  "src/components/academy/**",
+  // R4 G2c – plán a licenčné hodnotenie
+  "src/app/klub/[[]clubId]/plan/**",
+  "src/app/klub/[[]clubId]/licencne-hodnotenie/**",
+  // R4 G2d – mentoring a návštevy
+  "src/app/klub/[[]clubId]/mentoring/**",
+  "src/app/klub/[[]clubId]/navstevy/**",
+  // Novinky (ADR 0023) – public screens N2
+  "src/app/novinky/**",
+  "src/components/news/**",
+  // Novinky – club proposals and administration N3
+  "src/app/klub/[[]clubId]/novinky/**",
+  "src/app/admin/novinky/**",
+  // R4 G3a – Moja Akadémia; the board and charts are shared with the analysis (G4)
+  "src/app/moja-akademia/**",
+  "src/components/analytics/panel-board.tsx",
+  "src/components/analytics/charts.tsx",
+  "src/components/favorites/favorites-list.tsx",
+  // R4 G3b – účet a vzhľad
+  "src/app/ucet/page.tsx",
+  // R4 G3c – pracovisko mentora
+  "src/app/mentor/**",
+  // R4 G4 – analýza
+  "src/app/analyza/**",
+  "src/components/analytics/**",
+  // O Akadémii (návrh schválený 30. 10.) – ikony z lucide a zelený trávnik ako výnimky v súbore
+  "src/app/o-akademii/**",
+  "src/components/about/**",
+  "src/components/content/youtube-video.tsx",
 ];
 
 /** Tailwind palette colours – the design must use tokens (bg-(--surface), text-(--ink) …) instead. */

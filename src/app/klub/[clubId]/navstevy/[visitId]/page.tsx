@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
+import { Accordion, AccordionItem, Badge, EmptyState, Icon, LinkButton } from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { ApiError } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
@@ -42,15 +43,27 @@ async function Visit({ params }: Props) {
   } catch (error) {
     if (error instanceof ApiError && (error.code === "FORBIDDEN" || error.code === "NOT_FOUND")) {
       return (
-        <p className="text-sm">
-          {error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
-        </p>
+        <EmptyState
+          title={error.code === "FORBIDDEN" ? tClub("forbidden") : tClub("notFound")}
+          action={<LinkButton href="/moja-akademia">{tClub("back")}</LinkButton>}
+        />
       );
     }
     throw error;
   }
   const visit = list.visits.find((v) => v.id === visitId);
-  if (!visit) return <p className="text-sm">{t("notFound")}</p>;
+  if (!visit) {
+    return (
+      <EmptyState
+        title={t("notFound")}
+        action={
+          <LinkButton href={`/klub/${encodeURIComponent(clubId)}/mentoring#navstevy`}>
+            {t("backToMentoring")}
+          </LinkButton>
+        }
+      />
+    );
+  }
   const [club, areas] = await Promise.all([
     getClubOverview(visitDeps, user, clubId),
     listAreas(mongoContentStore, user),
@@ -63,23 +76,29 @@ async function Visit({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-5">
-      <header className="flex flex-col gap-1">
+      <header className="flex flex-col gap-2">
         <Link
-          href={`/klub/${encodeURIComponent(clubId)}/navstevy`}
-          className="text-muted-foreground text-sm underline underline-offset-4"
+          href={`/klub/${encodeURIComponent(clubId)}/mentoring#navstevy`}
+          className="body inline-flex min-h-(--touch-target) items-center gap-1 self-start no-underline"
         >
-          {club.club.name} · {t("title")}
+          <Icon name="chevron-left" size={22} />
+          {t("backToMentoring")}
         </Link>
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <p className="subheadline text-(--ink-muted)">{club.club.name}</p>
+        <h1 className="title-1">
           {t("visitOn", {
             date: format.dateTime(new Date(`${visit.date}T12:00:00Z`), { dateStyle: "long" }),
           })}
         </h1>
-        <p className="text-sm">
-          <span className="rounded-full border px-2 py-0.5 text-xs">
-            {t(`status.${visit.status}`)}
-          </span>
-        </p>
+        <Badge
+          tone={
+            visit.status === "sent" ? "success" : visit.status === "planned" ? "info" : "neutral"
+          }
+          dot
+          className="self-start"
+        >
+          {t(`status.${visit.status}`)}
+        </Badge>
       </header>
       {(mode.checklist || !mode.form || visit.status === "planned") && (
         <VisitView
@@ -154,16 +173,17 @@ function EditSection({
 }) {
   if (!collapsed) return <>{children}</>;
   return (
-    <details className="rounded-xl border p-4">
-      <summary className="cursor-pointer font-semibold">{label}</summary>
-      <div className="mt-4 flex flex-col gap-5">{children}</div>
-    </details>
+    <Accordion>
+      <AccordionItem title={label}>
+        <div className="flex flex-col gap-6">{children}</div>
+      </AccordionItem>
+    </Accordion>
   );
 }
 
 export default function VisitPage(props: Props) {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-10 sm:py-14">
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-4 py-6 sm:px-6 sm:py-8">
       <Suspense fallback={<div className="h-64" aria-hidden />}>
         <Visit {...props} />
       </Suspense>
