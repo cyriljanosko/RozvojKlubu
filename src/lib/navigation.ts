@@ -104,7 +104,11 @@ export function buildNavigation(ctx: NavContext): Navigation {
         CLUBS,
         item("signIn", "/prihlasenie", "user"),
       ],
-      more: [item("search", "/hladat", "search"), item("about", "/o-akademii", "info")],
+      more: [
+        item("news", "/novinky", "bell"),
+        item("search", "/hladat", "search"),
+        item("about", "/o-akademii", "info"),
+      ],
       activeClubId: null,
     };
   }
@@ -127,6 +131,7 @@ export function buildNavigation(ctx: NavContext): Navigation {
   const more = [
     item("account", "/ucet", "user"),
     CLUBS,
+    item("news", "/novinky", "bell"),
     item("search", "/hladat", "search"),
     item("about", "/o-akademii", "info"),
     analytics,

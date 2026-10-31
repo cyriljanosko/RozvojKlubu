@@ -13,6 +13,7 @@ import { PracticeView } from "@/components/content/practice-view";
 import { ScrollToHash } from "@/components/content/scroll-to-hash";
 import { PinButton } from "@/components/favorites/pin-button";
 import { pinnedHrefs } from "@/components/favorites/pins";
+import { AreaNews } from "@/components/news/news-blocks";
 import {
   Accordion,
   AccordionItem,
@@ -394,6 +395,11 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
           )}
         </>
       )}
+
+      {/* "Ako to robia iné kluby" (ADR 0023); hidden while the area has no club posts */}
+      <Suspense fallback={null}>
+        <AreaNews area={area.number} areaName={area.name} />
+      </Suspense>
     </article>
   );
 }
