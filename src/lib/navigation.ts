@@ -53,6 +53,8 @@ const CLUB_MEMBER_ROLES: readonly ClubRole[] = ["management", "coach"];
 const KOMPAS_ROLES: readonly ClubRole[] = ["management", "coach"];
 /** Roles with the analytics workspace in the menu (analysis 3.2: management, mentor, admin). */
 const ANALYTICS_ROLES: readonly ClubRole[] = ["management", "mentor"];
+/** Roles that see the club's Novinky proposals (news.service: coaches have no access). */
+const NEWS_ROLES: readonly ClubRole[] = ["management", "mentor"];
 
 const has = (roles: readonly ClubRole[], wanted: readonly ClubRole[]) =>
   roles.some((role) => wanted.includes(role));
@@ -174,6 +176,8 @@ export function clubMenu(clubId: string, roles: readonly ClubRole[], isAdmin: bo
     item("clubLicensing", `${base}/licencne-hodnotenie`),
     // visits are part of the mentoring page (decision 29. 10. 2026)
     item("clubMentoring", `${base}/mentoring`),
+    // club proposals for Novinky: management writes, the mentor reads (ADR 0023)
+    isAdmin || has(roles, NEWS_ROLES) ? item("clubNews", `${base}/novinky`) : null,
   ].filter((entry): entry is NavItem => entry !== null);
 }
 
@@ -183,5 +187,6 @@ export function adminMenu(): NavItem[] {
     item("adminClubs", "/admin/kluby", "trophy"),
     item("adminContent", "/admin/obsah", "edit", "exact"),
     item("adminRoles", "/admin/obsah/roly", "users"),
+    item("adminNews", "/admin/novinky", "bell"),
   ];
 }

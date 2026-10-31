@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
@@ -7,11 +8,15 @@ import { Suspense } from "react";
 import { AreaFilter } from "@/components/news/area-filter";
 import { NewsCard, NewsList } from "@/components/news/news-items";
 import { newsLabels } from "@/components/news/news-labels";
-import { EmptyState, LinkButton, LinkChip } from "@/components/sfz";
+import { Card, EmptyState, LinkButton, LinkChip } from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
+import { getCurrentUser } from "@/server/auth/session";
 import { newsDeps } from "@/server/clubs/deps";
+import { isDatabaseConfigured } from "@/server/db/mongo";
 import { NEWS_KINDS, type NewsKind } from "@/server/db/types";
+import { clubRolesFor } from "@/server/services/club-access";
 import { listPublishedNews } from "@/server/services/news.service";
+import { currentSeason } from "@/server/services/season";
 
 export const metadata: Metadata = {
   title: defaultMessages.news.title,
@@ -128,7 +133,42 @@ async function NewsPage({ searchParams }: Props) {
           )}
         </nav>
       )}
+
+      <Suspense fallback={null}>
+        <ProposeCta />
+      </Suspense>
     </div>
+  );
+}
+
+/** "Má váš klub čo povedať?" – club management goes to its proposals, others are told to sign in. */
+async function ProposeCta() {
+  const t = await getTranslations("news");
+  const user = isDatabaseConfigured()
+    ? await getCurrentUser(await headers()).catch(() => null)
+    : null;
+  let clubId: string | null = null;
+  if (user) {
+    const season = currentSeason(new Date());
+    const memberships = await newsDeps.memberships.listByUser(user.id);
+    clubId =
+      [...new Set(memberships.map((m) => m.clubId))].find((id) =>
+        clubRolesFor(memberships, id, season).includes("management"),
+      ) ?? null;
+  }
+  return (
+    <Card variant="highlight" title={t("ctaTitle")}>
+      <div className="flex flex-col gap-3">
+        <p className="callout text-(--ink-muted)">{t("ctaText")}</p>
+        {clubId ? (
+          <LinkButton href={`/klub/${encodeURIComponent(clubId)}/novinky`} icon="edit" block>
+            {t("ctaButton")}
+          </LinkButton>
+        ) : (
+          <p className="footnote text-(--ink-muted)">{t("ctaSignIn")}</p>
+        )}
+      </div>
+    </Card>
   );
 }
 

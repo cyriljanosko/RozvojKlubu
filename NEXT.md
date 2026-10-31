@@ -132,8 +132,9 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
       - [x] ADR 0023 – Novinky prijaté 31. 10. vrátane kolekcie `news_posts` (PR #117): stavy a schvaľovanie, súhlasy klubu, zdieľanie a balík pre komunikáciu SFZ.
       - [ ] Implementácia bez súborov v 3 PR (Cyril 31. 10.); e-maily klubu až s EM:
         - [x] N1 – dáta, služba `news.service.ts`, API a testy (PR #118).
-        - [ ] N2 – verejné obrazovky (vetva `feat/news-n2-public`): `/novinky`, detail so zdieľaním, blok na úvode, pri oblasti, dlaždica v Moja Akadémia, položka v menu Viac. S obsahom overiť po zverejnení prvej novinky.
-        - [ ] N3 – návrh klubu a Administrácia → Novinky (robím ja, Cyril 31. 10.); prvá novinka Akadémie „Oblasť 1 Vedenie má nové sekcie“ ako koncept, zverejní Cyril.
+        - [x] N2 – verejné obrazovky (PR #119): `/novinky`, detail so zdieľaním, blok na úvode, pri oblasti, dlaždica v Moja Akadémia, položka v menu Viac. S obsahom overiť po zverejnení prvej novinky.
+        - [ ] N3 – návrh klubu a Administrácia → Novinky (vetva `feat/news-n3-club-admin`): `/klub/:clubId/novinky` (Moje návrhy, formulár so súhlasmi), `/admin/novinky` (záložky podľa stavu, posúdenie, zverejnenie, pripnutie, balík pre komunikáciu, odkaz na futbalsfz.sk), výzva na `/novinky`, stav návrhu v dlaždici. Obrazovky po prihlásení overiť v preview (Claude sa prihlásiť nevie).
+        - [ ] Prvá novinka Akadémie „Oblasť 1 Vedenie má nové sekcie“ ako koncept (text v PR N3) – založiť po zlúčení N3, zverejní Cyril.
         - [ ] Fotky a dokumenty po rozhodnutí úložiska.
       - [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
       - [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.
