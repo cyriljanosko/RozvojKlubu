@@ -130,7 +130,11 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] ZK – sekcia **Novinky** (pôvodne „Zo života klubov“, premenované 31. 10.): príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
       - [x] Návrh na plátne (riadok „ZK – Novinky“, 5 obrazoviek) schválený Cyrilom 31. 10. okrem úložiska.
       - [x] ADR 0023 – Novinky prijaté 31. 10. vrátane kolekcie `news_posts` (PR #117): stavy a schvaľovanie, súhlasy klubu, zdieľanie a balík pre komunikáciu SFZ.
-      - [ ] Implementácia bez súborov: služba, API, `/novinky`, detail, výrezy, návrh klubu, Administrácia → Novinky; fotky a dokumenty v ďalšom PR.
+      - [ ] Implementácia bez súborov v 3 PR (Cyril 31. 10.); e-maily klubu až s EM:
+        - [ ] N1 – dáta, služba `news.service.ts`, API a testy (vetva `feat/news-n1-service`).
+        - [ ] N2 – verejné obrazovky: `/novinky`, detail, blok na úvode, pri oblasti, dlaždica v Moja Akadémia.
+        - [ ] N3 – návrh klubu a Administrácia → Novinky (robím ja, Cyril 31. 10.); prvá novinka Akadémie „Oblasť 1 Vedenie má nové sekcie“ ako koncept, zverejní Cyril.
+        - [ ] Fotky a dokumenty po rozhodnutí úložiska.
       - [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
       - [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.
     - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.
