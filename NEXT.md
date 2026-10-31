@@ -1,25 +1,113 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na konci). Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
-- [ ] DS – dizajn podľa SFZ Design System (rozhodnuté 26. 10., ADR 0016): projekt predvolene vychádza z `@slovensky-futbalovy-zvaz/design-system` (^1), nové verzie prináša Dependabot denne ako PR; žiadne natvrdo zapísané farby.
+### Redesign a Sportnet (plán `docs/dizajn/plan-redesignu.md`, ADR 0018)
+
+- [ ] Odstrániť shadcn (`src/components/ui`) – so súhlasom; dnes ho používa už len administrácia (`/admin/kluby`, `/admin/obsah`), ktorú prepíše S3.
+- [ ] Po vydaní verzie sfz-design-system s ikonami `map`, `map-pin`, `compass`, `book-open`, `star`, `Accordion` a `ProgressBar` (Slovensky-futbalovy-zvaz/sfz-design-system#1): nahradiť vlastný akordeón a ukazovateľ postupu v `src/components/sfz` a hviezdu z lucide v `pin-button.tsx`; ikony míľnikov.
+- [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Obrazovky po prihlásení (G2–G4, Novinky N3) overiť, keď bude hotové S1.
+- [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
+- [ ] Zmazať nepoužívané súbory (so súhlasom): `src/app/ucet/sign-out-button.tsx`; `src/components/search/search-form.tsx`, keď ho po prepise `/hladat` nič nepoužije.
+- [ ] Členovia a Nastavenia klubu (návrhy na plátne) až po S2 (Cyril 29. 10.).
+- [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
+- [ ] Cyril: v Claude Design overiť vzhľad artifactu „SFZ Design System“ (https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3) a nastaviť ho ako predvolený dizajn systém.
+
+### Novinky (ZK, ADR 0023)
+
+- [ ] Prvá novinka Akadémie „Oblasť 1 Vedenie klubu má nové sekcie o založení a smerovaní klubu“ – koncept SFZ založený 31. 10. (Administrácia → Novinky → Koncepty SFZ); zverejní Cyril, potom overiť zoznam, detail, blok na úvode a pri oblasti 1.
+- [ ] Fotky a dokumenty po rozhodnutí úložiska.
+- [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
+- [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.
+- [ ] Neskôr v e-maile klubu (s EM).
+
+### Pilot Stupňa II a Moja Akadémia
+
+- [ ] Pilot Stupňa II podľa mapy, časť 11 (F1 → F7). Rozsah: Vizitka, Kompas v aplikácii s odoslaním mentorovi, Moja Akadémia (vedenie, tréner, mentor), Naši tréneri; 10 pilotných klubov z Vizitky.
+- [ ] DK – karta „Váš ďalší krok“ v Moja Akadémia a sprievodca „Prvých 30 dní v Akadémii“.
+- [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.
+- [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
+- [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
+- [ ] Knižnica oblasti (ADR 0022, PR #114 – navrhnuté) a úložisko súborov; potom dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice.
+
+### Obsah
+
+- [ ] Prax pre ďalšie oblasti – keď vznikne obsah (model je spoločný).
+- [ ] Pracovná skupina: skontrolovať označenie sekcií rolami (napr. Manažér a výbor má v oblasti 8 zvýraznených 12 z 13 sekcií; fanúšik v oblasti 3 žiadnu).
+- [ ] Obrázok v úvode je zatiaľ ilustrácia; nahradiť fotkou SFZ (dodá Cyril).
+- [ ] Neskôr: rozšíriť automatické odkazy na web SFZ na ďalšie oblasti (napr. Ochrana detí v oblasti 11, ISSF v oblasti 10) – stačí doplniť `areas` v súbore.
+
+### Overiť s ozajstnými dátami
+
+- [ ] Sieťový graf: farby sa od G4 čítajú z tokenov a prevádzajú na hex (problém s `lab(…)` by mal zmiznúť – overiť v prehliadači); varovanie o vlastnej citlivosti kolieska ostáva.
+- [ ] Po prvom skutočnom uložení mentoringu overiť index `club_mentoring` cez `explain`; úlohy záveru sezóny skontrolovať v máji.
+- [ ] Rebríčky: top 3 a posun s ozajstnými dátami overiť po prvom súhlase klubu; prepínač súhlasu a tlačidlo potvrdenia overiť v preview s účtom vedenia a mentora.
+
+### F1 – prihlásenie
+
+- [ ] Overiť prihlásenie na preview (čaká na Ecomail alebo Sportnet pre Preview).
+- [ ] Overiť názov hlavičky Ecomail API (`key`) pri prvom reálnom odoslaní – nepodarilo sa potvrdiť z dokumentácie.
+- [ ] Overiť názvy claimov v Sportnet ID tokene (meno, e-mail) po registrácii klienta.
+
+### Neskôr
+
+- [ ] Tlač / PDF Vizitky, vizitka pre obec.
+- [ ] Levely klubu (malý / stredný / veľký podľa počtu hráčov) a 1–5 hviezd, samostatne pre Kompas a licenčné hodnotenie – pravidlo zatiaľ chýba.
+- [ ] Infografika „Ako Akadémia funguje“ – návrh ukázaný 17. 10., odložené.
+- [ ] Téma do budúcnosti (rozhodnuté 17. 10.): „Vypočuť si“ Metodiku – audio pri každej sekcii a playlist celej oblasti (napr. v aute). Pre auto treba nahovorené MP3 neurónovým hlasom sk-SK (hlas prehliadača sa pri zamknutom telefóne zastaví), úložisko súborov, kľúč poskytovateľa a prepis ~420 riadkov tabuliek do viet; odhad ~430 000 znakov, ~7 h audia.
+- [ ] Pri návrate na holé `/` sa zapamätaný výber obnoví až v prehliadači (krátko sa ukáže predvolená rola) – zvážiť cookie namiesto `localStorage`.
+- [ ] Hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
+- [ ] Zvýrazniť celú kartu zvolenej možnosti v Praxi (dnes len tlačidlo „Zvolené“).
+- [ ] Rodič a tímový hráč klubu pozvánkou (F7), mladí v klube po vyriešení súhlasu zákonného zástupcu; platnosť licencie a kurz ochrany detí, keď budú dáta zo Sportnetu/ISSF.
+- [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
+- [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.
+
+## Závislosti
+
+- [ ] Dependabot PR #85 (minor a patch) – rozhodne Cyril.
+- [ ] TypeScript 7 (Dependabot PR #5) – čaká na podporu v typescript-eslint (`eslint-config-next`); dovtedy TS 5.9.
+- [ ] Dependabot PR s veľkými verziami (ESLint 10, TypeScript 7, @types/node 26, actions v7) – prejsť riadene.
+
+## Pred prvými ostrými dátami
+
+- [ ] Samostatná databáza pre Preview (vlastný DB používateľ, iné `MONGODB_URI`/`MONGODB_DB` pre Preview vo Verceli). Naliehavejšie: skúšky (návštevy, mentoring, obľúbené) dnes zapisujú do tej istej databázy ako produkcia – mentoring sa preto nedal vyskúšať uložením.
+- [ ] Atlas: upgrade z M0 a obmedzenie DB používateľa len na svoju databázu.
+
+## Čaká na niekoho iného
+
+- [ ] Registrácia OAuth klienta v Sportnete (auth.sportnet.online) – client_id, client_secret, redirect URI.
+- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu ltk.solutions).
+- [ ] Ochrana vetvy `main` na GitHube (Settings → Branches) – 31. 10. stále nenastavená.
+- [ ] PR #103 – ADR 0021 roly zo sportnet.online (kolega z LTK Solutions).
+
+## Ďalej v poradí
+
+- [ ] F1 / Krok 3 – Microsoft Entra ID (tenant SFZ) – registrácia aplikácie v Azure.
+- [ ] Zrušiť nepoužívaný cluster v Atlas „Project 0“ (rozhodne Cyril).
+- [ ] CS a EN preklady (`messages/cs.json`, `messages/en.json`).
+
+## Hotové
+
+### Redesign a dizajn systém
+
+- [x] DS – dizajn podľa SFZ Design System (rozhodnuté 26. 10., ADR 0016): projekt predvolene vychádza z `@slovensky-futbalovy-zvaz/design-system` (^1), nové verzie prináša Dependabot denne ako PR; žiadne natvrdo zapísané farby.
   - [x] DS-1 – napojenie (PR #82, v produkcii `5b2daff`): balík z GitHub Packages (`.npmrc`, `NPM_GITHUB_TOKEN` v Actions, Dependabot a Verceli – nastavené 26. 10.), tokeny namiesto farieb shadcn, písmo SF Pro (namiesto Geist), tmavá téma podľa zariadenia, logo SFZ (variant D) v hlavičke, Dependabot s privátnym registrom.
-  - [ ] DS-2 a DS-3 nahradil redesign (ADR 0018, nižšie) – farby aj komponenty sa riešia pri prepise skupín.
-- [ ] Redesign a Sportnet (zadanie Cyrila 26. 10., plán `docs/dizajn/plan-redesignu.md`): celá aplikácia vyhradne v SFZ Design System bez dočasného shadcn (ADR 0018), prepracované rozloženie a UX, verejné vs. prihlásené podľa roly v klube, hlavné menu a podmenu; potom Sportnet (prihlásenie, roly, číselníky).
+  - [x] DS-2 a DS-3 nahradil redesign (ADR 0018, nižšie) – farby aj komponenty sa riešia pri prepise skupín.
+- Redesign a Sportnet (zadanie Cyrila 26. 10., plán `docs/dizajn/plan-redesignu.md`): celá aplikácia vyhradne v SFZ Design System bez dočasného shadcn (ADR 0018), prepracované rozloženie a UX, verejné vs. prihlásené podľa roly v klube, hlavné menu a podmenu; potom Sportnet (prihlásenie, roly, číselníky).
   - [x] R0 – ADR 0018, pravidlo v `CLAUDE.md`, skill `sfz-ui` (PR #88).
   - [x] R1 – analýza obrazoviek, model prístupov, menu (`docs/dizajn/analyza-obrazoviek.md`, PR #88), rozhodnutia v kap. 8.
   - [x] R2a – návrh skupiny 1 schválený 26. 10. (plátno https://claude.ai/artifact/9QUPTrsQ2KiRHh2SweNbkb).
   - [x] R2b – návrh skupín 2–5 na tom istom plátne (15 obrazoviek) schválený 26. 10.
-  - [ ] R3 – technický základ (postup schválený 26. 10., `docs/dizajn/plan-redesignu.md`): R3.1 vrstva `src/components/sfz`, R3.2 navigačný model, R3.3 rám aplikácie hneď pre celú appku, R3.4 lint + Playwright; PR do sfz-design-system s chýbajúcimi ikonami.
+  - [x] R3 – technický základ (postup schválený 26. 10., `docs/dizajn/plan-redesignu.md`): R3.1 vrstva `src/components/sfz`, R3.2 navigačný model, R3.3 rám aplikácie hneď pre celú appku, R3.4 lint + Playwright; PR do sfz-design-system s chýbajúcimi ikonami.
     - [x] R3.1 – vrstva `src/components/sfz` (PR #89): komponenty DS za klientskou hranicou, `AppNavBar`, `AppTabBar`, `LinkTabs`, akordeón, ukazovateľ postupu, pásma z tokenov.
     - [x] R3.2 – navigačný model `src/lib/navigation.ts` (PR #90). Stránky `/viac`, členovia a nastavenia klubu, číselníky a Sportnet v administrácii model zatiaľ nemá – pribudnú s R3.3, R4 a S3.
     - [x] R3.3 – rám aplikácie (PR #91): `AppFrame` v root layoute, `/viac`, `klub/[clubId]/layout.tsx`, `admin/layout.tsx`. Stará `src/components/site-header.tsx` zmazaná so súhlasom 28. 10.
     - [x] R3.4 – lint pravidlá dizajnu a Playwright screenshoty v CI (PR #92, ADR 0019).
     - [x] PR do sfz-design-system: ikony `map`, `map-pin`, `compass`, `book-open`, `star`, `Accordion` a `ProgressBar` (Slovensky-futbalovy-zvaz/sfz-design-system#1, 28. 10.). Po vydaní verzie: nahradiť vlastný akordeón a ukazovateľ postupu v `src/components/sfz` a hviezdu z lucide v `pin-button.tsx`.
   - [x] Opravy prístupov z analýzy obrazoviek (kap. 3.3), každá vlastný PR: zlúčené bod 1 (PR #93), bod 2 (PR #94), bod 3 (PR #95), bod 5 (PR #96); bod 4 – admin SFZ mení súhlas s rebríčkom za klub (rozhodnutie Cyrila 28. 10., ADR 0020, PR #97).
-  - [ ] R4… – prepis po skupinách; potom odstrániť shadcn (so súhlasom).
+  - [x] R4… – prepis po skupinách (G1–G4 hotové; shadcn odstrániť – viď Rozpracované).
     - [x] G1a – Akadémia (Hub), Oblasti, Prihlásenie (PR #98). Rozdelenie G1 na 4 PR – Cyril 28. 10.
     - [x] G1b – detail oblasti `/oblasti/[area]` (Metodika v akordeóne podľa roly, Prax na kartách so Stepperom) – PR #101.
     - [x] G1c – Kompas na vyskúšanie (PR #102): nový formulár Kompasu (spoločný s Kompasom klubu), vyskúšanie bez klubu, prenos odpovedí do Kompasu klubu (Cyril 28. 10.).
@@ -29,23 +117,28 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] G2c – plán a licenčné hodnotenie (PR #107): ciele v bočnom paneli (Drawer), licenčné oblasti v akordeóne, uzavretie a znovuotvorenie sezóny v dialógu (Cyril 29. 10.).
     - [x] G2d – mentoring a návštevy (PR #108): zoznam návštev je krok 3 na stránke Mentoring, `/navstevy` presmeruje, podmenu klubu bez položky Návštevy; formulár návštevy ostáva jeden so sekciami (Cyril 29. 10.).
     - [x] G3a – Moja Akadémia (PR #109): pevný vrch (pozdrav, výber klubu, „Váš ďalší krok“, úlohy) a nastaviteľné dlaždice v novom vzhľade (Cyril 29. 10.). Ďalej G3b účet, vzhľad a menu Viac; G3c pracovisko mentora na `/mentor` (dlaždica „Moje kluby“ sa presunie tam).
-    - [ ] G2a – prehľad klubu a klubová vizitka (vetva `feat/g2a-club-overview`): hlavička klubu s rolami a prepínačom klubu, dlaždice stavu sezóny, ďalšie kroky klubu, klub v číslach. G2b Kompas klubu + odoslaný Kompas, G2c plán + licenčné hodnotenie, G2d mentoring + návštevy (rozdelenie – Cyril 29. 10.). Členovia a Nastavenia klubu až po S2 (Cyril 29. 10.).
-    - [ ] G2b – Kompas klubu a odoslaný Kompas (vetva `feat/g2b-club-kompas`): pravidlo odoslania bez zmeny (aspoň jedna oblasť – Cyril 29. 10.), potvrdenie mentora a zrušenie adminom v dialógu.
-    - [ ] G2c – plán a licenčné hodnotenie (vetva `feat/g2c-plan-licensing`): ciele v bočnom paneli (Drawer), licenčné oblasti v akordeóne, uzavretie a znovuotvorenie sezóny v dialógu (Cyril 29. 10.).
-    - [ ] G2d – mentoring a návštevy (vetva `feat/g2d-mentoring-visits`): zoznam návštev je krok 3 na stránke Mentoring, `/navstevy` presmeruje, podmenu klubu bez položky Návštevy; formulár návštevy ostáva jeden so sekciami (Cyril 29. 10.).
-    - [x] G3b – účet a vzhľad (PR #110): účet podľa návrhu, voľba vzhľadu (podľa zariadenia / svetlý / tmavý) uložená v prehliadači. E-mailové upozornenia až s týždenným súhrnom (EM). `src/app/ucet/sign-out-button.tsx` už nič nepoužíva – zmazať so súhlasom.
+    - [x] G3b – účet a vzhľad (PR #110): účet podľa návrhu, voľba vzhľadu (podľa zariadenia / svetlý / tmavý) uložená v prehliadači. E-mailové upozornenia až s týždenným súhrnom (EM).
     - [x] G3c – pracovisko mentora na `/mentor` (PR #111): čísla sezóny, na potvrdenie (Kompas, plán), najbližšie návštevy, kluby so stavom. Dlaždica „Moje kluby v kohorte“ z Mojej Akadémie je odstránená (presunula sa sem).
     - [x] G4 – Analýza (PR #112): hlavička so štítkom rozsahu, filtre a porovnanie klubov v DS, prehľad sezóny (4 čísla), tepelná mapa a sieťový graf z tokenov. Po G4 ostáva odstrániť shadcn (`src/components/ui`) – so súhlasom. Obrazovky po prihlásení (G2–G4) overiť, keď bude hotové S1 (prihlásenie cez sportnet.online – Cyril 30. 10.).
-    - [ ] O Akadémii (vetva `feat/about-page`): podľa návrhu schváleného 30. 10.; trávnik ihriska zelený ako ilustrácia, línie jedenástky v modrej SFZ, ikony z lucide dočasne (výnimky priamo v súboroch). Potom shadcn používa už len administrácia (S3) a nepoužívaný `src/app/ucet/sign-out-button.tsx`.
-    - [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Ikony míľnikov a hviezda pinu po vydaní DS.
-    - [ ] Vizuálne testy Akadémie, Oblastí, detailu oblasti, Kompasu a Klubov potrebujú testovacie dáta (stránky čítajú MongoDB, CI databázu nemá) – navrhnúť riešenie.
-    - [ ] `src/components/search/search-form.tsx` zmazať (so súhlasom), keď ho po prepise `/hladat` nič nepoužije.
-  - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
+    - [x] O Akadémii (PR #113): podľa návrhu schváleného 30. 10.; trávnik ihriska zelený ako ilustrácia, línie jedenástky v modrej SFZ, ikony z lucide dočasne (výnimky priamo v súboroch).
   - [x] Artifact „SFZ Design System“ v Claude Design (z repozitára sfz-design-system, 26. 10.): https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3 – vzhľad overí Cyril a nastaví ho ako predvolený dizajn systém pre návrhy obrazoviek.
 - [x] Upgrade Next.js 16.4.0 → 16.4.3 (bezpečnostná oprava) – PR #83 (`6210a90`). Dependabot PR #85 (minor a patch) – rozhodne Cyril.
 
+### Novinky
+
+- [x] ZK – sekcia **Novinky** (pôvodne „Zo života klubov“, premenované 31. 10.): príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
+  - [x] Návrh na plátne (riadok „ZK – Novinky“, 5 obrazoviek) schválený Cyrilom 31. 10. okrem úložiska.
+  - [x] ADR 0023 – Novinky prijaté 31. 10. vrátane kolekcie `news_posts` (PR #117): stavy a schvaľovanie, súhlasy klubu, zdieľanie a balík pre komunikáciu SFZ.
+  - [x] Implementácia bez súborov v 3 PR (Cyril 31. 10.); e-maily klubu až s EM:
+    - [x] N1 – dáta, služba `news.service.ts`, API a testy (PR #118).
+    - [x] N2 – verejné obrazovky (PR #119): `/novinky`, detail so zdieľaním, blok na úvode, pri oblasti, dlaždica v Moja Akadémia, položka v menu Viac. S obsahom overiť po zverejnení prvej novinky.
+    - [x] N3 – návrh klubu a Administrácia → Novinky (PR #120): `/klub/:clubId/novinky` (Moje návrhy, formulár so súhlasmi), `/admin/novinky` (záložky podľa stavu, posúdenie, zverejnenie, pripnutie, balík pre komunikáciu, odkaz na futbalsfz.sk), výzva na `/novinky`, stav návrhu v dlaždici. Obrazovky po prihlásení overiť v preview (Claude sa prihlásiť nevie).
+    - [x] Prvá zverejnená novinka: školenie UEFA A (oblasť 3), 31. 10.
+    - [x] Novinky Akadémie aj v bloku pri oblasti (rozhodol Cyril 31. 10.) – blok „Novinky k oblasti“, 3 najnovšie zverejnené novinky oblasti všetkých typov.
+
+### Pilot Stupňa II (F2 – F6)
+
 - [x] Mapa produktu z návrhov v artifactoch (`docs/produkt/mapa-produktu.md`) – schválená 16. 10., roly v klube v ADR 0004.
-- [ ] Pilot Stupňa II podľa mapy, časť 11 (F1 → F7). Rozsah: Vizitka, Kompas v aplikácii s odoslaním mentorovi, Moja Akadémia (vedenie, tréner, mentor), Naši tréneri; 10 pilotných klubov z Vizitky.
 - [x] F2 – roly v klube a dáta pilotných klubov – PR #14 (zlúčený 16. 10.).
   - Snapshot (10 klubov, 19 sezón) nahratý do `rozvojklubu_dev`, Cyril: admin SFZ, vedenie FK v Nižnom Žipove, mentor 10 klubov.
   - Snapshot leží len v `data/private/` na Macu – pri inom počítači treba súbor preniesť mimo gitu.
@@ -54,9 +147,7 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] F3a – PR #15.
   - [x] F3b – Metodika 11 oblastí (106 sekcií v `rozvojklubu_dev`) – PR #16.
   - [x] F3c – Prax oblastí 3 a 4 (`area_practice` naplnené) – PR #17.
-  - [ ] Prax pre ďalšie oblasti – keď vznikne obsah (model je spoločný).
   - [x] Kvalita obsahu – oblasť 1 Vedenie (Cyril 30. 10.): sekcie Metodiky „Založenie klubu · vetva 0“, „Smerovanie klubu“ a „Predpisy SFZ, ktoré vedenie klubu potrebuje“ a Prax oblasti 1 (predseda, člen výboru, nové vedenie po voľbách, mentor zväzu) – PR #115 (zlúčený 30. 10.). Obsah je v databáze a väzba rolí oblasti 1 na Prax nastavená (katalóg rolí v6, zmena pod účtom admina Cyrila, 30. 10.); overené na webe na 375 px. Sekcia Predpisy SFZ ostáva bez kontroly právneho oddelenia (Cyril 30. 10.: „Nechaj tak“); odkazy vedú na kategórie futbalsfz.sk (pri zmene štruktúry webu SFZ upraviť `content/odkazy-sfz.json`).
-    - [ ] Dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice po jej schválení.
   - [x] Ukladanie postupu klubu v Praxi – F6d (PR #39–#41); ukazovatele neskôr.
 - [x] F4 – Kompas klubu v aplikácii (rozhodnuté 16. 10.: vypĺňa vedenie, tréner číta, mentor vidí len odoslané; kategórie len zo Sportnetu; bez ručného režimu; pri odoslaní zmrazená kópia; Vizitka pre obec neskôr).
   - [x] F4a – výpočet, model, API – PR #18 (zlúčený 16. 10.).
@@ -68,9 +159,7 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
   - [x] Zrušenie odoslania Kompasu adminom (ADR 0009) – PR #27 (zlúčený 16. 10.); skúšobné odoslanie Žipova zrušené, verejná Vizitka „zatiaľ neodoslané“.
   - [x] F5b – licenčné hodnotenie v UI – PR #22 (zlúčený 16. 10.).
   - [x] F5c – Vizitka klubu (ADR 0007): verejná `/vizitka/[clubId]` a pre roly `/klub/[clubId]/vizitka`, Kompas a licenčné hodnotenie vedľa seba za sezónu – PR #23 (zlúčený 16. 10.).
-  - [ ] Neskôr: tlač / PDF Vizitky, vizitka pre obec.
-  - [ ] Neskôr: levely klubu (malý / stredný / veľký podľa počtu hráčov) a 1–5 hviezd, samostatne pre Kompas a licenčné hodnotenie – pravidlo zatiaľ chýba.
-- [ ] F6 – Moja Akadémia (rozhodnuté 16. 10., ADR 0010).
+- F6 – Moja Akadémia (rozhodnuté 16. 10., ADR 0010).
   - [x] F6a – roly ako spravovaný obsah: 6 základných rolí a roly v 11 oblastiach podľa návrhu z 11. 10., editor admina, „vedenie“ → „Manažér a výbor“ – PR #29 (zlúčený 16. 10.).
   - [x] F6b – nástenka `/moja-akademia` pre manažéra a výbor, trénera a mentora; vlastné roly v oblastiach; prehľad mentora presunúť sem – PR #30 (zlúčený 16. 10.).
   - [x] Hub (ADR 0011) – v produkcii 16. 10. (`4501576`): verejný Hub s výberom roly (Celý klub, Manažér a výbor, Tréner a trénerka, Rodič, Dobrovoľník, Hráč / hráčka, Mentor zväzu, Fanúšik), preusporiadanie oblastí, vety pre rolu, „Začnite tu“, výber klubu, dve dráhy (Akadémia profesionálneho klubu „pripravujeme“); Metodika a Prax verejne; Metodika podľa roly (sekcie zbalené, pre rolu hore); Kompas na vyskúšanie bez uloženia.
@@ -82,18 +171,11 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
       - [x] H5b – po prihlásení – PR #37 (zlúčený 16. 10., v produkcii `5d9f0ba`; prihlásený pohľad overený lokálne, na produkcii nie – prehliadač nie je prihlásený): Vizitka klubu (hodnotenie) → úlohy z Moja Akadémia → slabé oblasti podľa Kompasu; mentor vidí svoje kluby so stavom Kompasu.
       - [x] Mentor zväzu na pozadí: rolu na úvode, v Metodike a v Praxi vidí len prihlásený mentor a admin SFZ (PR #37).
       - [x] H5c – „Ako Akadémia funguje“ pre neprihlásených: Vizitka klubu (zoznam pilotných klubov), 1. úroveň samoštúdium, 2. úroveň po prihlásení (komunikácia „pripravujeme“, mentor zväzu) – PR #38 (zlúčený 16. 10., v produkcii `16c2e65`, overené na 375 px).
-      - [ ] Obrázok v úvode je zatiaľ ilustrácia; nahradiť fotkou SFZ (dodá Cyril).
     - [x] H7 – stránka „O Akadémii“ `/o-akademii` – PR #43 (zlúčený 17. 10.): základné info, pomoc klubom na každej úrovni a v každej oblasti, prečo futbal v obci, benefity klubu (obec, škola, rodiny, mladí), význam športovania cez futbal (komunita, zdravie, výchova); krátke texty s ikonami, bez čísel; odkaz z úvodu, z päty a ikonou v hlavičke.
     - [x] Video „Akadémia za 8 minút“ na `/o-akademii` (YouTube neverejné, načíta sa po kliknutí) – PR #44 (zlúčený 17. 10., v produkcii `713faf6`, prehranie overené).
     - [x] „Prečo 11 oblastí“ na `/o-akademii` – PR #47 (zlúčený 17. 10.); ikony a ihrisko v perspektíve (vetva `feat/eleven-icons`, 18. 10., PR na review): jedenástka 1-4-3-3 – brankár Vedenie; obrana Financie, Právo, Dáta, Prostredie; stred Manažér, Tréneri, Dobrovoľníci; útok Hráč, Aktivity, Marketing; po kliknutí okno s opisom oblasti a odkazom na detail.
-    - [ ] Infografika „Ako Akadémia funguje“ – návrh ukázaný 17. 10., odložené.
-    - [ ] Neskôr (téma do budúcnosti, rozhodnuté 17. 10.): „Vypočuť si“ Metodiku – audio pri každej sekcii a playlist celej oblasti (napr. v aute). Pre auto treba nahovorené MP3 neurónovým hlasom sk-SK (hlas prehliadača sa pri zamknutom telefóne zastaví), úložisko súborov, kľúč poskytovateľa a prepis ~420 riadkov tabuliek do viet; odhad ~430 000 znakov, ~7 h audia.
-    - [ ] Neskôr: pri návrate na holé `/` sa zapamätaný výber obnoví až v prehliadači (krátko sa ukáže predvolená rola) – zvážiť cookie namiesto `localStorage`.
     - [x] H4 – Metodika podľa roly: označenie 106 sekcií navrhne a nasadí Claude ako návrh, neskôr ho skontroluje pracovná skupina; môže navrhnúť aj doplnenie obsahu (vetva `feat/methodology-roles`): hotové, katalóg v5 v DB (súhlas 16. 10.) – PR #34 (zlúčený 16. 10.).
-    - [ ] Pracovná skupina: skontrolovať označenie sekcií rolami (napr. Manažér a výbor má v oblasti 8 zvýraznených 12 z 13 sekcií; fanúšik v oblasti 3 žiadnu).
-    - [ ] Neskôr: knižnica vzorov s dokumentmi (PDF, Word, Excel, obrázky) – úložisko súborov rozhodnúť.
     - [x] H6 – vyhľadávanie – PR #42 (zlúčený 17. 10., tipy schválené): pole na úvodnej stránke pod blokom „Ako Akadémia funguje“ a v hlavičke; prehľadáva oblasti, Metodiku, Prax a vzory a kluby (Vizitka), bez otázok Kompasu; bez diakritiky a so skloňovaním; výsledky na `/hladat`, `GET /api/v1/search`; rýchle tipy pod poľom (návrh, schváli Cyril); mentorská Prax len pre mentorov.
-    - [ ] Neskôr: hodnotenie klubu očami hráča (do 18 r. so súhlasom zákonného zástupcu); obsah dráhy Akadémia profesionálneho klubu.
   - [x] Návšteva mentora (rozhodnuté 21. 10., z analýzy FAF/DFB): mentor zväzu a admin SFZ zapisujú návštevu (dátum, forma, prítomní menom, zhrnutie, zistenia pri vybraných oblastiach, dohodnuté kroky – čo, oblasť, kto, do kedy); rozpracovaná → odoslaná klubu → zrušená (nič sa nemaže); vedenie a tréner čítajú odoslané a odškrtávajú kroky; kroky ako úlohy v Moja Akadémia; v neverejnej Vizitke posledná návšteva a otvorené kroky; bez e-mailu zatiaľ.
     - [x] MV-a – kolekcia `mentor_visits`, služba, API – PR #53 (zlúčený 21. 10.).
     - [x] MV-b – formulár mentora – PR #54 (zlúčený 21. 10.): prítomní zo zoznamu ľudí s rolou v klube + voľné pole (pole `participantIds`), pripomienka minulej návštevy a najslabších oblastí, zrušenie aj po odoslaní, úprava krokov po odoslaní. Overiť po prihlásení v prehliadači.
@@ -106,7 +188,6 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] DA-b – stránka `/analyza`, 4 panely, filtre, mobil (PR #60).
     - [x] DA-c – porovnanie klubov, usporiadanie panelov, export (PR #62).
     - [x] DA-d – sieťový graf (PR #63). Ťuknutie prstom na skutočnom telefóne overí Cyril.
-    - [ ] Sieťový graf: farby sa od G4 čítajú z tokenov a prevádzajú na hex (problém s `lab(…)` by mal zmiznúť – overiť v prehliadači); varovanie o vlastnej citlivosti kolieska ostáva.
   - [x] Moja Akadémia ako nástenka (rozhodnuté 22. 10., ADR 0012): dlaždice s posúvaním a skrytím, pripínanie obľúbených hviezdičkou (oblasť, sekcia Metodiky, krok a vzor Praxe, Vizitka, plán a návštevy klubu), prepínač klubu pri viacerých kluboch, malý graf Kompasu, vlastné dlaždice pre admina a mentora; uložené v účte (kolekcia `user_preferences`, súhlas).
     - [x] MD-a – kolekcia `user_preferences`, služba, API (PR #64).
     - [x] MD-b – nástenka v Moja Akadémia (PR #65). Dva stĺpce od 1024 px overiť na počítači.
@@ -116,68 +197,17 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [x] MC-b – rozšírená návšteva v UI vrátane hodnotenia podľa tém (PR #68, ADR 0014).
     - [x] MC-c – stránka Mentoring klubu (PR #69).
     - [x] MC-d – úlohy, nástenka, Vizitka a prehľady (PR #70, v produkcii `aca4c0b`).
-    - [ ] Po prvom skutočnom uložení mentoringu overiť index `club_mentoring` cez `explain`; úlohy záveru sezóny skontrolovať v máji.
-  - [ ] Vizitky klubov na mape (rozhodnuté 26. 10.): verejná stránka `/vizitka` – mapa SR (RFZ / ObFZ, farba podľa počtu klubov, klik = filter), filtre (názov, RFZ, ObFZ, veľkosť), zoznam verejných Vizitiek; zatiaľ pilotné kluby; hranice z geoBoundaries (OSM, ODbL); odkaz z úvodu a z hlavičky.
+  - [x] Vizitky klubov na mape (rozhodnuté 26. 10.): verejná stránka `/vizitka` – mapa SR (RFZ / ObFZ, farba podľa počtu klubov, klik = filter), filtre (názov, RFZ, ObFZ, veľkosť), zoznam verejných Vizitiek; zatiaľ pilotné kluby; hranice z geoBoundaries (OSM, ODbL); odkaz z úvodu a z hlavičky.
     - [x] VK-a – mapa, filtre a zoznam (PR #75, v produkcii `37f86dd`).
     - [x] Tabuľka okres → ObFZ skontrolovaná Cyrilom (26. 10.).
     - [x] VK-b – rebríčky v `/vizitka` (PR #77, v produkcii `e9b3501`); blok hľadania pod mapou, zoznam až po hľadaní (PR #78, `de5ed81`).
-  - [ ] Mentorský smer (rozhodnuté 26. 10.): prioritne pomôcť klubom a ľuďom v klube, hodnotenie a rebríčky majú motivovať.
-    - [ ] MR – motivačné rebríčky (ADR 0015): súhlas klubu (opt-in, vedenie), Kompas potvrdený mentorom (odznak), najväčší posun oproti minulej sezóne, míľniky sezóny, verejne len top 3 v každej veľkosti + hviezdy bez poradia.
+  - Mentorský smer (rozhodnuté 26. 10.): prioritne pomôcť klubom a ľuďom v klube, hodnotenie a rebríčky majú motivovať.
+    - [x] MR – motivačné rebríčky (ADR 0015): súhlas klubu (opt-in, vedenie), Kompas potvrdený mentorom (odznak), najväčší posun oproti minulej sezóne, míľniky sezóny, verejne len top 3 v každej veľkosti + hviezdy bez poradia.
       - [x] MR-a – dáta a API: kolekcia `club_settings` (súhlas), `confirmedAt`/`confirmedBy` v `kompas_submissions` (PR #79, v produkcii `fb735d7`).
       - [x] MR-b – pravidlá (rozhodnuté 26. 10.): kluby bez súhlasu v zozname neutrálne bez hviezd, verejne všetkých 6 míľnikov, posun v bodoch aj hviezdach, top 3 vždy (aj menej klubov); `GET /api/v1/vizitky` – vetva `feat/mr-b-ranking-rules`, PR #80 (v produkcii `51f7f4a`). Top 3 a posun s ozajstnými dátami overiť po prvom súhlase klubu.
       - [x] MR-c – rozhranie (rozhodnuté 26. 10.): súhlas vo Vizitke klubu + úloha vedenia, kým nerozhodne; „Potvrdiť Kompas“ na detaile odoslaného Kompasu + úloha mentora; odznak „potvrdené mentorom“ v rebríčku aj vo verejnej Vizitke (pri každom klube); míľniky v rebríčku, vo verejnej Vizitke (so súhlasom) a dlaždica v Moja Akadémia – PR #81 (v produkcii `38c20da`). Prepínač súhlasu a tlačidlo potvrdenia overiť v preview s účtom vedenia a mentora.
-    - [ ] DK – karta „Váš ďalší krok“ v Moja Akadémia a sprievodca „Prvých 30 dní v Akadémii“.
-    - [ ] ZK – sekcia **Novinky** (pôvodne „Zo života klubov“, premenované 31. 10.): príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
-      - [x] Návrh na plátne (riadok „ZK – Novinky“, 5 obrazoviek) schválený Cyrilom 31. 10. okrem úložiska.
-      - [x] ADR 0023 – Novinky prijaté 31. 10. vrátane kolekcie `news_posts` (PR #117): stavy a schvaľovanie, súhlasy klubu, zdieľanie a balík pre komunikáciu SFZ.
-      - [ ] Implementácia bez súborov v 3 PR (Cyril 31. 10.); e-maily klubu až s EM:
-        - [x] N1 – dáta, služba `news.service.ts`, API a testy (PR #118).
-        - [x] N2 – verejné obrazovky (PR #119): `/novinky`, detail so zdieľaním, blok na úvode, pri oblasti, dlaždica v Moja Akadémia, položka v menu Viac. S obsahom overiť po zverejnení prvej novinky.
-        - [x] N3 – návrh klubu a Administrácia → Novinky (PR #120): `/klub/:clubId/novinky` (Moje návrhy, formulár so súhlasmi), `/admin/novinky` (záložky podľa stavu, posúdenie, zverejnenie, pripnutie, balík pre komunikáciu, odkaz na futbalsfz.sk), výzva na `/novinky`, stav návrhu v dlaždici. Obrazovky po prihlásení overiť v preview (Claude sa prihlásiť nevie).
-        - [ ] Prvá novinka Akadémie „Oblasť 1 Vedenie klubu má nové sekcie o založení a smerovaní klubu“ – koncept SFZ založený 31. 10. (Administrácia → Novinky → Koncepty SFZ); zverejní Cyril, potom overiť zoznam, detail, blok na úvode a pri oblasti 1.
-        - [x] Prvá zverejnená novinka: školenie UEFA A (oblasť 3), 31. 10.
-        - [x] Novinky Akadémie aj v bloku pri oblasti (rozhodol Cyril 31. 10.) – blok „Novinky k oblasti“, 3 najnovšie zverejnené novinky oblasti všetkých typov.
-        - [ ] Fotky a dokumenty po rozhodnutí úložiska.
-      - [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
-      - [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.
-    - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.
-    - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
-  - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
   - [x] Prepojenie na web SFZ (rozhodnuté 22. 10.): v oblasti 3 odkaz na futbalsfz.sk pri prvej zmienke školenia, licencie a kontinuálneho vzdelávania v Metodike a Praxi, rozbaľovací rozcestník „Vzdelávanie trénera“ a dlaždica v Moja Akadémia – PR #72 (v produkcii `4265fc6`, 38 odkazov v oblasti 3).
-    - [ ] Neskôr: rozšíriť automatické odkazy na ďalšie oblasti (napr. Ochrana detí v oblasti 11, ISSF v oblasti 10) – stačí doplniť `areas` v súbore.
   - [x] F6d – postup v Praxi (rozhodnuté 17. 10.): spoločný za klub, oblasť a sezónu; zapisuje vedenie a tréner, mentor číta; bez prihlásenia sa neukladá; nie vo Vizitke; ukazovatele a čísla mentora neskôr.
     - [x] F6d-a – kolekcia `practice_progress` (index `clubId + season + area`), služba, `GET|PUT /api/v1/clubs/:clubId/practice/:area` – PR #39 (zlúčený 17. 10.).
     - [x] F6d-b – UI v Praxi: úlohy prvého kroku, výber možnosti a „hotové“ pri kroku, priebeh roly, výber klubu – PR #40 (zlúčený 17. 10.).
-    - [ ] Neskôr: zvýrazniť celú kartu zvolenej možnosti (dnes len tlačidlo „Zvolené“).
     - [x] F6d-c – úloha „pokračujte krokom…“ v Moja Akadémia a na úvodnej obrazovke, postup pri slabej oblasti – PR #41 (zlúčený 17. 10.). Úloha sa ukáže až keď klub v Praxi začal.
-  - [ ] Neskôr: rodič a tímový hráč klubu pozvánkou (F7), mladí v klube po vyriešení súhlasu zákonného zástupcu; platnosť licencie a kurz ochrany detí, keď budú dáta zo Sportnetu/ISSF.
-- [ ] Zdroj licencií trénerov pre F6 (Naši tréneri) – zatiaľ zo snapshotu.
-- [ ] Sportnet API: verejné čítacie rozhranie existuje (kluby, družstvá, súpisky), zatiaľ ho nepoužívame (ADR 0005). Neverejné API s kľúčom – zistiť.
-
-- [ ] F1 – zostáva:
-  - [ ] Overiť prihlásenie na preview (čaká na Ecomail alebo Sportnet pre Preview).
-  - [ ] Overiť názov hlavičky Ecomail API (`key`) pri prvom reálnom odoslaní – nepodarilo sa potvrdiť z dokumentácie.
-  - [ ] Overiť názvy claimov v Sportnet ID tokene (meno, e-mail) po registrácii klienta.
-
-## Závislosti
-
-- [ ] TypeScript 7 (Dependabot PR #5) – čaká na podporu v typescript-eslint (`eslint-config-next`); dovtedy TS 5.9.
-
-## Pred prvými ostrými dátami
-
-- [ ] Samostatná databáza pre Preview (vlastný DB používateľ, iné `MONGODB_URI`/`MONGODB_DB` pre Preview vo Verceli). Naliehavejšie: skúšky (návštevy, mentoring, obľúbené) dnes zapisujú do tej istej databázy ako produkcia – mentoring sa preto nedal vyskúšať uložením.
-- [ ] Atlas: upgrade z M0 a obmedzenie DB používateľa len na svoju databázu.
-
-## Čaká na niekoho iného
-
-- [ ] Registrácia OAuth klienta v Sportnete (auth.sportnet.online) – client_id, client_secret, redirect URI.
-- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu ltk.solutions).
-- [ ] Ochrana vetvy `main` na GitHube (Settings → Branches).
-- [ ] Prístup Claude ku GitHubu (zatiaľ push robí Cyril).
-
-## Ďalej v poradí
-
-- [ ] F1 / Krok 3 – Microsoft Entra ID (tenant SFZ) – registrácia aplikácie v Azure.
-- [ ] Dependabot PR s veľkými verziami (ESLint 10, TypeScript 7, @types/node 26, actions v7) – prejsť riadene.
-- [ ] Zrušiť nepoužívaný cluster v Atlas „Project 0“ (rozhodne Cyril).
-- [ ] CS a EN preklady (`messages/cs.json`, `messages/en.json`).
