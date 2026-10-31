@@ -129,7 +129,8 @@ Aktualizované: 31. 10. 2026. Overuj proti `git log` – môže byť zastarané.
     - [ ] DK – karta „Váš ďalší krok“ v Moja Akadémia a sprievodca „Prvých 30 dní v Akadémii“.
     - [ ] ZK – sekcia **Novinky** (pôvodne „Zo života klubov“, premenované 31. 10.): príbehy klubov (so súhlasom klubu), odporúčania, novinky Akadémie; úvod (3 najnovšie), `/novinky`, pri oblasti, dlaždica v Moja Akadémia, neskôr v e-maile; bez chatu.
       - [x] Návrh na plátne (riadok „ZK – Novinky“, 5 obrazoviek) schválený Cyrilom 31. 10. okrem úložiska.
-      - [ ] ADR 0023 – Novinky (navrhnuté, vetva `docs/news-adr`): kolekcia `news_posts`, stavy a schvaľovanie, súhlasy klubu, zdieľanie a balík pre komunikáciu SFZ. Prijať a schváliť novú kolekciu.
+      - [x] ADR 0023 – Novinky prijaté 31. 10. vrátane kolekcie `news_posts` (PR #117): stavy a schvaľovanie, súhlasy klubu, zdieľanie a balík pre komunikáciu SFZ.
+      - [ ] Implementácia bez súborov: služba, API, `/novinky`, detail, výrezy, návrh klubu, Administrácia → Novinky; fotky a dokumenty v ďalšom PR.
       - [ ] Úložisko fotiek a dokumentov spolu s knižnicou (ADR 0022) a kontrola súborov nahratých klubmi.
       - [ ] Dohodnúť, kto v komunikácii SFZ preberá balíky na futbalsfz.sk a sociálne siete.
     - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.

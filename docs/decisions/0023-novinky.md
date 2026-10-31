@@ -1,6 +1,6 @@
 # 0023 – Novinky: príbehy klubov, odporúčania a novinky Akadémie
 
-- Stav: navrhnuté (úložisko súborov sa rozhodne spolu s knižnicou, ADR 0022)
+- Stav: prijaté 31. 10. 2026 vrátane novej kolekcie `news_posts` (úložisko súborov sa rozhodne spolu s knižnicou, ADR 0022)
 - Dátum: 2026-10-31
 - Rozhodol: Cyril Janoško
 - Návrh obrazoviek: plátno redizajnu, riadok „ZK – Novinky“ (https://claude.ai/artifact/9QUPTrsQ2KiRHh2SweNbkb),
