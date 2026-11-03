@@ -1,6 +1,6 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na konci). Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 3. 11. 2026 (doména klub.futbalsfz.sk, ADR 0021 zlúčené; hotové veci sú v sekcii Hotové na konci). Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
@@ -13,6 +13,9 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 - [ ] Zmazať nepoužívané súbory (so súhlasom): `src/app/ucet/sign-out-button.tsx`; `src/components/search/search-form.tsx`, keď ho po prepise `/hladat` nič nepoužije.
 - [ ] Členovia a Nastavenia klubu (návrhy na plátne) až po S2 (Cyril 29. 10.).
 - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
+  - [x] S2-a – zdroje rolí overené v dokumentácii aj na živom verejnom API, ADR 0021 prijaté 28. 10. (Ján), zlúčené 3. 11. (PR #103): schéma `club_memberships` so `source`/`validTo`/`syncedAt`, `management` → `club_manager`, klubový manažér = CRM `admin`/`manager`, obnova pri prihlásení + ručne (bez cronu). Tréner ↔ klub sa v Sportnete nenašiel – otázka B1 v `docs/sportnet/otazky-sportnet-online.md`.
+  - [ ] S2-b – implementácia podľa ADR 0021 (typy, klient Sportnetu, `deriveClubRoles`, nahradenie `management`, migrácia s dry-run).
+  - [ ] OAuth klient Sportnetu – nastaví Ján podľa `docs/sportnet/otazky-sportnet-online.md` časť A a pošle otázky B1–B9 vývojárom sportnet.online (rozhodnutie 28. 10.).
 - [ ] Cyril: v Claude Design overiť vzhľad artifactu „SFZ Design System“ (https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3) a nastaviť ho ako predvolený dizajn systém.
 
 ### Novinky (ZK, ADR 0023)
@@ -31,6 +34,11 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
 - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
 - [ ] Knižnica oblasti (ADR 0022, PR #114 – navrhnuté) a úložisko súborov; potom dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice.
+  - [x] Dokumenty oblasti 1 (31. 10.): 14 dokumentov v brandingu SFZ (Word alebo Excel podľa typu + PDF) z vzorov Praxe a sekcie „Založenie klubu“, pripravené mimo repa v `~/Documents/Knižnica SFZ/Oblasť 01 – Vedenie klubu/`.
+  - [ ] Cyril: skontrolovať dokumenty oblasti 1 a nahrať ich do SharePointu SFZ; doplniť originál UEFA Grassroots Club Development Framework 2022.
+  - [ ] Pri nahratí do knižnice určiť prístup každého dokumentu (verejný / po prihlásení); „Rozhovor o vedení pri návšteve mentora“ je pre mentora zväzu.
+  - [ ] Dokumenty oblastí 2 – 4 (vzory v Metodike a Praxi, spolu asi 35); oblasti 5 – 11 zatiaľ vzory nemajú.
+  - [ ] Pri zmene textu vzoru v Metodike alebo Praxi treba pregenerovať aj súbor – zdroj pravdy je obsah v aplikácii.
 - [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, PR #126 zlúčený 31. 10., v DB aj s odkazmi v oblastiach 2, 6, 11): termíny zápisov do 1. ročníka a materskej školy overiť s právnym oddelením (sekcia je bez `reviewedAt`). Príručku v knižnici zosúladiť so sekciou (školské súťaže → EduPage, Školský pohár SFZ). Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
 
 ### Obsah
@@ -79,9 +87,9 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 ## Čaká na niekoho iného
 
 - [ ] Registrácia OAuth klienta v Sportnete (auth.sportnet.online) – client_id, client_secret, redirect URI.
-- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu ltk.solutions).
+- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu futbalsfz.sk).
 - [ ] Ochrana vetvy `main` na GitHube (Settings → Branches) – 31. 10. stále nenastavená.
-- [ ] PR #103 – ADR 0021 roly zo sportnet.online (kolega z LTK Solutions).
+- [ ] Doména `klub.futbalsfz.sk` (3. 11.): overiť vo Verceli `BETTER_AUTH_URL` a `APP_URL` v Production, v Sportnete pridať `klub.futbalsfz.sk` do `allowed_hosts` (A3 v `docs/sportnet/otazky-sportnet-online.md`), po overení domény v Ecomaile zmeniť `EMAIL_FROM`.
 
 ## Ďalej v poradí
 

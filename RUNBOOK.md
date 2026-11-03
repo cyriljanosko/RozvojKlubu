@@ -4,9 +4,11 @@
 
 | Prostredie | Zdroj         | URL                                        | Databáza                               |
 | ---------- | ------------- | ------------------------------------------ | -------------------------------------- |
-| Production | vetva `main`  | https://rozvojklubu.ltk.solutions          | `rozvojklubu_dev`                      |
+| Production | vetva `main`  | https://klub.futbalsfz.sk                  | `rozvojklubu_dev`                      |
 | Preview    | každý PR      | `rozvojklubu-git-<vetva>-cyro5.vercel.app` | `rozvojklubu_dev` (zdieľaná – dočasne) |
 | Lokálne    | `npm run dev` | http://localhost:3000                      | podľa `.env.local`                     |
+
+Stará doména `rozvojklubu.ltk.solutions` presmerúva na `klub.futbalsfz.sk` (migrácia 3. 11. 2026).
 
 Preview a vercel.app adresy chráni Vercel Authentication (prihlásenie do Vercelu).
 
@@ -18,7 +20,7 @@ a `VERCEL_URL`, ktoré nastavuje Vercel sám (`src/server/auth/base-url.ts`). Pr
 
 1. PR do `main` → Vercel vytvorí Preview a GitHub Actions spustí CI (format, lint, typecheck, test, build).
 2. Po review merge commit (ADR 0017) → Vercel nasadí produkciu automaticky.
-3. Kontrola: `https://rozvojklubu.ltk.solutions/api/v1/health` → `status: ok`, `database: ok`, `version` = prvých 7 znakov commitu.
+3. Kontrola: `https://klub.futbalsfz.sk/api/v1/health` → `status: ok`, `database: ok`, `version` = prvých 7 znakov commitu.
 
 Nastavenia projektu Vercel: Framework **Next.js**, Node 24.x, región funkcií **fra1**. Premenné prostredia: viď `.env.example`.
 

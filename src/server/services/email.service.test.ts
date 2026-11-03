@@ -49,12 +49,12 @@ describe("sendMagicLinkEmail", () => {
   });
 
   it("sends via Ecomail when configured", async () => {
-    const deps = baseDeps({ apiKey: "k", fromEmail: "noreply@ltk.solutions" });
+    const deps = baseDeps({ apiKey: "k", fromEmail: "noreply@futbalsfz.sk" });
     await sendMagicLinkEmail(deps, "jan@sfz.sk", "https://x/link");
     expect(deps.send).toHaveBeenCalledWith(
       "k",
       expect.objectContaining({
-        fromEmail: "noreply@ltk.solutions",
+        fromEmail: "noreply@futbalsfz.sk",
         to: [{ email: "jan@sfz.sk" }],
       }),
     );
