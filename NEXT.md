@@ -13,6 +13,9 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 - [ ] Zmazať nepoužívané súbory (so súhlasom): `src/app/ucet/sign-out-button.tsx`; `src/components/search/search-form.tsx`, keď ho po prepise `/hladat` nič nepoužije.
 - [ ] Členovia a Nastavenia klubu (návrhy na plátne) až po S2 (Cyril 29. 10.).
 - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
+  - [x] S2-a – zdroje rolí overené v dokumentácii aj na živom verejnom API, ADR 0021 prijaté 28. 10. (Ján): schéma `club_memberships` so `source`/`validTo`/`syncedAt`, `management` → `club_manager`, klubový manažér = CRM `admin`/`manager`, obnova pri prihlásení + ručne (bez cronu). Tréner ↔ klub sa v Sportnete nenašiel – otázka B1 v `docs/sportnet/otazky-sportnet-online.md`.
+  - [ ] S2-b – implementácia podľa ADR 0021 (typy, klient Sportnetu, `deriveClubRoles`, nahradenie `management`, migrácia s dry-run).
+  - [ ] OAuth klient Sportnetu – nastaví Ján podľa `docs/sportnet/otazky-sportnet-online.md` časť A a pošle otázky B1–B9 vývojárom sportnet.online (rozhodnutie 28. 10.).
 - [ ] Cyril: v Claude Design overiť vzhľad artifactu „SFZ Design System“ (https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3) a nastaviť ho ako predvolený dizajn systém.
 
 ### Novinky (ZK, ADR 0023)
