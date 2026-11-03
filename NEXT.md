@@ -34,6 +34,7 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
 - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
 - [ ] Knižnica oblasti (ADR 0022, PR #114 – navrhnuté) a úložisko súborov; potom dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice.
+- [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, vetva `content/area1-municipality-school`): po zlúčení zapísať sekciu do DB a odkazy do existujúcich sekcií oblastí 2, 6, 11 (súhlas Cyrila); overiť na 375 px; rozhodnúť `reviewedAt` (sekciu nekontrolovalo právne oddelenie); overiť McDonald's Cup a termíny zápisov s právnym oddelením. Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
 
 ### Obsah
 
@@ -81,7 +82,7 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 ## Čaká na niekoho iného
 
 - [ ] Registrácia OAuth klienta v Sportnete (auth.sportnet.online) – client_id, client_secret, redirect URI.
-- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu ltk.solutions).
+- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu futbalsfz.sk).
 - [ ] Ochrana vetvy `main` na GitHube (Settings → Branches) – 31. 10. stále nenastavená.
 - [ ] PR #103 – ADR 0021 roly zo sportnet.online (kolega z LTK Solutions).
 

@@ -8,6 +8,8 @@
 | Preview    | každý PR      | `rozvojklubu-git-<vetva>-cyro5.vercel.app` | `rozvojklubu_dev` (zdieľaná – dočasne) |
 | Lokálne    | `npm run dev` | http://localhost:3000                      | podľa `.env.local`                     |
 
+Stará doména `rozvojklubu.ltk.solutions` presmerúva na `klub.futbalsfz.sk` (migrácia 3. 11. 2026).
+
 Preview a vercel.app adresy chráni Vercel Authentication (prihlásenie do Vercelu).
 
 Adresa pre prihlasovanie (odkazy v e-mailoch, callbacky): Production berie `BETTER_AUTH_URL`.

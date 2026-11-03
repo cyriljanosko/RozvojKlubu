@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Oblasť 1 Vedenie – Obec, škola a klub: sekcia Metodiky o trojuholníku spolupráce (čo si strany dávajú, kto s kým hovorí, materská, základná a stredná škola, možnosti obce, ročný kalendár, programy SFZ Dajme spolu gól a UEFA Disney Playmakers); odkazy na ňu v oblastiach 2, 6 a 11.
 - Novinky: odkazy v texte novinky sú klikateľné – `[text](https://…)` alebo holá adresa, otvoria sa v novom okne so značkou ↗ ako v Metodike; nápoveda vo formulári.
 - Novinky – návrhy klubov a administrácia (ADR 0023, N3): vedenie klubu navrhuje príbeh alebo odporúčanie v klube (Novinky klubu – zoznam návrhov so stavmi, formulár so štyrmi časťami a súhlasmi, odoslanie SFZ, potvrdenie úprav SFZ), mentor návrhy vidí. Administrácia → Novinky: záložky podľa stavu, posúdenie (úprava textu, vrátenie s poznámkou, zverejnenie, stiahnutie, pripnutie, balík pre komunikáciu SFZ na skopírovanie, odkaz na článok na futbalsfz.sk) a nová novinka SFZ. Výzva „Má váš klub čo povedať?“ na Novinkách a stav vlastného návrhu v dlaždici Mojej Akadémie.
 - Novinky – verejné obrazovky (ADR 0023, N2): `/novinky` s filtrom typu a oblasti, pripnutou novinkou a staršími stranami; detail novinky so štruktúrou príbehu, odporúčaním v zvýraznenej karte, odkazom na oblasť, zdieľaním (odkaz, Facebook, WhatsApp, e-mail) a náhľadom pre sociálne siete; blok Novinky na úvode Akadémie, „Ako to robia iné kluby“ v detaile oblasti a dlaždica Novinky v Mojej Akadémii (k najslabšej oblasti Kompasu a cieľom plánu). Položka Novinky v menu Viac. Bloky sa skryjú, kým nie je čo ukázať.
@@ -17,6 +18,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Produkčná doména je `klub.futbalsfz.sk` (predtým `rozvojklubu.ltk.solutions`, stará adresa presmerúva); dokumentácia, príklady v testoch a odosielateľská doména e-mailov (futbalsfz.sk) upravené.
 - Novinky v detaile oblasti: blok „Ako to robia iné kluby“ je teraz „Novinky k oblasti“ a okrem príbehov a odporúčaní klubov ukazuje aj novinky Akadémie (3 najnovšie).
 - Redesign stránky O Akadémii podľa návrhu schváleného 30. 10.: úvod, video, jedenástka na ihrisku s líniami v odtieňoch modrej SFZ (trávnik ostáva zelený ako ilustrácia), línie a tematické sekcie ako zoznamy, výzva v zvýraznenej karte; okno oblasti po ťuknutí na hráča v DS.
 - Redesign Analýzy (R4 G4, ADR 0018): hlavička so štítkom rozsahu (celý pilot / moje kluby / môj klub), export CSV a tlač, filtre a výber klubov na porovnanie v DS, prehľad sezóny (kluby, odoslaný Kompas, uzavreté licencie, plán sezóny). Tepelná mapa Kompasu a sieťový graf používajú farby z tokenov (pásma ako stavové farby DS, oblasti v odtieňoch modrej SFZ) – fungujú aj v tmavej téme.
