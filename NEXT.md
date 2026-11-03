@@ -39,7 +39,7 @@ Aktualizované: 3. 11. 2026 (doména klub.futbalsfz.sk, ADR 0021 zlúčené; hot
   - [ ] Pri nahratí do knižnice určiť prístup každého dokumentu (verejný / po prihlásení); „Rozhovor o vedení pri návšteve mentora“ je pre mentora zväzu.
   - [ ] Dokumenty oblastí 2 – 4 (vzory v Metodike a Praxi, spolu asi 35); oblasti 5 – 11 zatiaľ vzory nemajú.
   - [ ] Pri zmene textu vzoru v Metodike alebo Praxi treba pregenerovať aj súbor – zdroj pravdy je obsah v aplikácii.
-- [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, vetva `content/area1-municipality-school`): po zlúčení zapísať sekciu do DB a odkazy do existujúcich sekcií oblastí 2, 6, 11 (súhlas Cyrila); overiť na 375 px; rozhodnúť `reviewedAt` (sekciu nekontrolovalo právne oddelenie); overiť McDonald's Cup a termíny zápisov s právnym oddelením. Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
+- [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, PR #126 zlúčený 31. 10., v DB aj s odkazmi v oblastiach 2, 6, 11): termíny zápisov do 1. ročníka a materskej školy overiť s právnym oddelením (sekcia je bez `reviewedAt`). Príručku v knižnici zosúladiť so sekciou (školské súťaže → EduPage, Školský pohár SFZ). Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
 
 ### Obsah
 
