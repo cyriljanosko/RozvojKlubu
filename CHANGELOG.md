@@ -18,6 +18,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Pravidlá pre Clauda: globálne pravidlá Cyrila sú v `~/.claude/CLAUDE.md`; repo `CLAUDE.md` doplnený o pravidlá práce (overovanie, tajomstvá, rozsah) a o push len pri potrebe.
 - Produkčná doména je `klub.futbalsfz.sk` (predtým `rozvojklubu.ltk.solutions`, stará adresa presmerúva); dokumentácia, príklady v testoch a odosielateľská doména e-mailov (futbalsfz.sk) upravené.
 - Závislosti (3. 11.): better-auth 1.7.14, jose 6.2.14, lucide-react 1.66.0, mongodb 7.8.0, react a react-dom 19.3.1, @types/node 26.6.6, eslint 10.14.0, vitest 5.0.5.
 - Novinky v detaile oblasti: blok „Ako to robia iné kluby“ je teraz „Novinky k oblasti“ a okrem príbehov a odporúčaní klubov ukazuje aj novinky Akadémie (3 najnovšie).
