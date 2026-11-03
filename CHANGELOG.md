@@ -18,6 +18,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Pravidlá pre Clauda: globálne pravidlá Cyrila sú v `~/.claude/CLAUDE.md`; repo `CLAUDE.md` doplnený o pravidlá práce (overovanie, tajomstvá, rozsah) a o push len pri potrebe.
 - Produkčná doména je `klub.futbalsfz.sk` (predtým `rozvojklubu.ltk.solutions`, stará adresa presmerúva); dokumentácia, príklady v testoch a odosielateľská doména e-mailov (futbalsfz.sk) upravené.
 - Novinky v detaile oblasti: blok „Ako to robia iné kluby“ je teraz „Novinky k oblasti“ a okrem príbehov a odporúčaní klubov ukazuje aj novinky Akadémie (3 najnovšie).
 - Redesign stránky O Akadémii podľa návrhu schváleného 30. 10.: úvod, video, jedenástka na ihrisku s líniami v odtieňoch modrej SFZ (trávnik ostáva zelený ako ilustrácia), línie a tematické sekcie ako zoznamy, výzva v zvýraznenej karte; okno oblasti po ťuknutí na hráča v DS.
