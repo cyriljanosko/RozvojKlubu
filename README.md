@@ -2,7 +2,7 @@
 
 Web aplikácia Slovenského futbalového zväzu pre vzdelávanie a rozvoj futbalových klubov.
 
-- **Produkcia:** https://rozvojklubu.ltk.solutions (zatiaľ nenasadené)
+- **Produkcia:** https://klub.futbalsfz.sk (zatiaľ nenasadené)
 - **Stack:** Next.js 16 (App Router, TypeScript) · Tailwind CSS 4 + shadcn/ui · MongoDB Atlas · Vercel
 - **Moduly MVP:** vizitka klubu a mapa · akadémia vzdelávania · dashboard osoby · 10 oblastí rozvoja a licencie
 

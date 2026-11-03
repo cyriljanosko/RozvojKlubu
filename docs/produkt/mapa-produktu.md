@@ -5,7 +5,7 @@ v niekoľkých sessions. Pri rozpore platí kód → ADR → tento dokument.
 
 ## 1. Zadanie a rozhodnutia (Cyril, 15. 10. 2026)
 
-- Z návrhov v artifactoch vznikne **jedna aplikácia** na `rozvojklubu.ltk.solutions`.
+- Z návrhov v artifactoch vznikne **jedna aplikácia** na `klub.futbalsfz.sk`.
 - **Prvý cieľ: rovno pilot Stupňa II** (prihlásená časť) pre pilotné kluby. Termín nie je.
 - Obsah oblastí, detailov a otázok je **spravovateľný obsah** (upraviteľný bez programátora).
 - Aplikácia je **samostatný web s prihlásením cez Sportnet** (nie sekcia v my.sportnet.online).
