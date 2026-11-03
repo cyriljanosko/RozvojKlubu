@@ -79,7 +79,7 @@ Aktualizované: 31. 10. 2026 (upratané – hotové veci sú v sekcii Hotové na
 ## Čaká na niekoho iného
 
 - [ ] Registrácia OAuth klienta v Sportnete (auth.sportnet.online) – client_id, client_secret, redirect URI.
-- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu ltk.solutions).
+- [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu futbalsfz.sk).
 - [ ] Ochrana vetvy `main` na GitHube (Settings → Branches) – 31. 10. stále nenastavená.
 - [ ] PR #103 – ADR 0021 roly zo sportnet.online (kolega z LTK Solutions).
 
