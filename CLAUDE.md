@@ -4,7 +4,7 @@
 
 ## 1. Čo to je a ako to rozbehať
 
-- Web aplikácia SFZ na vzdelávanie a rozvoj futbalových klubov: https://rozvojklubu.ltk.solutions
+- Web aplikácia SFZ na vzdelávanie a rozvoj futbalových klubov: https://klub.futbalsfz.sk
 - Stack: Next.js 16 (App Router, TypeScript), Tailwind CSS 4 + SFZ Design System (shadcn/ui len v obrazovkách pred prepisom, ADR 0018), MongoDB Atlas (oficiálny driver `mongodb`), Better Auth, next-intl, Vercel (fra1), Vitest
 - Štruktúra: jedna aplikácia, API-first – pozri `ARCHITECTURE.md`
 - Lokálny beh: `npm install && npm run dev` → http://localhost:3000 (stav: `/api/v1/health`)
