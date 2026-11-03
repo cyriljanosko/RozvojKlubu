@@ -19,6 +19,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 ### Zmenené
 
 - Produkčná doména je `klub.futbalsfz.sk` (predtým `rozvojklubu.ltk.solutions`, stará adresa presmerúva); dokumentácia, príklady v testoch a odosielateľská doména e-mailov (futbalsfz.sk) upravené.
+- Závislosti (3. 11.): better-auth 1.7.14, jose 6.2.14, lucide-react 1.66.0, mongodb 7.8.0, react a react-dom 19.3.1, @types/node 26.6.6, eslint 10.14.0, vitest 5.0.5.
 - Novinky v detaile oblasti: blok „Ako to robia iné kluby“ je teraz „Novinky k oblasti“ a okrem príbehov a odporúčaní klubov ukazuje aj novinky Akadémie (3 najnovšie).
 - Redesign stránky O Akadémii podľa návrhu schváleného 30. 10.: úvod, video, jedenástka na ihrisku s líniami v odtieňoch modrej SFZ (trávnik ostáva zelený ako ilustrácia), línie a tematické sekcie ako zoznamy, výzva v zvýraznenej karte; okno oblasti po ťuknutí na hráča v DS.
 - Redesign Analýzy (R4 G4, ADR 0018): hlavička so štítkom rozsahu (celý pilot / moje kluby / môj klub), export CSV a tlač, filtre a výber klubov na porovnanie v DS, prehľad sezóny (kluby, odoslaný Kompas, uzavreté licencie, plán sezóny). Tepelná mapa Kompasu a sieťový graf používajú farby z tokenov (pásma ako stavové farby DS, oblasti v odtieňoch modrej SFZ) – fungujú aj v tmavej téme.

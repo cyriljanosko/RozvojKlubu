@@ -75,9 +75,7 @@ Aktualizované: 3. 11. 2026 (doména klub.futbalsfz.sk, ADR 0021 zlúčené; hot
 
 ## Závislosti
 
-- [ ] Dependabot PR #85 (minor a patch) – rozhodne Cyril.
 - [ ] TypeScript 7 (Dependabot PR #5) – čaká na podporu v typescript-eslint (`eslint-config-next`); dovtedy TS 5.9.
-- [ ] Dependabot PR s veľkými verziami (ESLint 10, TypeScript 7, @types/node 26, actions v7) – prejsť riadene.
 
 ## Pred prvými ostrými dátami
 
