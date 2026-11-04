@@ -1,6 +1,6 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 3. 11. 2026 (doména klub.futbalsfz.sk, ADR 0021 zlúčené; hotové veci sú v sekcii Hotové na konci). Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 4. 11. 2026 (knižnica oblasti 3; doména klub.futbalsfz.sk, ADR 0021 zlúčené; hotové veci sú v sekcii Hotové na konci). Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
@@ -37,9 +37,12 @@ Aktualizované: 3. 11. 2026 (doména klub.futbalsfz.sk, ADR 0021 zlúčené; hot
   - [x] Dokumenty oblasti 1 (31. 10.): 14 dokumentov v brandingu SFZ (Word alebo Excel podľa typu + PDF) z vzorov Praxe a sekcie „Založenie klubu“, pripravené mimo repa v `~/Documents/Knižnica SFZ/Oblasť 01 – Vedenie klubu/`.
   - [ ] Cyril: skontrolovať dokumenty oblasti 1 a nahrať ich do SharePointu SFZ; doplniť originál UEFA Grassroots Club Development Framework 2022.
   - [ ] Pri nahratí do knižnice určiť prístup každého dokumentu (verejný / po prihlásení); „Rozhovor o vedení pri návšteve mentora“ je pre mentora zväzu.
-  - [ ] Dokumenty oblastí 2 – 4 (vzory v Metodike a Praxi, spolu asi 35); oblasti 5 – 11 zatiaľ vzory nemajú.
+  - [x] Dokumenty oblasti 3 – Tréneri (3. 11.): 29 dokumentov (14 zo vzorov + dochádzka a minutáž, mesačný plán v dvoch verziách, komunikácia tréner – rodič v troch vekových úrovniach, 7 praktických vzorov pre každodennú prácu trénera) v `~/Documents/Knižnica SFZ/Oblasť 03 – Tréneri/`. Generátory sú v `~/Documents/Knižnica SFZ/_generátory/` (README).
+  - [ ] Cyril: skontrolovať dokumenty oblasti 3, nahrať do SharePointu a vybrať lepšiu verziu mesačného plánu (Excel / kalendár na tlač).
+  - [ ] Právne overiť: dohodu s dorastencom a rodičom o asistencii, súhlas s prepravou v Organizácii výjazdu a Núdzové kontakty tímu (osobné údaje); údaje o licenciách v Prehľade trénerov pred zverejnením.
+  - [ ] Dokumenty oblastí 2 a 4 (vzory v Metodike a Praxi); oblasti 5 – 11 zatiaľ vzory nemajú. Navrhnuté poradie: 4, 2, 9, 11.
   - [ ] Pri zmene textu vzoru v Metodike alebo Praxi treba pregenerovať aj súbor – zdroj pravdy je obsah v aplikácii.
-- [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, PR #126 zlúčený 31. 10., v DB aj s odkazmi v oblastiach 2, 6, 11): termíny zápisov do 1. ročníka a materskej školy overiť s právnym oddelením (sekcia je bez `reviewedAt`). Príručku v knižnici zosúladiť so sekciou (školské súťaže → EduPage, Školský pohár SFZ). Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
+- [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, PR #126 zlúčený 31. 10., v DB aj s odkazmi v oblastiach 2, 6, 11): termíny zápisov do 1. ročníka a materskej školy overiť s právnym oddelením (sekcia je bez `reviewedAt`). Príručka a kalendár v knižnici sú zosúladené so sekciou (31. 10.). Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
 
 ### Obsah
 
