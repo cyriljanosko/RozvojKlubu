@@ -6,12 +6,12 @@ describe("resolveAuthBaseURL", () => {
   it("uses BETTER_AUTH_URL when it is set", () => {
     expect(
       resolveAuthBaseURL({
-        BETTER_AUTH_URL: "https://rozvojklubu.ltk.solutions",
+        BETTER_AUTH_URL: "https://klub.futbalsfz.sk",
         APP_URL: "http://localhost:3000",
         VERCEL_ENV: "preview",
         VERCEL_URL: "rozvojklubu-abc123-cyro5.vercel.app",
       }),
-    ).toBe("https://rozvojklubu.ltk.solutions");
+    ).toBe("https://klub.futbalsfz.sk");
   });
 
   // Bug 2026-10-16: on Vercel Preview (no BETTER_AUTH_URL) magic links and callbacks

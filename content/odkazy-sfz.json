@@ -1,5 +1,5 @@
 {
-  "source": "futbalsfz.sk – sekcia Tréneri, overené 22. 10. 2026",
+  "source": "futbalsfz.sk – sekcia Tréneri, overené 22. 10. 2026; Predpisy SFZ (oblasť 1), overené 30. 10. 2026",
   "areas": [3],
   "links": [
     {
@@ -105,7 +105,12 @@
       "url": "https://futbalsfz.sk/issf/",
       "label": "ISSF – konto trénera"
     },
-    { "id": "xps", "terms": ["XPS"], "url": "https://futbalsfz.sk/xps/", "label": "XPS" },
+    {
+      "id": "xps",
+      "terms": ["XPS"],
+      "url": "https://futbalsfz.sk/xps/",
+      "label": "XPS"
+    },
     {
       "id": "coach-contacts",
       "terms": ["futbalsfz.sk/treneri/kontakt", "Technický úsek SFZ"],
@@ -135,15 +140,98 @@
       "terms": [],
       "url": "https://futbalsfz.sk/treneri/manualy/",
       "label": "Manuály"
+    },
+    {
+      "id": "regulations",
+      "areas": [1],
+      "terms": ["Predpisy SFZ"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz/",
+      "label": "Predpisy SFZ"
+    },
+    {
+      "id": "statutes",
+      "areas": [1],
+      "terms": ["Stanovy SFZ", "stanovy SFZ", "stanov SFZ", "stanovami SFZ", "stanovách SFZ"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-stanovy/",
+      "label": "Stanovy SFZ"
+    },
+    {
+      "id": "org-changes",
+      "areas": [1],
+      "terms": [
+        "Smernica o právno-organizačných zmenách v kluboch",
+        "Smernicu o právno-organizačných zmenách v kluboch",
+        "Smernice o právno-organizačných zmenách v kluboch"
+      ],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-smernice/",
+      "label": "Smernica o právno-organizačných zmenách v kluboch"
+    },
+    {
+      "id": "membership-fee",
+      "areas": [1],
+      "terms": ["Smernica o spôsobe uhrádzania členského príspevku SFZ"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-smernice/",
+      "label": "Smernica o spôsobe uhrádzania členského príspevku SFZ"
+    },
+    {
+      "id": "competition-rules",
+      "areas": [1],
+      "terms": ["Súťažný poriadok futbalu"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-poriadky/",
+      "label": "Súťažný poriadok futbalu"
+    },
+    {
+      "id": "transfer-rules",
+      "areas": [1],
+      "terms": ["Registračný a prestupový poriadok"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-poriadky/",
+      "label": "Registračný a prestupový poriadok"
+    },
+    {
+      "id": "disciplinary-rules",
+      "areas": [1],
+      "terms": ["Disciplinárny poriadok SFZ"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-poriadky/",
+      "label": "Disciplinárny poriadok SFZ"
+    },
+    {
+      "id": "ethics-code",
+      "areas": [1],
+      "terms": ["Etický kódex SFZ"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-statuty-a-kodexy/",
+      "label": "Etický kódex SFZ"
+    },
+    {
+      "id": "forms",
+      "areas": [1],
+      "terms": ["registračný formulár riadneho člena"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-tlaciva-a-formulare/",
+      "label": "Tlačivá a formuláre SFZ"
+    },
+    {
+      "id": "comment-procedure",
+      "areas": [1],
+      "terms": ["pripomienkovom konaní", "pripomienkové konanie", "Pripomienkové konanie"],
+      "url": "https://futbalsfz.sk/legislativa-predpisy-sfz-pripomienkove-konanie/",
+      "label": "Pripomienkové konanie"
     }
   ],
   "hub": [
-    { "key": "start", "links": ["grassroots-leader"] },
-    { "key": "higher", "links": ["uefa-c", "uefa-b", "uefa-a", "uefa-pro", "youth", "goalkeeper"] },
+    {
+      "key": "start",
+      "links": ["grassroots-leader"]
+    },
+    {
+      "key": "higher",
+      "links": ["uefa-c", "uefa-b", "uefa-a", "uefa-pro", "youth", "goalkeeper"]
+    },
     {
       "key": "renew",
       "links": ["continuing", "seminars", "child-protection", "coaches-hub", "grassroots-leader-kv"]
     },
-    { "key": "signup", "links": ["ticketing", "issf", "coach-contacts", "documents", "manuals"] }
+    {
+      "key": "signup",
+      "links": ["ticketing", "issf", "coach-contacts", "documents", "manuals"]
+    }
   ]
 }

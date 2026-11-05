@@ -100,6 +100,13 @@ MCP server (F5, plánovaný)        ─┘        │
 2. `POST|DELETE /api/v1/clubs/:clubId/kompas/submissions/:submissionId/confirm` – mentor klubu v sezóne alebo admin SFZ potvrdí odoslaný Kompas (odznak, `confirmedAt` / `confirmedBy`), stiahnutý sa potvrdiť nedá (409)
 3. `GET /api/v1/vizitky` (verejné, `vizitky.service.ts`): karty klubov – hviezdy, body licencovania, posun oproti minulej sezóne, potvrdenie a míľniky sezóny len pri kluboch so súhlasom (`listRankingConsents`); `viewer` určuje, pri ktorých kluboch smie používateľ vidieť neverejné poradie (admin SFZ všetky, mentor svoje, vedenie a tréner vlastný klub). Top 3, posun a poradie počíta `src/lib/rankings.ts`
 
+### Novinky (ADR 0023)
+
+1. Verejné: `GET /api/v1/news` (`kind`, `area`, `before`, `limit`; pripnutý príspevok zvlášť na prvej strane), `GET /api/v1/news/:slug` (detail a 3 súvisiace) – služba `news.service.ts`, kolekcia `news_posts`
+2. Klub: `GET|POST /api/v1/clubs/:clubId/news`, `GET|PATCH .../news/:newsId`, `POST .../news/:newsId/submit` (súhlasy) – píše vedenie klubu, mentor klubu číta, tréner nemá prístup; nezverejnené príspevky klubu sa čítajú len s `clubId` (ADR 0003)
+3. Admin SFZ: `GET|POST /api/v1/admin/news` (novinky Akadémie, rad na schválenie; koncepty klubov nevidí), `GET|PATCH .../news/:newsId`, `POST .../return|publish|hide|comms`, `PUT .../pin|external-url` – dotazy s explicitným zoznamom klubov
+4. Stavy: koncept → na schválení → zverejnené, alebo vrátené s poznámkou; skryté. Úprava textu klubu adminom (`sfzEditedAt`) blokuje zverejnenie, kým klub príspevok znova neodošle; zmeny textu po odoslaní idú do `content_revisions` (`entity: "news_post"`). Slug vzniká pri prvom zverejnení. Fotky a dokumenty až s úložiskom (ADR 0022)
+
 ### Plán klubu na sezónu (CP)
 
 1. `GET|PUT /api/v1/clubs/:clubId/plan`, `PATCH .../plan/goals/:goalId` (stav), `POST .../plan/confirm`, `GET .../plan/public` – služba `club-plan.service.ts`
@@ -150,30 +157,31 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ## Kolekcie a indexy (MongoDB `rozvojklubu_dev`)
 
-| Kolekcia                | Vlastník           | Poznámka                                                      |
-| ----------------------- | ------------------ | ------------------------------------------------------------- |
-| `user`                  | Better Auth        | + polia `role`, `sportnetId`                                  |
-| `session`               | Better Auth        | relácie                                                       |
-| `account`               | Better Auth        | prepojenia na poskytovateľov (Sportnet, e-mail)               |
-| `verification`          | Better Auth        | tokeny magic linku                                            |
-| `clubs`                 | aplikácia          | klub zo snapshotu, `clubId` = Sportnet appSpace               |
-| `club_seasons`          | aplikácia          | družstvá, počty hráčov, tréneri s licenciami (osobné údaje)   |
-| `club_memberships`      | aplikácia          | roly v klube na sezónu (ADR 0004)                             |
-| `areas`                 | aplikácia          | 11 oblastí (spravovaný obsah, bez tenanta)                    |
-| `kompas_questions`      | aplikácia          | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia        |
-| `content_revisions`     | aplikácia          | história zmien spravovaného obsahu                            |
-| `area_sections`         | aplikácia          | sekcie Metodiky, Markdown, verzia                             |
-| `area_practice`         | aplikácia          | Prax oblasti (všetky roly), validovaný JSON, verzia           |
-| `kompas_assessments`    | aplikácia (tenant) | pracovné sebahodnotenie klubu na sezónu, verzia               |
-| `kompas_submissions`    | aplikácia (tenant) | odoslané (zmrazené) kópie Kompasu pre mentora, história       |
-| `licensing_evaluations` | aplikácia (tenant) | licenčné hodnotenie – pracovná verzia na sezónu (ADR 0006)    |
-| `licensing_submissions` | aplikácia (tenant) | uzavreté (zmrazené) licenčné hodnotenie sezóny                |
-| `practice_progress`     | aplikácia (tenant) | postup klubu v Praxi oblasti na sezónu, verzia (F6d)          |
-| `mentor_visits`         | aplikácia (tenant) | návštevy mentora s dohodnutými krokmi, stav, verzia (MV)      |
-| `club_mentoring`        | aplikácia (tenant) | mentoring klubu na sezónu – úvod, zameranie, záver (MC)       |
-| `club_plans`            | aplikácia (tenant) | plán klubu na sezónu – ciele, stav, potvrdenie, verzia (CP)   |
-| `user_preferences`      | aplikácia (osobné) | nástenka a obľúbené používateľa, verzia (MD, ADR 0012)        |
-| `club_settings`         | aplikácia (tenant) | nastavenia klubu – súhlas s verejným rebríčkom (MR, ADR 0015) |
+| Kolekcia                | Vlastník           | Poznámka                                                                          |
+| ----------------------- | ------------------ | --------------------------------------------------------------------------------- |
+| `user`                  | Better Auth        | + polia `role`, `sportnetId`                                                      |
+| `session`               | Better Auth        | relácie                                                                           |
+| `account`               | Better Auth        | prepojenia na poskytovateľov (Sportnet, e-mail)                                   |
+| `verification`          | Better Auth        | tokeny magic linku                                                                |
+| `clubs`                 | aplikácia          | klub zo snapshotu, `clubId` = Sportnet appSpace                                   |
+| `club_seasons`          | aplikácia          | družstvá, počty hráčov, tréneri s licenciami (osobné údaje)                       |
+| `club_memberships`      | aplikácia          | roly v klube na sezónu (ADR 0004)                                                 |
+| `areas`                 | aplikácia          | 11 oblastí (spravovaný obsah, bez tenanta)                                        |
+| `kompas_questions`      | aplikácia          | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia                            |
+| `content_revisions`     | aplikácia          | história zmien spravovaného obsahu                                                |
+| `area_sections`         | aplikácia          | sekcie Metodiky, Markdown, verzia                                                 |
+| `area_practice`         | aplikácia          | Prax oblasti (všetky roly), validovaný JSON, verzia                               |
+| `kompas_assessments`    | aplikácia (tenant) | pracovné sebahodnotenie klubu na sezónu, verzia                                   |
+| `kompas_submissions`    | aplikácia (tenant) | odoslané (zmrazené) kópie Kompasu pre mentora, história                           |
+| `licensing_evaluations` | aplikácia (tenant) | licenčné hodnotenie – pracovná verzia na sezónu (ADR 0006)                        |
+| `licensing_submissions` | aplikácia (tenant) | uzavreté (zmrazené) licenčné hodnotenie sezóny                                    |
+| `practice_progress`     | aplikácia (tenant) | postup klubu v Praxi oblasti na sezónu, verzia (F6d)                              |
+| `mentor_visits`         | aplikácia (tenant) | návštevy mentora s dohodnutými krokmi, stav, verzia (MV)                          |
+| `club_mentoring`        | aplikácia (tenant) | mentoring klubu na sezónu – úvod, zameranie, záver (MC)                           |
+| `club_plans`            | aplikácia (tenant) | plán klubu na sezónu – ciele, stav, potvrdenie, verzia (CP)                       |
+| `user_preferences`      | aplikácia (osobné) | nástenka a obľúbené používateľa, verzia (MD, ADR 0012)                            |
+| `club_settings`         | aplikácia (tenant) | nastavenia klubu – súhlas s verejným rebríčkom (MR, ADR 0015)                     |
+| `news_posts`            | aplikácia (tenant) | Novinky – príspevky klubov (tenant do zverejnenia) a SFZ, stav, verzia (ADR 0023) |
 
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
@@ -201,3 +209,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `club_mentoring`: `{ clubId: 1, season: 1 }` unikátny (zakladá `src/server/db/club-mentoring.store.ts` pri prvom uložení, súhlas 22. 10. 2026; ADR 0013)
 - `user_preferences`: `{ userId: 1 }` unikátny (zakladá `src/server/db/preferences.store.ts` pri prvom uložení, súhlas 22. 10. 2026; osobné dáta mimo tenanta – ADR 0012)
 - `club_settings`: `{ clubId: 1 }` unikátny (zakladá `src/server/db/club-settings.store.ts` pri prvom uložení, súhlas 26. 10. 2026; ADR 0015); zoznam súhlasov `{ "rankingConsent.given": true }` bez vlastného indexu – jeden dokument na klub Akadémie
+- `news_posts`: `{ status: 1, publishedAt: -1 }`; `{ clubId: 1, status: 1 }`; `{ areas: 1, status: 1, publishedAt: -1 }`; `{ slug: 1 }` unikátny len pre príspevky so slugom (`partialFilterExpression: { slug: { $type: "string" } }`) (zakladá `src/server/db/news.store.ts` pri prvom zápise, súhlas 31. 10. 2026; ADR 0023). Kolekcia je zatiaľ malá – `explain` overiť, keď bude mať stovky príspevkov

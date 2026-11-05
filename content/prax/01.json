@@ -1,0 +1,1093 @@
+{
+  "area": 1,
+  "source": "content/metodika/01.md + podklady SFZ (Založenie klubu) a UEFA Grassroots Club Development Framework (2022)",
+  "validAsOf": "2026-10-30",
+  "reviewedAt": "2026-10-30",
+  "roles": [
+    {
+      "id": "p",
+      "label": "Predseda a štatutár",
+      "description": "podpisuje za klub a drží výbor pokope",
+      "who": "predseda, prezident, štatutárny zástupca klubu",
+      "does": "Spíšete funkcie a prístupy, dohodnete mandát a podpisy, zavediete rytmus výboru a s výborom pomenujete, kam klub smeruje.",
+      "gain": "Klub nestojí na jednom telefóne, rozhodnutia platia a vy nemusíte robiť všetko sám.",
+      "responsibilities": [
+        "Každá funkcia má meno a kritický prístup aj zálohu",
+        "Výbor zasadá podľa plánu a po každom zasadnutí je zápis",
+        "Klub vie povedať, kam smeruje o tri roky"
+      ],
+      "notThis": [
+        "Operatíva klubu – to je manažér (oblasť 2)",
+        "Účtovníctvo – to je ekonóm a účtovník (oblasť 8)"
+      ],
+      "time": "1,5 h týždenne prvý mesiac, potom 1 h mesačne",
+      "withWhom": "výbor, ekonóm, ISSF manažér, mentor zväzu",
+      "library": ["funkcie", "mandat", "zapis", "kalendar", "odovzdanie", "swot", "vizia", "plan3"],
+      "indicators": [
+        "Funkcie bez mena",
+        "Kritické prístupy (ISSF, účet) len s jednou osobou",
+        "Mesiace od posledného zasadnutia výboru so zápisom"
+      ],
+      "pathTitle": "Vedenie, ktoré nestojí na jednom človeku",
+      "pathSubtitle": "Päť krokov, jeden za týždeň. Pri každom si vyberte možnosť podľa času a veľkosti klubu.",
+      "firstStep": {
+        "title": "Vyplňte tabuľku funkcií a prístupov",
+        "who": "vy",
+        "time": "30 min",
+        "result": "tabuľka funkcia → meno → zástupca a prístup → kto ho má → záloha",
+        "template": "funkcie",
+        "tasks": [
+          {
+            "id": "p1",
+            "title": "Ku každej funkcii napíšte meno – prázdny riadok nechajte prázdny",
+            "note": "vzor je v knižnici"
+          },
+          {
+            "id": "p2",
+            "title": "Pri ISSF, účte a e-maile zapíšte, kto má prístup a kto je záloha"
+          },
+          {
+            "id": "p3",
+            "title": "Zakrúžkujte riadky bez mena a prístupy s jedinou osobou"
+          }
+        ],
+        "aside": {
+          "title": "Čo poslať výboru",
+          "text": "Ahoj, dávam dokopy prehľad, kto v klube robí čo a kto má aké prístupy. Pozrite si prosím tabuľku a doplňte, čo chýba:\n\n1. Je pri vašej funkcii správne meno?\n2. Máte prístup do ISSF, k účtu alebo k e-mailu klubu?\n3. Koho by ste vedeli zastúpiť?\n\nNa najbližšom výbore z toho urobíme jedno uznesenie.",
+          "note": "Pošlite do skupiny výboru alebo vytlačte na najbližšie zasadnutie."
+        }
+      },
+      "steps": [
+        {
+          "id": "ps1",
+          "label": "1. týždeň",
+          "title": "Mandát a podpisy na papieri",
+          "why": "Bez zapísaného mandátu sa každé rozhodnutie dá spochybniť a predseda nesie všetko sám.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "20 min",
+              "what": "Napíšte návrh: do akej sumy rozhodujete sám a kto potvrdzuje platby. Pošlite výboru na odsúhlasenie.",
+              "result": "návrh uznesenia",
+              "template": "mandat"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a výbor",
+              "time": "1 zasadnutie",
+              "what": "Odsúhlaste mandát a pravidlá podpisov na výbore a zapíšte do zápisnice.",
+              "result": "uznesenie o mandáte a podpisoch",
+              "template": "mandat"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy, výbor, ekonóm",
+              "time": "1 h",
+              "what": "Pridajte limity pre zmluvy a pravidlo dvoch ponúk pri väčšej zákazke.",
+              "result": "pravidlá podpisov a zákaziek",
+              "template": "mandat",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "ps2",
+          "label": "2. týždeň",
+          "title": "Rytmus výboru a zápis",
+          "why": "Zasadnutie bez zápisu sa o pol roka pamätá každému inak. Zápis s uzneseniami robí z rozhovoru rozhodnutie.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Dajte do kalendára štyri termíny výboru na rok dopredu a pošlite ich členom výboru.",
+              "result": "termíny v kalendári",
+              "template": "kalendar"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a zapisovateľ",
+              "time": "1 zasadnutie",
+              "what": "Najbližšie zasadnutie podľa agendy zo vzoru a pol strany zápisu s uzneseniami kto, čo, dokedy.",
+              "result": "prvý zápis podľa vzoru",
+              "template": "zapis"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy a výbor",
+              "time": "30 min mesačne",
+              "what": "Krátke mesačné stretnutie vedenia (aj online) medzi zasadnutiami výboru.",
+              "result": "mesačný rytmus vedenia",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "ps3",
+          "label": "3. týždeň",
+          "title": "Záloha a odovzdanie",
+          "why": "Funkcia bez zálohy a bez odovzdania je kríza, keď človek odíde – hoci nikto nič nepokazil.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy a ISSF manažér",
+              "time": "30 min",
+              "what": "Zriaďte druhý prístup do ISSF – vybavíte to na ObFZ.",
+              "result": "dve osoby s prístupom do ISSF",
+              "template": "funkcie"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy, ekonóm, ISSF manažér",
+              "time": "1 h",
+              "what": "Doplňte druhú osobu ku každému kritickému prístupu (ISSF, účet, e-mail).",
+              "result": "pri každom kritickom prístupe dve osoby",
+              "template": "funkcie"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "každý vo svojej funkcii",
+              "time": "do konca sezóny",
+              "what": "Ku každej funkcii odovzdávací balík: prístupy, kontakty, posledná zápisnica, termíny.",
+              "result": "balík pre každú funkciu",
+              "template": "odovzdanie",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "ps4",
+          "label": "4. týždeň",
+          "title": "Kam klub smeruje",
+          "why": "Výbor, ktorý vie, kam chce o tri roky dôjsť, rozhoduje rýchlejšie a ľahšie získa obec aj sponzora.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "20 min",
+              "what": "Napíšte jednou vetou, aký má byť klub o 5 rokov, a pošlite ju výboru na pripomienky.",
+              "result": "návrh vízie",
+              "template": "vizia"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a výbor",
+              "time": "60 min",
+              "what": "SWOT za 60 minút na zasadnutí výboru a z neho najviac tri ciele na tri roky.",
+              "result": "SWOT a tri ciele",
+              "template": "swot"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy, výbor, tréneri",
+              "time": "2 stretnutia",
+              "what": "Vízia, hodnoty a plán na tri roky; ciele sezóny zapíšte do Plánu sezóny v Akadémii.",
+              "result": "plán na tri roky a ciele v Pláne sezóny",
+              "template": "plan3",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "ps5",
+          "label": "5. týždeň",
+          "title": "Predpisy, ktoré klub viažu",
+          "why": "Klub je členom SFZ, a preto ho viažu aj predpisy zväzu. Kto nevie, kde ich hľadať, zistí to až pri zamietnutej žiadosti alebo pokute.",
+          "links": [
+            {
+              "label": "Predpisy SFZ pre vedenie",
+              "anchor": "#predpisy"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Prejdite tabuľku „Ktorý predpis otvoriť, keď…“ v Metodike a odkaz na Predpisy SFZ uložte do klubového e-mailu alebo zdieľaného priečinka.",
+              "result": "klub vie, kde predpisy nájde"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a výbor",
+              "time": "1 zasadnutie",
+              "what": "Určte člena výboru, ktorý sleduje zmeny predpisov a pred sezónou povie, čo sa klubu týka. Zapíšte to do zápisnice.",
+              "result": "meno zodpovednej osoby v zápisnici",
+              "template": "predpisy"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy, výbor, tajomník",
+              "time": "1 h",
+              "what": "Porovnajte stanovy klubu so stanovami SFZ a pri plánovanej zmene názvu, právnej formy alebo zlúčení najprv otvorte Smernicu o právno-organizačných zmenách v kluboch.",
+              "result": "stanovy a zmeny v súlade s predpismi SFZ",
+              "template": "predpisy",
+              "tag": "stredny+"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Nový člen výboru aspoň raz za tri roky",
+          "tag": "all"
+        },
+        {
+          "text": "Kontrolór alebo revízor a ročná správa o hospodárení",
+          "tag": "stredny+"
+        },
+        {
+          "text": "Ekonóm na dohodu s malou odmenou",
+          "tag": "velky"
+        },
+        {
+          "text": "Rodič s profesiou ako člen výboru",
+          "tag": "maly"
+        },
+        {
+          "text": "Ženy a mladší ľudia vo vedení",
+          "tag": "all"
+        },
+        {
+          "text": "Agendy výboru: mládež, financie, areál, komunikácia",
+          "tag": "velky"
+        }
+      ],
+      "next": [
+        {
+          "area": 2,
+          "title": "Zadanie a mandát pre manažéra klubu",
+          "why": "Výbor rozhoduje, manažér vykonáva – potrebuje jasné zadanie."
+        },
+        {
+          "area": 8,
+          "title": "Rozpočet schválený výborom",
+          "why": "Mandát a podpisy majú zmysel, až keď je jasné, s akými peniazmi klub hospodári."
+        },
+        {
+          "area": 9,
+          "title": "Stanovy a register v poriadku",
+          "why": "Čo musí byť na papieri, rieši Právne a formálne minimum."
+        },
+        {
+          "area": 10,
+          "title": "ISSF prístupy a evidencia",
+          "why": "Druhý prístup do ISSF je prvý krok k poriadku v dátach."
+        }
+      ],
+      "myAcademyRole": "vedenie"
+    },
+    {
+      "id": "c",
+      "label": "Člen výboru",
+      "description": "má na starosti jednu agendu a spolu s výborom rozhoduje",
+      "who": "člen výboru – často tréner, rodič alebo dlhoročný dobrovoľník",
+      "does": "Prevezmete jednu agendu, prídete na zasadnutie pripravený, dotiahnete svoje uznesenia a pomôžete, aby členovia vedeli, ako klub hospodári.",
+      "gain": "Vaša práca vo výbore má jasný výsledok a nekončí v telefonátoch.",
+      "responsibilities": [
+        "Viem, ktorá agenda je moja a aký má cieľ",
+        "Moje uznesenia majú termín a stav",
+        "Členovia sa o rozhodnutiach dozvedia bez pýtania"
+      ],
+      "notThis": [
+        "Rozhodovať sám za výbor – výbor rozhoduje kolektívne",
+        "Robiť operatívu za manažéra"
+      ],
+      "time": "1 h pred každým zasadnutím, 30 min po ňom",
+      "withWhom": "predseda, ostatní členovia výboru, manažér",
+      "library": ["zapis", "kalendar", "konflikt", "sprava", "funkcie"],
+      "indicators": ["Moje uznesenia po termíne", "Zasadnutia, z ktorých nešiel zápis členom"],
+      "pathTitle": "Agenda, ktorá má výsledok",
+      "pathSubtitle": "Štyri kroky do konca polsezóny. Vyberte si možnosť podľa času, ktorý máte.",
+      "firstStep": {
+        "title": "Pripravte sa na najbližšie zasadnutie",
+        "who": "vy",
+        "time": "30 min",
+        "result": "zoznam vašich uznesení so stavom a jeden návrh na zasadnutie",
+        "template": "zapis",
+        "tasks": [
+          {
+            "id": "c1",
+            "title": "Nájdite v poslednom zápise uznesenia, ktoré máte na sebe"
+          },
+          {
+            "id": "c2",
+            "title": "Ku každému napíšte stav: hotové / prebieha / čaká"
+          },
+          {
+            "id": "c3",
+            "title": "Pripravte jeden návrh za svoju agendu – čo by mal výbor rozhodnúť"
+          }
+        ],
+        "aside": {
+          "title": "Čo napísať predsedovi pred zasadnutím",
+          "text": "Ahoj, k zasadnutiu: moje uznesenia z minula – 1) … hotové, 2) … prebieha (dôvod), 3) … čaká. Za svoju agendu navrhujem rozhodnúť: …. Potrebujem na to 10 minút.",
+          "note": "Pošlite 2–3 dni pred zasadnutím, aby sa to dostalo do agendy."
+        }
+      },
+      "steps": [
+        {
+          "id": "cs1",
+          "label": "1. krok",
+          "title": "Moja agenda a jej cieľ",
+          "why": "Výbor, kde má každý všetko, nemá v skutočnosti nič. Jedna agenda s menom sa dá dotiahnuť.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Napíšte, ktorú agendu máte (mládež, financie, areál, komunikácia) a jeden cieľ na sezónu.",
+              "result": "agenda a cieľ"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a predseda",
+              "time": "1 zasadnutie",
+              "what": "Výbor rozdelí agendy uznesením; vaša agenda dostane cieľ a termín.",
+              "result": "uznesenie o agendách",
+              "template": "zapis"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "vy a pracovná skupina",
+              "time": "1 h",
+              "what": "K agende pracovná skupina (napr. tréneri mládeže) a pravidelné krátke stretnutie.",
+              "result": "skupina pre agendu",
+              "tag": "velky"
+            }
+          ]
+        },
+        {
+          "id": "cs2",
+          "label": "2. krok",
+          "title": "Uznesenia: kto, čo, dokedy",
+          "why": "Rozhodnutie bez mena a termínu sa nestane. Kontrola uznesení je prvý bod každého zasadnutia.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "5 min po zasadnutí",
+              "what": "Do svojho kalendára zapíšte termíny svojich uznesení.",
+              "result": "termíny v kalendári"
+            },
+            {
+              "name": "Bežná",
+              "who": "zapisovateľ a vy",
+              "time": "15 min",
+              "what": "Zápis podľa vzoru so stĺpcom stav; pred ďalším zasadnutím ho doplníte.",
+              "result": "zápis so stavom uznesení",
+              "template": "zapis"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "zapisovateľ",
+              "time": "priebežne",
+              "what": "Spoločná tabuľka uznesení pre celý výbor (zdieľaný priečinok).",
+              "result": "tabuľka uznesení",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "cs3",
+          "label": "3. krok",
+          "title": "Členovia vedia, čo sa rozhodlo",
+          "why": "Kto sa musí pýtať, prestane veriť. Krátky zápis členom stavia dôveru, ktorú klub potrebuje pri brigáde aj pri voľbách.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Po zasadnutí tri vety do skupiny rodičov a členov: čo sme rozhodli.",
+              "result": "správa členom"
+            },
+            {
+              "name": "Bežná",
+              "who": "zapisovateľ",
+              "time": "20 min",
+              "what": "Zápis bez osobných údajov členom e-mailom alebo na nástenku.",
+              "result": "zápis rozposlaný členom",
+              "template": "zapis"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "komunikácia klubu",
+              "time": "30 min",
+              "what": "Pravidelná rubrika na webe alebo v klubových novinkách.",
+              "result": "rubrika na webe",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "cs4",
+          "label": "4. krok",
+          "title": "Kontrola a férovosť",
+          "why": "Vedenie hospodári s peniazmi, ktoré nie sú jeho. Pravidlo konfliktu záujmov a správa o hospodárení chránia klub aj výbor.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Navrhnite výboru pravidlo konfliktu záujmov zo vzoru.",
+              "result": "návrh pravidla",
+              "template": "konflikt"
+            },
+            {
+              "name": "Bežná",
+              "who": "výbor",
+              "time": "1 zasadnutie",
+              "what": "Odsúhlaste pravidlo a zoznam vzťahov s dodávateľmi.",
+              "result": "pravidlo v zápisnici",
+              "template": "konflikt"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "ekonóm a kontrolór",
+              "time": "2 h ročne",
+              "what": "Ročná správa o hospodárení pre členov a kontrola revízorom.",
+              "result": "správa pre valné zhromaždenie",
+              "template": "sprava",
+              "tag": "stredny+"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Jeden bod výboru ročne: čo klub urobil pre obec",
+          "tag": "all"
+        },
+        {
+          "text": "Poďakovanie dobrovoľníkom ako plánovaný bod",
+          "tag": "all"
+        },
+        {
+          "text": "Člen výboru pre dievčatá a ženy",
+          "tag": "zd"
+        },
+        {
+          "text": "Hlas mládeže – dorastenec na časť zasadnutia",
+          "tag": "DO"
+        }
+      ],
+      "next": [
+        {
+          "area": 4,
+          "title": "Dobrovoľníci a ich poďakovanie",
+          "why": "Agenda výboru stojí na ľuďoch, ktorí pomáhajú."
+        },
+        {
+          "area": 7,
+          "title": "Komunikácia s členmi a fanúšikmi",
+          "why": "Informovanie členov je aj marketing klubu."
+        },
+        {
+          "area": 8,
+          "title": "Financie a správa o hospodárení",
+          "why": "Kontrola hospodárenia potrebuje prehľad od ekonóma."
+        }
+      ]
+    },
+    {
+      "id": "nv",
+      "label": "Nové vedenie po voľbách",
+      "description": "práve prevzalo klub a potrebuje ho rozbehnúť",
+      "who": "novozvolený predseda a výbor – alebo zakladatelia nového klubu",
+      "does": "Zistíte, čo klub má, zapíšete zmenu štatutára, prevezmete účet a prístupy, podpíšete odovzdanie a ohlásite nové vedenie.",
+      "gain": "Do mesiaca od voľby viete za klub platne konať a nikto už nevolá starému predsedovi.",
+      "responsibilities": [
+        "Zmena štatutára je zapísaná a oznámená zväzu",
+        "Účet a prístupy sú prepísané, staré odobrané",
+        "Odovzdanie je podpísané oboma stranami"
+      ],
+      "notThis": [
+        "Meniť všetko naraz – najprv konať, potom zlepšovať",
+        "Odkladať zápis štatutára „na potom“"
+      ],
+      "time": "3 h týždenne prvý mesiac",
+      "withWhom": "odchádzajúce vedenie, banka, ObFZ, mentor zväzu",
+      "library": ["prevzatie", "odovzdanie", "funkcie", "zapis", "kalendar"],
+      "indicators": [
+        "Dni od voľby bez zapísaného štatutára",
+        "Prístupy, ktoré má stále odchádzajúce vedenie"
+      ],
+      "pathTitle": "Prvý mesiac nového vedenia",
+      "pathSubtitle": "Päť krokov od voľby po prvé dva mesiace. Zakladáte klub? Začnite Metodikou – Založenie klubu · vetva 0.",
+      "firstStep": {
+        "title": "Zistite, čo klub má",
+        "who": "vy",
+        "time": "45 min",
+        "result": "zoznam šiestich vecí so stavom a tým, kto chýbajúce zoženie",
+        "template": "prevzatie",
+        "tasks": [
+          {
+            "id": "nv1",
+            "title": "Prejdite šesť bodov zo vzoru: stanovy, register, zápisnice, prístupy, peniaze, termíny"
+          },
+          {
+            "id": "nv2",
+            "title": "Pri každom napíšte, či to máte, a ak nie, kto to zoženie"
+          },
+          {
+            "id": "nv3",
+            "title": "Dohodnite si stretnutie s odchádzajúcim vedením"
+          }
+        ],
+        "aside": {
+          "title": "Čo napísať odchádzajúcemu predsedovi",
+          "text": "Dobrý deň, ďakujeme za vašu prácu pre klub. Aby sme mohli plynule pokračovať, potrebujeme do dvoch týždňov prevziať: stanovy a zápisnice, prístupy (ISSF, účet, e-mail, siete), stav účtu a pokladne, zmluvy a nevyúčtované dotácie. Navrhujeme stretnutie …, prinesieme odovzdávací protokol. Ďakujeme.",
+          "note": "Slušne a s termínom – odovzdanie je v záujme oboch strán."
+        }
+      },
+      "steps": [
+        {
+          "id": "ns1",
+          "label": "Do 30 dní",
+          "title": "Zapísať štatutára a oznámiť zväzu",
+          "why": "Kým nie je zmena zapísaná, za klub stále podpisuje starý štatutár.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "nový predseda",
+              "time": "1 h",
+              "what": "Zistite, kam klub patrí podľa právnej formy (napr. register MV SR pri občianskom združení), a podajte zmenu so zápisnicou z voľby.",
+              "result": "podaná zmena v registri"
+            },
+            {
+              "name": "Bežná",
+              "who": "nový predseda",
+              "time": "2 h",
+              "what": "Zmena v registri a súčasne oznámenie ObFZ a SFZ s kontaktom na nové vedenie.",
+              "result": "aktuálny výpis + oznámenie zväzu"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "predseda a právnik",
+              "time": "podľa potreby",
+              "what": "Pri zmene stanov alebo spornom zvolení konzultujte právnika (oblasť 9).",
+              "result": "zmena bez rizika napadnutia",
+              "tag": "velky"
+            }
+          ]
+        },
+        {
+          "id": "ns2",
+          "label": "Do 2 týždňov",
+          "title": "Účet a prístupy",
+          "why": "Prístup bez funkcie je riziko pre klub aj pre človeka, ktorý ho ešte má.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "predseda a ISSF manažér",
+              "time": "1 h",
+              "what": "Prepíšte ISSF a klubový e-mail, staré prístupy odoberte.",
+              "result": "prepísané ISSF a e-mail",
+              "template": "funkcie"
+            },
+            {
+              "name": "Bežná",
+              "who": "predseda a ekonóm",
+              "time": "návšteva banky",
+              "what": "V banke prepíšte dispozičné a podpisové práva; platby pripravuje iný človek, než ich potvrdzuje.",
+              "result": "aktualizované práva k účtu",
+              "template": "funkcie"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "ISSF manažér",
+              "time": "2 h",
+              "what": "Kompletná tabuľka prístupov s dvoma osobami pri každom (web, siete, zdieľaný priečinok, kľúče).",
+              "result": "tabuľka prístupov",
+              "template": "funkcie",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "ns3",
+          "label": "Do 1 mesiaca",
+          "title": "Odovzdávací protokol",
+          "why": "Podpísané odovzdanie mení odchod z krízy na administratívny krok – a chráni aj odchádzajúcich.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "oba predsedovia",
+              "time": "1 h",
+              "what": "Odovzdanie podľa vzoru – aspoň dokumenty, peniaze a prístupy.",
+              "result": "podpísaný protokol",
+              "template": "odovzdanie"
+            },
+            {
+              "name": "Bežná",
+              "who": "oba výbory",
+              "time": "2 h",
+              "what": "Celý protokol vrátane zmlúv, dotácií a otvorených vecí a podpis za výbor.",
+              "result": "kompletný protokol",
+              "template": "odovzdanie"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "ekonóm a kontrolór",
+              "time": "pol dňa",
+              "what": "Pri prevzatí aj kontrola účtov a dokladov – zistenia do protokolu.",
+              "result": "protokol s kontrolou hospodárenia",
+              "template": "odovzdanie",
+              "tag": "stredny+"
+            }
+          ]
+        },
+        {
+          "id": "ns4",
+          "label": "Do 1 mesiaca",
+          "title": "Prvý výbor a oznámenie",
+          "why": "Bez oznámenia pol roka polovica ľudí volá starému predsedovi.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "predseda",
+              "time": "30 min",
+              "what": "Jeden e-mail a jeden príspevok: kto je kontakt pre čo.",
+              "result": "oznámenie členom a partnerom"
+            },
+            {
+              "name": "Bežná",
+              "who": "výbor",
+              "time": "1 zasadnutie",
+              "what": "Prvé zasadnutie: funkcie menovite, mandát predsedu, termíny na rok; potom oznámenie.",
+              "result": "zápisnica s funkciami a mandátom",
+              "template": "zapis"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "výbor",
+              "time": "2 zasadnutia",
+              "what": "Zostavenie tímu s napísanými kompetenciami a agendami a osobné stretnutie s obcou a školou.",
+              "result": "tím s kompetenciami",
+              "tag": "velky"
+            }
+          ]
+        },
+        {
+          "id": "ns5",
+          "label": "Do 2 mesiacov",
+          "title": "Predpisy SFZ, ktoré nové vedenie potrebuje",
+          "why": "Nové vedenie preberá aj povinnosti voči zväzu – členské, prihlášky do súťaží, registrácie hráčov. Pravidlá sú v predpisoch SFZ, nie v hlavách predchodcov.",
+          "links": [
+            {
+              "label": "Predpisy SFZ pre vedenie",
+              "anchor": "#predpisy"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "nový predseda",
+              "time": "20 min",
+              "what": "Prejdite tabuľku „Ktorý predpis otvoriť, keď…“ a označte situácie, ktoré klub čakajú v najbližšej sezóne.",
+              "result": "zoznam predpisov na najbližšiu sezónu"
+            },
+            {
+              "name": "Bežná",
+              "who": "nový predseda a tajomník",
+              "time": "1 h",
+              "what": "Vyplňte prehľad predpisov pre výbor a dopíšte do odovzdávacieho protokolu, kto ich v novom vedení sleduje.",
+              "result": "prehľad predpisov s menami",
+              "template": "predpisy"
+            },
+            {
+              "name": "Pre väčší klub",
+              "who": "predseda a výbor",
+              "time": "podľa potreby",
+              "what": "Ak nové vedenie plánuje zmenu názvu, právnej formy alebo zlúčenie, prečítajte najprv Smernicu o právno-organizačných zmenách v kluboch a spýtajte sa matriky SFZ.",
+              "result": "zmena pripravená podľa smernice",
+              "tag": "stredny+"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Stretnutie s obcou a školou do 3 mesiacov",
+          "tag": "all"
+        },
+        {
+          "text": "Poďakovanie odchádzajúcemu vedeniu na výročnej schôdzi",
+          "tag": "all"
+        },
+        {
+          "text": "Kontrola stanov – sú aktuálne?",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 9,
+          "title": "Stanovy, register a zmluvy",
+          "why": "Nové vedenie by malo vedieť, čo musí byť na papieri."
+        },
+        {
+          "area": 8,
+          "title": "Rozpočet nového vedenia",
+          "why": "Prvý rozpočet ukáže, s čím nové vedenie reálne počíta."
+        },
+        {
+          "area": 10,
+          "title": "ISSF a evidencia",
+          "why": "Prístupy do ISSF sú prvé, čo treba prevziať."
+        }
+      ]
+    },
+    {
+      "id": "m",
+      "label": "Mentor zväzu",
+      "description": "pomáha klubu dať vedenie do poriadku a pomenovať smerovanie",
+      "who": "mentor ObFZ alebo krajského zväzu",
+      "does": "Pred návštevou si pozriete Kompas a Vizitku, pri návšteve sa s výborom porozprávate o vedení a pomôžete s tabuľkou funkcií, rytmom a smerovaním.",
+      "gain": "Klub, ktorý mentorujete, má do konca sezóny zapísané vedenie, zálohu prístupov a tri ciele.",
+      "responsibilities": [
+        "Klub má vyplnenú tabuľku funkcií a prístupov",
+        "Výbor zasadá so zápisom",
+        "Klub má tri ciele v Pláne sezóny"
+      ],
+      "notThis": [
+        "Rozhodovať za výbor",
+        "Riešiť právne spory klubu – patria právnikovi (oblasť 9)"
+      ],
+      "time": "1 návšteva a 2 telefonáty za polsezónu",
+      "withWhom": "predseda, výbor, manažér klubu",
+      "library": ["navsteva", "funkcie", "zapis", "swot", "plan3"],
+      "indicators": [
+        "Kritické prístupy s jednou osobou",
+        "Mesiace bez zápisu z výboru",
+        "Ciele sezóny v Pláne sezóny"
+      ],
+      "pathTitle": "Vedenie klubu za jednu polsezónu",
+      "pathSubtitle": "Päť krokov od prípravy návštevy po kontrolu. Výsledky zapíšte do návštevy v Akadémii.",
+      "firstStep": {
+        "title": "Pripravte sa na návštevu",
+        "who": "vy",
+        "time": "20 min",
+        "result": "tri otázky pre výbor z Kompasu oblasti 1",
+        "template": "navsteva",
+        "tasks": [
+          {
+            "id": "m1",
+            "title": "Pozrite odoslaný Kompas – ktoré otázky oblasti 1 klub nezaškrtol"
+          },
+          {
+            "id": "m2",
+            "title": "Vo Vizitke pozrite čísla klubu (družstvá, hráči, tréneri)"
+          },
+          {
+            "id": "m3",
+            "title": "Vyberte tri otázky z rozhovoru o vedení, na ktoré sa opýtate"
+          }
+        ],
+        "aside": {
+          "title": "Čo napísať predsedovi pred návštevou",
+          "text": "Dobrý deň, pri návšteve by som sa s vami a výborom rád/rada pol hodiny porozprával(a) o vedení klubu: kto má aké funkcie a prístupy a kam chcete klub posunúť. Ak máte, vezmite prosím poslednú zápisnicu z výboru. Ďakujem.",
+          "note": "Pošlite týždeň pred návštevou."
+        }
+      },
+      "steps": [
+        {
+          "id": "ms1",
+          "label": "Pri návšteve",
+          "title": "Rozhovor o vedení",
+          "why": "Rozhovor podľa šiestich otázok ukáže, kde vedenie stojí, lepšie než kontrola papierov.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "30 min",
+              "what": "Šesť otázok zo vzoru s predsedom; zapíšte jeden dohodnutý krok.",
+              "result": "jeden dohodnutý krok",
+              "template": "navsteva"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a výbor",
+              "time": "45 min",
+              "what": "Rozhovor s celým výborom a porovnanie s Kompasom oblasti 1.",
+              "result": "zistenia a krok do ďalšej návštevy",
+              "template": "navsteva"
+            },
+            {
+              "name": "Osobne na zasadnutí",
+              "who": "vy",
+              "time": "1 zasadnutie výboru",
+              "what": "Zúčastnite sa zasadnutia výboru a dajte spätnú väzbu k agende a zápisu.",
+              "result": "spätná väzba k zasadnutiu",
+              "template": "zapis"
+            }
+          ]
+        },
+        {
+          "id": "ms2",
+          "label": "Do 14 dní",
+          "title": "Tabuľka funkcií a záloha prístupov",
+          "why": "Najrýchlejší posun v oblasti 1 je druhý prístup do ISSF a k účtu.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min telefonát",
+              "what": "Opýtajte sa, či klub zriadil druhý prístup do ISSF.",
+              "result": "stav zálohy ISSF"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a predseda",
+              "time": "30 min",
+              "what": "Prejdite s predsedom tabuľku funkcií a prístupov a doplňte zálohy.",
+              "result": "vyplnená tabuľka",
+              "template": "funkcie"
+            },
+            {
+              "name": "Osobne",
+              "who": "vy",
+              "time": "1 návšteva",
+              "what": "Pomôžte s vybavením druhého prístupu na ObFZ.",
+              "result": "zriadený druhý prístup"
+            }
+          ]
+        },
+        {
+          "id": "ms3",
+          "label": "Do 2 mesiacov",
+          "title": "Smerovanie s výborom",
+          "why": "Klub, ktorý vie, kam smeruje, využije mentoring lepšie.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "15 min",
+              "what": "Požiadajte výbor o jednu vetu vízie a tri ciele na sezónu.",
+              "result": "vízia a tri ciele",
+              "template": "plan3"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a výbor",
+              "time": "60 min",
+              "what": "Veďte SWOT za 60 minút a pomôžte zapísať ciele do Plánu sezóny.",
+              "result": "SWOT a ciele v Pláne sezóny",
+              "template": "swot"
+            },
+            {
+              "name": "Osobne",
+              "who": "vy",
+              "time": "1 stretnutie",
+              "what": "Potvrďte Plán sezóny klubu v Akadémii po spoločnej úprave.",
+              "result": "potvrdený plán sezóny"
+            }
+          ]
+        },
+        {
+          "id": "ms5",
+          "label": "Do 3 mesiacov",
+          "title": "Predpisy SFZ s vedením",
+          "why": "Mentor nemusí byť právnik. Má však klubu ukázať, kde pravidlá zväzu nájde a kto sa o ne v klube stará.",
+          "links": [
+            {
+              "label": "Predpisy SFZ pre vedenie",
+              "anchor": "#predpisy"
+            }
+          ],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Pošlite predsedovi odkaz na Predpisy SFZ a na sekciu Metodiky „Predpisy SFZ, ktoré vedenie klubu potrebuje“.",
+              "result": "klub má odkaz na predpisy"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a predseda",
+              "time": "30 min",
+              "what": "Spýtajte sa, kto v klube sleduje predpisy a kedy naposledy porovnali stanovy klubu so stanovami SFZ; odpoveď zapíšte do návštevy.",
+              "result": "zapísaná zodpovedná osoba",
+              "template": "predpisy"
+            },
+            {
+              "name": "Osobne",
+              "who": "vy",
+              "time": "1 návšteva",
+              "what": "Na výbore prejdite tabuľku „Ktorý predpis otvoriť, keď…“ a pri plánovanej zmene názvu, formy alebo zlúčení odporučte kontakt na matriku SFZ.",
+              "result": "výbor vie, kam sa obrátiť"
+            }
+          ]
+        },
+        {
+          "id": "ms4",
+          "label": "Na konci polsezóny",
+          "title": "Kontrola a ďalší krok",
+          "why": "Porovnanie so začiatkom ukáže posun aj tam, kde má klub pocit, že sa nič nedeje.",
+          "links": [],
+          "options": [
+            {
+              "name": "Rýchla",
+              "who": "vy",
+              "time": "10 min",
+              "what": "Opýtajte sa na tie isté tri čísla ako na začiatku (funkcie bez mena, prístupy s jednou osobou, zasadnutia so zápisom).",
+              "result": "posun oproti začiatku"
+            },
+            {
+              "name": "Bežná",
+              "who": "vy a predseda",
+              "time": "30 min",
+              "what": "Krátke vyhodnotenie a jeden cieľ na ďalšiu polsezónu; zapíšte do záveru mentoringu.",
+              "result": "vyhodnotenie a ďalší cieľ"
+            },
+            {
+              "name": "Osobne",
+              "who": "vy",
+              "time": "1 návšteva",
+              "what": "Vyhodnotenie s výborom a poďakovanie ľuďom, ktorí veci dotiahli.",
+              "result": "vyhodnotenie na výbore"
+            }
+          ]
+        }
+      ],
+      "backlog": [
+        {
+          "text": "Stretnutie predsedov klubov v okrese",
+          "tag": "all"
+        },
+        {
+          "text": "Zdieľanie dobrých vzorov zápisníc medzi klubmi",
+          "tag": "all"
+        }
+      ],
+      "next": [
+        {
+          "area": 2,
+          "title": "Manažér klubu",
+          "why": "Keď je vedenie v poriadku, ďalší krok je jasné zadanie pre manažéra."
+        },
+        {
+          "area": 9,
+          "title": "Právne minimum",
+          "why": "Pri nesúlade registra a stanov pomôže oblasť 9."
+        }
+      ],
+      "myAcademyRole": "mentor",
+      "mentorNumbers": [
+        {
+          "key": "bez",
+          "label": "Funkcie bez mena",
+          "lowerIsBetter": true
+        },
+        {
+          "key": "jedna",
+          "label": "Kritické prístupy s jednou osobou",
+          "lowerIsBetter": true
+        },
+        {
+          "key": "zapis",
+          "label": "Zasadnutia výboru so zápisom za polsezónu",
+          "lowerIsBetter": false
+        }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "key": "funkcie",
+      "title": "Rozdelenie funkcií a prístupov",
+      "description": "Jedna tabuľka: kto akú funkciu má a kto sa kam dostane. Prázdny riadok je informácia.",
+      "text": "FUNKCIE\nFunkcia                        Meno            Zástupca        Od kedy\nPrezident / predseda\nČlen výboru\nČlen výboru\nKontrolór / revízor\nISSF manažér\nMatrikár\nEkonóm klubu (peniaze, doklady)\nHospodár klubu (materiál, areál)\nVedúci mužstva\nOsoba pre ochranu detí\n\nPRÍSTUPY\nPrístup                        Kto ho má       Záloha (2. osoba)   Posledná kontrola\nISSF\nBankový účet (dispozícia)\nPodpisové právo k účtu\nKlubový e-mail\nSportnet / web klubu\nFacebook / Instagram\nZdieľaný priečinok s dokladmi\nKľúče od areálu a skladu"
+    },
+    {
+      "key": "zapis",
+      "title": "Agenda a zápis zo zasadnutia výboru",
+      "description": "Agenda, ktorú pošlete dopredu, a pol strany zápisu s uzneseniami: kto, čo, dokedy.",
+      "text": "AGENDA ZASADNUTIA VÝBORU\nKlub: .....................  Dátum a čas: .................  Miesto: .................\n\n1. Kontrola uznesení z posledného zasadnutia        (5 min)\n2. Prevádzka a termíny — súťaže, registrácie, súpisky   (10 min)\n3. Financie — stav rozpočtu, členské, dotácie a granty   (10 min)\n4. Ľudia — obsadenie funkcií, tréneri, dobrovoľníci   (10 min)\n5. Rozvoj klubu — jedna oblasť z Akadémie                (10 min)\n6. Rôzne a termín ďalšieho zasadnutia                    (5 min)\n\nZÁPIS ZO ZASADNUTIA VÝBORU\nPrítomní: ...........................................  Neprítomní: .................\nZapisovateľ: ........................................\n\nUznesenia:\nČ.  O čom sa rozhodlo                         Kto to má na sebe   Dokedy   Stav\n1\n2\n3\n\nKontrola uznesení z minula:  hotové / prebieha / nesplnené (dôvod)\nĎalšie zasadnutie: ..................  Zápis rozposlaný členom dňa: .............."
+    },
+    {
+      "key": "odovzdanie",
+      "title": "Odovzdávací protokol funkcie",
+      "description": "Pri každej zmene vo funkcii – dokumenty, peniaze, prístupy, otvorené veci a podpisy.",
+      "text": "ODOVZDANIE A PREVZATIE FUNKCIE\nFunkcia: ..............................  Dátum odovzdania: ..................\nOdovzdáva: ............................  Preberá: ...........................\n\nDOKUMENTY\n[ ] Stanovy klubu a posledné zmeny\n[ ] Zápisnice zo zasadnutí (posledné 2 roky)\n[ ] Zmluvy — obec, škola, tréneri, sponzori, prenájmy\n[ ] Doklady k dotáciám a grantom (aj nevyúčtované)\n[ ] Poistné zmluvy\n[ ] Evidencia členov a súhlasy rodičov\n\nFINANCIE (ak sa funkcie týka)\n[ ] Stav účtu ku dňu odovzdania: ................ €\n[ ] Pokladňa v hotovosti: ................ €\n[ ] Nezaplatené faktúry a záväzky: ................\n[ ] Neuhradené členské: ................\n\nPRÍSTUPY A VECI\n[ ] ISSF — prepísané na nového, starému odobrané\n[ ] Bankový účet a dispozičné právo\n[ ] Klubový e-mail, web, sociálne siete\n[ ] Pečiatka klubu\n[ ] Kľúče (areál, sklad, šatne) — počet: ......\n[ ] Technika a materiál v držbe (notebook, telefón, výstroj)\n\nOTVORENÉ VECI, KTORÉ NOVÝ ČLOVEK PREBERÁ\n1.\n2.\n3.\n\nOdovzdal (podpis): ....................  Prevzal (podpis): ....................\nZa výbor klubu (podpis): ...................."
+    },
+    {
+      "key": "kalendar",
+      "title": "Ročný kalendár orgánov klubu",
+      "description": "Termíny, ktoré sa nedajú dohnať – leto, jeseň, zima, jar.",
+      "text": "LETO (júl – aug)\n[ ] Prihlášky mužstiev do súťaží — overiť termín na ObFZ\n[ ] Súpisky a registrácie nových hráčov (ISSF)\n[ ] Schválenie rozpočtu na novú sezónu vo výbore\n[ ] Kontrola platnosti poistení a zmlúv s trénermi\n[ ] Kontrola prístupov — kto má ISSF, účet, e-mail\n\nJESEŇ (sep – nov)\n[ ] Zasadnutie výboru na štart sezóny (uznesenia, zodpovednosti)\n[ ] Priebežné registrácie a hosťovania v termínoch\n[ ] Kontrola vyzbieraných členských\n[ ] Žiadosti o dotácie na ďalší rok (obec, mesto)\n\nZIMA (dec – feb)\n[ ] Uzávierka roka — doklady ekonómovi a účtovníkovi\n[ ] Vyúčtovanie dotácií a grantov\n[ ] Kontrola hospodárenia (kontrolór / revízor)\n[ ] Valné zhromaždenie: hospodárenie, plán, prípadné voľby\n[ ] Zasadnutie výboru k jesennej časti a plánu na jar\n\nJAR (mar – jún)\n[ ] Registrácie a súpisky pre jarnú časť\n[ ] Kontrola obsadenia funkcií — čo je prázdne a prečo\n[ ] Príprava odovzdávacích balíkov pri plánovaných zmenách\n[ ] Vyhodnotenie sezóny vo výbore a plán na ďalšiu\n[ ] Poďakovanie dobrovoľníkom a rodičom (bod výboru, nie náhoda)"
+    },
+    {
+      "key": "swot",
+      "title": "SWOT za 60 minút",
+      "description": "Program zasadnutia výboru a tabuľka silných a slabých stránok, príležitostí a hrozieb.",
+      "text": "SWOT KLUBU – zasadnutie výboru (60 min)\nKlub: .....................  Dátum: .............  Prítomní: .........................\n\n10 min  Každý sám: 3 silné a 3 slabé stránky klubu (na lístočky)\n15 min  Spoločne: zoskupiť a vybrať 3 najdôležitejšie z každého\n15 min  Príležitosti a hrozby zvonka (obec, škola, demografia, súťaže, peniaze)\n15 min  Čo z toho vyplýva: čo posilniť, čo opraviť, čo využiť, čomu predísť\n 5 min  Kto to prepíše na jednu stranu a pošle výboru\n\nSILNÉ STRÁNKY (vnútri klubu)        SLABÉ STRÁNKY (vnútri klubu)\n1.                                  1.\n2.                                  2.\n3.                                  3.\n\nPRÍLEŽITOSTI (zvonka)               HROZBY (zvonka)\n1.                                  1.\n2.                                  2.\n3.                                  3.\n\nPodklady: výsledok Kompasu klubu, čísla vo Vizitke, rozhovor s 2 rodičmi a 2 hráčmi"
+    },
+    {
+      "key": "vizia",
+      "title": "Vízia, poslanie a hodnoty na jednu stranu",
+      "description": "Jedna veta o klube o 5 rokov, pre koho klub je a 3 až 5 hodnôt s konkrétnym správaním.",
+      "text": "NÁŠ KLUB O 5 ROKOV (vízia – jedna veta)\n...................................................................................\n\nPRE KOHO SME A ČO DÁVAME (poslanie – 2 až 3 vety)\n...................................................................................\n\nNAŠE HODNOTY (3 až 5) A AKO SA PODĽA NICH SPRÁVAME\nHodnota            Ako to u nás vyzerá v praxi\n1. ..............   ................................................................\n2. ..............   ................................................................\n3. ..............   ................................................................\n\nSchválené výborom dňa: ..............  Zverejnené (web, nástenka, rodičom): ........."
+    },
+    {
+      "key": "plan3",
+      "title": "Plán klubu na tri roky",
+      "description": "Najviac tri ciele na tri roky, ciele sezóny a vyhodnotenie.",
+      "text": "PLÁN KLUBU NA TRI ROKY  (sezóny ......../........ až ......../........)\n\nCieľ na 3 roky        Ako poznáme, že sa podaril   Oblasť   Kto   S kým        Odhad €   Zdroj\n1.\n2.\n3.\n\nCIELE NA TÚTO SEZÓNU  (zapíšte aj do Plánu sezóny v Akadémii)\nCieľ sezóny           Kto        Dokedy      Stav (nezačatý / rozbehnutý / splnený)\n1.\n2.\n3.\n\nVYHODNOTENIE  (zimné zasadnutie výboru / valné zhromaždenie)\nČo sa podarilo:  ......................................................\nČo nie a prečo:  ......................................................\nČo meníme:       ......................................................"
+    },
+    {
+      "key": "mandat",
+      "title": "Mandát predsedu a pravidlá podpisov",
+      "description": "Uznesenie výboru: do akej sumy rozhoduje predseda sám a kto pripravuje a kto potvrdzuje platby.",
+      "text": "UZNESENIE VÝBORU – MANDÁT A PODPISY\nKlub: .....................  Zasadnutie dňa: .................\n\n1. Predseda rozhoduje sám o výdavkoch do ........ € na jednu vec.\n   Nad túto sumu rozhoduje výbor (aj per rollam e-mailom so zápisom).\n2. Zmluvy nad ........ € alebo na dlhšie ako ........ mesiacov schvaľuje výbor.\n3. Platbu pripravuje: ......................  Platbu potvrdzuje: ......................\n   (nikdy ten istý človek)\n4. Prístup do internetbankingu: ......................  Záloha: ......................\n5. Pokladňa v hotovosti do ........ €; doklad ku každému výdavku.\n6. Výbor dostáva prehľad príjmov a výdavkov: raz za ........ (štvrťrok / mesiac).\n\nPlatí od: ..................  Hlasovanie: za ..... / proti ..... / zdržal sa .....\nPodpis predsedu: ..................  Podpis zapisovateľa: .................."
+    },
+    {
+      "key": "prevzatie",
+      "title": "Šesť vecí, ktoré zistiť pri prevzatí klubu",
+      "description": "Zoznam pre nové vedenie: stanovy, register, zápisnice, prístupy, peniaze a termíny.",
+      "text": "PREVZATIE KLUBU – ČO ZISTIŤ V PRVOM TÝŽDNI\nKlub: .....................  Nové vedenie zvolené dňa: ..................\n\n[ ] Stanovy v aktuálnej verzii – kde sú, kedy boli naposledy zmenené\n[ ] Register – kto je zapísaný ako štatutár; zodpovedá to voľbe?\n[ ] Posledné zápisnice – valné zhromaždenie a výbor (ak existujú)\n[ ] Prístupy – ISSF, účet, e-mail, web, sociálne siete, kľúče: kto ich má dnes\n[ ] Peniaze a doklady – zostatok, nezaplatené faktúry, neuhradené členské, nevyúčtované dotácie\n[ ] Tvrdé termíny – prihlášky do súťaží, súpisky, vyúčtovanie dotácií, uzávierka roka\n\nČo chýba a kto to zoženie:\n1. ....................................  kto: ..........  dokedy: ..........\n2. ....................................  kto: ..........  dokedy: .........."
+    },
+    {
+      "key": "sprava",
+      "title": "Správa o hospodárení pre členov",
+      "description": "Jedna strana raz ročne: koľko klub získal, za čo míňal, čo kontroloval revízor a čo plánuje.",
+      "text": "SPRÁVA O HOSPODÁRENÍ KLUBU ZA ROK ........\nPre členov klubu a rodičov – predložené na valnom zhromaždení dňa ..........\n\nPRÍJMY SPOLU: ........ €\n  členské ........ € · obec / dotácie ........ € · granty ........ € · 2 % ........ €\n  sponzori ........ € · podujatia ........ € · iné ........ €\nVÝDAVKY SPOLU: ........ €\n  súťaže a rozhodcovia ........ € · doprava ........ € · výstroj ........ €\n  areál a energie ........ € · vzdelávanie trénerov ........ € · iné ........ €\nZOSTATOK K 31. 12.: ........ €\n\nKontrola hospodárenia: vykonal(a) .......................... dňa .......... – zistenia: ..........\nČo sme za tie peniaze urobili (3 vety): ..............................................\nČo plánujeme na budúci rok: ...........................................................\n\nKontakt na otázky: ...................... (ekonóm / predseda)"
+    },
+    {
+      "key": "konflikt",
+      "title": "Pravidlo konfliktu záujmov",
+      "description": "Krátke pravidlo pre výbor: kto je dodávateľ alebo s ním v rodine, povie to a o zákazke nehlasuje.",
+      "text": "KONFLIKT ZÁUJMOV – PRAVIDLO VÝBORU\n1. Člen výboru, ktorý je dodávateľom klubu (alebo je s dodávateľom v rodine či vo firme),\n   to povie pred rozhodnutím o zákazke.\n2. O takej zákazke nehlasuje a do zápisnice sa uvedie, že sa zdržal.\n3. Pri zákazke nad ........ € výbor porovná aspoň dve ponuky.\n4. Zoznam takýchto vzťahov vedie zapisovateľ a raz ročne ho výbor prejde.\n\nVzťahy, o ktorých výbor vie:\nMeno člena výboru     Firma / dodávateľ     Čo dodáva     Odkedy"
+    },
+    {
+      "key": "navsteva",
+      "title": "Rozhovor o vedení pri návšteve mentora",
+      "description": "Šesť otázok pre predsedu a výbor; odpovede porovnáte s Kompasom oblasti 1.",
+      "text": "ROZHOVOR O VEDENÍ – NÁVŠTEVA MENTORA (30 min)\nKlub: .....................  Dátum: .............  Prítomní: .........................\n\n1. Kto je zapísaný ako štatutár a zodpovedá to realite?\n2. Koľko ľudí má prístup do ISSF a k účtu? Kto je záloha?\n3. Kedy výbor naposledy zasadal a kde je zápis?\n4. Ktorá funkcia je dnes prázdna alebo stojí na jednom človeku?\n5. Čo by sa stalo, keby zajtra odišiel predseda?\n6. Kam chce klub o tri roky dôjsť – vie to povedať jednou vetou?\n\nDohodnutý krok do ďalšej návštevy: ...................... kto: .......... dokedy: .........."
+    },
+    {
+      "key": "predpisy",
+      "title": "Predpisy, ktoré sleduje výbor",
+      "description": "Prehľad predpisov SFZ s menom, kto ich sleduje a kedy ich naposledy skontroloval.",
+      "text": "PREDPISY SFZ, KTORÉ SLEDUJE VÝBOR\nPlatné znenia: futbalsfz.sk → Predpisy SFZ\nZa predpisy vo výbore zodpovedá: .....................  (určené dňa ..........)\n\nPredpis                                         Kedy ho otvárame                Posledná kontrola   Čo sa nás týka\nStanovy SFZ                                     zmena stanov klubu, členstvo\nSmernica o právno-organizačných zmenách         zmena názvu, formy, zlúčenie\nSmernica o členskom príspevku SFZ               výber členského\nSúťažný poriadok futbalu + rozpis súťaže        prihlášky, pred sezónou\nRegistračný a prestupový poriadok               registrácie, prestupy\nDisciplinárny poriadok SFZ                      disciplinárne konanie\nEtický kódex SFZ                                konflikt záujmov, správanie\nPripomienkové konanie                           pred sezónou – čo sa mení\n\nSTANOVY KLUBU\nPosledná zmena stanov klubu: ..........   Porovnané so stanovami SFZ dňa: ..........\nCieľ športovej činnosti je v stanovách doslova:  áno / nie"
+    }
+  ],
+  "mentorModules": []
+}

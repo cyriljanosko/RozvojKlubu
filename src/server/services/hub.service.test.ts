@@ -135,7 +135,9 @@ describe("mentor behind the scenes", () => {
     expect(withoutMentor(lenses, false).some((h) => h.baseRole === "mentor")).toBe(false);
     expect(withoutMentor(lenses, true)).toHaveLength(lenses.length);
     expect(mentorPracticeRoles(catalog, 3)).toEqual(["m"]);
-    expect(mentorPracticeRoles(catalog, 1)).toEqual([]);
+    // area 1 has a mentor Prax role too (30. 10. 2026); area 2 has no Prax
+    expect(mentorPracticeRoles(catalog, 1)).toEqual(["m"]);
+    expect(mentorPracticeRoles(catalog, 2)).toEqual([]);
   });
 });
 

@@ -5,8 +5,11 @@ import { SFZ_HUB, SFZ_LINKS, linkSegments, linkTree, sfzLinksFor } from "./sfz-l
 const link = (id: string) => SFZ_LINKS.find((l) => l.id === id)!;
 
 describe("SFZ links", () => {
-  it("applies to area 3 only and every hub link exists", () => {
+  it("applies coach links to area 3, regulations to area 1 and every hub link exists", () => {
     expect(sfzLinksFor(3).length).toBeGreaterThan(10);
+    expect(sfzLinksFor(3).some((l) => l.id === "statutes")).toBe(false);
+    expect(sfzLinksFor(1).map((l) => l.id)).toContain("statutes");
+    expect(sfzLinksFor(1).some((l) => l.id === "uefa-c")).toBe(false);
     expect(sfzLinksFor(5)).toEqual([]);
     expect(SFZ_HUB.flatMap((g) => g.links).every((l) => l.url.startsWith("https://"))).toBe(true);
     expect(SFZ_LINKS.every((l) => l.url.startsWith("https://"))).toBe(true);
@@ -52,5 +55,21 @@ describe("SFZ links", () => {
     expect(urls).toEqual([link("ticketing").url, "x", link("issf").url, link("uefa-b").url]);
     expect(tree.children[0].children).toEqual([{ type: "text", value: "UEFA B" }]);
     expect(tree.children[2]).toEqual({ type: "code", value: "SFZ Ticketing" });
+  });
+
+  it("links regulations in area 1 texts to their category pages", () => {
+    const segments = linkSegments(
+      "Dokument musí byť v súlade so stanovami SFZ; pozri aj Smernicu o právno-organizačných zmenách v kluboch.",
+      sfzLinksFor(1),
+      new Set<string>(),
+    );
+    const linked = segments.filter((s) => s.link).map((s) => [s.text, s.link!.url]);
+    expect(linked).toEqual([
+      ["stanovami SFZ", "https://futbalsfz.sk/legislativa-predpisy-sfz-stanovy/"],
+      [
+        "Smernicu o právno-organizačných zmenách v kluboch",
+        "https://futbalsfz.sk/legislativa-predpisy-sfz-smernice/",
+      ],
+    ]);
   });
 });

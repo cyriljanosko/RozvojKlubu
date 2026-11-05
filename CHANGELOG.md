@@ -6,12 +6,22 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Oblasť 1 Vedenie – Obec, škola a klub: sekcia Metodiky o trojuholníku spolupráce (čo si strany dávajú, kto s kým hovorí, materská, základná a stredná škola, možnosti obce, ročný kalendár, programy SFZ Dajme spolu gól a UEFA Disney Playmakers); odkazy na ňu v oblastiach 2, 6 a 11.
+- Novinky: odkazy v texte novinky sú klikateľné – `[text](https://…)` alebo holá adresa, otvoria sa v novom okne so značkou ↗ ako v Metodike; nápoveda vo formulári.
+- Novinky – návrhy klubov a administrácia (ADR 0023, N3): vedenie klubu navrhuje príbeh alebo odporúčanie v klube (Novinky klubu – zoznam návrhov so stavmi, formulár so štyrmi časťami a súhlasmi, odoslanie SFZ, potvrdenie úprav SFZ), mentor návrhy vidí. Administrácia → Novinky: záložky podľa stavu, posúdenie (úprava textu, vrátenie s poznámkou, zverejnenie, stiahnutie, pripnutie, balík pre komunikáciu SFZ na skopírovanie, odkaz na článok na futbalsfz.sk) a nová novinka SFZ. Výzva „Má váš klub čo povedať?“ na Novinkách a stav vlastného návrhu v dlaždici Mojej Akadémie.
+- Novinky – verejné obrazovky (ADR 0023, N2): `/novinky` s filtrom typu a oblasti, pripnutou novinkou a staršími stranami; detail novinky so štruktúrou príbehu, odporúčaním v zvýraznenej karte, odkazom na oblasť, zdieľaním (odkaz, Facebook, WhatsApp, e-mail) a náhľadom pre sociálne siete; blok Novinky na úvode Akadémie, „Ako to robia iné kluby“ v detaile oblasti a dlaždica Novinky v Mojej Akadémii (k najslabšej oblasti Kompasu a cieľom plánu). Položka Novinky v menu Viac. Bloky sa skryjú, kým nie je čo ukázať.
+- Novinky – služba a API (ADR 0023, N1): verejný zoznam a detail zverejnených príspevkov, návrhy príbehov a odporúčaní vedením klubu (koncept, úprava, odoslanie so súhlasmi), schvaľovanie adminom SFZ (vrátenie s poznámkou, úprava s potvrdením klubom, zverejnenie, skrytie, pripnutie, balík pre komunikáciu SFZ, odkaz na futbalsfz.sk) a novinky Akadémie. Obrazovky prídu v ďalších PR.
+- Oblasť 1 Vedenie – Predpisy SFZ: sekcia Metodiky, ktorý predpis SFZ otvoriť v akej situácii (s odkazmi na kategórie na futbalsfz.sk), krok k predpisom v Praxi predsedu, nového vedenia a mentora, vzor „Predpisy, ktoré sleduje výbor“; názvy predpisov v texte oblasti 1 sú automaticky prelinkované.
 - Voľba vzhľadu v účte: podľa zariadenia, svetlý alebo tmavý (R4 G3b). Uloží sa v prehliadači a nastaví sa ešte pred vykreslením stránky, takže tmavá téma nebliká.
 - Kompas na vyskúšanie bez klubu: na `/kompas` sa dá vybrať „Bez klubu – len sa otestujem“, platia potom všetky otázky (všetky vekové kategórie). Výber klubu je priamo na stránke.
 - Prenos odpovedí z vyskúšania: klubový manažér, ktorý si Kompas vyskúšal v tom istom prehliadači, dostane v Kompase klubu ponuku odpovede prevziať (len otázky platné pre klub); uložia sa až tlačidlom Uložiť, potom sa z prehliadača zmažú.
 
 ### Zmenené
 
+- Pravidlá pre Clauda: globálne pravidlá Cyrila sú v `~/.claude/CLAUDE.md`; repo `CLAUDE.md` doplnený o pravidlá práce (overovanie, tajomstvá, rozsah) a o push len pri potrebe.
+- Produkčná doména je `klub.futbalsfz.sk` (predtým `rozvojklubu.ltk.solutions`, stará adresa presmerúva); dokumentácia, príklady v testoch a odosielateľská doména e-mailov (futbalsfz.sk) upravené.
+- Závislosti (3. 11.): better-auth 1.7.14, jose 6.2.14, lucide-react 1.66.0, mongodb 7.8.0, react a react-dom 19.3.1, @types/node 26.6.6, eslint 10.14.0, vitest 5.0.5.
+- Novinky v detaile oblasti: blok „Ako to robia iné kluby“ je teraz „Novinky k oblasti“ a okrem príbehov a odporúčaní klubov ukazuje aj novinky Akadémie (3 najnovšie).
 - Redesign stránky O Akadémii podľa návrhu schváleného 30. 10.: úvod, video, jedenástka na ihrisku s líniami v odtieňoch modrej SFZ (trávnik ostáva zelený ako ilustrácia), línie a tematické sekcie ako zoznamy, výzva v zvýraznenej karte; okno oblasti po ťuknutí na hráča v DS.
 - Redesign Analýzy (R4 G4, ADR 0018): hlavička so štítkom rozsahu (celý pilot / moje kluby / môj klub), export CSV a tlač, filtre a výber klubov na porovnanie v DS, prehľad sezóny (kluby, odoslaný Kompas, uzavreté licencie, plán sezóny). Tepelná mapa Kompasu a sieťový graf používajú farby z tokenov (pásma ako stavové farby DS, oblasti v odtieňoch modrej SFZ) – fungujú aj v tmavej téme.
 - Redesign Mojej Akadémie (R4 G3a, ADR 0018): pozdrav so sezónou, výber klubu čipmi, karta „Váš ďalší krok“ (najnaliehavejšia úloha) a zoznam úloh pevne hore, pre mentora odkaz na pracovisko; pod tým nastaviteľné dlaždice (ADR 0012) v novom vzhľade. Tabuľa dlaždíc, grafy (farby z tokenov `--chart-*`) a obľúbené sú zdieľané aj s Analýzou.
@@ -28,6 +38,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Opravené
 
+- Úryvok novinky (zoznam, náhľad pri zdieľaní) sa už neodreže pri dátume („20. 11. 2026“) a ukazuje text odkazu bez zápisu `[…](…)`.
 - Vizitka klubu: mentor už nevidí odkaz „Otvoriť Kompas“ na pracovnú verziu, ktorá mu vrátila „bez prístupu“ – odkaz ho vedie na posledný platný odoslaný Kompas; kým klub nič neodoslal, odkaz sa mentorovi nezobrazí (analýza obrazoviek, kap. 3.3, bod 1).
 - Mentoring klubu: kto je v klube mentor aj vedenie, píše časti klubu (úvodné sebahodnotenie, záver klubu) aj časti mentora (zameranie, záver mentora) – doteraz mal len práva mentora (analýza obrazoviek, kap. 3.3, bod 2).
 - `/mentor` („Moje kluby v kohorte“): mentor vidí svoje kluby sezóny s posledným odoslaným Kompasom namiesto presmerovania do Moja Akadémia; admin SFZ ďalej všetky kluby, ostatní prihlásení hlášku „Nie ste mentor žiadneho klubu.“ (analýza obrazoviek, kap. 3.3, bod 3). Odkazy na `/mentor` v novej navigácii tak vedú tam, kam sľubujú.

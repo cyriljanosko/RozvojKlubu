@@ -1,10 +1,10 @@
 # CLAUDE.md — Rozvoj klubu (Akadémia vzdelávania SFZ)
 
-> Konvencie tohto repozitára. Globálne pravidlá (jazyk, plánovanie, zákaz mazania, rituály) sú v Instructions for Claude a tu sa neopakujú.
+> Konvencie tohto repozitára. Globálne pravidlá Cyrila (jazyk, doplňujúce otázky a plán pred prácou, rituály „Zorientuj sa“, „Poupratuj“, „Odovzdaj“, „Rozhodni“) sú v `~/.claude/CLAUDE.md` a tu sa neopakujú. Pri rozpore vyhráva prísnejšie pravidlo.
 
 ## 1. Čo to je a ako to rozbehať
 
-- Web aplikácia SFZ na vzdelávanie a rozvoj futbalových klubov: https://rozvojklubu.ltk.solutions
+- Web aplikácia SFZ na vzdelávanie a rozvoj futbalových klubov: https://klub.futbalsfz.sk
 - Stack: Next.js 16 (App Router, TypeScript), Tailwind CSS 4 + SFZ Design System (shadcn/ui len v obrazovkách pred prepisom, ADR 0018), MongoDB Atlas (oficiálny driver `mongodb`), Better Auth, next-intl, Vercel (fra1), Vitest
 - Štruktúra: jedna aplikácia, API-first – pozri `ARCHITECTURE.md`
 - Lokálny beh: `npm install && npm run dev` → http://localhost:3000 (stav: `/api/v1/health`)
@@ -39,6 +39,7 @@ Zdroj pravdy pri rozpore: **kód → git log → ADR → NEXT.md → devlog** (v
 - **Dve sessions v jednom repozitári = dve vetvy.** Nikdy dve na `main` ani na jednej spoločnej.
 - Súbory do commitu sa pridávajú **menovite**, nie `git add -A`. Cudzí `M` v `git status` = niekto ďalší pracuje → vlastná vetva, nepribaľovať.
 - Claude pushuje **vlastné** vetvy a otvára PR (cez `gh` účtom Cyrila, rozhodnutie 16. 10. 2026). Do `main` nepushuje nikdy.
+- Commit je povolený priebežne; push až vtedy, keď je potrebný (PR, preview deployment, odovzdanie).
 
 ## 4. Devlog
 
@@ -106,7 +107,14 @@ Sekcia „Nefungovalo“ je povinná, keď sa niečo zamietlo – z git logu sa 
 - Testy nikdy nebežia proti živej databáze – mock alebo dedikovaná testovacia DB.
 - `npm run test` musí prejsť pred commitom.
 
-## 8. Čo nesmieš bez výslovného súhlasu
+## 8. Pravidlá práce a čo nesmieš bez výslovného súhlasu
+
+- Čo sa nedá overiť, je „neviem“. Žiadne hádanie faktov o kóde, dátach ani stave projektu.
+- Dokumentácia je indícia, pravdou je kód a git log. `NEXT.md` môže byť zastaraný – pred tvrdením „toto je ešte otvorené“ to over v `git log`.
+- Žiadne drive-by refaktoringy ani preformátovanie nesúvisiacich súborov.
+- Žiadne tajomstvá (tokeny, heslá, kľúče, prístupové údaje) v repozitári, dokumentácii ani devlogu. V zápisoch maskuj tokeny, e-maily a ID osôb a klubov mimo verejných údajov.
+
+Bez výslovného súhlasu nikdy:
 
 - DB migrácie a zmeny schém (vrátane nových kolekcií)
 - Zásahy do `.env*` (okrem šablóny `.env.example`), CI, deployment a produkčných nastavení

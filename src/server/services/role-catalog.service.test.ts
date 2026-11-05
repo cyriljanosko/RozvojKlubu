@@ -18,7 +18,7 @@ const file = JSON.parse(readFileSync(join(process.cwd(), "content/roly.json"), "
 const at = new Date("2026-10-16T12:00:00Z");
 
 describe("role catalog file", () => {
-  it("contains 7 base roles (ADR 0011), 60 roles in 11 areas and two Hub tracks", () => {
+  it("contains 7 base roles (ADR 0011), 61 roles in 11 areas and two Hub tracks", () => {
     const c = roleCatalogSchema.parse(file);
     expect(c.baseRoles.map((b) => b.key)).toEqual([
       "management",
@@ -58,7 +58,7 @@ describe("role catalog file", () => {
       clubRole: "management",
     });
     expect(c.areas).toHaveLength(11);
-    expect(c.areas.reduce((n, a) => n + a.roles.length, 0)).toBe(60);
+    expect(c.areas.reduce((n, a) => n + a.roles.length, 0)).toBe(61);
     expect(c.areas.filter((a) => a.status === "approved").map((a) => a.area)).toEqual([3, 4]);
     // areas 3 and 4 point to the roles of their Prax
     const practice = (n: number) =>

@@ -161,7 +161,8 @@ export interface AreaPracticeDoc extends Versioned {
 /** Collection `content_revisions` – one document per change of managed content. */
 export interface ContentRevisionDoc {
   _id?: ObjectId;
-  entity: "area" | "kompas_question" | "area_section" | "area_practice" | "role_catalog";
+  entity:
+    "area" | "kompas_question" | "area_section" | "area_practice" | "role_catalog" | "news_post";
   entityId: string;
   /** Version created by this change. */
   version: number;
@@ -515,6 +516,73 @@ export interface ClubSettingsDoc {
   rankingConsent: { given: boolean; at: Date; by: string } | null;
   version: number;
   createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}
+
+// ---- Novinky (ADR 0023) ----
+
+/** story = príbeh klubu, tip = odporúčanie (both proposed by a club), academy = novinka Akadémie (SFZ). */
+export const NEWS_KINDS = ["story", "tip", "academy"] as const;
+export type NewsKind = (typeof NEWS_KINDS)[number];
+
+export const NEWS_STATUSES = ["draft", "submitted", "returned", "published", "hidden"] as const;
+export type NewsStatus = (typeof NEWS_STATUSES)[number];
+
+/** Guided parts of a club post; an academy post has one free `body`. */
+export const NEWS_SECTION_KEYS = ["start", "done", "result", "advice", "body"] as const;
+export type NewsSectionKey = (typeof NEWS_SECTION_KEYS)[number];
+
+export interface NewsConsent {
+  at: Date;
+  by: string;
+}
+
+/** Collection `news_posts` – club posts carry `clubId` (tenant while not published), academy posts do not. */
+export interface NewsPostDoc {
+  _id?: ObjectId;
+  kind: NewsKind;
+  /** Sportnet ID of the proposing club; null for academy posts */
+  clubId: string | null;
+  title: string;
+  /** set when first published, unique */
+  slug: string | null;
+  /** 0–3 area numbers 1–11 */
+  areas: number[];
+  /** plain text, paragraphs separated by an empty line */
+  sections: { key: NewsSectionKey; text: string }[];
+  /** photos and documents arrive with the file storage (ADR 0022) */
+  photos: { key: string; caption: string; width: number; height: number }[];
+  documents: {
+    name: string;
+    mime: string;
+    size: number;
+    key: string;
+    access: "public" | "signedIn";
+  }[];
+  consents: {
+    publication: NewsConsent | null;
+    photoPeople: NewsConsent | null;
+    external: NewsConsent | null;
+  };
+  status: NewsStatus;
+  /** note of SFZ to the club when returned */
+  reviewNote: string | null;
+  /** SFZ changed the club's text – the club must confirm it (submit again) before publishing */
+  sfzEditedAt: Date | null;
+  pinned: boolean;
+  /** article on futbalsfz.sk */
+  externalUrl: string | null;
+  commsSharedAt: Date | null;
+  commsSharedBy: string | null;
+  views: number;
+  submittedAt: Date | null;
+  submittedBy: string | null;
+  publishedAt: Date | null;
+  publishedBy: string | null;
+  version: number;
+  createdAt: Date;
+  createdBy: string;
   updatedAt: Date;
   updatedBy: string;
 }
