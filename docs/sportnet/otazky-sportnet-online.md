@@ -3,6 +3,8 @@
 > Stav: 28. 10. 2026 – OAuth klienta nastaví a otázky vývojárom sportnet.online pošle Ján (SFZ); Cyril dostane hodnoty do Vercelu.
 > Kontext: ADR 0002 (prihlásenie Sportnet), ADR 0021 (roly v klube), zadanie `zadanie-s1-s3.md`.
 > Overené v dokumentácii auth.sportnet.online a CoreApi a na živom verejnom API 28. 10. 2026.
+> **Odpovede sportnet.online zo 4. 11. 2026: `odpovede-sportnet-online.md`.** Niektoré predpoklady tu
+> neplatia – klient je verejný bez secretu (A2), `client_credentials` nebude, namiesto neho token exchange (A5, A9, B7).
 
 ## A. Čo potrebuje aplikácia od OAuth klienta v sportnet.online
 
