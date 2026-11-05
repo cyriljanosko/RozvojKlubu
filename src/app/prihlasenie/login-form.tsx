@@ -20,6 +20,8 @@ export function LoginForm({ sportnetEnabled }: { sportnetEnabled: boolean }) {
     const { error } = await authClient.signIn.social({
       provider: "sportnet",
       callbackURL: "/moja-akademia",
+      // Failed callbacks (e.g. Sportnet account without e-mail) come back here with ?error=
+      errorCallbackURL: "/prihlasenie",
     });
     if (error) {
       setRedirecting(false);

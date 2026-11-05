@@ -36,10 +36,12 @@ MCP server (F5, plánovaný)        ─┘        │
 ### Prihlásenie cez Sportnet (OIDC)
 
 1. `/prihlasenie` → `authClient.signIn.social({ provider: "sportnet" })`
-2. Better Auth presmeruje na `auth.sportnet.online/authorize` (Authorization Code + PKCE, scope `openid`)
-3. Callback `/api/auth/oauth2/callback/sportnet` → výmena kódu na `/token`
+2. Better Auth presmeruje na `auth.sportnet.online/authorize` (Authorization Code + PKCE, scope `openid`;
+   verejný klient `rozvojklubu` bez secretu)
+3. Callback `/api/auth/callback/sportnet` → výmena kódu na `/token` (posiela sa len `client_id` a `code_verifier`)
 4. ID token sa overí cez JWKS (`/.well-known/jwks.json`, RS256, `iss`, `aud`) → `sub` = Sportnet ID
-5. Better Auth vytvorí/prepojí používateľa (podľa e-mailu) a reláciu (cookie)
+5. Better Auth vytvorí/prepojí používateľa (podľa e-mailu) a reláciu (cookie). Bez e-mailu v ID tokene
+   sa prihlásenie odmietne a `/prihlasenie?error=email_not_found` ukáže výzvu (ADR 0025)
 
 ### Prihlásenie e-mailovým odkazom
 

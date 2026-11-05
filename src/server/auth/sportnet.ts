@@ -5,19 +5,25 @@ import { createRemoteJWKSet, jwtVerify, type JWTPayload } from "jose";
 /**
  * Sportnet OIDC provider (auth.sportnet.online) for Better Auth genericOAuth.
  *
- * Verified in Sportnet docs (project auth-sportnet-online):
- * - Authorization Code + PKCE (S256), `openid` scope issues an ID token
- * - endpoints /authorize and /token, JWKS at /.well-known/jwks.json
- * - RS256 tokens, iss = https://auth.sportnet.online, aud = client_id, sub = userId
- * NOT verified yet: exact ID-token profile claim names (name/surname/email) –
- * mapping below is defensive; confirm after the OAuth client is registered.
+ * Confirmed by the sportnet.online developers on 2026-11-04
+ * (docs/sportnet/odpovede-sportnet-online.md, A1–A8):
+ * - client `rozvojklubu` is a public client: Authorization Code + PKCE (S256), no client secret
+ * - endpoints /authorize and /token, JWKS at /.well-known/jwks.json; no OIDC discovery, no userinfo
+ * - RS256 ID token, iss = https://auth.sportnet.online, aud = client_id, sub = Sportnet user id
+ * - ID-token profile claims: name, surname, family_name, username (string or array), email
+ *   (NOT guaranteed – ISSF accounts may have none), photoUrl, photoIsPublic; no nonce, picture
+ *   or dnm (dnm is only in the access token)
  */
 export const SPORTNET_PROVIDER_ID = "sportnet";
 
 export interface SportnetConfig {
   authUrl: string;
   clientId: string;
-  clientSecret: string;
+}
+
+/** Sportnet sign-in is shown as soon as the public client id is set (no secret exists). */
+export function isSportnetConfigured(env: { SPORTNET_OAUTH_CLIENT_ID?: string }): boolean {
+  return Boolean(env.SPORTNET_OAUTH_CLIENT_ID);
 }
 
 type Claims = JWTPayload & Record<string, unknown>;
@@ -28,13 +34,15 @@ const str = (v: unknown): string | undefined =>
 /** Maps Sportnet ID-token claims to the generic OAuth user info shape. */
 export function mapSportnetClaims(claims: Claims) {
   const sub = str(claims.sub);
+  if (!sub) return null;
+  // Without e-mail the user is still returned: Better Auth then rejects the sign-in with
+  // `email_not_found` and the sign-in page asks the user to add an e-mail in Sportnet (ADR 0025).
   const email = str(claims.email)?.toLowerCase();
-  if (!sub || !email) return null;
-  const fullName =
-    str(claims.name) && str(claims.surname)
-      ? `${str(claims.name)} ${str(claims.surname)}`
-      : (str(claims.dnm) ?? str(claims.displayName) ?? str(claims.name) ?? email);
-  const image = str(claims.photo) ?? str(claims.picture);
+  const first = str(claims.name);
+  const last = str(claims.surname) ?? str(claims.family_name);
+  const username = str(Array.isArray(claims.username) ? claims.username[0] : claims.username);
+  const fullName = [first, last].filter(Boolean).join(" ") || username || email || sub;
+  const image = claims.photoIsPublic === true ? str(claims.photoUrl) : undefined;
   return {
     id: sub,
     sub,
@@ -42,7 +50,7 @@ export function mapSportnetClaims(claims: Claims) {
     name: fullName,
     image,
     // auth.sportnet.online only issues ID tokens for authenticated accounts;
-    // treat the e-mail as verified so accounts can be linked by e-mail.
+    // treat the e-mail as verified so accounts can be linked by e-mail (ADR 0002).
     emailVerified: true,
     sportnetId: sub,
   };
@@ -55,7 +63,8 @@ export function sportnetProvider(config: SportnetConfig) {
   return {
     providerId: SPORTNET_PROVIDER_ID,
     clientId: config.clientId,
-    clientSecret: config.clientSecret,
+    // Public client: only client_id goes into the token request, PKCE protects the code.
+    tokenEndpointAuth: { method: "none" as const },
     authorizationUrl: `${base}/authorize`,
     tokenUrl: `${base}/token`,
     scopes: ["openid"],

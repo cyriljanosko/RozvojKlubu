@@ -224,6 +224,8 @@ skončiť zamietnutím).
 - **Verejný klient bez secretu:** `auth.ts` dnes zapína Sportnet len pri `SPORTNET_OAUTH_CLIENT_ID` aj
   `SPORTNET_OAUTH_CLIENT_SECRET`. Stačiť má `client_id`; `SPORTNET_OAUTH_CLIENT_SECRET` z `.env.example`
   a z Vercelu preč. Better Auth 1.7.10 klienta bez secretu podporuje (`clientSecret` je voliteľný, PKCE).
+  Hotové v S1 (5. 11.). Callback Better Auth 1.7 je `/api/auth/callback/sportnet`, nie `/api/auth/oauth2/…`
+  z A4 – Sportnet cestu nekontroluje (A3), na localhoste overené: `/authorize` presmerovanie prijal.
 - **Claims:** fotka je `photoUrl` (použiť len pri `photoIsPublic`), nie `photo`/`picture`; meno z `name` +
   `surname`; `dnm` a `displayName` v ID tokene nie sú – z `mapSportnetClaims` vypadnú. `username` môže byť pole.
 - **Refresh token sa pri každom použití mení** – po obnove treba uložiť nový (overiť, že to Better Auth

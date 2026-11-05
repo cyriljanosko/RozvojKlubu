@@ -19,7 +19,8 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
   - [ ] Sportnet: doplniť `klub.futbalsfz.sk` do `allowed_hosts` (dnes je tam `rozvojklubu.futbalsfz.sk`) a pevnú Preview doménu; poslať zoznam endpointov Súťaží, ak ich budeme volať (Ján; časť 6, D1–D3).
   - [x] Klubový manažér aj s CRM rolou `matrikar` (B3) – ADR 0024 (5. 11., Ján); S2-b berie `admin`, `matrikar`, `manager`.
   - [x] Účet Sportnetu bez e-mailu – odmietnuť s výzvou, ADR 0025 (5. 11., Ján); implementácia v S1.
-  - [ ] S1 – prihlásenie bez secretu (`SPORTNET_OAUTH_CLIENT_SECRET` preč), claims `photoUrl`/`name`/`surname`, bez `dnm`, výzva pri účte bez e-mailu (ADR 0025); overiť na localhost s `SPORTNET_OAUTH_CLIENT_ID=rozvojklubu`.
+  - [x] S1 – prihlásenie bez secretu (`SPORTNET_OAUTH_CLIENT_SECRET` preč), claims `photoUrl` (len verejná fotka)/`name`/`surname`/`username`, bez `dnm`, výzva pri účte bez e-mailu (ADR 0025). Na localhost overené presmerovanie na Sportnet (5. 11.).
+  - [ ] S1 – dokončiť prihlásenie Sportnet účtom na localhoste (zadá Ján), potom `SPORTNET_OAUTH_CLIENT_ID=rozvojklubu` do `.env.local` a do Vercelu (Production + Preview), `SPORTNET_OAUTH_CLIENT_SECRET` z Vercelu zmazať; overiť na produkcii po doplnení `klub.futbalsfz.sk` do `allowed_hosts`.
 - [ ] Cyril: v Claude Design overiť vzhľad artifactu „SFZ Design System“ (https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3) a nastaviť ho ako predvolený dizajn systém.
 
 ### Novinky (ZK, ADR 0023)

@@ -52,7 +52,7 @@ Väčšie rozhodnutie = najprv ADR (číslo podľa `docs/decisions/`).
 ### S1 – prihlásenie cez sportnet.online
 
 1. Registrácia OAuth klienta v sportnet.online pre Production, Preview a localhost (redirect URI
-   `…/api/auth/oauth2/callback/sportnet` – over v Better Auth). Hodnoty dá Cyril do Vercelu a `.env.local`.
+   `…/api/auth/callback/sportnet` – overené v Better Auth 1.7 5. 11.). Hodnoty dá Cyril do Vercelu a `.env.local`.
 2. Overiť skutočné claimy ID tokenu, upraviť `mapSportnetClaims` a test `sportnet.test.ts`.
 3. Účet bez e-mailu, zmena e-mailu, prepojenie s existujúcim účtom z e-mailového odkazu – správanie + testy.
 4. Overiť prihlásenie na Preview a v produkcii (zápis do `NEXT.md` a devlogu).
