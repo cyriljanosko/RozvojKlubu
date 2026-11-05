@@ -59,6 +59,8 @@ Nastavenie Better Auth `genericOAuth`:
 | A7  | `openid` stačí. `/me/appspaces`, `/me/sport-orgs` a `/me/sport-expert-orgs` prijmú access token z prihlásenia bez ďalšieho scope a bez výmeny.                                                                                                                                                                                                                        |
 | A8  | ID token nesie `sub`, `name` (meno), `surname` (priezvisko), `family_name`, `username` (môže byť pole), `email`, `photoUrl`, `photoIsPublic`, `aud`, `iss`, `jti`, `iat` a `exp` (24 h). `dnm` (zobrazované meno), `displayName` ani `picture` v ňom nie sú, `dnm` je len v access tokene. **`email` nie je garantovaný:** účty prihlasované cez ISSF ho mať nemusia. |
 
+Overené pri prvom ostrom prihlásení 5. 11. 2026: `iss` v ID tokene je `auth.sportnet.online` bez `https://`, ostatné claims sedia s A8. Aplikácia prijme obe podoby `iss`.
+
 ## 2. Volanie CRM a Súťaží: token exchange (A9, A10, B7)
 
 Keď potrebujete volať CRM alebo Súťaže v mene prihláseného používateľa za konkrétny klub, najprv si
