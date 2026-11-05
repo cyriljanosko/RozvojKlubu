@@ -37,7 +37,7 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
 - [ ] EM – e-mailové prihlasovanie (dotiahne Cyril) a týždenný súhrn „čo vás čaká“ a pochvala po splnení cieľa.
 - [ ] PS – spätná väzba z pilotu: krátka anketa po každej fáze, rozhovory s 2 – 3 klubmi.
 - [ ] F6c – Naši tréneri: kategória → tréner → licencia, upozornenia, náhradník (dopĺňa vedenie). Odložené 22. 10. (návrh a otázky v devlogu); treba rozhodnúť zdroj licencií.
-- [ ] Knižnica oblasti (ADR 0022, PR #114 – navrhnuté) a úložisko súborov; potom dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice.
+- [ ] **Odložené (Cyril 30. 10.):** Knižnica oblasti s dokumentmi (ADR 0022 – navrhnuté, návrhy „Detail oblasti – Knižnica“ a „Administrácia – knižnica oblasti“ na plátne schválené Cyrilom 30. 10.): verejné / po prihlásení, dokument vo viacerých oblastiach, nahráva admin SFZ, počítadlo stiahnutí. Pred implementáciou: Cyril s kolegom potvrdí úložisko (zatiaľ Vercel Blob) a limit 25 MB; súhlas s kolekciou `library_items`, závislosťou `@vercel/blob` a premennou `BLOB_READ_WRITE_TOKEN`; administráciu zladiť s kolegom (S3). Potom dokumenty „Založenie klubu“ a UEFA Club Development Framework do knižnice.
   - [x] Dokumenty oblasti 1 (31. 10.): 14 dokumentov v brandingu SFZ (Word alebo Excel podľa typu + PDF) z vzorov Praxe a sekcie „Založenie klubu“, pripravené mimo repa v `~/Documents/Knižnica SFZ/Oblasť 01 – Vedenie klubu/`.
   - [ ] Cyril: skontrolovať dokumenty oblasti 1 a nahrať ich do SharePointu SFZ; doplniť originál UEFA Grassroots Club Development Framework 2022.
   - [ ] Pri nahratí do knižnice určiť prístup každého dokumentu (verejný / po prihlásení); „Rozhovor o vedení pri návšteve mentora“ je pre mentora zväzu.
