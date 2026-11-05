@@ -1,6 +1,6 @@
 # NEXT – ďalšie kroky
 
-Aktualizované: 4. 11. 2026 (knižnica oblasti 3; doména klub.futbalsfz.sk, ADR 0021 zlúčené; hotové veci sú v sekcii Hotové na konci). Overuj proti `git log` – môže byť zastarané.
+Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména klub.futbalsfz.sk, ADR 0021 zlúčené; hotové veci sú v sekcii Hotové na konci). Overuj proti `git log` – môže byť zastarané.
 
 ## Rozpracované
 
@@ -40,7 +40,9 @@ Aktualizované: 4. 11. 2026 (knižnica oblasti 3; doména klub.futbalsfz.sk, ADR
   - [x] Dokumenty oblasti 3 – Tréneri (3. 11.): 29 dokumentov (14 zo vzorov + dochádzka a minutáž, mesačný plán v dvoch verziách, komunikácia tréner – rodič v troch vekových úrovniach, 7 praktických vzorov pre každodennú prácu trénera) v `~/Documents/Knižnica SFZ/Oblasť 03 – Tréneri/`. Generátory sú v `~/Documents/Knižnica SFZ/_generátory/` (README).
   - [ ] Cyril: skontrolovať dokumenty oblasti 3, nahrať do SharePointu a vybrať lepšiu verziu mesačného plánu (Excel / kalendár na tlač).
   - [ ] Právne overiť: dohodu s dorastencom a rodičom o asistencii, súhlas s prepravou v Organizácii výjazdu a Núdzové kontakty tímu (osobné údaje); údaje o licenciách v Prehľade trénerov pred zverejnením.
-  - [ ] Dokumenty oblastí 2 a 4 (vzory v Metodike a Praxi); oblasti 5 – 11 zatiaľ vzory nemajú. Navrhnuté poradie: 4, 2, 9, 11.
+  - [x] Katalóg knižnice (5. 11.): 166 dokumentov pre 11 oblastí × 7 rolí, spoločné dokumenty, krížová tabuľka, pomôcka podľa roly, plán tvorby a kalendár sezóny v `~/Documents/Knižnica SFZ/Katalóg knižnice SFZ.xlsx`; generátor v `_generátory`.
+  - [ ] Cyril: prejsť katalóg a poslať poznámky; rozhodnúť, čím začne tvorba (oblasť 4 alebo spoločné dokumenty).
+  - [ ] Tvorba 115 dokumentov podľa katalógu – poradie oblastí 4, 2, 9, 8, 11, 5, 6, 7, 10, potom nové návrhy v 1 a 3; 29 s právnou kontrolou. Vzory sú v sekciách „Knižnica oblasti“ Metodiky všetkých oblastí.
   - [ ] Pri zmene textu vzoru v Metodike alebo Praxi treba pregenerovať aj súbor – zdroj pravdy je obsah v aplikácii.
 - [ ] Obec – škola – klub (sekcia oblasti 1 `#obec-skola`, PR #126 zlúčený 31. 10., v DB aj s odkazmi v oblastiach 2, 6, 11): termíny zápisov do 1. ročníka a materskej školy overiť s právnym oddelením (sekcia je bez `reviewedAt`). Príručka a kalendár v knižnici sú zosúladené so sekciou (31. 10.). Súbory knižnice (príručka + 3 vzory) skontroluje a nahrá Cyril.
 
