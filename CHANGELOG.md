@@ -18,6 +18,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Prihlásenie cez sportnet.online (S1): verejný klient `rozvojklubu` s PKCE bez secretu – na zapnutie stačí `SPORTNET_OAUTH_CLIENT_ID`, `SPORTNET_OAUTH_CLIENT_SECRET` sa už nepoužíva. Meno z `name` + `surname` (inak `username`), fotka z `photoUrl` len ak je verejná. Sportnet účet bez e-mailu sa neprihlási a stránka prihlásenia vysvetlí, ako si e-mail doplniť na my.sportnet.online (ADR 0025); ostatné chyby prihlásenia cez Sportnet ukáže stránka prihlásenia namiesto chybovej stránky Better Auth.
 - Pravidlá pre Clauda: globálne pravidlá Cyrila sú v `~/.claude/CLAUDE.md`; repo `CLAUDE.md` doplnený o pravidlá práce (overovanie, tajomstvá, rozsah) a o push len pri potrebe.
 - Produkčná doména je `klub.futbalsfz.sk` (predtým `rozvojklubu.ltk.solutions`, stará adresa presmerúva); dokumentácia, príklady v testoch a odosielateľská doména e-mailov (futbalsfz.sk) upravené.
 - Závislosti (3. 11.): better-auth 1.7.14, jose 6.2.14, lucide-react 1.66.0, mongodb 7.8.0, react a react-dom 19.3.1, @types/node 26.6.6, eslint 10.14.0, vitest 5.0.5.
