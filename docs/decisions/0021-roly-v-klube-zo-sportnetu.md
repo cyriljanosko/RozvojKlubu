@@ -4,6 +4,7 @@
 - Dátum: 2026-10-28
 - Pripravil: Ján Letko (Claude) · Rozhodol: Ján Letko · Potvrdí: Cyril Janoško
 - Nadväzuje na: 0002 (prihlásenie Sportnet), 0003 (tenant = klub), 0004 (roly ako väzby), 0005 (zdroj dát klubov)
+- Nahradené: 0024 (časť 1 – klubový manažér aj s CRM rolou `matrikar`)
 - Zadanie: `docs/sportnet/zadanie-s1-s3.md`, časť S2 · Otvorené otázky pre sportnet.online:
   `docs/sportnet/otazky-sportnet-online.md`
 

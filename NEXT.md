@@ -17,9 +17,9 @@ Aktualizované: 4. 11. 2026 (knižnica oblasti 3; doména klub.futbalsfz.sk, ADR
   - [ ] S2-b – implementácia podľa ADR 0021 (typy, klient Sportnetu, `deriveClubRoles`, nahradenie `management`, migrácia s dry-run).
   - [x] OAuth klient Sportnetu – klient `rozvojklubu` založený (verejný, PKCE, bez secretu), odpovede na A1–A10 a B1–B9 zo 4. 11. v `docs/sportnet/odpovede-sportnet-online.md`.
   - [ ] Sportnet: doplniť `klub.futbalsfz.sk` do `allowed_hosts` (dnes je tam `rozvojklubu.futbalsfz.sk`) a pevnú Preview doménu; poslať zoznam endpointov Súťaží, ak ich budeme volať (Ján; časť 6, D1–D3).
-  - [x] Klubový manažér a CRM rola `matrikar` (B3) – rozhodnuté 5. 11. (Ján): len `admin`/`manager`, ADR 0021 bez zmeny.
-  - [ ] Rozhodnúť: účet Sportnetu bez e-mailu (R3 v odpovediach).
-  - [ ] S1 – prihlásenie bez secretu (`SPORTNET_OAUTH_CLIENT_SECRET` preč), claims `photoUrl`/`name`/`surname`, bez `dnm`; overiť na localhost s `SPORTNET_OAUTH_CLIENT_ID=rozvojklubu`.
+  - [x] Klubový manažér aj s CRM rolou `matrikar` (B3) – ADR 0024 (5. 11., Ján); S2-b berie `admin`, `matrikar`, `manager`.
+  - [x] Účet Sportnetu bez e-mailu – odmietnuť s výzvou, ADR 0025 (5. 11., Ján); implementácia v S1.
+  - [ ] S1 – prihlásenie bez secretu (`SPORTNET_OAUTH_CLIENT_SECRET` preč), claims `photoUrl`/`name`/`surname`, bez `dnm`, výzva pri účte bez e-mailu (ADR 0025); overiť na localhost s `SPORTNET_OAUTH_CLIENT_ID=rozvojklubu`.
 - [ ] Cyril: v Claude Design overiť vzhľad artifactu „SFZ Design System“ (https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3) a nastaviť ho ako predvolený dizajn systém.
 
 ### Novinky (ZK, ADR 0023)
