@@ -53,6 +53,8 @@
     "sentBody": "Na adresu <strong>{email}</strong> sme poslali prihlasovací odkaz. Platí 15 minút.",
     "useAnotherEmail": "Použiť inú adresu",
     "error": "Prihlásenie sa nepodarilo. Skúste to prosím znova.",
+    "sportnetNoEmailTitle": "Váš účet Sportnet nemá e-mail",
+    "sportnetNoEmail": "Bez e-mailu vás prihlásiť nevieme. Doplňte si ho na <link>my.sportnet.online</link> v časti Profil – Osobné údaje a prihláste sa znova. Alebo nám nižšie zadajte e-mail a pošleme vám prihlasovací odkaz.",
     "emailHint": "Pošleme vám odkaz na prihlásenie bez hesla.",
     "publicHint": "Oblasti, Kompas na vyskúšanie a vizitky klubov sú dostupné aj bez prihlásenia."
   },

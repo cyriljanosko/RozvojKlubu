@@ -8,7 +8,7 @@ import { genericOAuth, magicLink } from "better-auth/plugins";
 import { defaultMessages } from "@/i18n/config";
 import { resolveAuthBaseURL } from "@/server/auth/base-url";
 import { bootstrapRole, DEFAULT_ROLE, parseAdminEmails } from "@/server/auth/roles";
-import { sportnetProvider } from "@/server/auth/sportnet";
+import { isSportnetConfigured, sportnetProvider } from "@/server/auth/sportnet";
 import { getDbSync, getMongoClient } from "@/server/db/mongo";
 import { getEnv } from "@/server/env";
 import { sendTransactional } from "@/server/integrations/ecomail/client";
@@ -22,7 +22,7 @@ function createAuth() {
   }
   const adminEmails = parseAdminEmails(env.INITIAL_ADMIN_EMAILS);
 
-  const sportnetEnabled = Boolean(env.SPORTNET_OAUTH_CLIENT_ID && env.SPORTNET_OAUTH_CLIENT_SECRET);
+  const sportnetEnabled = isSportnetConfigured(env);
 
   return betterAuth({
     appName: "Rozvoj klubu",
@@ -92,7 +92,6 @@ function createAuth() {
                   ...sportnetProvider({
                     authUrl: env.SPORTNET_AUTH_URL,
                     clientId: env.SPORTNET_OAUTH_CLIENT_ID!,
-                    clientSecret: env.SPORTNET_OAUTH_CLIENT_SECRET!,
                   }),
                   mapProfileToUser: (profile) => ({
                     sportnetId: typeof profile.sub === "string" ? profile.sub : undefined,
@@ -118,6 +117,5 @@ export function getAuth(): Auth {
 }
 
 export function isSportnetLoginEnabled(): boolean {
-  const env = getEnv();
-  return Boolean(env.SPORTNET_OAUTH_CLIENT_ID && env.SPORTNET_OAUTH_CLIENT_SECRET);
+  return isSportnetConfigured(getEnv());
 }

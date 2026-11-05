@@ -29,10 +29,9 @@ const envSchema = z.object({
   VERCEL_URL: optional(z.string().min(1)),
   VERCEL_BRANCH_URL: optional(z.string().min(1)),
 
-  // Sportnet OIDC (auth.sportnet.online)
+  // Sportnet OIDC (auth.sportnet.online) – public PKCE client, no secret
   SPORTNET_AUTH_URL: z.url().default("https://auth.sportnet.online"),
   SPORTNET_OAUTH_CLIENT_ID: optional(z.string().min(1)),
-  SPORTNET_OAUTH_CLIENT_SECRET: optional(z.string().min(1)),
 
   // E-mail (Ecomail transactional API)
   ECOMAIL_API_KEY: optional(z.string().min(1)),
