@@ -138,6 +138,7 @@ Celé znenie a dopady: `docs/sportnet/odpovede-sportnet-online.md`. Mení body 1
   a userinfo; profil z ID tokenu (`sub`, `name`, `surname`, `email` – nie vždy, `photoUrl`).
 - **Aplikačný token (`client_credentials`) nebude.** CRM a Súťaže len cez token exchange (RFC 8693) s tokenom
   prihláseného používateľa a `scope=appSpace:<ppo>`; prejde len s rolou používateľa v danom klube.
-- **Klubový manažér z ISSF má v CRM rolu `matrikar`**, nie `admin`/`manager` – rozpor s ADR 0021, treba nové ADR.
+- **Klubový manažér z ISSF má v CRM rolu `matrikar`**, nie `admin`/`manager`. Rozhodnuté 5. 11. (Ján): ADR 0021 platí – klubový manažér len z `admin`/`manager`,
+  `matrikar` nie.
 - Tréner ostáva ručne (B1), tímový manažér = „Vedúci družstva“ (B6), `/me/*` vracajú `isActive` (B5),
   staging nie je – testuje sa na produkcii s testovacím klubom (B9).
