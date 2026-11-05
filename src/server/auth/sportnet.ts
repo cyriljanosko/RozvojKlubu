@@ -9,7 +9,8 @@ import { createRemoteJWKSet, jwtVerify, type JWTPayload } from "jose";
  * (docs/sportnet/odpovede-sportnet-online.md, A1–A8):
  * - client `rozvojklubu` is a public client: Authorization Code + PKCE (S256), no client secret
  * - endpoints /authorize and /token, JWKS at /.well-known/jwks.json; no OIDC discovery, no userinfo
- * - RS256 ID token, iss = https://auth.sportnet.online, aud = client_id, sub = Sportnet user id
+ * - RS256 ID token, aud = client_id, sub = Sportnet user id; iss is the bare host
+ *   `auth.sportnet.online` (seen on the first real sign-in 2026-11-05, not the URL from A3)
  * - ID-token profile claims: name, surname, family_name, username (string or array), email
  *   (NOT guaranteed – ISSF accounts may have none), photoUrl, photoIsPublic; no nonce, picture
  *   or dnm (dnm is only in the access token)
@@ -56,6 +57,19 @@ export function mapSportnetClaims(claims: Claims) {
   };
 }
 
+/**
+ * Sportnet user id to store on the user for a Sportnet account, else null.
+ * Better Auth 1.7 drops `input: false` fields (sportnetId) from the provider profile, so the id
+ * is copied from the account record in a database hook (create = first sign-in, update = every
+ * later sign-in, which also covers users that existed before linking).
+ */
+export function sportnetIdFromAccount(account: {
+  providerId?: unknown;
+  accountId?: unknown;
+}): string | null {
+  return account.providerId === SPORTNET_PROVIDER_ID ? (str(account.accountId) ?? null) : null;
+}
+
 let jwks: ReturnType<typeof createRemoteJWKSet> | undefined;
 
 export function sportnetProvider(config: SportnetConfig) {
@@ -72,12 +86,21 @@ export function sportnetProvider(config: SportnetConfig) {
     async getUserInfo(tokens: { idToken?: string }) {
       if (!tokens.idToken) return null;
       jwks ??= createRemoteJWKSet(new URL(`${base}/.well-known/jwks.json`));
-      const { payload } = await jwtVerify(tokens.idToken, jwks, {
-        issuer: base,
-        audience: config.clientId,
-        algorithms: ["RS256"],
-      });
-      return mapSportnetClaims(payload as Claims);
+      try {
+        const { payload } = await jwtVerify(tokens.idToken, jwks, {
+          // Sportnet sends the bare host; the URL form is accepted in case they align with OIDC.
+          issuer: [new URL(base).host, base],
+          audience: config.clientId,
+          algorithms: ["RS256"],
+        });
+        return mapSportnetClaims(payload as Claims);
+      } catch (error) {
+        // null → Better Auth redirects to the sign-in page with an error instead of a 500.
+        // Log only the reason: the jose error carries the full token payload (personal data).
+        const reason = error instanceof Error ? `${error.name}: ${error.message}` : "unknown";
+        console.error(`[sportnet] ID token rejected – ${reason}`);
+        return null;
+      }
     },
   };
 }

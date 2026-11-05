@@ -1,6 +1,19 @@
-import { describe, expect, it } from "vitest";
+import { exportJWK, generateKeyPair, SignJWT, type JWK } from "jose";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
-import { isSportnetConfigured, mapSportnetClaims, sportnetProvider } from "./sportnet";
+// The provider fetches Sportnet's JWKS; tests serve a local key set instead.
+const keys = vi.hoisted(() => ({ jwks: { keys: [] as JWK[] } }));
+vi.mock("jose", async (importOriginal) => {
+  const jose = await importOriginal<typeof import("jose")>();
+  return { ...jose, createRemoteJWKSet: () => jose.createLocalJWKSet(keys.jwks) };
+});
+
+import {
+  isSportnetConfigured,
+  mapSportnetClaims,
+  sportnetIdFromAccount,
+  sportnetProvider,
+} from "./sportnet";
 
 describe("mapSportnetClaims", () => {
   it("maps sub, e-mail and full name from name + surname", () => {
@@ -71,11 +84,66 @@ describe("sportnetProvider", () => {
   });
 });
 
+describe("sportnetProvider.getUserInfo", () => {
+  const p = sportnetProvider({ authUrl: "https://auth.sportnet.online", clientId: "rozvojklubu" });
+  let privateKey: CryptoKey;
+
+  beforeAll(async () => {
+    const pair = await generateKeyPair("RS256");
+    privateKey = pair.privateKey;
+    keys.jwks.keys = [{ ...(await exportJWK(pair.publicKey)), kid: "test", alg: "RS256" }];
+  });
+
+  const idToken = (iss: string, aud = "rozvojklubu") =>
+    new SignJWT({ name: "Ján", surname: "Letko", email: "jan@example.sk" })
+      .setProtectedHeader({ alg: "RS256", kid: "test" })
+      .setSubject("55a6733f03af1ade801a2231")
+      .setIssuer(iss)
+      .setAudience(aud)
+      .setIssuedAt()
+      .setExpirationTime("1h")
+      .sign(privateKey);
+
+  // Regression (2026-11-05, first real sign-in): auth.sportnet.online issues
+  // `iss: "auth.sportnet.online"` without the scheme; requiring the URL failed every sign-in with 500.
+  it("accepts the issuer as auth.sportnet.online sends it (host without scheme)", async () => {
+    const user = await p.getUserInfo({ idToken: await idToken("auth.sportnet.online") });
+    expect(user).toMatchObject({ id: "55a6733f03af1ade801a2231", name: "Ján Letko" });
+  });
+
+  it("accepts the issuer as a full URL", async () => {
+    const user = await p.getUserInfo({ idToken: await idToken("https://auth.sportnet.online") });
+    expect(user?.id).toBe("55a6733f03af1ade801a2231");
+  });
+
+  it("rejects a foreign issuer or audience without throwing", async () => {
+    expect(await p.getUserInfo({ idToken: await idToken("evil.example") })).toBeNull();
+    expect(
+      await p.getUserInfo({ idToken: await idToken("auth.sportnet.online", "other-client") }),
+    ).toBeNull();
+  });
+});
+
 describe("isSportnetConfigured", () => {
   // Regression: sign-in used to require SPORTNET_OAUTH_CLIENT_SECRET, which the public
   // client `rozvojklubu` does not have, so the Sportnet button never showed.
   it("needs only the client id", () => {
     expect(isSportnetConfigured({ SPORTNET_OAUTH_CLIENT_ID: "rozvojklubu" })).toBe(true);
     expect(isSportnetConfigured({})).toBe(false);
+  });
+});
+
+describe("sportnetIdFromAccount", () => {
+  // Regression (2026-11-05): mapProfileToUser's sportnetId was dropped by Better Auth
+  // (input: false), so the account page always said "Bez prepojenia so sportnet.online".
+  it("takes the Sportnet user id from a sportnet account", () => {
+    expect(sportnetIdFromAccount({ providerId: "sportnet", accountId: "55a6733f" })).toBe(
+      "55a6733f",
+    );
+  });
+
+  it("ignores other providers and empty ids", () => {
+    expect(sportnetIdFromAccount({ providerId: "magic-link", accountId: "x" })).toBeNull();
+    expect(sportnetIdFromAccount({ providerId: "sportnet", accountId: "" })).toBeNull();
   });
 });

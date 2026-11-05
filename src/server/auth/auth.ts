@@ -8,7 +8,11 @@ import { genericOAuth, magicLink } from "better-auth/plugins";
 import { defaultMessages } from "@/i18n/config";
 import { resolveAuthBaseURL } from "@/server/auth/base-url";
 import { bootstrapRole, DEFAULT_ROLE, parseAdminEmails } from "@/server/auth/roles";
-import { isSportnetConfigured, sportnetProvider } from "@/server/auth/sportnet";
+import {
+  isSportnetConfigured,
+  sportnetIdFromAccount,
+  sportnetProvider,
+} from "@/server/auth/sportnet";
 import { getDbSync, getMongoClient } from "@/server/db/mongo";
 import { getEnv } from "@/server/env";
 import { sendTransactional } from "@/server/integrations/ecomail/client";
@@ -41,6 +45,10 @@ function createAuth() {
       accountLinking: { enabled: true, trustedProviders: ["sportnet"] },
     },
     databaseHooks: {
+      account: {
+        create: { after: linkSportnetId },
+        update: { after: linkSportnetId },
+      },
       user: {
         create: {
           before: async (user) => ({
@@ -93,9 +101,6 @@ function createAuth() {
                     authUrl: env.SPORTNET_AUTH_URL,
                     clientId: env.SPORTNET_OAUTH_CLIENT_ID!,
                   }),
-                  mapProfileToUser: (profile) => ({
-                    sportnetId: typeof profile.sub === "string" ? profile.sub : undefined,
-                  }),
                 },
               ],
             }),
@@ -104,6 +109,18 @@ function createAuth() {
       nextCookies(), // must stay last
     ],
   });
+}
+
+/** Stores the Sportnet id on the user so the account page shows the link (see sportnetIdFromAccount). */
+async function linkSportnetId(
+  account: { providerId?: unknown; accountId?: unknown; userId?: unknown },
+  ctx: {
+    context: { internalAdapter: { updateUser: (id: string, data: object) => Promise<unknown> } };
+  } | null,
+) {
+  const sportnetId = sportnetIdFromAccount(account);
+  if (!sportnetId || !ctx || typeof account.userId !== "string") return;
+  await ctx.context.internalAdapter.updateUser(account.userId, { sportnetId });
 }
 
 type Auth = ReturnType<typeof createAuth>;
