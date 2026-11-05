@@ -129,3 +129,15 @@ desktope; texty cez next-intl; aktualizovaný `NEXT.md`, `CHANGELOG.md` a devlog
    zriedka (zlúčenia, premenovania, nové kluby medzi sezónami), denný beh by bol zbytočný. Rozhodne Cyril v S3.
 5. **Databáza pre Preview** – nateraz netreba, Preview ďalej používa `rozvojklubu_dev` (rozhodnutie Jána 28. 10. 2026). Prázdna `rozvojklubu_preview` založená v ten deň bola hneď zrušená. Platí odchýlka
    v CLAUDE.md, časť 7: pred prvými ostrými dátami vlastná databáza.
+
+## 9. Odpovede sportnet.online – 4. 11. 2026
+
+Celé znenie a dopady: `docs/sportnet/odpovede-sportnet-online.md`. Mení body 1 a 2 časti 8:
+
+- **OAuth klient `rozvojklubu` je založený** – verejný klient s PKCE, **bez secretu**. Bez OIDC discovery
+  a userinfo; profil z ID tokenu (`sub`, `name`, `surname`, `email` – nie vždy, `photoUrl`).
+- **Aplikačný token (`client_credentials`) nebude.** CRM a Súťaže len cez token exchange (RFC 8693) s tokenom
+  prihláseného používateľa a `scope=appSpace:<ppo>`; prejde len s rolou používateľa v danom klube.
+- **Klubový manažér z ISSF má v CRM rolu `matrikar`**, nie `admin`/`manager` – rozpor s ADR 0021, treba nové ADR.
+- Tréner ostáva ručne (B1), tímový manažér = „Vedúci družstva“ (B6), `/me/*` vracajú `isActive` (B5),
+  staging nie je – testuje sa na produkcii s testovacím klubom (B9).
