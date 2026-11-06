@@ -247,6 +247,18 @@ export const mongoClubImportStore: ClubImportStore = {
       ...pending.filter((c) => !used.has(c.clubId)),
     ].slice(0, limit);
   },
+  async listClubsForRefresh(limit) {
+    const db = await getDb();
+    const projection = { _id: 0, clubId: 1, name: 1, union: 1, region: 1 } as const;
+    const fresh = await mongoClubImportStore.listClubsWithoutDetails(limit);
+    if (fresh.length >= limit) return fresh;
+    const oldest = await clubs(db)
+      .find({ status: "active", sportnetDetailsAt: { $exists: true } }, { projection })
+      .sort({ sportnetDetailsAt: 1, clubId: 1 })
+      .limit(limit - fresh.length)
+      .toArray();
+    return [...fresh, ...oldest];
+  },
   async countClubsWithoutDetails() {
     const db = await getDb();
     return clubs(db).countDocuments(withoutDetails);

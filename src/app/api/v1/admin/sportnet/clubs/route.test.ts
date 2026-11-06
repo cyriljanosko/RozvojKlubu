@@ -8,6 +8,7 @@ const store = {
   applyClubImport: vi.fn(async () => {}),
   listClubsWithoutDetails: vi.fn(async () => []),
   countClubsWithoutDetails: vi.fn(async () => 0),
+  listClubsForRefresh: vi.fn(async () => []),
   setClubDetails: vi.fn(async () => {}),
 };
 

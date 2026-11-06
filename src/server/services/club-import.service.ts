@@ -158,6 +158,10 @@ export interface ClubImportStore {
     limit: number,
   ) => Promise<Pick<ClubDoc, "clubId" | "name" | "union" | "region">[]>;
   countClubsWithoutDetails: () => Promise<number>;
+  /** active clubs for the nightly refresh: without details first, then the oldest details */
+  listClubsForRefresh: (
+    limit: number,
+  ) => Promise<Pick<ClubDoc, "clubId" | "name" | "union" | "region">[]>;
   setClubDetails: (clubId: string, details: ClubDetails) => Promise<void>;
 }
 
@@ -231,23 +235,19 @@ export interface ClubDetailsResult {
  * fits the function time; call again until `remaining` is 0. The dry-run reads the same batch and
  * shows the union changes without writing. A club that fails is skipped and tried next time.
  */
-export async function fillClubDetails(
+type DetailsBatch = Pick<ClubDetailsResult, "checked" | "failed" | "unionChanges">;
+
+/** Reads (and with `apply` writes) the details of the clubs one after another until `until`. */
+async function readClubDetails(
   deps: ClubImportDeps,
-  actor: CurrentUser | null,
-  input: unknown,
-): Promise<ClubDetailsResult> {
-  requireAdmin(actor);
-  const { apply, limit } = clubDetailsInputSchema.parse(input ?? {});
-  const unions = unionIndex((await deps.fetchDirectory()).tree);
-  const batch = await deps.store.listClubsWithoutDetails(limit);
-  const result: ClubDetailsResult = {
-    applied: apply,
-    checked: 0,
-    failed: 0,
-    remaining: 0,
-    unionChanges: [],
-  };
+  unions: ReadonlyMap<string, UnionInfo>,
+  batch: readonly Pick<ClubDoc, "clubId" | "name" | "union" | "region">[],
+  apply: boolean,
+  until = Number.POSITIVE_INFINITY,
+): Promise<DetailsBatch> {
+  const result: DetailsBatch = { checked: 0, failed: 0, unionChanges: [] };
   for (const club of batch) {
+    if (Date.now() >= until) break;
     try {
       const union = clubUnionOf(await deps.fetchProfile(club.clubId), unions);
       const legal = await deps.fetchLegalEntity(club.clubId);
@@ -275,6 +275,59 @@ export async function fillClubDetails(
       result.failed += 1;
     }
   }
-  result.remaining = await deps.store.countClubsWithoutDetails();
   return result;
+}
+
+export async function fillClubDetails(
+  deps: ClubImportDeps,
+  actor: CurrentUser | null,
+  input: unknown,
+): Promise<ClubDetailsResult> {
+  requireAdmin(actor);
+  const { apply, limit } = clubDetailsInputSchema.parse(input ?? {});
+  const unions = unionIndex((await deps.fetchDirectory()).tree);
+  const batch = await deps.store.listClubsWithoutDetails(limit);
+  const read = await readClubDetails(deps, unions, batch, apply);
+  return { applied: apply, ...read, remaining: await deps.store.countClubsWithoutDetails() };
+}
+
+// ---- 3. nightly sync (Vercel Cron, ADR 0029) ----
+
+export interface ClubSyncResult extends Omit<ClubImportResult, "applied"> {
+  checked: number;
+  failed: number;
+  unionChanges: number;
+  /** clubs still without details after the run */
+  remaining: number;
+}
+
+/**
+ * Nightly sync without a user (the cron route checks its secret): the directory step and the
+ * details of at most `limit` clubs – new ones first, then the oldest – within `budgetMs`, so the
+ * run fits the function time. Writes directly; the admin routes keep the dry-run.
+ */
+export async function syncSportnetClubs(
+  deps: ClubImportDeps,
+  options: { limit?: number; budgetMs?: number } = {},
+): Promise<ClubSyncResult> {
+  const until = Date.now() + (options.budgetMs ?? 240_000);
+  const directory = await deps.fetchDirectory();
+  const plan = planClubImport({
+    clubs: directory.clubs,
+    existing: await deps.store.listClubsForImport(),
+    now: deps.now?.() ?? new Date(),
+  });
+  await deps.store.applyClubImport(plan);
+  const batch = await deps.store.listClubsForRefresh(options.limit ?? 600);
+  const read = await readClubDetails(deps, unionIndex(directory.tree), batch, true, until);
+  return {
+    sportnetClubs: directory.clubs.length,
+    created: plan.create.length,
+    updated: plan.update.length,
+    skipped: plan.skipped,
+    checked: read.checked,
+    failed: read.failed,
+    unionChanges: read.unionChanges.length,
+    remaining: await deps.store.countClubsWithoutDetails(),
+  };
 }

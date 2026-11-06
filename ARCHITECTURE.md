@@ -180,7 +180,10 @@ MCP server (F5, plánovaný)        ─┘        │
    názvy zväzov priradené k `content/obfz-okresy.json`). Miesto na mape (`placeOf`, `src/lib/slovakia-map.ts`): pilotný klub podľa okresu
    (`content/kluby-okresy.json`), ostatné podľa `unionId` – ObFZ cez `sportnetId` v `content/obfz-okresy.json`
    (ObFZ a RFZ), regionálny zväz len RFZ; SFZ, ÚLK, futsal a plážový futbal bez miesta.
-4. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
+4. Nočná synchronizácia (ADR 0029): Vercel Cron denne o 2:00 UTC → `GET /api/v1/cron/sportnet-clubs`
+   (`Authorization: Bearer $CRON_SECRET`) → `syncSportnetClubs`: zoznam (zápis) a podrobnosti najviac 600
+   klubov – bez podrobností, potom najstaršie `sportnetDetailsAt`; po 240 s prestane.
+5. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
    zväzom namiesto ObFZ (dry-run 6. 11.).
 
 ## Hranice systému
