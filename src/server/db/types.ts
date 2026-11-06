@@ -72,7 +72,19 @@ export interface ClubSeasonDoc {
   importedAt: Date;
 }
 
-export const CLUB_ROLES = ["management", "coach", "mentor"] as const;
+/**
+ * Roles in a club (ADR 0021 part 1, ADR 0024). club_manager ⊃ coach = team_manager ⊃ member;
+ * player = member (analysis 3.1). Sportnet gives club_manager, team_manager, player and member;
+ * coach and mentor are given in the app.
+ */
+export const CLUB_ROLES = [
+  "club_manager",
+  "coach",
+  "team_manager",
+  "player",
+  "member",
+  "mentor",
+] as const;
 export type ClubRole = (typeof CLUB_ROLES)[number];
 
 /** Collection `club_memberships` – a person's role in a club for one season (ADR 0004). */

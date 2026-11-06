@@ -1,3 +1,4 @@
+import { isClubManager, isCoachLevel } from "@/lib/club-roles";
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
@@ -48,7 +49,7 @@ async function accessFor(
 ): Promise<ProgressAccess> {
   if (isAdmin(user)) return "edit";
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
-  if (roles.includes("management") || roles.includes("coach")) return "edit";
+  if (isClubManager(roles) || isCoachLevel(roles)) return "edit";
   if (roles.includes("mentor")) return "read";
   throw new ApiError("FORBIDDEN", "No access to this club's practice progress");
 }

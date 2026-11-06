@@ -187,7 +187,7 @@ export function clubGraph(input: ClubGraphInput): Pick<NetworkView, "nodes" | "e
   const baseOf = (clubRole: string) => catalog.baseRoles.find((b) => b.clubRole === clubRole);
   const roles = [
     ...new Set(
-      ["management", "coach", ...members.flatMap((m) => m.roles)].filter(
+      ["club_manager", "coach", ...members.flatMap((m) => m.roles)].filter(
         (r) => input.withMentor || r !== "mentor",
       ),
     ),
@@ -277,7 +277,7 @@ export async function getNetwork(
   const club = analysis.scope === "club" || request.clubId ? analysis.clubs[0] : undefined;
   if (!club) throw new ApiError("NOT_FOUND", "Club not found or not visible");
   const managesClub = memberships.some(
-    (m) => m.season === season && m.clubId === club.clubId && m.role === "management",
+    (m) => m.season === season && m.clubId === club.clubId && m.role === "club_manager",
   );
   const people = isAdmin(user) || analysis.scope === "mentor" || managesClub;
   const [visits, plan, members] = await Promise.all([

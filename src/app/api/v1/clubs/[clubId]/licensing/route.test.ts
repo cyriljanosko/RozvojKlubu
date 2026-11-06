@@ -39,7 +39,7 @@ describe("licensing API", () => {
       evaluations: memoryEvaluationStore(),
       licensingSubmissions: memoryLicensingSubmissionStore(),
     };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(holder.deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     getCurrentUser.mockReset();
   });

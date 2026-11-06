@@ -1,5 +1,5 @@
 import type { ClubDoc, ClubMembershipDoc, ClubRole } from "@/server/db/types";
-import type { SportnetMeAppspaces } from "@/server/integrations/sportnet/me";
+import type { SportnetAffiliation, SportnetMeAppspaces } from "@/server/integrations/sportnet/me";
 import { currentSeason } from "@/server/services/season";
 
 /**
@@ -10,11 +10,8 @@ import { currentSeason } from "@/server/services/season";
 /** CRM roles that make a person the club manager (ADR 0024). */
 export const CLUB_MANAGER_CRM_ROLES: readonly string[] = ["admin", "matrikar", "manager"];
 
-/**
- * App role given for the CRM role. Still the code "management" – the rename to "club_manager"
- * (ADR 0021) is a separate change (ADR 0026).
- */
-export const SPORTNET_CLUB_MANAGER_ROLE: ClubRole = "management";
+/** App role given for the CRM role (ADR 0021: renamed from `management`). */
+export const SPORTNET_CLUB_MANAGER_ROLE: ClubRole = "club_manager";
 
 export const SPORTNET_REF_CRM = "appspace:CRM";
 
@@ -24,7 +21,21 @@ export interface SportnetManagedClub {
   validTo?: Date;
 }
 
+/** A role from Sportnet in a club (club manager from CRM or a role from an affiliation). */
+export interface SportnetClubRole {
+  clubId: string;
+  role: ClubRole;
+  sportnetRef: string;
+  validTo?: Date;
+}
+
 const dayStart = (d: Date) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+
+const parseDate = (value: string | null | undefined): Date | undefined => {
+  if (!value) return undefined;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? undefined : d;
+};
 
 /** Clubs (Sportnet `type: club`) where the person has a club-manager role in CRM today. */
 export function deriveManagedClubs(me: SportnetMeAppspaces, today: Date): SportnetManagedClub[] {
@@ -35,19 +46,93 @@ export function deriveManagedClubs(me: SportnetMeAppspaces, today: Date): Sportn
       if (!a.role || !CLUB_MANAGER_CRM_ROLES.includes(a.role)) continue;
       // Unions (futbalsfz.sk, ObFZ), schools and other PPO types are not clubs.
       if (a.org_profile?.type !== "club") continue;
-      const validTo = a.validTo ? new Date(a.validTo) : undefined;
-      if (validTo && !Number.isNaN(validTo.getTime()) && dayStart(validTo) < dayStart(today)) {
-        continue;
-      }
+      const validTo = parseDate(a.validTo);
+      if (validTo && dayStart(validTo) < dayStart(today)) continue;
       if (!a.app_space || found.has(a.app_space)) continue;
       found.set(a.app_space, {
         clubId: a.app_space,
         name: a.org_profile?.name?.trim() || a.app_space,
-        validTo: validTo && !Number.isNaN(validTo.getTime()) ? validTo : undefined,
+        validTo,
       });
     }
   }
   return [...found.values()];
+}
+
+/** `competence_type` compared as ISSF writes it or as a code (ADR 0021, B2): lowercase, no diacritics. */
+export function normalizeCompetence(value: string | undefined): string {
+  return (value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** "Vedúci družstva" and "Vedúci družstva / Tímový manažér" (B6). */
+const TEAM_MANAGER_PREFIX = "veduci druzstva";
+
+/** Active per CoreApi `isActive` (B5); without it date_from ≤ today ≤ date_to (ADR 0021). */
+export function isAffiliationActive(a: SportnetAffiliation, today: Date): boolean {
+  if (typeof a.isActive === "boolean") return a.isActive;
+  const from = parseDate(a.date_from);
+  const to = parseDate(a.date_to);
+  if (from && dayStart(from) > dayStart(today)) return false;
+  return !(to && dayStart(to) < dayStart(today));
+}
+
+/** Strength in the club (analysis 3.1): club_manager ⊃ team_manager ⊃ member; player = member. */
+const STRENGTH: Partial<Record<ClubRole, number>> = {
+  club_manager: 3,
+  team_manager: 2,
+  player: 1,
+  member: 0,
+};
+
+/**
+ * Roles from `/me/sport-orgs` and `/me/sport-expert-orgs` (ADR 0021): player, team manager and
+ * member, only in clubs the app knows (clubs are created only from the club-manager role, ADR 0026).
+ * Coach stays manual (B1).
+ */
+export function deriveAffiliationRoles(
+  input: {
+    sportOrgs: readonly SportnetAffiliation[];
+    sportExpertOrgs: readonly SportnetAffiliation[];
+  },
+  today: Date,
+  knownClubIds: ReadonlySet<string>,
+): SportnetClubRole[] {
+  const roles: SportnetClubRole[] = [];
+  const add = (a: SportnetAffiliation, role: ClubRole, kind: string) => {
+    const clubId = a.org_profile_id;
+    if (!clubId || !knownClubIds.has(clubId) || !isAffiliationActive(a, today)) return;
+    const validTo = parseDate(a.date_to);
+    roles.push({
+      clubId,
+      role,
+      sportnetRef: `${kind}:${a._id ?? clubId}`,
+      ...(validTo ? { validTo } : {}),
+    });
+  };
+  for (const a of input.sportOrgs) {
+    if (normalizeCompetence(a.competence_type) === "player") add(a, "player", "sport_orgs");
+  }
+  for (const a of input.sportExpertOrgs) {
+    const teamManager = normalizeCompetence(a.competence_type).startsWith(TEAM_MANAGER_PREFIX);
+    add(a, teamManager ? "team_manager" : "member", "sport_expert_orgs");
+  }
+  return roles;
+}
+
+/** One role per club: the strongest one (a weaker role adds no access). */
+export function strongestPerClub(roles: readonly SportnetClubRole[]): SportnetClubRole[] {
+  const best = new Map<string, SportnetClubRole>();
+  for (const r of roles) {
+    const current = best.get(r.clubId);
+    if (!current || (STRENGTH[r.role] ?? -1) > (STRENGTH[current.role] ?? -1))
+      best.set(r.clubId, r);
+  }
+  return [...best.values()];
 }
 
 type Membership = Omit<ClubMembershipDoc, "_id">;
@@ -57,7 +142,7 @@ export function planSportnetLinks(input: {
   userId: string;
   season: string;
   now: Date;
-  clubs: readonly SportnetManagedClub[];
+  roles: readonly SportnetClubRole[];
   appLinks: readonly Pick<ClubMembershipDoc, "clubId" | "role" | "season" | "source">[];
 }): Membership[] {
   const taken = new Set(
@@ -65,19 +150,19 @@ export function planSportnetLinks(input: {
       .filter((m) => m.season === input.season && m.source !== "sportnet")
       .map((m) => `${m.clubId}|${m.role}`),
   );
-  return input.clubs
-    .filter((c) => !taken.has(`${c.clubId}|${SPORTNET_CLUB_MANAGER_ROLE}`))
-    .map((c) => ({
+  return input.roles
+    .filter((r) => !taken.has(`${r.clubId}|${r.role}`))
+    .map((r) => ({
       userId: input.userId,
-      clubId: c.clubId,
-      role: SPORTNET_CLUB_MANAGER_ROLE,
+      clubId: r.clubId,
+      role: r.role,
       season: input.season,
       ageGroups: [],
       createdBy: "sportnet",
       createdAt: input.now,
       source: "sportnet" as const,
-      sportnetRef: SPORTNET_REF_CRM,
-      ...(c.validTo ? { validTo: c.validTo } : {}),
+      sportnetRef: r.sportnetRef,
+      ...(r.validTo ? { validTo: r.validTo } : {}),
       syncedAt: input.now,
     }));
 }
@@ -98,6 +183,12 @@ export function clubFromSportnet(club: SportnetManagedClub, now: Date): ClubDoc 
 
 export interface ClubRolesSyncDeps {
   fetchAppspaces: (accessToken: string) => Promise<SportnetMeAppspaces>;
+  fetchAffiliations: (accessToken: string) => Promise<{
+    sportOrgs: SportnetAffiliation[];
+    sportExpertOrgs: SportnetAffiliation[];
+  }>;
+  /** The subset of `clubIds` stored in the app. */
+  listKnownClubIds: (clubIds: string[]) => Promise<string[]>;
   /** Inserts clubs whose clubId is not stored yet; existing clubs stay untouched. */
   insertMissingClubs: (clubs: ClubDoc[]) => Promise<number>;
   listUserLinks: (
@@ -122,15 +213,36 @@ export async function syncSportnetClubRoles(
 ): Promise<ClubRolesSyncResult> {
   const now = deps.now?.() ?? new Date();
   const season = currentSeason(now);
+  // Both reads first: a Sportnet error leaves the stored roles as they were.
   const clubs = deriveManagedClubs(await deps.fetchAppspaces(accessToken), now);
+  const affiliations = await deps.fetchAffiliations(accessToken);
   const createdClubs = clubs.length
     ? await deps.insertMissingClubs(clubs.map((c) => clubFromSportnet(c, now)))
     : 0;
+  const affiliationClubIds = [
+    ...new Set(
+      [...affiliations.sportOrgs, ...affiliations.sportExpertOrgs]
+        .map((a) => a.org_profile_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
+  ];
+  const known = new Set(
+    affiliationClubIds.length ? await deps.listKnownClubIds(affiliationClubIds) : [],
+  );
+  const roles = strongestPerClub([
+    ...clubs.map((c) => ({
+      clubId: c.clubId,
+      role: SPORTNET_CLUB_MANAGER_ROLE,
+      sportnetRef: SPORTNET_REF_CRM,
+      ...(c.validTo ? { validTo: c.validTo } : {}),
+    })),
+    ...deriveAffiliationRoles(affiliations, now, known),
+  ]);
   const links = planSportnetLinks({
     userId,
     season,
     now,
-    clubs,
+    roles,
     appLinks: await deps.listUserLinks(userId),
   });
   await deps.replaceSportnetLinks(userId, season, links);

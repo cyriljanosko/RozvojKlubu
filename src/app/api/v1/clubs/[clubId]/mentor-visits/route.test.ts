@@ -47,7 +47,7 @@ describe("/api/v1/clubs/:clubId/mentor-visits", () => {
       visits: memoryVisitStore(),
       submissions: memorySubmissionStore(),
     };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     getCurrentUser.mockReset();
   });
 

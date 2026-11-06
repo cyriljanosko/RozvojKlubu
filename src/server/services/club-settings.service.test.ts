@@ -9,7 +9,7 @@ describe("club settings – consent to the rankings (MR-a, ADR 0015, ADR 0020)",
   let deps: ClubSettingsDeps & { settings: ReturnType<typeof memoryClubSettingsStore> };
   beforeEach(async () => {
     deps = { ...memoryDeps(), settings: memoryClubSettingsStore() };
-    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
   });
 

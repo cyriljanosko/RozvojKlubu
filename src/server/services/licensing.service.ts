@@ -1,3 +1,4 @@
+import { isCoachLevel } from "@/lib/club-roles";
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
@@ -79,8 +80,8 @@ async function accessFor(
   if (isAdmin(user)) return "edit";
   const season = currentSeason(deps.now?.() ?? new Date());
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
-  if (roles.includes("management") || roles.includes("mentor")) return "edit";
-  if (roles.includes("coach")) return "read";
+  if (roles.includes("club_manager") || roles.includes("mentor")) return "edit";
+  if (isCoachLevel(roles)) return "read";
   throw new ApiError("FORBIDDEN", "No access to this club's licensing evaluation");
 }
 

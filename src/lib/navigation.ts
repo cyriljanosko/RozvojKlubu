@@ -1,3 +1,4 @@
+import { CLUB_MEMBER_ROLES, COACH_LEVEL_ROLES } from "@/lib/club-roles";
 import type { ClubRole } from "@/server/db/types";
 
 /**
@@ -47,21 +48,21 @@ export interface Navigation {
   activeClubId: string | null;
 }
 
-/** Roles that work in the club (not the federation mentor). */
-const CLUB_MEMBER_ROLES: readonly ClubRole[] = ["management", "coach"];
 /** Roles that may open the club's own Kompas (kompas.service: mentor sees only submitted ones). */
-const KOMPAS_ROLES: readonly ClubRole[] = ["management", "coach"];
+const KOMPAS_ROLES: readonly ClubRole[] = ["club_manager", ...COACH_LEVEL_ROLES];
+/** Licensing and mentoring: not for players and members (analysis 3.2). */
+const STAFF_ROLES: readonly ClubRole[] = ["club_manager", ...COACH_LEVEL_ROLES, "mentor"];
 /** Roles with the analytics workspace in the menu (analysis 3.2: management, mentor, admin). */
-const ANALYTICS_ROLES: readonly ClubRole[] = ["management", "mentor"];
+const ANALYTICS_ROLES: readonly ClubRole[] = ["club_manager", "mentor"];
 /** Roles that see the club's Novinky proposals (news.service: coaches have no access). */
-const NEWS_ROLES: readonly ClubRole[] = ["management", "mentor"];
+const NEWS_ROLES: readonly ClubRole[] = ["club_manager", "mentor"];
 
 const has = (roles: readonly ClubRole[], wanted: readonly ClubRole[]) =>
   roles.some((role) => wanted.includes(role));
 
 const allRoles = (clubs: readonly NavClub[]) => clubs.flatMap((club) => club.roles);
 
-/** Clubs where the person has a role in the club itself (management, coach, later players and members). */
+/** Clubs where the person has a role in the club itself (not only the mentor). */
 export function ownClubs(clubs: readonly NavClub[]): NavClub[] {
   return clubs.filter((club) => has(club.roles, CLUB_MEMBER_ROLES));
 }
@@ -173,9 +174,11 @@ export function clubMenu(clubId: string, roles: readonly ClubRole[], isAdmin: bo
     item("clubOverview", base, undefined, "exact"),
     isAdmin || has(roles, KOMPAS_ROLES) ? item("clubKompas", `${base}/kompas`) : null,
     item("clubPlan", `${base}/plan`),
-    item("clubLicensing", `${base}/licencne-hodnotenie`),
+    isAdmin || has(roles, STAFF_ROLES)
+      ? item("clubLicensing", `${base}/licencne-hodnotenie`)
+      : null,
     // visits are part of the mentoring page (decision 29. 10. 2026)
-    item("clubMentoring", `${base}/mentoring`),
+    isAdmin || has(roles, STAFF_ROLES) ? item("clubMentoring", `${base}/mentoring`) : null,
     // club proposals for Novinky: management writes, the mentor reads (ADR 0023)
     isAdmin || has(roles, NEWS_ROLES) ? item("clubNews", `${base}/novinky`) : null,
   ].filter((entry): entry is NavItem => entry !== null);

@@ -5,7 +5,7 @@
       "key": "management",
       "name": "Manažér a výbor",
       "status": "approved",
-      "clubRole": "management"
+      "clubRole": "club_manager"
     },
     {
       "key": "coach",

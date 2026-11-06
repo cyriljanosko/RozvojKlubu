@@ -68,7 +68,10 @@ describe("lensForClubRoles", () => {
   it("maps club roles to the Hub lens of the base role", () => {
     const club = catalog.tracks![0];
     expect(lensForClubRoles(club, ["coach"])?.key).toBe("coach");
-    expect(lensForClubRoles(club, ["coach", "management"])?.key).toBe("management");
+    expect(lensForClubRoles(club, ["coach", "club_manager"])?.key).toBe("management");
+    // the team manager has the coach's lens; players and members have none
+    expect(lensForClubRoles(club, ["team_manager"])?.key).toBe("coach");
+    expect(lensForClubRoles(club, ["player", "member"])).toBeNull();
     expect(lensForClubRoles(club, [])).toBeNull();
   });
 });
@@ -127,7 +130,7 @@ describe("mentor behind the scenes", () => {
   it("shows the mentor lens and Prax only to mentors and admin_sfz", () => {
     const season = "2026/2027";
     expect(seesMentor(null, [], season)).toBe(false);
-    expect(seesMentor(alice, [{ role: "management", season }], season)).toBe(false);
+    expect(seesMentor(alice, [{ role: "club_manager", season }], season)).toBe(false);
     expect(seesMentor(alice, [{ role: "mentor", season: "2025/2026" }], season)).toBe(false);
     expect(seesMentor(alice, [{ role: "mentor", season }], season)).toBe(true);
     expect(seesMentor(admin, [], season)).toBe(true);
@@ -150,7 +153,7 @@ describe("getHub", () => {
     const roleCatalog = memoryRoleCatalogStore(memoryContentStore());
     await seedRoleCatalog(roleCatalog, admin, file);
     deps = { ...base, content, roleCatalog };
-    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
   });
 
   it("works without sign-in: whole club by default, coach lens reorders areas", async () => {

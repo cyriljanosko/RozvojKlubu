@@ -35,7 +35,7 @@ export function MemberForm({ clubId }: { clubId: string }) {
           id="member-role"
           name="role"
           className="border-input bg-background h-9 rounded-md border px-3 text-sm"
-          defaultValue="management"
+          defaultValue="club_manager"
         >
           {CLUB_ROLES.map((role) => (
             <option key={role} value={role}>

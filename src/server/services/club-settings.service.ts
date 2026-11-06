@@ -71,7 +71,7 @@ export async function getClubSettings(
 
 /** Pure: club management decides, admin_sfz may change the consent for the club (ADR 0020). */
 const canDecide = (user: CurrentUser, roles: readonly string[]) =>
-  isAdmin(user) || roles.includes("management");
+  isAdmin(user) || roles.includes("club_manager");
 
 /** Gives or withdraws the consent to the public rankings (management or admin_sfz). */
 export async function setRankingConsent(

@@ -37,7 +37,7 @@ describe("Kompas submissions API", () => {
       assessments: memoryAssessmentStore(),
       submissions: memorySubmissionStore(),
     };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(holder.deps, admin, A, { email: "bob@klub.sk", role: "mentor" });
     await saveKompasAnswers(holder.deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
     getCurrentUser.mockReset();

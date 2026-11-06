@@ -46,7 +46,7 @@ const story = {
 describe("/api/v1 news (ADR 0023)", () => {
   beforeEach(async () => {
     holder.deps = { ...memoryDeps(), news: memoryNewsStore(), revisions: memoryRevisions() };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(holder.deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     getCurrentUser.mockReset();
   });

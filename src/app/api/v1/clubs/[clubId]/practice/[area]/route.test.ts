@@ -40,7 +40,7 @@ describe("/api/v1/clubs/:clubId/practice/:area", () => {
     const practice = memoryPracticeStore(memoryContentStore());
     await seedPractice(practice, admin, [file]);
     holder.deps = { ...memoryDeps(), practice, progress: memoryProgressStore() };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     getCurrentUser.mockReset();
   });
 

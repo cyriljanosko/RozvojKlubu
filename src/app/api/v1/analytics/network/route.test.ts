@@ -50,7 +50,7 @@ describe("/api/v1/analytics/network", () => {
       visits: memoryVisitStore(),
       plans: memoryPlanStore(),
     };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     getCurrentUser.mockReset();
   });
 

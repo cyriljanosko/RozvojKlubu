@@ -1,3 +1,4 @@
+import { isClubMember } from "@/lib/club-roles";
 import { randomUUID } from "node:crypto";
 
 import { z } from "zod";
@@ -59,8 +60,9 @@ async function accessFor(
 ): Promise<{ access: PlanAccess; roles: string[] }> {
   if (isAdmin(user)) return { access: "edit", roles: [] };
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
-  if (roles.includes("management") || roles.includes("mentor")) return { access: "edit", roles };
-  if (roles.includes("coach")) return { access: "read", roles };
+  if (roles.includes("club_manager") || roles.includes("mentor")) return { access: "edit", roles };
+  // coach and team manager read (and own their goals); players and members read (Cyril 26. 10.)
+  if (isClubMember(roles)) return { access: "read", roles };
   throw new ApiError("FORBIDDEN", "No access to this club's plan");
 }
 

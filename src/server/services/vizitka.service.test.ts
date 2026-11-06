@@ -41,7 +41,7 @@ async function setup() {
     evaluations: memoryEvaluationStore(),
     licensingSubmissions: memoryLicensingSubmissionStore(),
   };
-  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
   await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
   return deps;
 }

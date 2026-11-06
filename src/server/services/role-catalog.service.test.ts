@@ -53,9 +53,10 @@ describe("role catalog file", () => {
     ]);
     expect(Object.keys(club.teasers ?? {})).toHaveLength(11);
     expect(c.tracks![1].areas).toHaveLength(11);
+    // the base role key stays "management" (URLs, saved choices); its club role is club_manager
     expect(c.baseRoles.find((b) => b.key === "management")).toMatchObject({
       name: "Manažér a výbor",
-      clubRole: "management",
+      clubRole: "club_manager",
     });
     expect(c.areas).toHaveLength(11);
     expect(c.areas.reduce((n, a) => n + a.roles.length, 0)).toBe(61);

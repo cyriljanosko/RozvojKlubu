@@ -89,7 +89,7 @@ describe("news – club proposals and SFZ review (ADR 0023)", () => {
   beforeEach(async () => {
     const base = memoryDeps();
     deps = { ...base, news: memoryNewsStore(), revisions: memoryRevisions() };
-    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     base.memberDocs.push({
       id: "mc",

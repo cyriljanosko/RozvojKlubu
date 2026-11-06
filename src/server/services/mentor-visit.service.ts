@@ -1,3 +1,4 @@
+import { isClubManager, isCoachLevel } from "@/lib/club-roles";
 import { randomUUID } from "node:crypto";
 
 import { z } from "zod";
@@ -66,7 +67,7 @@ async function accessFor(
   const season = currentSeason(deps.now?.() ?? new Date());
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
   if (roles.includes("mentor")) return "write";
-  if (roles.includes("management") || roles.includes("coach")) return "club";
+  if (isClubManager(roles) || isCoachLevel(roles)) return "club";
   throw new ApiError("FORBIDDEN", "No access to this club's mentor visits");
 }
 

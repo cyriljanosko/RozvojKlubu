@@ -71,7 +71,7 @@
     "noClubs": "Zatiaľ nemáte pridelený žiadny klub.",
     "areasLink": "Oblasti Akadémie",
     "myClubsRoles": "Moje kluby a roly",
-    "rolesSource": "Rolu Manažér a výbor preberáme pri prihlásení zo sportnet.online – podľa vašej roly v CRM klubu. Ostatné roly prideľuje admin SFZ.",
+    "rolesSource": "Roly v kluboch preberáme pri prihlásení zo sportnet.online: Manažér a výbor podľa roly v CRM klubu, Tímový manažér, Hráč a Člen podľa príslušnosti ku klubu. Trénera a mentora prideľuje admin SFZ.",
     "settings": "Nastavenia",
     "theme": {
       "label": "Vzhľad",
@@ -95,8 +95,11 @@
     }
   },
   "clubRoles": {
-    "management": "Manažér a výbor",
+    "club_manager": "Manažér a výbor",
     "coach": "Tréner a trénerka",
+    "team_manager": "Tímový manažér",
+    "player": "Hráč a hráčka",
+    "member": "Člen klubu",
     "mentor": "Mentor zväzu"
   },
   "club": {
@@ -819,8 +822,11 @@
     },
     "sees": {
       "title": "Čo táto rola vidí",
-      "management": "Manažér a výbor vidí o klube všetko: Kompas aj s rozpracovanou verziou, licenčné hodnotenie a Vizitku. Upravuje Kompas a licenčné hodnotenie.",
+      "club_manager": "Manažér a výbor vidí o klube všetko: Kompas aj s rozpracovanou verziou, licenčné hodnotenie a Vizitku. Upravuje Kompas a licenčné hodnotenie.",
       "coach": "Tréner a trénerka vidí výsledky klubu (Kompas, licenčné hodnotenie, Vizitku) len na čítanie a pracuje hlavne s oblasťami 3 a 5.",
+      "team_manager": "Tímový manažér má rovnaké práva ako tréner: výsledky klubu (Kompas, licenčné hodnotenie, Vizitku) len na čítanie.",
+      "player": "Hráč a hráčka vidí prehľad klubu a plán rozvoja len na čítanie.",
+      "member": "Člen klubu vidí prehľad klubu a plán rozvoja len na čítanie.",
       "mentor": "Mentor zväzu vidí kluby svojej kohorty: odoslaný Kompas a licenčné hodnotenie, ktoré môže pri návšteve doplniť. Rozpracovaný Kompas nevidí."
     },
     "analytics": "Analýza klubu a porovnanie",
