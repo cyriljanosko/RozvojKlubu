@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Pridané
+
+- Import klubov zo sportnet.online pre admina SFZ (S3, ADR 0028): `POST /api/v1/admin/sportnet/clubs` založí alebo obnoví všetky aktívne futbalové kluby (názov, logo, stav), predvolene ako dry-run; `POST /api/v1/admin/sportnet/clubs/details` doplní po dávkach matričný a regionálny zväz z profilu klubu, IČO a právnickú osobu. Snapshot už neprepíše názov a zväz klubu obnoveného zo Sportnetu.
+
 ### Zmenené
 
 - Verejné Kluby, Kompas na vyskúšanie, prehľad mentora a analýza admina čítajú dáta po jednom len pre kluby, ktoré aplikáciu používajú – príprava na import všetkých klubov zo sportnet.online (S3, ADR 0028). Výber klubu v Kompase na vyskúšanie a analýza admina ukazujú len tieto kluby.

@@ -29,6 +29,21 @@ export interface ClubDoc {
   /** Date the source data was taken (YYYY-MM-DD). */
   dataAsOf: string;
   importedAt: Date;
+  // ---- from sportnet.online (S3, ADR 0028); missing until the first import ----
+  /** PPO status, e.g. "active", "excluded", "inactive" */
+  status?: string;
+  logoUrl?: string;
+  /** appSpace of the registering union (ObFZ or regional union); `union` is its short name */
+  unionId?: string;
+  /** appSpace of the regional union (BFZ, ZsFZ, SsFZ, VsFZ); `region` holds the same code */
+  regionId?: string;
+  /** legal entity (PO): full name, IČO and legal form code */
+  legalName?: string;
+  businessId?: string;
+  legalForm?: string;
+  sportnetSyncedAt?: Date;
+  /** union, region and legal entity read from the club's own profile */
+  sportnetDetailsAt?: Date;
 }
 
 export interface TeamSummary {

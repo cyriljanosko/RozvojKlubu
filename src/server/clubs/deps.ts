@@ -1,7 +1,17 @@
 import "server-only";
 
 import { betterAuthUserDirectory } from "@/server/auth/session";
-import { mongoClubStore, mongoMembershipStore } from "@/server/db/clubs.store";
+import {
+  mongoClubImportStore,
+  mongoClubStore,
+  mongoMembershipStore,
+} from "@/server/db/clubs.store";
+import {
+  fetchSportnetClubDirectory,
+  fetchSportnetClubProfile,
+  fetchSportnetLegalEntity,
+} from "@/server/integrations/sportnet/ppo";
+import type { ClubImportDeps } from "@/server/services/club-import.service";
 import { mongoAreaRoleChoiceStore } from "@/server/db/academy.store";
 import {
   mongoContentStore,
@@ -146,4 +156,11 @@ export const newsDeps: NewsDeps = {
   ...clubDeps,
   news: mongoNewsStore,
   revisions: mongoContentStore,
+};
+
+export const clubImportDeps: ClubImportDeps = {
+  store: mongoClubImportStore,
+  fetchDirectory: () => fetchSportnetClubDirectory(),
+  fetchProfile: (clubId) => fetchSportnetClubProfile(clubId),
+  fetchLegalEntity: (clubId) => fetchSportnetLegalEntity(clubId),
 };

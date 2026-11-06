@@ -159,10 +159,29 @@ MCP server (F5, plánovaný)        ─┘        │
 2. `parseSnapshot` ho overí (Zod) a premapuje → upsert do `clubs` a `club_seasons`
 3. Karta klubu `/klub/[clubId]` a `GET /api/v1/clubs/:clubId` čítajú len počty a družstvá (mená trénerov nie)
 4. Snapshot s menami leží len lokálne v `data/private/` (gitignore), nikdy v gite
+5. Klub obnovený zo Sportnetu (`sportnetSyncedAt`) si pri snapshote ponechá názov, zväz a región; snapshot
+   mu doplní len `slug` a dáta sezóny (ADR 0028)
+
+### Kluby zo sportnet.online (S3, ADR 0028)
+
+1. Admin SFZ: `POST /api/v1/admin/sportnet/clubs` (`{ apply?: boolean }`, bez `apply` dry-run) →
+   `club-import.service.ts` číta verejné `GET /ppo/futbalsfz.sk/related-ppos?ppoType=club` (bez tokenu,
+   `integrations/sportnet/ppo.ts`). Aktívne futbalové kluby sa založia (`source: "sportnet"`) alebo obnovia:
+   názov, logo, stav, `sportnetSyncedAt`; zväz, `slug` a dáta sezóny ostávajú. Klub, ktorý v Sportnete
+   prestal byť aktívny, ostáva s novým stavom.
+2. `POST /api/v1/admin/sportnet/clubs/details` (`{ apply?, limit? }`, bez `apply` dry-run) doplní klubom bez
+   `sportnetDetailsAt` (najprv kluby používané v aplikácii) matričný zväz (`union`, `unionId`) a regionálny
+   zväz (`region`, `regionId`) z profilu klubu `GET /ppo/{appSpace}` (aktívna väzba `matricity`; názvy
+   a regióny zväzov zo `GET /ppo/futbalsfz.sk/relations-structure`) a IČO, právnu formu a názov právnickej
+   osoby z `GET /ppo/{appSpace}/invoice-profile`. Najviac `limit` klubov (≤ 150) na volanie, sekvenčne (B8);
+   volá sa znova, kým `remaining` nie je 0. Dry-run ukáže zmeny zväzu v dávke. Kontaktné osoby, e-maily
+   a telefóny sa neukladajú.
+3. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
+   zväzom namiesto ObFZ (dry-run 6. 11.).
 
 ## Hranice systému
 
-- **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Dáta klubov zatiaľ zo snapshotu (ADR 0005), verejné API Sportnetu sa zatiaľ nepoužíva.
+- **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Kluby (názov, zväz, región, IČO) z verejného CoreApi (ADR 0028), dáta sezóny zatiaľ zo snapshotu (ADR 0005).
 - **MongoDB** drží len dáta aplikácie.
 - **Ecomail** len odosiela transakčné e-maily, nič neukladáme.
 
@@ -174,7 +193,7 @@ MCP server (F5, plánovaný)        ─┘        │
 | `session`               | Better Auth        | relácie                                                                           |
 | `account`               | Better Auth        | prepojenia na poskytovateľov (Sportnet, e-mail)                                   |
 | `verification`          | Better Auth        | tokeny magic linku                                                                |
-| `clubs`                 | aplikácia          | klub zo snapshotu alebo z prihlásenia (ADR 0026), `clubId` = Sportnet appSpace    |
+| `clubs`                 | aplikácia          | klub zo Sportnetu (ADR 0028), snapshotu alebo prihlásenia, `clubId` = appSpace    |
 | `club_seasons`          | aplikácia          | družstvá, počty hráčov, tréneri s licenciami (osobné údaje)                       |
 | `club_memberships`      | aplikácia          | roly v klube na sezónu (ADR 0004), `source` `app`/`sportnet` (ADR 0021)           |
 | `areas`                 | aplikácia          | 11 oblastí (spravovaný obsah, bez tenanta)                                        |
