@@ -159,7 +159,7 @@ export async function listVizitky(
         clubId: c.clubId,
         name: c.name,
         union: c.union,
-        place: placeOf(c.clubId),
+        place: placeOf(c),
       };
       // A Sportnet club without any app data has nothing to read (S3, ADR 0028).
       if (!active.has(c.clubId)) return { ...base, size: null, players: null, ...neutral() };
