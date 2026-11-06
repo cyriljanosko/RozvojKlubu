@@ -8,6 +8,7 @@ import {
   fillClubDetails,
   importSportnetClubs,
   planClubImport,
+  syncSportnetClubs,
   unionIndex,
   type ClubImportDeps,
 } from "./club-import.service";
@@ -151,6 +152,10 @@ function deps(): ClubImportDeps {
         { clubId: "broken", name: "Broken", union: "X", region: "" },
       ]),
       countClubsWithoutDetails: vi.fn(async () => 7),
+      listClubsForRefresh: vi.fn(async () => [
+        { clubId: "mfk-nova-bana.futbalnet.sk", name: "MFK Nová Baňa", union: "", region: "" },
+        { clubId: "broken", name: "Broken", union: "X", region: "" },
+      ]),
       setClubDetails: vi.fn(async () => {}),
     },
     fetchDirectory: vi.fn(async () => ({ tree, clubs: [ppo("new")] })),
@@ -248,5 +253,34 @@ describe("fillClubDetails", () => {
   it("rejects a limit out of range and non-admins", async () => {
     await expect(fillClubDetails(deps(), admin, { limit: 1000 })).rejects.toThrow();
     await expect(fillClubDetails(deps(), alice, {})).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+});
+
+describe("syncSportnetClubs (nightly cron)", () => {
+  it("writes the directory and refreshes the details of the batch", async () => {
+    const d = deps();
+    expect(await syncSportnetClubs(d)).toEqual({
+      sportnetClubs: 1,
+      created: 1,
+      updated: 0,
+      skipped: 0,
+      checked: 1,
+      failed: 1,
+      unionChanges: 1,
+      remaining: 7,
+    });
+    expect(d.store.applyClubImport).toHaveBeenCalledOnce();
+    expect(d.store.listClubsForRefresh).toHaveBeenCalledWith(600);
+    expect(d.store.setClubDetails).toHaveBeenCalledOnce();
+    // one directory read for both steps
+    expect(d.fetchDirectory).toHaveBeenCalledOnce();
+  });
+
+  it("stops reading details when the time budget is spent", async () => {
+    const d = deps();
+    const r = await syncSportnetClubs(d, { limit: 10, budgetMs: 0 });
+    expect(r).toMatchObject({ created: 1, checked: 0, failed: 0 });
+    expect(d.fetchProfile).not.toHaveBeenCalled();
+    expect(d.store.listClubsForRefresh).toHaveBeenCalledWith(10);
   });
 });
