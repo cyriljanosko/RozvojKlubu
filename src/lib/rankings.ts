@@ -58,7 +58,10 @@ export function sortClubs<T extends RankedClub>(clubs: readonly T[], sort: RankS
     kompas: (a, b) => byKompas(a, b) || byLicensing(a, b) || byName(a, b),
     licensing: (a, b) => byLicensing(a, b) || byKompas(a, b) || byName(a, b),
     players: (a, b) => desc(a.players, b.players) || byName(a, b),
-    obfz: (a, b) => byText(a.place?.obfz, b.place?.obfz) || byKompas(a, b) || byName(a, b),
+    obfz: (a, b) =>
+      byText(a.place?.obfz ?? undefined, b.place?.obfz ?? undefined) ||
+      byKompas(a, b) ||
+      byName(a, b),
     rfz: (a, b) => byText(a.place?.rfz, b.place?.rfz) || byKompas(a, b) || byName(a, b),
   };
   return [...clubs].sort(compare[sort]);
@@ -84,8 +87,8 @@ const average = (values: (number | null)[]) => {
 export function unionRatings(clubs: readonly RankedClub[], level: MapLevel): UnionRating[] {
   const groups = new Map<string, RankedClub[]>();
   for (const c of clubs) {
-    if (!c.place) continue;
-    const key = level === "rfz" ? c.place.rfz : c.place.obfz;
+    const key = level === "rfz" ? c.place?.rfz : c.place?.obfz;
+    if (!key) continue;
     groups.set(key, [...(groups.get(key) ?? []), c]);
   }
   return [...groups.entries()]

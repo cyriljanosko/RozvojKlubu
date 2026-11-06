@@ -179,10 +179,10 @@ export function VizitkyExplorer({
       </span>
     );
 
+  // A club outside the ranking gets no label: which clubs are SFZ academies or ÚTM is not in
+  // Sportnet yet (6. 11. 2026), so "in the Academy" would be wrong for most imported clubs.
   const rating = (c: VizitkaCard) =>
-    !c.ranked ? (
-      <span className="footnote text-(--ink-muted)">{t("list.notRanked")}</span>
-    ) : (
+    !c.ranked ? null : (
       <span className="grid gap-1 sm:grid-cols-2">
         <span className="flex flex-col">
           <span className="caption-1 text-(--ink-muted)">{t("stars.kompas")}</span>
@@ -195,7 +195,7 @@ export function VizitkyExplorer({
       </span>
     );
   const place = (c: VizitkaCard) =>
-    c.place ? `${c.place.obfz} · ${c.place.rfz}` : t("list.noPlace");
+    c.place ? (c.place.obfz ? `${c.place.obfz} · ${c.place.rfz}` : c.place.rfz) : t("list.noPlace");
 
   const mapPanel = (
     <div className="flex flex-col gap-4">

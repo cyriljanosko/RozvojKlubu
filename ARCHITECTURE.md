@@ -176,7 +176,10 @@ MCP server (F5, plánovaný)        ─┘        │
    osoby z `GET /ppo/{appSpace}/invoice-profile`. Najviac `limit` klubov (≤ 150) na volanie, sekvenčne (B8);
    volá sa znova, kým `remaining` nie je 0. Dry-run ukáže zmeny zväzu v dávke. Kontaktné osoby, e-maily
    a telefóny sa neukladajú.
-3. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
+3. Miesto na mape (`placeOf`, `src/lib/slovakia-map.ts`): pilotný klub podľa okresu
+   (`content/kluby-okresy.json`), ostatné podľa `unionId` – ObFZ cez `sportnetId` v `content/obfz-okresy.json`
+   (ObFZ a RFZ), regionálny zväz len RFZ; SFZ, ÚLK, futsal a plážový futbal bez miesta.
+4. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
    zväzom namiesto ObFZ (dry-run 6. 11.).
 
 ## Hranice systému
