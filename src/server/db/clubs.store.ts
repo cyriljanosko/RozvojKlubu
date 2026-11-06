@@ -4,6 +4,7 @@ import { ObjectId, type Db } from "mongodb";
 
 import { getDb } from "@/server/db/mongo";
 import type { ClubDoc, ClubMembershipDoc, ClubSeasonDoc } from "@/server/db/types";
+import type { ClubImportStore } from "@/server/services/club-import.service";
 import type { ClubRolesSyncDeps } from "@/server/services/club-roles-sync.service";
 import type { SnapshotStore } from "@/server/services/club-snapshot.service";
 import type { ClubStore, MembershipStore, StoredMembership } from "@/server/services/clubs.service";
@@ -127,10 +128,32 @@ export const mongoSnapshotStore: SnapshotStore = {
   async saveSnapshot(snapshot) {
     const db = await getDb();
     await ensureIndexes(db);
+    // A club refreshed from Sportnet keeps its name, union and region (ADR 0028); the snapshot
+    // still brings the slug and the season data.
+    const synced = new Set(
+      (
+        await clubs(db)
+          .find(
+            {
+              clubId: { $in: snapshot.clubs.map((c) => c.clubId) },
+              sportnetSyncedAt: { $exists: true },
+            },
+            { projection: { _id: 0, clubId: 1 } },
+          )
+          .toArray()
+      ).map((c) => c.clubId),
+    );
     await clubs(db).bulkWrite(
-      snapshot.clubs.map((c) => ({
-        replaceOne: { filter: { clubId: c.clubId }, replacement: c, upsert: true },
-      })),
+      snapshot.clubs.map((c) =>
+        synced.has(c.clubId)
+          ? {
+              updateOne: {
+                filter: { clubId: c.clubId },
+                update: { $set: { slug: c.slug, dataAsOf: c.dataAsOf, importedAt: c.importedAt } },
+              },
+            }
+          : { replaceOne: { filter: { clubId: c.clubId }, replacement: c, upsert: true } },
+      ),
     );
     await seasons(db).bulkWrite(
       snapshot.seasons.map((s) => ({
@@ -179,5 +202,58 @@ export const mongoClubRolesSyncStore: Omit<
     await ensureIndexes(db);
     await memberships(db).deleteMany({ userId, season, source: "sportnet" });
     if (links.length > 0) await memberships(db).insertMany(links.map((l) => ({ ...l })));
+  },
+};
+
+// Active clubs whose union, region and legal entity have not been read from their profile yet.
+const withoutDetails = { status: "active", sportnetDetailsAt: { $exists: false } };
+
+export const mongoClubImportStore: ClubImportStore = {
+  async listClubsForImport() {
+    const db = await getDb();
+    return clubs(db)
+      .find({}, { projection: { _id: 0, clubId: 1 } })
+      .toArray();
+  },
+  async applyClubImport(plan) {
+    const db = await getDb();
+    await ensureIndexes(db);
+    const ops = [
+      ...plan.create.map((c) => ({
+        updateOne: { filter: { clubId: c.clubId }, update: { $setOnInsert: c }, upsert: true },
+      })),
+      ...plan.update.map((u) => ({
+        updateOne: { filter: { clubId: u.clubId }, update: { $set: u.set } },
+      })),
+    ];
+    // batches keep each request small on the M0 cluster
+    for (let i = 0; i < ops.length; i += 500) {
+      await clubs(db).bulkWrite(ops.slice(i, i + 500), { ordered: false });
+    }
+  },
+  async listClubsWithoutDetails(limit) {
+    const db = await getDb();
+    const [pending, active] = await Promise.all([
+      clubs(db)
+        .find(withoutDetails, { projection: { _id: 0, clubId: 1, name: 1, union: 1, region: 1 } })
+        .sort({ clubId: 1 })
+        .toArray(),
+      mongoClubStore.listActiveClubIds!(),
+    ]);
+    // clubs used in the app first, so they get their union before the rest
+    const used = new Set(active);
+    return [
+      ...pending.filter((c) => used.has(c.clubId)),
+      ...pending.filter((c) => !used.has(c.clubId)),
+    ].slice(0, limit);
+  },
+  async countClubsWithoutDetails() {
+    const db = await getDb();
+    return clubs(db).countDocuments(withoutDetails);
+  },
+  async setClubDetails(clubId, details) {
+    const db = await getDb();
+    const set = Object.fromEntries(Object.entries(details).filter(([, v]) => v !== undefined));
+    await clubs(db).updateOne({ clubId }, { $set: set });
   },
 };
