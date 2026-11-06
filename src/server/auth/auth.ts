@@ -13,9 +13,12 @@ import {
   sportnetIdFromAccount,
   sportnetProvider,
 } from "@/server/auth/sportnet";
+import { mongoClubRolesSyncStore } from "@/server/db/clubs.store";
 import { getDbSync, getMongoClient } from "@/server/db/mongo";
 import { getEnv } from "@/server/env";
 import { sendTransactional } from "@/server/integrations/ecomail/client";
+import { fetchMyAppspaces } from "@/server/integrations/sportnet/me";
+import { syncSportnetClubRoles } from "@/server/services/club-roles-sync.service";
 import { sendMagicLinkEmail } from "@/server/services/email.service";
 
 function createAuth() {
@@ -111,9 +114,13 @@ function createAuth() {
   });
 }
 
-/** Stores the Sportnet id on the user so the account page shows the link (see sportnetIdFromAccount). */
+/**
+ * After every Sportnet sign-in (account create/update): stores the Sportnet id on the user so the
+ * account page shows the link (see sportnetIdFromAccount), then refreshes club roles from
+ * sportnet.online (S2-b). A failing sync never blocks the sign-in.
+ */
 async function linkSportnetId(
-  account: { providerId?: unknown; accountId?: unknown; userId?: unknown },
+  account: { providerId?: unknown; accountId?: unknown; userId?: unknown; accessToken?: unknown },
   ctx: {
     context: { internalAdapter: { updateUser: (id: string, data: object) => Promise<unknown> } };
   } | null,
@@ -121,6 +128,26 @@ async function linkSportnetId(
   const sportnetId = sportnetIdFromAccount(account);
   if (!sportnetId || !ctx || typeof account.userId !== "string") return;
   await ctx.context.internalAdapter.updateUser(account.userId, { sportnetId });
+  if (typeof account.accessToken === "string" && account.accessToken) {
+    await syncClubRolesSafely(account.userId, account.accessToken);
+  }
+}
+
+async function syncClubRolesSafely(userId: string, accessToken: string) {
+  try {
+    const result = await syncSportnetClubRoles(
+      { ...mongoClubRolesSyncStore, fetchAppspaces: (token) => fetchMyAppspaces(token) },
+      userId,
+      accessToken,
+    );
+    console.info(
+      `[sportnet] club roles synced – clubs ${result.clubs}, new clubs ${result.createdClubs}, links ${result.links}`,
+    );
+  } catch (error) {
+    // Only the reason: no tokens or personal data in logs. Roles stay as they were.
+    const reason = error instanceof Error ? error.message : "unknown";
+    console.error(`[sportnet] club role sync failed – ${reason}`);
+  }
 }
 
 type Auth = ReturnType<typeof createAuth>;

@@ -4,6 +4,7 @@ import { ObjectId, type Db } from "mongodb";
 
 import { getDb } from "@/server/db/mongo";
 import type { ClubDoc, ClubMembershipDoc, ClubSeasonDoc } from "@/server/db/types";
+import type { ClubRolesSyncDeps } from "@/server/services/club-roles-sync.service";
 import type { SnapshotStore } from "@/server/services/club-snapshot.service";
 import type { ClubStore, MembershipStore, StoredMembership } from "@/server/services/clubs.service";
 
@@ -112,5 +113,31 @@ export const mongoSnapshotStore: SnapshotStore = {
       })),
     );
     return { clubs: snapshot.clubs.length, seasons: snapshot.seasons.length };
+  },
+};
+
+/** Writes of the Sportnet club-role sync at sign-in (club-roles-sync.service, ADR 0026). */
+export const mongoClubRolesSyncStore: Omit<ClubRolesSyncDeps, "fetchAppspaces" | "now"> = {
+  async insertMissingClubs(docs) {
+    const db = await getDb();
+    await ensureIndexes(db);
+    const result = await clubs(db).bulkWrite(
+      docs.map((c) => ({
+        updateOne: { filter: { clubId: c.clubId }, update: { $setOnInsert: c }, upsert: true },
+      })),
+    );
+    return result.upsertedCount;
+  },
+  async listUserLinks(userId) {
+    const db = await getDb();
+    return memberships(db)
+      .find({ userId }, { projection: { _id: 0, clubId: 1, role: 1, season: 1, source: 1 } })
+      .toArray();
+  },
+  async replaceSportnetLinks(userId, season, links) {
+    const db = await getDb();
+    await ensureIndexes(db);
+    await memberships(db).deleteMany({ userId, season, source: "sportnet" });
+    if (links.length > 0) await memberships(db).insertMany(links.map((l) => ({ ...l })));
   },
 };
