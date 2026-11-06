@@ -7,12 +7,14 @@ describe("Slovakia map", () => {
     const districts = OBFZ.flatMap((o) => o.okresy);
     expect(districts).toHaveLength(79);
     expect(new Set(districts).size).toBe(79);
-    expect(mapAreas("obfz").every((a) => a.paths.length > 0)).toBe(true);
+    // every ObFZ and RFZ has its own territory (content/mapa-zvazov.json)
+    expect(mapAreas("obfz")).toHaveLength(38);
+    expect(mapAreas("obfz").every((a) => a.paths.length === 1)).toBe(true);
     expect(mapAreas("rfz").map((a) => [a.id, a.paths.length])).toEqual([
       ["BFZ", 1],
-      ["ZsFZ", 3],
-      ["SsFZ", 2],
-      ["VsFZ", 2],
+      ["ZsFZ", 1],
+      ["SsFZ", 1],
+      ["VsFZ", 1],
     ]);
     expect(RFZ).toHaveLength(4);
   });
