@@ -71,7 +71,7 @@
     "noClubs": "Zatiaľ nemáte pridelený žiadny klub.",
     "areasLink": "Oblasti Akadémie",
     "myClubsRoles": "Moje kluby a roly",
-    "rolesSource": "Roly v kluboch prideľuje admin SFZ; po prepojení so sportnet.online ich budeme preberať odtiaľ.",
+    "rolesSource": "Rolu Manažér a výbor preberáme pri prihlásení zo sportnet.online – podľa vašej roly v CRM klubu. Ostatné roly prideľuje admin SFZ.",
     "settings": "Nastavenia",
     "theme": {
       "label": "Vzhľad",

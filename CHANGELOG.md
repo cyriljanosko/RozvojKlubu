@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Pridané
+
+- Rola Manažér a výbor zo sportnet.online (S2-b, ADR 0024, ADR 0026): pri každom prihlásení cez Sportnet aplikácia prečíta roly v CRM klubov (`admin`, `matrikar`, `manager`) a pridelí rolu v klube na aktuálnu sezónu. Klub, ktorý v aplikácii ešte nie je, sa založí. Keď rola v Sportnete zanikne, pri ďalšom prihlásení zmizne aj v aplikácii; ručne pridelené roly ostávajú.
+
 ### Opravené
 
 - Prihlásenie cez sportnet.online: ID token sa už neodmieta pre `iss` bez schémy (`auth.sportnet.online`) – prvé ostré prihlásenie padalo na chybu 500. Neplatný token vráti používateľa na stránku prihlásenia s chybou a do logu nejdú osobné údaje z tokenu.

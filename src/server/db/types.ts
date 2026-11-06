@@ -24,7 +24,8 @@ export interface ClubDoc {
   region: string;
   /** Futbalnet profile slug. */
   slug: string;
-  source: "snapshot";
+  /** "sportnet" = created at sign-in from a CRM role in a club not yet in the app (ADR 0026). */
+  source: "snapshot" | "sportnet";
   /** Date the source data was taken (YYYY-MM-DD). */
   dataAsOf: string;
   importedAt: Date;
@@ -84,8 +85,20 @@ export interface ClubMembershipDoc {
   season: string;
   /** Optional narrowing for coaches (age groups). Empty = whole club. */
   ageGroups: AgeGroup[];
+  /** Better Auth user id of the admin, or "sportnet" for links from sign-in. */
   createdBy: string;
   createdAt: Date;
+  /**
+   * Where the link comes from (ADR 0021, part 2). Missing = "app" (links made before S2-b).
+   * Links with "sportnet" are rewritten on every Sportnet sign-in and never edited by hand.
+   */
+  source?: "sportnet" | "app";
+  /** Sportnet reference, e.g. "appspace:CRM" for the club manager role. */
+  sportnetRef?: string;
+  /** End of the role in Sportnet (appspace `validTo`); missing = open-ended. */
+  validTo?: Date;
+  /** Last time Sportnet confirmed the link. */
+  syncedAt?: Date;
 }
 
 // ---- Managed content (global, no tenant – ADR 0003) ----

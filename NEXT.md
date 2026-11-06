@@ -14,7 +14,9 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
 - [ ] Členovia a Nastavenia klubu (návrhy na plátne) až po S2 (Cyril 29. 10.).
 - [ ] S1 – prihlásenie cez sportnet.online; S2 – roly zo sportnet.online (zmena schémy – súhlas); S3 – číselníky a administrácia (obrazovky G5). Robí kolega z LTK Solutions paralelne s redesignom – zadanie `docs/sportnet/zadanie-s1-s3.md` (28. 10.); otvorené otázky v jeho časti 8.
   - [x] S2-a – zdroje rolí overené v dokumentácii aj na živom verejnom API, ADR 0021 prijaté 28. 10. (Ján), zlúčené 3. 11. (PR #103): schéma `club_memberships` so `source`/`validTo`/`syncedAt`, `management` → `club_manager`, klubový manažér = CRM `admin`/`manager`, obnova pri prihlásení + ručne (bez cronu). Tréner ↔ klub sa v Sportnete nenašiel – otázka B1 v `docs/sportnet/otazky-sportnet-online.md`.
-  - [ ] S2-b – implementácia podľa ADR 0021 (typy, klient Sportnetu, `deriveClubRoles`, nahradenie `management`, migrácia s dry-run).
+  - [x] S2-b etapa 1 – rola Manažér a výbor (`management`) zo `/me/appspaces` pri každom prihlásení cez Sportnet, chýbajúci klub sa založí (ADR 0026). Overené 6. 11. na ostrom účte Jána (MFK Nová Baňa).
+  - [ ] S2-b etapa 2 – premenovať `management` → `club_manager` (kód, `content/roly.json`, katalóg rolí v DB), roly `team_manager`, `player`, `member` zo `/me/sport-orgs` a `/me/sport-expert-orgs` a ich prístupy podľa analýzy kap. 3.2; migrácia `management` → `club_manager` + `source: "app"` s dry-run (súhlas Jána 6. 11.).
+  - [ ] Kluby založené pri prihlásení (`clubs.source: "sportnet"`) nemajú zväz, región ani dáta sezóny – doplní S3.
   - [x] OAuth klient Sportnetu – klient `rozvojklubu` založený (verejný, PKCE, bez secretu), odpovede na A1–A10 a B1–B9 zo 4. 11. v `docs/sportnet/odpovede-sportnet-online.md`.
   - [ ] Sportnet: doplniť `klub.futbalsfz.sk` do `allowed_hosts` (dnes je tam `rozvojklubu.futbalsfz.sk`) a pevnú Preview doménu; poslať zoznam endpointov Súťaží, ak ich budeme volať (Ján; časť 6, D1–D3).
   - [x] Klubový manažér aj s CRM rolou `matrikar` (B3) – ADR 0024 (5. 11., Ján); S2-b berie `admin`, `matrikar`, `manager`.
