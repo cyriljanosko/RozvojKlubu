@@ -42,6 +42,10 @@ MCP server (F5, plánovaný)        ─┘        │
 4. ID token sa overí cez JWKS (`/.well-known/jwks.json`, RS256, `iss`, `aud`) → `sub` = Sportnet ID
 5. Better Auth vytvorí/prepojí používateľa (podľa e-mailu) a reláciu (cookie). Bez e-mailu v ID tokene
    sa prihlásenie odmietne a `/prihlasenie?error=email_not_found` ukáže výzvu (ADR 0025)
+6. Hook účtu (create/update) uloží `sportnetId` a obnoví roly v klube (S2-b): `GET /me/appspaces` access tokenom
+   z prihlásenia → CRM rola `admin`/`matrikar`/`manager` v klube (`type: club`) = rola `management`
+   (ADR 0024). Chýbajúci klub sa založí (`clubs.source: "sportnet"`, ADR 0026), väzby `source: "sportnet"`
+   používateľa v sezóne sa prepíšu (`club-roles-sync.service.ts`). Chyba Sportnetu prihlásenie neblokuje.
 
 ### Prihlásenie e-mailovým odkazom
 
@@ -165,9 +169,9 @@ MCP server (F5, plánovaný)        ─┘        │
 | `session`               | Better Auth        | relácie                                                                           |
 | `account`               | Better Auth        | prepojenia na poskytovateľov (Sportnet, e-mail)                                   |
 | `verification`          | Better Auth        | tokeny magic linku                                                                |
-| `clubs`                 | aplikácia          | klub zo snapshotu, `clubId` = Sportnet appSpace                                   |
+| `clubs`                 | aplikácia          | klub zo snapshotu alebo z prihlásenia (ADR 0026), `clubId` = Sportnet appSpace    |
 | `club_seasons`          | aplikácia          | družstvá, počty hráčov, tréneri s licenciami (osobné údaje)                       |
-| `club_memberships`      | aplikácia          | roly v klube na sezónu (ADR 0004)                                                 |
+| `club_memberships`      | aplikácia          | roly v klube na sezónu (ADR 0004), `source` `app`/`sportnet` (ADR 0021)           |
 | `areas`                 | aplikácia          | 11 oblastí (spravovaný obsah, bez tenanta)                                        |
 | `kompas_questions`      | aplikácia          | 220 otázok Kompasu, `questionId` napr. `4.i.2`, verzia                            |
 | `content_revisions`     | aplikácia          | história zmien spravovaného obsahu                                                |
