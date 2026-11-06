@@ -23,9 +23,9 @@ describe("clubs service", () => {
     expect((await listMyClubs(deps, admin)).map((c) => c.clubId)).toEqual([B, A]);
     expect(await listMyClubs(deps, alice)).toEqual([]);
 
-    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     expect(await listMyClubs(deps, alice)).toEqual([
-      { clubId: A, name: "TJ Test", union: "ObFZ Test", region: "VsFZ", roles: ["management"] },
+      { clubId: A, name: "TJ Test", union: "ObFZ Test", region: "VsFZ", roles: ["club_manager"] },
     ]);
   });
 
@@ -40,7 +40,7 @@ describe("clubs service", () => {
   it("ignores memberships from another season", async () => {
     await addClubMember(deps, admin, A, {
       email: "alice@klub.sk",
-      role: "management",
+      role: "club_manager",
       season: "2025/2026",
     });
     await expect(getClubOverview(deps, alice, A)).rejects.toMatchObject({ code: "FORBIDDEN" });

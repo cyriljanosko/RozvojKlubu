@@ -121,7 +121,7 @@ describe("mentor visits – service", () => {
   beforeEach(async () => {
     const base = memoryDeps();
     deps = { ...base, visits: memoryVisitStore(), submissions: memorySubmissionStore() };
-    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     base.memberDocs.push({
       id: "m1",
@@ -331,7 +331,7 @@ describe("mentor visits – service", () => {
 
     const empty = await getVisitFormData(deps, mona, A);
     expect(empty.members.map((m) => m.userId).sort()).toEqual(["alice", "bob", "mona"]);
-    expect(empty.members.find((m) => m.userId === "alice")?.roles).toEqual(["management"]);
+    expect(empty.members.find((m) => m.userId === "alice")?.roles).toEqual(["club_manager"]);
     expect(empty).toMatchObject({ previous: null, weakest: [] });
 
     await sendMentorVisit(deps, mona, A, v.id, { expectedVersion: 1 });

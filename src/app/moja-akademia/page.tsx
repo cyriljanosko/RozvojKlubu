@@ -322,7 +322,7 @@ async function Academy({ searchParams }: Props) {
             <NewsTile
               weakAreas={weak.map((w) => w.area)}
               planAreas={[...new Set(club.planGoals.map((g) => g.area))]}
-              proposals={club.roles.includes("management") ? { user, clubId: club.clubId } : null}
+              proposals={club.roles.includes("club_manager") ? { user, clubId: club.clubId } : null}
             />
           </Suspense>
         ),

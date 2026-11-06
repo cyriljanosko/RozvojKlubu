@@ -135,7 +135,7 @@ describe("network – pure", () => {
         updatedBy: "alice",
       },
       members: [
-        { userId: "alice", name: "Alice", roles: ["management"] },
+        { userId: "alice", name: "Alice", roles: ["club_manager"] },
         { userId: "bob", name: "Bob", roles: ["coach"] },
         { userId: "mona", name: "Mona", roles: ["mentor"] },
       ],
@@ -187,7 +187,7 @@ describe("network – access", () => {
       visits,
       plans: memoryPlanStore(),
     };
-    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     visits.docs.push(visit({ season: currentSeason(), actions: [action({})] }));
   });

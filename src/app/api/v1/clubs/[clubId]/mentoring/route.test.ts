@@ -26,7 +26,7 @@ const intro = { strengths: "a", weaknesses: "b", improve: "c", expectations: "d"
 describe("/api/v1/clubs/:clubId/mentoring", () => {
   beforeEach(async () => {
     holder.deps = { ...memoryDeps(), mentoring: memoryMentoringStore() };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(holder.deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     getCurrentUser.mockReset();
   });

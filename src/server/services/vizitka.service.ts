@@ -1,3 +1,4 @@
+import { isClubManager, isCoachLevel } from "@/lib/club-roles";
 import { ApiError } from "@/server/api/errors";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
@@ -171,7 +172,7 @@ export async function getClubVizitka(
     throw new ApiError("FORBIDDEN", "No access to this club");
   const { view, latest, closed, licensingResult } = await build(deps, clubId, season);
   // Same rule as the Kompas itself: a mentor alone never opens the working form (F4c).
-  const opensAssessment = isAdmin(user) || roles.includes("management") || roles.includes("coach");
+  const opensAssessment = isAdmin(user) || isClubManager(roles) || isCoachLevel(roles);
   const [assessment, evaluation] = await Promise.all([
     deps.assessments.findAssessment(clubId, view.season),
     deps.evaluations.findEvaluation(clubId, view.season),

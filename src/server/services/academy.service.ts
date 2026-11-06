@@ -1,3 +1,4 @@
+import { isCoachLevel } from "@/lib/club-roles";
 import { z } from "zod";
 
 import { milestonesOf, type Milestone } from "@/lib/rankings";
@@ -165,8 +166,8 @@ const ORDER: Record<TaskSeverity, number> = { crit: 0, warn: 1, info: 2 };
 export function clubTasks(i: TaskInput): AcademyTask[] {
   const base = `/klub/${encodeURIComponent(i.clubId)}`;
   const tasks: AcademyTask[] = [];
-  const management = i.roles.includes("management");
-  const coach = i.roles.includes("coach");
+  const management = i.roles.includes("club_manager");
+  const coach = isCoachLevel(i.roles);
   if (management) {
     if (i.kompasVersion === 0 || i.kompasResult.filledAreas === 0) {
       tasks.push({ key: "kompas_empty", severity: "crit", href: `${base}/kompas` });
@@ -235,7 +236,7 @@ export function clubTasks(i: TaskInput): AcademyTask[] {
     tasks.push({ key: "ranking_consent", severity: "info", href: `${base}/vizitka#rebricek` });
   }
   const planHref = `/klub/${encodeURIComponent(i.clubId)}/plan`;
-  if (i.planMissing && i.roles.includes("management")) {
+  if (i.planMissing && i.roles.includes("club_manager")) {
     tasks.push({ key: "plan_missing", severity: "info", href: planHref });
   }
   for (const g of i.planTasks ?? []) {
@@ -399,7 +400,11 @@ export function practiceRoleFromChoice(
 }
 
 /** Prax roles of the pilot club roles (ADR 0004); mentors only read. */
-const CLUB_PRACTICE_ROLE: Partial<Record<ClubRole, string>> = { management: "v", coach: "t" };
+const CLUB_PRACTICE_ROLE: Partial<Record<ClubRole, string>> = {
+  club_manager: "v",
+  coach: "t",
+  team_manager: "t",
+};
 
 /** Pure: the user's Prax role and progress in one area of a club. */
 export function practiceInput(
@@ -580,12 +585,12 @@ export async function getMyAcademy(
       .sort((a, b) => a.date.localeCompare(b.date))[0];
     const planTasks = planTasksFor(
       plan,
-      { userId: user.id, management: roles.includes("management") },
+      { userId: user.id, management: roles.includes("club_manager") },
       today,
     );
     const visitTasks = visitTasksFor(
       visits,
-      { userId: user.id, management: roles.includes("management") },
+      { userId: user.id, management: roles.includes("club_manager") },
       today,
     );
     own.push({

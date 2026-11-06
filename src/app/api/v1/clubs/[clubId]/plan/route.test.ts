@@ -49,7 +49,7 @@ describe("/api/v1/clubs/:clubId/plan", () => {
       submissions: memorySubmissionStore(),
       kompas: { ...base, content: memoryContentStore(), assessments: memoryAssessmentStore() },
     };
-    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(holder.deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(holder.deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     getCurrentUser.mockReset();
   });

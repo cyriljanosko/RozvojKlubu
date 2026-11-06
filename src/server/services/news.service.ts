@@ -365,7 +365,7 @@ type ClubAccess = "write" | "read";
 async function clubAccess(deps: NewsDeps, user: CurrentUser, clubId: string): Promise<ClubAccess> {
   const season = currentSeason(deps.now?.() ?? new Date());
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
-  if (roles.includes("management")) return "write";
+  if (roles.includes("club_manager")) return "write";
   if (isAdmin(user) || roles.includes("mentor")) return "read";
   throw new ApiError("FORBIDDEN", "No access to this club's news");
 }

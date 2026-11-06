@@ -17,7 +17,7 @@ import { mongoClubRolesSyncStore } from "@/server/db/clubs.store";
 import { getDbSync, getMongoClient } from "@/server/db/mongo";
 import { getEnv } from "@/server/env";
 import { sendTransactional } from "@/server/integrations/ecomail/client";
-import { fetchMyAppspaces } from "@/server/integrations/sportnet/me";
+import { fetchMyAffiliations, fetchMyAppspaces } from "@/server/integrations/sportnet/me";
 import { syncSportnetClubRoles } from "@/server/services/club-roles-sync.service";
 import { sendMagicLinkEmail } from "@/server/services/email.service";
 
@@ -136,7 +136,11 @@ async function linkSportnetId(
 async function syncClubRolesSafely(userId: string, accessToken: string) {
   try {
     const result = await syncSportnetClubRoles(
-      { ...mongoClubRolesSyncStore, fetchAppspaces: (token) => fetchMyAppspaces(token) },
+      {
+        ...mongoClubRolesSyncStore,
+        fetchAppspaces: (token) => fetchMyAppspaces(token),
+        fetchAffiliations: (token) => fetchMyAffiliations(token),
+      },
       userId,
       accessToken,
     );

@@ -46,7 +46,7 @@ describe("/api/v1/clubs", () => {
   it("member flow: admin adds a member, the member opens only their club", async () => {
     getCurrentUser.mockResolvedValue(admin);
     const created = await members.POST(
-      req(`/api/v1/clubs/${A}/members`, json({ email: "alice@klub.sk", role: "management" })),
+      req(`/api/v1/clubs/${A}/members`, json({ email: "alice@klub.sk", role: "club_manager" })),
       params({ clubId: A }),
     );
     expect(created.status).toBe(201);
@@ -55,7 +55,7 @@ describe("/api/v1/clubs", () => {
     getCurrentUser.mockResolvedValue(alice);
     const ok = await club.GET(req(`/api/v1/clubs/${A}`), params({ clubId: A }));
     expect(ok.status).toBe(200);
-    expect((await ok.json()).data).toMatchObject({ club: { clubId: A }, roles: ["management"] });
+    expect((await ok.json()).data).toMatchObject({ club: { clubId: A }, roles: ["club_manager"] });
     expect((await club.GET(req(`/api/v1/clubs/${B}`), params({ clubId: B }))).status).toBe(403);
 
     // a member cannot manage members

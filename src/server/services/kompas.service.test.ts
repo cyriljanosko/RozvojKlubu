@@ -15,7 +15,7 @@ async function setup(): Promise<KompasDeps & { store: ReturnType<typeof memoryAs
   await seedContent(content, admin);
   const store = memoryAssessmentStore();
   const deps = { ...base, content, assessments: store, store };
-  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
   await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
   return deps;
 }

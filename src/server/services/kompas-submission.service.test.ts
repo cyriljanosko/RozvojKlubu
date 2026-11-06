@@ -31,7 +31,7 @@ async function setup(): Promise<SubmissionDeps> {
     assessments: memoryAssessmentStore(),
     submissions: memorySubmissionStore(),
   };
-  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
   await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
   await addClubMember(deps, admin, A, { email: "mona@obfz.sk", role: "mentor" });
   return deps;

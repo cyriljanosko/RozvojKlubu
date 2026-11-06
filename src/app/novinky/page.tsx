@@ -153,7 +153,7 @@ async function ProposeCta() {
     const memberships = await newsDeps.memberships.listByUser(user.id);
     clubId =
       [...new Set(memberships.map((m) => m.clubId))].find((id) =>
-        clubRolesFor(memberships, id, season).includes("management"),
+        clubRolesFor(memberships, id, season).includes("club_manager"),
       ) ?? null;
   }
   return (

@@ -29,8 +29,8 @@ const closingClub = {
 
 describe("club mentoring – pure", () => {
   it("lets management write the club parts and the mentor the mentor parts; admin all", () => {
-    expect(canWrite("management", "intro")).toBe(true);
-    expect(canWrite("management", "focus")).toBe(false);
+    expect(canWrite("club_manager", "intro")).toBe(true);
+    expect(canWrite("club_manager", "focus")).toBe(false);
     expect(canWrite("mentor", "focus")).toBe(true);
     expect(canWrite("mentor", "closingClub")).toBe(false);
     expect(canWrite("coach", "intro")).toBe(false);
@@ -86,7 +86,7 @@ describe("club mentoring – service", () => {
   beforeEach(async () => {
     const base = memoryDeps();
     deps = { ...base, mentoring: memoryMentoringStore() };
-    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+    await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
     base.memberDocs.push({
       id: "m1",
@@ -103,7 +103,7 @@ describe("club mentoring – service", () => {
   it("runs the cycle: club intro, mentor focus, both closings – with versions", async () => {
     expect(await getClubMentoring(deps, alice, A)).toMatchObject({
       version: 0,
-      role: "management",
+      role: "club_manager",
       writes: ["intro", "closingClub"],
       intro: null,
     });

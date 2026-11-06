@@ -72,7 +72,7 @@ async function Showcase() {
     getTranslations("kompas.bands"),
     getTranslations("licensing.bands"),
     getTranslations("aboutPage.eleven.lines"),
-    toLinks(clubMenu("ukazka", ["management"], false)),
+    toLinks(clubMenu("ukazka", ["club_manager"], false)),
   ]);
 
   return (

@@ -1,3 +1,4 @@
+import { PRACTICE_ROLE_OF } from "@/lib/club-roles";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { connection } from "next/server";
@@ -36,7 +37,6 @@ import {
   mongoRoleCatalogStore,
   mongoSectionStore,
 } from "@/server/db/content.store";
-import type { ClubRole } from "@/server/db/types";
 import { practiceRoleFor } from "@/server/services/academy.service";
 import {
   baseRoleForParam,
@@ -58,9 +58,6 @@ import { getPractice } from "@/server/services/practice.service";
 import { getPracticeProgress } from "@/server/services/practice-progress.service";
 
 export const metadata: Metadata = { title: defaultMessages.areas.title };
-
-/** Practice roles that correspond to the pilot club roles (ADR 0004). */
-const PRACTICE_ROLE: Record<ClubRole, string> = { management: "v", coach: "t", mentor: "m" };
 
 async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">) {
   await connection(); // public page: render per request (session optional, ADR 0011)
@@ -141,7 +138,7 @@ async function AreaDetail({ params, searchParams }: PageProps<"/oblasti/[area]">
   if (practice && tab === "prax" && !roleId) {
     const myRoles = myClubs.flatMap((c) => c.roles);
     roleId = myRoles
-      .map((r) => PRACTICE_ROLE[r])
+      .map((r) => PRACTICE_ROLE_OF[r])
       .find((id) => practice.content.roles.some((x) => x.id === id));
   }
   // club progress in the Prax (F6d): a club where the user has a role, chosen by ?club=

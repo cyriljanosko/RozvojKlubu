@@ -1,3 +1,4 @@
+import { BASE_ROLE_OF } from "@/lib/club-roles";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
 import { listPublicClubs } from "@/server/services/clubs.service";
@@ -122,9 +123,9 @@ export function splitAreas<T extends { forRole: boolean }>(
 
 /** Pure: the Hub role lens for a club role (management → management lens, …). */
 export function lensForClubRoles(track: Track, roles: readonly string[]): HubRole | null {
-  for (const r of ["management", "coach", "mentor"]) {
+  for (const r of ["club_manager", "coach", "team_manager", "mentor"] as const) {
     if (!roles.includes(r)) continue;
-    const lens = track.hubRoles.find((h) => h.baseRole === r);
+    const lens = track.hubRoles.find((h) => h.baseRole === BASE_ROLE_OF[r]);
     if (lens) return lens;
   }
   return null;

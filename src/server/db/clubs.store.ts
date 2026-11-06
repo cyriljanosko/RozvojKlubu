@@ -36,8 +36,17 @@ function ensureIndexes(db: Db): Promise<unknown> {
   return indexes;
 }
 
+/**
+ * Role code before S2-b stage 2. Read as "club_manager" until the migration has run, so a
+ * deploy before the migration takes no rights away (scripts/migrate-club-roles.mjs).
+ */
+const LEGACY_CLUB_MANAGER = "management";
+const normalizeRole = (role: string): ClubMembershipDoc["role"] =>
+  (role === LEGACY_CLUB_MANAGER ? "club_manager" : role) as ClubMembershipDoc["role"];
+
 const toStored = ({ _id, ...rest }: ClubMembershipDoc): StoredMembership => ({
   ...rest,
+  role: normalizeRole(rest.role),
   id: String(_id),
 });
 
@@ -117,7 +126,17 @@ export const mongoSnapshotStore: SnapshotStore = {
 };
 
 /** Writes of the Sportnet club-role sync at sign-in (club-roles-sync.service, ADR 0026). */
-export const mongoClubRolesSyncStore: Omit<ClubRolesSyncDeps, "fetchAppspaces" | "now"> = {
+export const mongoClubRolesSyncStore: Omit<
+  ClubRolesSyncDeps,
+  "fetchAppspaces" | "fetchAffiliations" | "now"
+> = {
+  async listKnownClubIds(clubIds) {
+    const db = await getDb();
+    const found = await clubs(db)
+      .find({ clubId: { $in: clubIds } }, { projection: { _id: 0, clubId: 1 } })
+      .toArray();
+    return found.map((c) => c.clubId);
+  },
   async insertMissingClubs(docs) {
     const db = await getDb();
     await ensureIndexes(db);
@@ -130,9 +149,10 @@ export const mongoClubRolesSyncStore: Omit<ClubRolesSyncDeps, "fetchAppspaces" |
   },
   async listUserLinks(userId) {
     const db = await getDb();
-    return memberships(db)
+    const links = await memberships(db)
       .find({ userId }, { projection: { _id: 0, clubId: 1, role: 1, season: 1, source: 1 } })
       .toArray();
+    return links.map((l) => ({ ...l, role: normalizeRole(l.role) }));
   },
   async replaceSportnetLinks(userId, season, links) {
     const db = await getDb();

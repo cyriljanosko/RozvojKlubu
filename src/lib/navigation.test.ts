@@ -38,7 +38,7 @@ describe("buildNavigation – signed in", () => {
   });
 
   it("club management: my club, club Kompas and analytics", () => {
-    const nav = buildNavigation(signedIn({ clubs: [{ clubId: "c1", roles: ["management"] }] }));
+    const nav = buildNavigation(signedIn({ clubs: [{ clubId: "c1", roles: ["club_manager"] }] }));
     expect(ids(nav.tabs)).toEqual(["home", "myClub", "areas", "kompas", "more"]);
     expect(hrefOf(nav.tabs, "myClub")).toBe("/klub/c1");
     expect(hrefOf(nav.tabs, "kompas")).toBe("/klub/c1/kompas");
@@ -63,7 +63,7 @@ describe("buildNavigation – signed in", () => {
   it("uses the picked club and falls back to the first own club", () => {
     const clubs = [
       { clubId: "c1", roles: ["coach"] as const },
-      { clubId: "c2", roles: ["management"] as const },
+      { clubId: "c2", roles: ["club_manager"] as const },
     ];
     expect(buildNavigation(signedIn({ clubs, activeClubId: "c2" })).activeClubId).toBe("c2");
     expect(buildNavigation(signedIn({ clubs, activeClubId: "gone" })).activeClubId).toBe("c1");
@@ -80,14 +80,14 @@ describe("buildNavigation – signed in", () => {
     const contexts: NavContext[] = [
       { signedIn: false, isAdmin: false, clubs: [] },
       signedIn({}),
-      signedIn({ clubs: [{ clubId: "c1", roles: ["management", "mentor"] }] }),
+      signedIn({ clubs: [{ clubId: "c1", roles: ["club_manager", "mentor"] }] }),
       signedIn({ isAdmin: true, clubs: [{ clubId: "c1", roles: ["coach"] }] }),
     ];
     for (const ctx of contexts) expect(buildNavigation(ctx).tabs.length).toBeLessThanOrEqual(5);
   });
 
   it("gives every TabBar item an icon", () => {
-    const nav = buildNavigation(signedIn({ clubs: [{ clubId: "c1", roles: ["management"] }] }));
+    const nav = buildNavigation(signedIn({ clubs: [{ clubId: "c1", roles: ["club_manager"] }] }));
     for (const entry of nav.tabs) expect(entry.icon).toBeTruthy();
   });
 });
@@ -98,7 +98,7 @@ describe("clubMenu", () => {
   });
 
   it("gives management the full sub-menu with an exact overview link", () => {
-    const menu = clubMenu("c1", ["management"], false);
+    const menu = clubMenu("c1", ["club_manager"], false);
     expect(ids(menu)).toEqual([
       "clubOverview",
       "clubKompas",

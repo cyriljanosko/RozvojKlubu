@@ -7,7 +7,7 @@ import { adminMenu, buildNavigation, clubMenu, type NavContext } from "./navigat
 const contexts: NavContext[] = [
   { signedIn: false, isAdmin: false, clubs: [] },
   { signedIn: true, isAdmin: false, clubs: [] },
-  { signedIn: true, isAdmin: false, clubs: [{ clubId: "c1", roles: ["management", "mentor"] }] },
+  { signedIn: true, isAdmin: false, clubs: [{ clubId: "c1", roles: ["club_manager", "mentor"] }] },
   { signedIn: true, isAdmin: true, clubs: [] },
 ];
 
@@ -19,7 +19,7 @@ describe("navigation texts", () => {
       const model = buildNavigation(ctx);
       for (const entry of [...model.main, ...model.tabs, ...model.more]) keys.add(entry.labelKey);
     }
-    for (const entry of [...clubMenu("c1", ["management"], true), ...adminMenu()]) {
+    for (const entry of [...clubMenu("c1", ["club_manager"], true), ...adminMenu()]) {
       keys.add(entry.labelKey);
     }
     for (const key of keys) expect(nav[key], key).toBeTruthy();

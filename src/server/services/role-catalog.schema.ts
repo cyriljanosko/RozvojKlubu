@@ -15,8 +15,14 @@ export const baseRoleSchema = z.object({
   status,
   /** shown only on the public Hub, never assigned in a club (e.g. fan, ADR 0011) */
   publicOnly: z.boolean().optional(),
-  /** club role (ADR 0004) this base role is assigned through, if any */
-  clubRole: z.enum(["management", "coach", "mentor"]).optional(),
+  /** club role (ADR 0004) this base role is assigned through, if any; "management" is the
+   *  code before S2-b stage 2 and is read as "club_manager" until the catalog is migrated */
+  clubRole: z
+    .preprocess(
+      (v) => (v === "management" ? "club_manager" : v),
+      z.enum(["club_manager", "coach", "team_manager", "player", "member", "mentor"]),
+    )
+    .optional(),
   note: text(500).optional(),
   rules: z.array(text(300)).max(20).optional(),
 });

@@ -1,3 +1,4 @@
+import { isCoachLevel } from "@/lib/club-roles";
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
@@ -34,7 +35,7 @@ export interface MentoringDeps extends ClubDeps {
 }
 
 export type MentoringPartKey = "intro" | "focus" | "closingClub" | "closingMentor";
-export type MentoringRole = "admin" | "mentor" | "management" | "coach";
+export type MentoringRole = "admin" | "mentor" | "club_manager" | "coach";
 
 const text = (max = 3000) => z.string().trim().max(max);
 
@@ -69,8 +70,8 @@ export const mentoringPartSchemas = {
 } as const;
 
 const WRITERS: Record<MentoringPartKey, readonly MentoringRole[]> = {
-  intro: ["management", "admin"],
-  closingClub: ["management", "admin"],
+  intro: ["club_manager", "admin"],
+  closingClub: ["club_manager", "admin"],
   focus: ["mentor", "admin"],
   closingMentor: ["mentor", "admin"],
 };
@@ -92,7 +93,10 @@ async function rolesFor(
   if (isAdmin(user)) return ["admin"];
   const season = currentSeason(deps.now?.() ?? new Date());
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
-  const found = (["mentor", "management", "coach"] as const).filter((r) => roles.includes(r));
+  // the team manager has the coach's rights (analysis 3.1); players and members have no access
+  const found = (["mentor", "club_manager", "coach"] as const).filter((r) =>
+    r === "coach" ? isCoachLevel(roles) : roles.includes(r),
+  );
   if (found.length === 0) throw new ApiError("FORBIDDEN", "No access to this club's mentoring");
   return found;
 }

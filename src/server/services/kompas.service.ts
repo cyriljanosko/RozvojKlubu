@@ -1,3 +1,4 @@
+import { isCoachLevel } from "@/lib/club-roles";
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
@@ -49,8 +50,8 @@ async function accessFor(
 ): Promise<KompasAccess> {
   if (isAdmin(user)) return "edit";
   const roles = clubRolesFor(await deps.memberships.listByUser(user.id), clubId, season);
-  if (roles.includes("management")) return "edit";
-  if (roles.includes("coach")) return "read";
+  if (roles.includes("club_manager")) return "edit";
+  if (isCoachLevel(roles)) return "read";
   throw new ApiError("FORBIDDEN", "No access to this club's Kompas");
 }
 

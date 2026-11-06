@@ -151,7 +151,7 @@ async function Mentoring({ params, searchParams }: Props) {
               fields={FIELDS[key]}
               filled={record !== null}
               startOpen={
-                (key === "intro" && view.role === "management") ||
+                (key === "intro" && view.role === "club_manager") ||
                 (key === "focus" && view.role === "mentor")
               }
               version={view.version}

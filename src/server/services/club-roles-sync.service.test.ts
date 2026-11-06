@@ -1,10 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { SportnetAppspace, SportnetMeAppspaces } from "@/server/integrations/sportnet/me";
+import type {
+  SportnetAffiliation,
+  SportnetAppspace,
+  SportnetMeAppspaces,
+} from "@/server/integrations/sportnet/me";
 
 import {
+  deriveAffiliationRoles,
   deriveManagedClubs,
+  isAffiliationActive,
+  normalizeCompetence,
   planSportnetLinks,
+  strongestPerClub,
   syncSportnetClubRoles,
   type ClubRolesSyncDeps,
 } from "./club-roles-sync.service";
@@ -69,10 +77,125 @@ describe("deriveManagedClubs (ADR 0024)", () => {
   });
 });
 
+const aff = (
+  id: string,
+  club: string,
+  competence: string,
+  extra: Partial<SportnetAffiliation> = {},
+): SportnetAffiliation => ({
+  _id: id,
+  org_profile_id: club,
+  competence_type: competence,
+  isActive: true,
+  ...extra,
+});
+
+describe("normalizeCompetence", () => {
+  it("drops case, diacritics and extra spaces", () => {
+    expect(normalizeCompetence("  Vedúci  družstva / Tímový manažér ")).toBe(
+      "veduci druzstva / timovy manazer",
+    );
+    expect(normalizeCompetence(undefined)).toBe("");
+  });
+});
+
+describe("isAffiliationActive (B5)", () => {
+  it("trusts isActive from /me/*", () => {
+    expect(isAffiliationActive({ isActive: false, date_to: null }, today)).toBe(false);
+    expect(isAffiliationActive({ isActive: true, date_to: "2020-01-01" }, today)).toBe(true);
+  });
+
+  it("falls back to date_from / date_to", () => {
+    expect(isAffiliationActive({ date_from: "2020-01-01", date_to: null }, today)).toBe(true);
+    expect(isAffiliationActive({ date_from: "2026-11-06", date_to: "2026-11-06" }, today)).toBe(
+      true,
+    );
+    expect(isAffiliationActive({ date_from: "2026-12-01" }, today)).toBe(false);
+    expect(isAffiliationActive({ date_to: "2026-11-05" }, today)).toBe(false);
+  });
+});
+
+describe("deriveAffiliationRoles (ADR 0021)", () => {
+  const known = new Set(["a", "b"]);
+  const derive = (sportOrgs: SportnetAffiliation[], sportExpertOrgs: SportnetAffiliation[]) =>
+    deriveAffiliationRoles({ sportOrgs, sportExpertOrgs }, today, known);
+
+  it("player from an active sport_orgs player entry, hosting included", () => {
+    expect(derive([aff("p1", "a", "player", { date_to: "2027-06-30" })], [])).toEqual([
+      {
+        clubId: "a",
+        role: "player",
+        sportnetRef: "sport_orgs:p1",
+        validTo: new Date("2027-06-30"),
+      },
+    ]);
+  });
+
+  it("team manager from Vedúci družstva in both ISSF spellings (B6)", () => {
+    const roles = derive(
+      [],
+      [aff("e1", "a", "Vedúci družstva"), aff("e2", "b", "Vedúci družstva / Tímový manažér")],
+    );
+    expect(roles.map((r) => [r.clubId, r.role])).toEqual([
+      ["a", "team_manager"],
+      ["b", "team_manager"],
+    ]);
+  });
+
+  it("member from any other expert entry (code or ISSF name)", () => {
+    const roles = derive([], [aff("e1", "a", "Lekár / Zdravotník"), aff("e2", "b", "functionary")]);
+    expect(roles.map((r) => [r.clubId, r.role, r.sportnetRef])).toEqual([
+      ["a", "member", "sport_expert_orgs:e1"],
+      ["b", "member", "sport_expert_orgs:e2"],
+    ]);
+  });
+
+  it("no coach from Sportnet (B1): a coach entry is only a member", () => {
+    expect(derive([], [aff("e1", "a", "coach")])[0].role).toBe("member");
+  });
+
+  it("skips inactive entries, clubs not in the app and non-player sport_orgs", () => {
+    expect(
+      derive(
+        [aff("p1", "a", "player", { isActive: false }), aff("p2", "a", "referee")],
+        [aff("e1", "futbalsfz.sk", "coach"), aff("e2", "x", "Vedúci družstva"), { _id: "e3" }],
+      ),
+    ).toEqual([]);
+  });
+});
+
+describe("strongestPerClub", () => {
+  it("keeps one role per club: club_manager > team_manager > player > member", () => {
+    const r = (clubId: string, role: "club_manager" | "team_manager" | "player" | "member") => ({
+      clubId,
+      role,
+      sportnetRef: role,
+    });
+    const roles = strongestPerClub([
+      r("a", "member"),
+      r("a", "player"),
+      r("b", "team_manager"),
+      r("b", "club_manager"),
+      r("c", "member"),
+      r("c", "team_manager"),
+    ]);
+    expect(roles.map((x) => [x.clubId, x.role])).toEqual([
+      ["a", "player"],
+      ["b", "club_manager"],
+      ["c", "team_manager"],
+    ]);
+  });
+});
+
 describe("planSportnetLinks", () => {
   const clubs = [
-    { clubId: "a", name: "A" },
-    { clubId: "b", name: "B", validTo: new Date("2027-01-01") },
+    { clubId: "a", role: "club_manager" as const, sportnetRef: "appspace:CRM" },
+    {
+      clubId: "b",
+      role: "club_manager" as const,
+      sportnetRef: "appspace:CRM",
+      validTo: new Date("2027-01-01"),
+    },
   ];
 
   it("creates a sportnet link per club for the season", () => {
@@ -80,14 +203,14 @@ describe("planSportnetLinks", () => {
       userId: "u1",
       season: "2026/2027",
       now: today,
-      clubs,
+      roles: clubs,
       appLinks: [],
     });
     expect(links).toHaveLength(2);
     expect(links[0]).toMatchObject({
       userId: "u1",
       clubId: "a",
-      role: "management",
+      role: "club_manager",
       season: "2026/2027",
       source: "sportnet",
       sportnetRef: "appspace:CRM",
@@ -103,11 +226,11 @@ describe("planSportnetLinks", () => {
       userId: "u1",
       season: "2026/2027",
       now: today,
-      clubs,
+      roles: clubs,
       appLinks: [
-        { clubId: "a", role: "management", season: "2026/2027" }, // old link without source = app
-        { clubId: "b", role: "management", season: "2025/2026", source: "app" },
-        { clubId: "b", role: "management", season: "2026/2027", source: "sportnet" },
+        { clubId: "a", role: "club_manager", season: "2026/2027" }, // old link without source = app
+        { clubId: "b", role: "club_manager", season: "2025/2026", source: "app" },
+        { clubId: "b", role: "club_manager", season: "2026/2027", source: "sportnet" },
       ],
     });
     expect(links.map((l) => l.clubId)).toEqual(["b"]);
@@ -115,8 +238,17 @@ describe("planSportnetLinks", () => {
 });
 
 describe("syncSportnetClubRoles", () => {
-  const deps = (appspaces: SportnetMeAppspaces): ClubRolesSyncDeps => ({
+  const deps = (
+    appspaces: SportnetMeAppspaces,
+    affiliations: { sportOrgs: SportnetAffiliation[]; sportExpertOrgs: SportnetAffiliation[] } = {
+      sportOrgs: [],
+      sportExpertOrgs: [],
+    },
+    knownClubs: string[] = [],
+  ): ClubRolesSyncDeps => ({
     fetchAppspaces: vi.fn(async () => appspaces),
+    fetchAffiliations: vi.fn(async () => affiliations),
+    listKnownClubIds: vi.fn(async (ids: string[]) => ids.filter((id) => knownClubs.includes(id))),
     insertMissingClubs: vi.fn(async (c) => c.length),
     listUserLinks: vi.fn(async () => []),
     replaceSportnetLinks: vi.fn(async () => {}),
@@ -131,7 +263,7 @@ describe("syncSportnetClubRoles", () => {
       expect.objectContaining({ clubId: "mfk-nova-bana.futbalnet.sk", source: "sportnet" }),
     ]);
     expect(d.replaceSportnetLinks).toHaveBeenCalledWith("u1", "2026/2027", [
-      expect.objectContaining({ clubId: "mfk-nova-bana.futbalnet.sk", role: "management" }),
+      expect.objectContaining({ clubId: "mfk-nova-bana.futbalnet.sk", role: "club_manager" }),
     ]);
     expect(result).toEqual({ clubs: 1, createdClubs: 1, links: 1 });
   });
@@ -141,5 +273,37 @@ describe("syncSportnetClubRoles", () => {
     await syncSportnetClubRoles(d, "u1", "token");
     expect(d.insertMissingClubs).not.toHaveBeenCalled();
     expect(d.replaceSportnetLinks).toHaveBeenCalledWith("u1", "2026/2027", []);
+  });
+
+  it("adds player, team manager and member roles in known clubs", async () => {
+    const d = deps(
+      me(crm("mfk-nova-bana.futbalnet.sk", "manager")),
+      {
+        sportOrgs: [aff("p1", "pilot-a", "player")],
+        sportExpertOrgs: [
+          aff("e1", "pilot-b", "Vedúci družstva"),
+          aff("e2", "mfk-nova-bana.futbalnet.sk", "functionary"),
+          aff("e3", "unknown-club", "functionary"),
+        ],
+      },
+      ["pilot-a", "pilot-b", "mfk-nova-bana.futbalnet.sk"],
+    );
+    const result = await syncSportnetClubRoles(d, "u1", "token");
+    expect(d.fetchAffiliations).toHaveBeenCalledWith("token");
+    const links = vi.mocked(d.replaceSportnetLinks).mock.calls[0][2];
+    expect(links.map((l) => [l.clubId, l.role, l.sportnetRef])).toEqual([
+      ["mfk-nova-bana.futbalnet.sk", "club_manager", "appspace:CRM"],
+      ["pilot-a", "player", "sport_orgs:p1"],
+      ["pilot-b", "team_manager", "sport_expert_orgs:e1"],
+    ]);
+    expect(result).toEqual({ clubs: 1, createdClubs: 1, links: 3 });
+  });
+
+  it("keeps stored roles when Sportnet fails", async () => {
+    const d = deps(me(crm("a", "admin")));
+    vi.mocked(d.fetchAffiliations).mockRejectedValueOnce(new Error("Sportnet down"));
+    await expect(syncSportnetClubRoles(d, "u1", "token")).rejects.toThrow("Sportnet down");
+    expect(d.insertMissingClubs).not.toHaveBeenCalled();
+    expect(d.replaceSportnetLinks).not.toHaveBeenCalled();
   });
 });

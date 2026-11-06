@@ -6,6 +6,12 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Roly Tímový manažér, Hráč a hráčka a Člen klubu zo sportnet.online (S2-b etapa 2, ADR 0021, ADR 0027): pri prihlásení cez Sportnet aplikácia prečíta hráčske a odborné príslušnosti. „Vedúci družstva“ = tímový manažér (vidí Kompas, licenčné hodnotenie a mentoring, upravuje postup v Praxi), hráč a ostatné funkcie = člen klubu (vidí prehľad a plán). Platí len v kluboch, ktoré sú v aplikácii; tréner ostáva ručný.
+
+### Zmenené
+
+- Rola v klube `management` sa volá `club_manager` (ADR 0021, ADR 0027); názov „Manažér a výbor“ sa nemení. Staré väzby a katalóg rolí aplikácia číta aj pred migráciou (`scripts/migrate-club-roles.mjs`).
+
 - Rola Manažér a výbor zo sportnet.online (S2-b, ADR 0024, ADR 0026): pri každom prihlásení cez Sportnet aplikácia prečíta roly v CRM klubov (`admin`, `matrikar`, `manager`) a pridelí rolu v klube na aktuálnu sezónu. Klub, ktorý v aplikácii ešte nie je, sa založí. Keď rola v Sportnete zanikne, pri ďalšom prihlásení zmizne aj v aplikácii; ručne pridelené roly ostávajú.
 
 ### Opravené

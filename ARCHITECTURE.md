@@ -43,9 +43,12 @@ MCP server (F5, plánovaný)        ─┘        │
 5. Better Auth vytvorí/prepojí používateľa (podľa e-mailu) a reláciu (cookie). Bez e-mailu v ID tokene
    sa prihlásenie odmietne a `/prihlasenie?error=email_not_found` ukáže výzvu (ADR 0025)
 6. Hook účtu (create/update) uloží `sportnetId` a obnoví roly v klube (S2-b): `GET /me/appspaces` access tokenom
-   z prihlásenia → CRM rola `admin`/`matrikar`/`manager` v klube (`type: club`) = rola `management`
-   (ADR 0024). Chýbajúci klub sa založí (`clubs.source: "sportnet"`, ADR 0026), väzby `source: "sportnet"`
-   používateľa v sezóne sa prepíšu (`club-roles-sync.service.ts`). Chyba Sportnetu prihlásenie neblokuje.
+   z prihlásenia → CRM rola `admin`/`matrikar`/`manager` v klube (`type: club`) = rola `club_manager`
+   (ADR 0024). Chýbajúci klub sa založí (`clubs.source: "sportnet"`, ADR 0026). Potom `GET /me/sport-orgs`
+   a `GET /me/sport-expert-orgs` (sekvenčne) → `player`, `team_manager` („Vedúci družstva“), `member` len
+   v kluboch, ktoré aplikácia pozná; v klube ostane najsilnejšia rola (ADR 0027). Väzby `source: "sportnet"`
+   používateľa v sezóne sa prepíšu (`club-roles-sync.service.ts`). Chyba Sportnetu prihlásenie neblokuje
+   a uložené roly nechá tak.
 
 ### Prihlásenie e-mailovým odkazom
 
@@ -58,7 +61,9 @@ MCP server (F5, plánovaný)        ─┘        │
 
 - Globálna rola je pole `user.role`: `admin_sfz` alebo `public` (`src/server/auth/roles.ts`).
 - Prví administrátori: `INITIAL_ADMIN_EMAILS` – pri vytvorení účtu aj pri ďalšom prihlásení (len povýšenie, nikdy odobratie).
-- Roly v klube sú členstvá `club_memberships` (osoba – klub – rola – sezóna, ADR 0004): `management`, `coach` (voliteľne kategórie), `mentor`.
+- Roly v klube sú členstvá `club_memberships` (osoba – klub – rola – sezóna, ADR 0004): `club_manager`, `coach` (voliteľne kategórie), `team_manager`, `player`, `member`, `mentor`
+  (`src/lib/club-roles.ts`). Úrovne podľa analýzy kap. 3.1: `club_manager` ⊃ `coach` = `team_manager` ⊃ `member`
+  = `player`. Mentor je mimo klubu. Kód základnej roly v katalógu (`management`, „Manažér a výbor“) sa nemení.
 - Prístup ku klubu: admin SFZ všetky kluby, ostatní len kluby s členstvom v aktuálnej sezóne (`src/server/services/club-access.ts`).
 - Tenant = klub (ADR 0003): každý dotaz na klubové dáta má filter `clubId` = Sportnet appSpace (ADR 0005).
 

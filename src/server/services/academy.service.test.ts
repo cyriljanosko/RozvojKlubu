@@ -51,7 +51,7 @@ describe("clubTasks", () => {
       licensingClosed: false,
       teamsWithoutCoach: 1,
     };
-    expect(clubTasks({ ...base, roles: ["management"] }).map((t) => t.key)).toEqual([
+    expect(clubTasks({ ...base, roles: ["club_manager"] }).map((t) => t.key)).toEqual([
       "kompas_empty",
       "licensing_open",
       "teams_without_coach",
@@ -70,7 +70,7 @@ describe("clubTasks", () => {
         ] as never,
       },
     };
-    expect(clubTasks({ ...filled, roles: ["management"] })).toEqual([
+    expect(clubTasks({ ...filled, roles: ["club_manager"] })).toEqual([
       { key: "kompas_unsent", severity: "warn", href: `/klub/${A}/kompas` },
       { key: "weak_area", severity: "info", href: "/oblasti/7?tab=prax", area: 7, points: 4 },
     ]);
@@ -88,11 +88,11 @@ describe("clubTasks", () => {
       teamsWithoutCoach: 0,
       rankingUndecided: true,
     };
-    expect(clubTasks({ ...base, roles: ["management"] })).toEqual([
+    expect(clubTasks({ ...base, roles: ["club_manager"] })).toEqual([
       { key: "ranking_consent", severity: "info", href: `/klub/${A}/vizitka#rebricek` },
     ]);
     expect(clubTasks({ ...base, roles: ["coach"] })).toEqual([]);
-    expect(clubTasks({ ...base, rankingUndecided: false, roles: ["management"] })).toEqual([]);
+    expect(clubTasks({ ...base, rankingUndecided: false, roles: ["club_manager"] })).toEqual([]);
   });
 });
 
@@ -109,7 +109,7 @@ describe("mentoring tasks (MC-d)", () => {
   it("asks management for the opening, to prepare for a meeting and – in May and June – the closing", () => {
     const keys = (
       mentoring: Parameters<typeof clubTasks>[0]["mentoring"],
-      roles = ["management"],
+      roles = ["club_manager"],
     ) => clubTasks({ ...base, roles: roles as never, mentoring }).map((t) => [t.key, t.severity]);
     expect(keys(null)).toEqual([]);
     expect(keys({ status, closingDue: false, prep: null })).toEqual([["mentoring_intro", "warn"]]);
@@ -205,7 +205,7 @@ describe("roleOptions", () => {
     const coach = roleOptions(catalog, ["coach"]);
     expect(coach.find((o) => o.area === 3 && o.key === "new_coach")).toBeTruthy();
     expect(coach.some((o) => o.key === "economist")).toBe(false);
-    expect(roleOptions(catalog, ["management"]).filter((o) => o.area === 8)).toHaveLength(5);
+    expect(roleOptions(catalog, ["club_manager"]).filter((o) => o.area === 8)).toHaveLength(5);
   });
 });
 
@@ -234,7 +234,7 @@ async function setup(): Promise<AcademyDeps> {
     mentoring: memoryMentoringStore(),
   };
   await seedPractice(deps.practice as ReturnType<typeof memoryPracticeStore>, admin, [prax3]);
-  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "management" });
+  await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
   await addClubMember(deps, admin, A, { email: "bob@klub.sk", role: "coach" });
   await addClubMember(deps, admin, A, { email: "mona@obfz.sk", role: "mentor" });
   return deps;
@@ -252,7 +252,7 @@ describe("getMyAcademy", () => {
     expect(view.clubs).toHaveLength(1);
     expect(view.clubs[0]).toMatchObject({
       clubId: A,
-      roles: ["management"],
+      roles: ["club_manager"],
       baseRoleNames: ["Manažér a výbor"],
       kompas: { version: 0, filledAreas: 0, submittedAt: null },
       licensingClosedAt: null,
@@ -445,7 +445,7 @@ describe("getMyAcademy", () => {
 describe("Prax tasks (F6d)", () => {
   const input = {
     clubId: A,
-    roles: ["management" as const],
+    roles: ["club_manager" as const],
     kompasVersion: 1,
     kompasResult: { filledAreas: 11, areas: [], next: [{ area: 3, points: 6 }] as never },
     kompasUnsent: false,
@@ -506,7 +506,7 @@ describe("splitTasks", () => {
   it("keeps up to three tasks to do and the weak areas apart", () => {
     const tasks = clubTasks({
       clubId: A,
-      roles: ["management"],
+      roles: ["club_manager"],
       kompasVersion: 2,
       kompasResult: {
         filledAreas: 11,

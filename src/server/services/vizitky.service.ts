@@ -1,3 +1,4 @@
+import { CLUB_MEMBER_ROLES } from "@/lib/club-roles";
 import {
   kompasProgress,
   kompasStars,
@@ -82,7 +83,7 @@ async function viewerOf(deps: RankingsDeps, actor: CurrentUser | null): Promise<
   const ids = [...new Set(memberships.map((m) => m.clubId))];
   const has = (clubId: string, role: ClubRole) =>
     clubRolesFor(memberships, clubId, season).includes(role);
-  const own = ids.filter((id) => has(id, "management") || has(id, "coach"));
+  const own = ids.filter((id) => CLUB_MEMBER_ROLES.some((r) => has(id, r)));
   const mentored = ids.filter((id) => has(id, "mentor"));
   return { positions: [...new Set([...own, ...mentored])], own };
 }
