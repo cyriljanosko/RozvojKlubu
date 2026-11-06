@@ -4,6 +4,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ## [Unreleased]
 
+### Zmenené
+
+- Verejné Kluby, Kompas na vyskúšanie, prehľad mentora a analýza admina čítajú dáta po jednom len pre kluby, ktoré aplikáciu používajú – príprava na import všetkých klubov zo sportnet.online (S3, ADR 0028). Výber klubu v Kompase na vyskúšanie a analýza admina ukazujú len tieto kluby.
+
 ### Pridané
 
 - Roly Tímový manažér, Hráč a hráčka a Člen klubu zo sportnet.online (S2-b etapa 2, ADR 0021, ADR 0027): pri prihlásení cez Sportnet aplikácia prečíta hráčske a odborné príslušnosti. „Vedúci družstva“ = tímový manažér (vidí Kompas, licenčné hodnotenie a mentoring, upravuje postup v Praxi), hráč a ostatné funkcie = člen klubu (vidí prehľad a plán). Platí len v kluboch, ktoré sú v aplikácii; tréner ostáva ručný.

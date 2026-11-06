@@ -58,6 +58,26 @@ export const mongoClubStore: ClubStore = {
       .find(filter, { projection: { _id: 0 } })
       .toArray();
   },
+  async listActiveClubIds() {
+    const db = await getDb();
+    // Every collection holding club data; one distinct per collection (indexed on clubId).
+    const lists = await Promise.all(
+      [
+        "club_seasons",
+        "club_memberships",
+        "kompas_assessments",
+        "kompas_submissions",
+        "licensing_evaluations",
+        "licensing_submissions",
+        "club_plans",
+        "mentor_visits",
+        "club_mentoring",
+        "club_settings",
+        "practice_progress",
+      ].map((name) => db.collection(name).distinct("clubId")),
+    );
+    return [...new Set(lists.flat().filter((id): id is string => typeof id === "string"))];
+  },
   async findClub(clubId) {
     const db = await getDb();
     return clubs(db).findOne({ clubId }, { projection: { _id: 0 } });

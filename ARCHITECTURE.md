@@ -194,6 +194,8 @@ MCP server (F5, plánovaný)        ─┘        │
 | `club_settings`         | aplikácia (tenant) | nastavenia klubu – súhlas s verejným rebríčkom (MR, ADR 0015)                     |
 | `news_posts`            | aplikácia (tenant) | Novinky – príspevky klubov (tenant do zverejnenia) a SFZ, stav, verzia (ADR 0023) |
 
+Aktívny klub (ADR 0028) = má dáta v niektorej klubovej kolekcii (`ClubStore.listActiveClubIds`, `distinct("clubId")` po kolekciách). Zoznamy a analýza čítajú dáta po jednom len pre aktívne kluby – po importe všetkých klubov zo Sportnetu.
+
 Vlastné indexy (zakladá `src/server/db/clubs.store.ts` pred prvým zápisom, súhlas 16. 10. 2026):
 
 - `clubs`: `{ clubId: 1 }` unikátny
