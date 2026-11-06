@@ -304,12 +304,13 @@ export interface ClubSyncResult extends Omit<ClubImportResult, "applied"> {
 /**
  * Nightly sync without a user (the cron route checks its secret): the directory step and the
  * details of at most `limit` clubs – new ones first, then the oldest – within `budgetMs`, so the
- * run fits the function time. Writes directly; the admin routes keep the dry-run.
+ * run fits the function time. Writes unless `apply: false` (manual dry-run, ADR 0030).
  */
 export async function syncSportnetClubs(
   deps: ClubImportDeps,
-  options: { limit?: number; budgetMs?: number } = {},
+  options: { limit?: number; budgetMs?: number; apply?: boolean } = {},
 ): Promise<ClubSyncResult> {
+  const apply = options.apply ?? true;
   const until = Date.now() + (options.budgetMs ?? 240_000);
   const directory = await deps.fetchDirectory();
   const plan = planClubImport({
@@ -317,9 +318,9 @@ export async function syncSportnetClubs(
     existing: await deps.store.listClubsForImport(),
     now: deps.now?.() ?? new Date(),
   });
-  await deps.store.applyClubImport(plan);
+  if (apply) await deps.store.applyClubImport(plan);
   const batch = await deps.store.listClubsForRefresh(options.limit ?? 600);
-  const read = await readClubDetails(deps, unionIndex(directory.tree), batch, true, until);
+  const read = await readClubDetails(deps, unionIndex(directory.tree), batch, apply, until);
   return {
     sportnetClubs: directory.clubs.length,
     created: plan.create.length,

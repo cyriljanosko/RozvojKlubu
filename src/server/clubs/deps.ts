@@ -2,6 +2,7 @@ import "server-only";
 
 import { betterAuthUserDirectory } from "@/server/auth/session";
 import {
+  clubSyncStats,
   mongoClubImportStore,
   mongoClubStore,
   mongoMembershipStore,
@@ -12,6 +13,8 @@ import {
   fetchSportnetLegalEntity,
 } from "@/server/integrations/sportnet/ppo";
 import type { ClubImportDeps } from "@/server/services/club-import.service";
+import type { SyncRunDeps } from "@/server/services/sync-runs.service";
+import { mongoSyncRunStore } from "@/server/db/sync-runs.store";
 import { mongoAreaRoleChoiceStore } from "@/server/db/academy.store";
 import {
   mongoContentStore,
@@ -163,4 +166,10 @@ export const clubImportDeps: ClubImportDeps = {
   fetchDirectory: () => fetchSportnetClubDirectory(),
   fetchProfile: (clubId) => fetchSportnetClubProfile(clubId),
   fetchLegalEntity: (clubId) => fetchSportnetLegalEntity(clubId),
+};
+
+export const syncRunDeps: SyncRunDeps = {
+  clubs: clubImportDeps,
+  runs: mongoSyncRunStore,
+  stats: clubSyncStats,
 };

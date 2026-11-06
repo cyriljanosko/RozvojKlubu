@@ -7,6 +7,7 @@ import type { ClubDoc, ClubMembershipDoc, ClubSeasonDoc } from "@/server/db/type
 import type { ClubImportStore } from "@/server/services/club-import.service";
 import type { ClubRolesSyncDeps } from "@/server/services/club-roles-sync.service";
 import type { SnapshotStore } from "@/server/services/club-snapshot.service";
+import type { ClubSyncStats } from "@/server/services/sync-runs.service";
 import type { ClubStore, MembershipStore, StoredMembership } from "@/server/services/clubs.service";
 
 /**
@@ -269,3 +270,27 @@ export const mongoClubImportStore: ClubImportStore = {
     await clubs(db).updateOne({ clubId }, { $set: set });
   },
 };
+
+/** Club counts for the sync status (ADR 0030); one aggregation over `clubs`. */
+export async function clubSyncStats(): Promise<ClubSyncStats> {
+  const db = await getDb();
+  const [row] = await clubs(db)
+    .aggregate<ClubSyncStats>([
+      { $match: { status: "active" } },
+      {
+        $group: {
+          _id: null,
+          activeClubs: { $sum: 1 },
+          withoutDetails: { $sum: { $cond: [{ $ifNull: ["$sportnetDetailsAt", false] }, 0, 1] } },
+          oldestDetailsAt: { $min: "$sportnetDetailsAt" },
+        },
+      },
+      { $project: { _id: 0, activeClubs: 1, withoutDetails: 1, oldestDetailsAt: 1 } },
+    ])
+    .toArray();
+  return {
+    activeClubs: row?.activeClubs ?? 0,
+    withoutDetails: row?.withoutDetails ?? 0,
+    oldestDetailsAt: row?.oldestDetailsAt ?? null,
+  };
+}

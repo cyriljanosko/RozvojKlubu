@@ -65,7 +65,9 @@ Nastavenia projektu Vercel: Framework **Next.js**, Node 24.x, región funkcií *
 
 - Cron joby (`vercel.json`): `GET /api/v1/cron/sportnet-clubs` denne o 2:00 UTC – synchronizácia klubov zo
   sportnet.online (ADR 0029). Potrebuje `CRON_SECRET` v prostredí Production; bez neho vráti 401 a nič
-  nezapíše. Výsledok (len počty) je v logoch funkcie („sportnet club sync“). Ručne: admin SFZ cez
+  nezapíše. Výsledok (len počty) je v logoch funkcie („sportnet club sync“) a v kolekcii `sync_runs`
+  (ADR 0030) – stav a posledné behy: `GET /api/v1/admin/sportnet/sync` (admin SFZ). Ručný beh:
+  `POST /api/v1/admin/sportnet/sync` s `{ "apply": true }` (bez neho dry-run); jednotlivé kroky
   `POST /api/v1/admin/sportnet/clubs` a `/clubs/details` (dry-run predvolene). Vypnutie: odstrániť záznam
   z `crons` vo `vercel.json` alebo vypnúť Cron Jobs v nastaveniach projektu.
 - Atlas M0: zdieľaný cluster, max. 500 spojení, 512 MB – pred ostrou prevádzkou upgrade.

@@ -626,3 +626,19 @@ export interface NewsPostDoc {
   updatedAt: Date;
   updatedBy: string;
 }
+
+/** Collection `sync_runs` – one document per writing sync run (ADR 0030); counts only, no personal data. */
+export interface SyncRunDoc {
+  _id?: ObjectId;
+  kind: "sportnet-clubs";
+  trigger: "cron" | "manual";
+  startedAt: Date;
+  finishedAt: Date;
+  ok: boolean;
+  /** counts of the run (`ClubSyncResult`), missing when it failed */
+  result: Record<string, number> | null;
+  /** short technical message when it failed */
+  error: string | null;
+  /** user who started a manual run */
+  actorId: string | null;
+}
