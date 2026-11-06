@@ -1769,7 +1769,7 @@
       "rfz": "RFZ",
       "obfz": "ObFZ",
       "clubs": "{count, plural, =0 {bez klubu} one {# klub} few {# kluby} other {# klubov}}",
-      "legend": "Farba podľa počtu klubov v Akadémii",
+      "legend": "Farba podľa počtu klubov",
       "none": "bez klubu",
       "selected": "Vybraný zväz: {name}",
       "source": "Hranice: © prispievatelia OpenStreetMap (geoBoundaries), ODbL.",
@@ -1800,8 +1800,7 @@
       "open": "Otvoriť Vizitku",
       "noPlace": "zaradenie chýba",
       "players": "{count, plural, one {# hráč} few {# hráči} other {# hráčov}}",
-      "hint": "Zadajte názov klubu, zvoľte filter alebo kliknite na zväz na mape – zobrazí sa zoznam klubov.",
-      "notRanked": "Zapojený do Akadémie"
+      "hint": "Zadajte názov klubu, zvoľte filter alebo kliknite na zväz na mape – zobrazí sa zoznam klubov."
     },
     "sizes": {
       "small": "malý klub",

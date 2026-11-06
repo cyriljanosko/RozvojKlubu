@@ -1,75 +1,234 @@
 {
-  "source": "Zoznam ObFZ a ich RFZ zo Sportnetu (aktívne zväzy, 26. 10. 2026); pridelenie okresov skontroloval Cyril 26. 10. 2026.",
+  "source": "Zoznam ObFZ a ich RFZ zo Sportnetu (aktívne zväzy, 26. 10. 2026); pridelenie okresov skontroloval Cyril 26. 10. 2026; `sportnetId` = appSpace zväzu v Sportnete (matričný zväz klubu, 6. 11. 2026).",
   "reviewed": true,
   "obfz": [
     {
       "id": "ObFZ Bratislava-mesto",
+      "sportnetId": "BA-mesto",
       "rfz": "BFZ",
       "okresy": ["Bratislava I", "Bratislava II", "Bratislava III", "Bratislava IV", "Bratislava V"]
     },
-    { "id": "ObFZ Bratislava-vidiek", "rfz": "BFZ", "okresy": ["Malacky", "Pezinok", "Senec"] },
-
-    { "id": "ObFZ Dunajská Streda", "rfz": "ZsFZ", "okresy": ["Dunajská Streda"] },
-    { "id": "ObFZ Galanta", "rfz": "ZsFZ", "okresy": ["Galanta", "Šaľa"] },
-    { "id": "ObFZ Komárno", "rfz": "ZsFZ", "okresy": ["Komárno"] },
-    { "id": "ObFZ Levice", "rfz": "ZsFZ", "okresy": ["Levice"] },
-    { "id": "ObFZ Nitra", "rfz": "ZsFZ", "okresy": ["Nitra", "Zlaté Moravce"] },
-    { "id": "ObFZ Nové Zámky", "rfz": "ZsFZ", "okresy": ["Nové Zámky"] },
-    { "id": "ObFZ Senica", "rfz": "ZsFZ", "okresy": ["Senica", "Skalica"] },
+    {
+      "id": "ObFZ Bratislava-vidiek",
+      "sportnetId": "BA-vidiek",
+      "rfz": "BFZ",
+      "okresy": ["Malacky", "Pezinok", "Senec"]
+    },
+    {
+      "id": "ObFZ Dunajská Streda",
+      "sportnetId": "obfz-dunajska-streda",
+      "rfz": "ZsFZ",
+      "okresy": ["Dunajská Streda"]
+    },
+    {
+      "id": "ObFZ Galanta",
+      "sportnetId": "obfz-galanta.futbalnet.sk",
+      "rfz": "ZsFZ",
+      "okresy": ["Galanta", "Šaľa"]
+    },
+    {
+      "id": "ObFZ Komárno",
+      "sportnetId": "obfz-komarno.futbalnet.sk",
+      "rfz": "ZsFZ",
+      "okresy": ["Komárno"]
+    },
+    {
+      "id": "ObFZ Levice",
+      "sportnetId": "obfz-levice.futbalnet.sk",
+      "rfz": "ZsFZ",
+      "okresy": ["Levice"]
+    },
+    {
+      "id": "ObFZ Nitra",
+      "sportnetId": "obfz-nitra.futbalnet.sk",
+      "rfz": "ZsFZ",
+      "okresy": ["Nitra", "Zlaté Moravce"]
+    },
+    {
+      "id": "ObFZ Nové Zámky",
+      "sportnetId": "ObFZ-Nove-Zamky",
+      "rfz": "ZsFZ",
+      "okresy": ["Nové Zámky"]
+    },
+    {
+      "id": "ObFZ Senica",
+      "sportnetId": "obfz-senica.futbalnet.sk",
+      "rfz": "ZsFZ",
+      "okresy": ["Senica", "Skalica"]
+    },
     {
       "id": "ObFZ Topoľčany",
+      "sportnetId": "obfz-topolcany.futbalnet.sk",
       "rfz": "ZsFZ",
       "okresy": ["Topoľčany", "Partizánske"]
     },
     {
       "id": "ObFZ Trenčín",
+      "sportnetId": "ObFZTrencin",
       "rfz": "ZsFZ",
       "okresy": ["Trenčín", "Nové Mesto nad Váhom", "Myjava", "Bánovce nad Bebravou"]
     },
-    { "id": "ObFZ Trnava", "rfz": "ZsFZ", "okresy": ["Trnava", "Hlohovec", "Piešťany"] },
+    {
+      "id": "ObFZ Trnava",
+      "sportnetId": "ObFZ-Trnava",
+      "rfz": "ZsFZ",
+      "okresy": ["Trnava", "Hlohovec", "Piešťany"]
+    },
     {
       "id": "ObFZ Považská Bystrica",
+      "sportnetId": "obfz-povazska-bystrica.futbalnet.sk",
       "rfz": "ZsFZ",
       "okresy": ["Považská Bystrica", "Púchov", "Ilava"]
     },
-    { "id": "ObFZ Prievidza", "rfz": "ZsFZ", "okresy": ["Prievidza"] },
-
-    { "id": "ObFZ Banská Bystrica", "rfz": "SsFZ", "okresy": ["Banská Bystrica", "Brezno"] },
-    { "id": "ObFZ Kysúc", "rfz": "SsFZ", "okresy": ["Čadca", "Kysucké Nové Mesto"] },
-    { "id": "Liptovský FZ", "rfz": "SsFZ", "okresy": ["Liptovský Mikuláš", "Ružomberok"] },
-    { "id": "ObFZ Lučenec", "rfz": "SsFZ", "okresy": ["Lučenec", "Poltár"] },
-    { "id": "Oravský FZ", "rfz": "SsFZ", "okresy": ["Dolný Kubín", "Námestovo", "Tvrdošín"] },
-    { "id": "ObFZ Rimavská Sobota", "rfz": "SsFZ", "okresy": ["Rimavská Sobota", "Revúca"] },
-    { "id": "Turčiansky FZ Martin", "rfz": "SsFZ", "okresy": ["Martin", "Turčianske Teplice"] },
-    { "id": "ObFZ Veľký Krtíš", "rfz": "SsFZ", "okresy": ["Veľký Krtíš"] },
-    { "id": "ObFZ Zvolen", "rfz": "SsFZ", "okresy": ["Zvolen", "Detva", "Krupina"] },
+    {
+      "id": "ObFZ Prievidza",
+      "sportnetId": "obfz-prievidza",
+      "rfz": "ZsFZ",
+      "okresy": ["Prievidza"]
+    },
+    {
+      "id": "ObFZ Banská Bystrica",
+      "sportnetId": "ObFZ-Banska-Bystrica",
+      "rfz": "SsFZ",
+      "okresy": ["Banská Bystrica", "Brezno"]
+    },
+    {
+      "id": "ObFZ Kysúc",
+      "sportnetId": "obfz-kysuc.futbalnet.sk",
+      "rfz": "SsFZ",
+      "okresy": ["Čadca", "Kysucké Nové Mesto"]
+    },
+    {
+      "id": "Liptovský FZ",
+      "sportnetId": "lfz-liptovsky-mikulas.futbalnet.sk",
+      "rfz": "SsFZ",
+      "okresy": ["Liptovský Mikuláš", "Ružomberok"]
+    },
+    {
+      "id": "ObFZ Lučenec",
+      "sportnetId": "obfz-lucenec.futbalnet.sk",
+      "rfz": "SsFZ",
+      "okresy": ["Lučenec", "Poltár"]
+    },
+    {
+      "id": "Oravský FZ",
+      "sportnetId": "oravsky-futbalovy-zvaz.futbalnet.sk",
+      "rfz": "SsFZ",
+      "okresy": ["Dolný Kubín", "Námestovo", "Tvrdošín"]
+    },
+    {
+      "id": "ObFZ Rimavská Sobota",
+      "sportnetId": "obfz-rimavska-sobota.futbalnet.sk",
+      "rfz": "SsFZ",
+      "okresy": ["Rimavská Sobota", "Revúca"]
+    },
+    {
+      "id": "Turčiansky FZ Martin",
+      "sportnetId": "TFZ",
+      "rfz": "SsFZ",
+      "okresy": ["Martin", "Turčianske Teplice"]
+    },
+    {
+      "id": "ObFZ Veľký Krtíš",
+      "sportnetId": "obfz-velky-krtis.futbalnet.sk",
+      "rfz": "SsFZ",
+      "okresy": ["Veľký Krtíš"]
+    },
+    {
+      "id": "ObFZ Zvolen",
+      "sportnetId": "obfz-zvolen.futbalnet.sk",
+      "rfz": "SsFZ",
+      "okresy": ["Zvolen", "Detva", "Krupina"]
+    },
     {
       "id": "ObFZ Žiar nad Hronom",
+      "sportnetId": "obfz-ziar-nad-hronom.futbalnet.sk",
       "rfz": "SsFZ",
       "okresy": ["Žiar nad Hronom", "Žarnovica", "Banská Štiavnica"]
     },
-    { "id": "ObFZ Žilina", "rfz": "SsFZ", "okresy": ["Žilina", "Bytča"] },
-
-    { "id": "ObFZ Bardejov", "rfz": "VsFZ", "okresy": ["Bardejov"] },
-    { "id": "ObFZ Humenné", "rfz": "VsFZ", "okresy": ["Humenné", "Medzilaborce", "Snina"] },
-    { "id": "ObFZ Košice-okolie", "rfz": "VsFZ", "okresy": ["Košice-okolie"] },
+    {
+      "id": "ObFZ Žilina",
+      "sportnetId": "obfz-zilina",
+      "rfz": "SsFZ",
+      "okresy": ["Žilina", "Bytča"]
+    },
+    {
+      "id": "ObFZ Bardejov",
+      "sportnetId": "obfz-bardejov.futbalnet.sk",
+      "rfz": "VsFZ",
+      "okresy": ["Bardejov"]
+    },
+    {
+      "id": "ObFZ Humenné",
+      "sportnetId": "obfz-humenne.futbalnet.sk",
+      "rfz": "VsFZ",
+      "okresy": ["Humenné", "Medzilaborce", "Snina"]
+    },
+    {
+      "id": "ObFZ Košice-okolie",
+      "sportnetId": "ObFZ-KE-okolie",
+      "rfz": "VsFZ",
+      "okresy": ["Košice-okolie"]
+    },
     {
       "id": "MFZ Košice",
+      "sportnetId": "MFZ-Kosice",
       "rfz": "VsFZ",
       "okresy": ["Košice I", "Košice II", "Košice III", "Košice IV"]
     },
-    { "id": "ObFZ Michalovce", "rfz": "VsFZ", "okresy": ["Michalovce", "Sobrance"] },
-    { "id": "Ondavský ObFZ Svidník", "rfz": "VsFZ", "okresy": ["Svidník", "Stropkov"] },
-    { "id": "Podtatranský FZ", "rfz": "VsFZ", "okresy": ["Poprad", "Kežmarok"] },
-    { "id": "ObFZ Prešov", "rfz": "VsFZ", "okresy": ["Prešov", "Sabinov"] },
-    { "id": "ObFZ Rožňava", "rfz": "VsFZ", "okresy": ["Rožňava"] },
+    {
+      "id": "ObFZ Michalovce",
+      "sportnetId": "obfz-michalovce",
+      "rfz": "VsFZ",
+      "okresy": ["Michalovce", "Sobrance"]
+    },
+    {
+      "id": "Ondavský ObFZ Svidník",
+      "sportnetId": "ondavsky-futbalovy-zvaz.futbalnet.sk",
+      "rfz": "VsFZ",
+      "okresy": ["Svidník", "Stropkov"]
+    },
+    {
+      "id": "Podtatranský FZ",
+      "sportnetId": "ObFZ-Poprad",
+      "rfz": "VsFZ",
+      "okresy": ["Poprad", "Kežmarok"]
+    },
+    {
+      "id": "ObFZ Prešov",
+      "sportnetId": "ObFZ-Presov",
+      "rfz": "VsFZ",
+      "okresy": ["Prešov", "Sabinov"]
+    },
+    {
+      "id": "ObFZ Rožňava",
+      "sportnetId": "obfz-roznava.futbalnet.sk",
+      "rfz": "VsFZ",
+      "okresy": ["Rožňava"]
+    },
     {
       "id": "Spišský ObFZ",
+      "sportnetId": "sofz-spisska-nova-ves.futbalnet.sk",
       "rfz": "VsFZ",
       "okresy": ["Spišská Nová Ves", "Levoča", "Gelnica"]
     },
-    { "id": "ObFZ Stará Ľubovňa", "rfz": "VsFZ", "okresy": ["Stará Ľubovňa"] },
-    { "id": "ObFZ Trebišov", "rfz": "VsFZ", "okresy": ["Trebišov"] },
-    { "id": "ObFZ Vranov nad Topľou", "rfz": "VsFZ", "okresy": ["Vranov nad Topľou"] }
+    {
+      "id": "ObFZ Stará Ľubovňa",
+      "sportnetId": "obfz-stara-lubovna.futbalnet.sk",
+      "rfz": "VsFZ",
+      "okresy": ["Stará Ľubovňa"]
+    },
+    {
+      "id": "ObFZ Trebišov",
+      "sportnetId": "obfz-trebisov.futbalnet.sk",
+      "rfz": "VsFZ",
+      "okresy": ["Trebišov"]
+    },
+    {
+      "id": "ObFZ Vranov nad Topľou",
+      "sportnetId": "obfz-vranov-nad-toplou.futbalnet.sk",
+      "rfz": "VsFZ",
+      "okresy": ["Vranov nad Topľou"]
+    }
   ]
 }
