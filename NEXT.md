@@ -16,7 +16,7 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
   - [x] S2-a – zdroje rolí overené v dokumentácii aj na živom verejnom API, ADR 0021 prijaté 28. 10. (Ján), zlúčené 3. 11. (PR #103): schéma `club_memberships` so `source`/`validTo`/`syncedAt`, `management` → `club_manager`, klubový manažér = CRM `admin`/`manager`, obnova pri prihlásení + ručne (bez cronu). Tréner ↔ klub sa v Sportnete nenašiel – otázka B1 v `docs/sportnet/otazky-sportnet-online.md`.
   - [x] S2-b etapa 1 – rola Manažér a výbor (`management`) zo `/me/appspaces` pri každom prihlásení cez Sportnet, chýbajúci klub sa založí (ADR 0026). Overené 6. 11. na ostrom účte Jána (MFK Nová Baňa).
   - [x] S2-b etapa 2 (ADR 0027) – premenovať `management` → `club_manager` (kód, `content/roly.json`, katalóg rolí v DB), roly `team_manager`, `player`, `member` zo `/me/sport-orgs` a `/me/sport-expert-orgs` a ich prístupy podľa analýzy kap. 3.2; migrácia `management` → `club_manager` + `source: "app"` s dry-run (súhlas Jána 6. 11.). Zlúčené 6. 11. (PR #143, `9a19a8a`), migrácia `scripts/migrate-club-roles.mjs --apply` spustená 6. 11. na pokyn Jána.
-  - [ ] Overiť `team_manager`/`player`/`member` na ostrom účte s príslušnosťou v pilotnom klube; obal odpovede `/me/sport-orgs` nie je zdokumentovaný (parsuje sa obranne).
+  - [ ] **Cyril:** prihlásiť sa na klub.futbalsfz.sk cez sportnet.online účtom (alebo poprosiť niekoho), ktorý má v pilotnom klube hráčsku registráciu alebo funkciu (napr. „Vedúci družstva“), a v Môj účet skontrolovať rolu Hráč a hráčka, Tímový manažér alebo Člen klubu. Overí aj obal odpovede `/me/sport-orgs`, ktorý nie je zdokumentovaný (parsuje sa obranne). Výsledok poslať Jánovi.
   - [ ] Kluby založené pri prihlásení (`clubs.source: "sportnet"`) nemajú zväz, región ani dáta sezóny – doplní S3.
   - [x] OAuth klient Sportnetu – klient `rozvojklubu` založený (verejný, PKCE, bez secretu), odpovede na A1–A10 a B1–B9 zo 4. 11. v `docs/sportnet/odpovede-sportnet-online.md`.
   - [ ] Sportnet: pevná Preview doména; zoznam endpointov Súťaží, ak ich budeme volať (Ján; časť 6, D2–D3). `klub.futbalsfz.sk` v `allowed_hosts` je od 6. 11.
@@ -24,6 +24,7 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
   - [x] Účet Sportnetu bez e-mailu – odmietnuť s výzvou, ADR 0025 (5. 11., Ján); implementácia v S1.
   - [x] S1 – prihlásenie bez secretu (`SPORTNET_OAUTH_CLIENT_SECRET` preč), claims `photoUrl` (len verejná fotka)/`name`/`surname`/`username`, bez `dnm`, výzva pri účte bez e-mailu (ADR 0025). Na localhost overené presmerovanie na Sportnet (5. 11.).
   - [x] S1 – prihlásenie cez sportnet.online funguje na produkcii (overil Ján 6. 11., po PR #140: `iss` bez schémy, ukladanie `sportnetId`). Vercel: `SPORTNET_OAUTH_CLIENT_ID`, `BETTER_AUTH_URL=https://klub.futbalsfz.sk`, secret netreba.
+- [ ] **Cyril:** potvrdiť, či Ján smie dávať pokyn na zlúčenie PR natrvalo (6. 11. „Cyril s tým nemá problém“), a doplniť to do `CLAUDE.md` časť 3.
 - [ ] Cyril: v Claude Design overiť vzhľad artifactu „SFZ Design System“ (https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3) a nastaviť ho ako predvolený dizajn systém.
 
 ### Novinky (ZK, ADR 0023)
