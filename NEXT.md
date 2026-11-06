@@ -18,11 +18,11 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
   - [ ] S2-b etapa 2 – premenovať `management` → `club_manager` (kód, `content/roly.json`, katalóg rolí v DB), roly `team_manager`, `player`, `member` zo `/me/sport-orgs` a `/me/sport-expert-orgs` a ich prístupy podľa analýzy kap. 3.2; migrácia `management` → `club_manager` + `source: "app"` s dry-run (súhlas Jána 6. 11.).
   - [ ] Kluby založené pri prihlásení (`clubs.source: "sportnet"`) nemajú zväz, región ani dáta sezóny – doplní S3.
   - [x] OAuth klient Sportnetu – klient `rozvojklubu` založený (verejný, PKCE, bez secretu), odpovede na A1–A10 a B1–B9 zo 4. 11. v `docs/sportnet/odpovede-sportnet-online.md`.
-  - [ ] Sportnet: doplniť `klub.futbalsfz.sk` do `allowed_hosts` (dnes je tam `rozvojklubu.futbalsfz.sk`) a pevnú Preview doménu; poslať zoznam endpointov Súťaží, ak ich budeme volať (Ján; časť 6, D1–D3).
+  - [ ] Sportnet: pevná Preview doména; zoznam endpointov Súťaží, ak ich budeme volať (Ján; časť 6, D2–D3). `klub.futbalsfz.sk` v `allowed_hosts` je od 6. 11.
   - [x] Klubový manažér aj s CRM rolou `matrikar` (B3) – ADR 0024 (5. 11., Ján); S2-b berie `admin`, `matrikar`, `manager`.
   - [x] Účet Sportnetu bez e-mailu – odmietnuť s výzvou, ADR 0025 (5. 11., Ján); implementácia v S1.
   - [x] S1 – prihlásenie bez secretu (`SPORTNET_OAUTH_CLIENT_SECRET` preč), claims `photoUrl` (len verejná fotka)/`name`/`surname`/`username`, bez `dnm`, výzva pri účte bez e-mailu (ADR 0025). Na localhost overené presmerovanie na Sportnet (5. 11.).
-  - [ ] S1 – dokončiť prihlásenie Sportnet účtom na localhoste (zadá Ján), potom `SPORTNET_OAUTH_CLIENT_ID=rozvojklubu` do `.env.local` a do Vercelu (Production + Preview), `SPORTNET_OAUTH_CLIENT_SECRET` z Vercelu zmazať; overiť na produkcii po doplnení `klub.futbalsfz.sk` do `allowed_hosts`.
+  - [x] S1 – prihlásenie cez sportnet.online funguje na produkcii (overil Ján 6. 11., po PR #140: `iss` bez schémy, ukladanie `sportnetId`). Vercel: `SPORTNET_OAUTH_CLIENT_ID`, `BETTER_AUTH_URL=https://klub.futbalsfz.sk`, secret netreba.
 - [ ] Cyril: v Claude Design overiť vzhľad artifactu „SFZ Design System“ (https://claude.ai/artifact/YMgD4uTMvAci1YvDWQESp3) a nastaviť ho ako predvolený dizajn systém.
 
 ### Novinky (ZK, ADR 0023)
@@ -98,7 +98,7 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
 
 - [ ] Ecomail: API kľúč a overená odosielateľská doména (DNS SPF/DKIM u správcu futbalsfz.sk).
 - [ ] Ochrana vetvy `main` na GitHube (Settings → Branches) – 31. 10. stále nenastavená.
-- [ ] Doména `klub.futbalsfz.sk` (3. 11.): overiť vo Verceli `BETTER_AUTH_URL` a `APP_URL` v Production, v Sportnete pridať `klub.futbalsfz.sk` do `allowed_hosts` (4. 11. tam ešte nie je – D1 v `docs/sportnet/odpovede-sportnet-online.md`), po overení domény v Ecomaile zmeniť `EMAIL_FROM`.
+- [ ] Doména `klub.futbalsfz.sk` (3. 11.): `BETTER_AUTH_URL` v Production opravený 5. 11., Sportnet `allowed_hosts` doplnený 6. 11.; ostáva po overení domény v Ecomaile zmeniť `EMAIL_FROM`.
 
 ## Ďalej v poradí
 
