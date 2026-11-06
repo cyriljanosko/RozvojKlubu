@@ -1772,7 +1772,7 @@
       "legend": "Farba podľa počtu klubov",
       "none": "bez klubu",
       "selected": "Vybraný zväz: {name}",
-      "source": "Hranice: © prispievatelia OpenStreetMap (geoBoundaries), ODbL.",
+      "source": "Hranice zväzov: statistika.futbalsfz.sk (SFZ).",
       "metric": "Farba podľa",
       "count": "Počet klubov",
       "kompas": "★ Kompas",

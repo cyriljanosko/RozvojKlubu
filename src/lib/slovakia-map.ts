@@ -1,12 +1,12 @@
 import clubDistricts from "../../content/kluby-okresy.json";
-import map from "../../content/mapa-sr.json";
+import map from "../../content/mapa-zvazov.json";
 import table from "../../content/obfz-okresy.json";
 
 /**
- * Map of Slovakia for the Vizitky (VK-a, 26. 10. 2026): district shapes from geoBoundaries
- * (© OpenStreetMap contributors, ODbL) simplified to SVG, district → ObFZ → RFZ from
- * `content/obfz-okresy.json` (ObFZ list from Sportnet, districts reviewed by Cyril) and the
- * pilot clubs' districts from `content/kluby-okresy.json`. Other clubs are placed by their
+ * Map of Slovakia for the Vizitky: the territories of the 4 RFZ and 38 ObFZ from the SFZ project
+ * statistika.futbalsfz.sk (`content/mapa-zvazov.json`, 6. 11. 2026 – ObFZ borders do not follow
+ * districts). ObFZ list with RFZ and Sportnet ids in `content/obfz-okresy.json`; the pilot clubs'
+ * districts in `content/kluby-okresy.json`. Other clubs are placed by their
  * registering union from Sportnet (S3, ADR 0028): an ObFZ gives ObFZ and RFZ, a regional union
  * only the RFZ.
  */
@@ -25,8 +25,8 @@ export interface Obfz {
 export const MAP_VIEWBOX: string = map.viewBox;
 export const MAP_SOURCE: string = map.source;
 export const OBFZ: Obfz[] = table.obfz as Obfz[];
-const DISTRICTS: { id: string; kraj: string; path: string }[] = map.okresy;
-const REGIONS: { id: string; rfz: string; path: string }[] = map.kraje;
+const RFZ_SHAPES = new Map(map.rfz.map((r) => [r.id, r.path]));
+const OBFZ_SHAPES = new Map(map.obfz.map((o) => [o.id, o.path]));
 const CLUB_DISTRICT: Record<string, string> = clubDistricts.clubs;
 
 const obfzByDistrict = new Map(OBFZ.flatMap((o) => o.okresy.map((d) => [d, o] as const)));
@@ -63,25 +63,18 @@ export interface MapArea {
   /** RFZ code or ObFZ name – the value of the filter */
   id: string;
   rfz: Rfz;
-  /** SVG paths drawn with the same colour (regions of an RFZ, districts of an ObFZ) */
+  /** SVG paths drawn with the same colour (the territory of the union) */
   paths: string[];
 }
 
-/** Pure: the areas drawn for a level – RFZ from the regions (kraje), ObFZ from districts. */
+const shape = (path: string | undefined) => (path ? [path] : []);
+
+/** Pure: the areas drawn for a level – the territories of the RFZ or of the ObFZ. */
 export function mapAreas(level: MapLevel): MapArea[] {
   if (level === "rfz") {
-    return RFZ.map((rfz) => ({
-      id: rfz,
-      rfz,
-      paths: REGIONS.filter((r) => r.rfz === rfz).map((r) => r.path),
-    }));
+    return RFZ.map((rfz) => ({ id: rfz, rfz, paths: shape(RFZ_SHAPES.get(rfz)) }));
   }
-  const paths = new Map(DISTRICTS.map((d) => [d.id, d.path]));
-  return OBFZ.map((o) => ({
-    id: o.id,
-    rfz: o.rfz,
-    paths: o.okresy.map((d) => paths.get(d)).filter((p): p is string => p !== undefined),
-  }));
+  return OBFZ.map((o) => ({ id: o.id, rfz: o.rfz, paths: shape(OBFZ_SHAPES.get(o.id)) }));
 }
 
 /** Pure: how many clubs fall into each area of a level. */
