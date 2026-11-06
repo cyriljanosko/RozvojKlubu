@@ -27,6 +27,21 @@ export interface ClubStore {
   findClub: (clubId: string) => Promise<ClubDoc | null>;
   findSeason: (clubId: string, season: string) => Promise<ClubSeasonDoc | null>;
   listSeasonNames: (clubId: string) => Promise<string[]>;
+  /**
+   * Clubs that use the app or have season data (S3, ADR 0028): the rest of the Sportnet clubs have
+   * nothing to compute, so lists and analytics skip their per-club reads. Omitted = every club.
+   */
+  listActiveClubIds?: () => Promise<string[]>;
+}
+
+/** The active subset of `clubs` (all of them when the store cannot tell). */
+export async function onlyActiveClubs<T extends { clubId: string }>(
+  store: Pick<ClubStore, "listActiveClubIds">,
+  clubs: readonly T[],
+): Promise<T[]> {
+  if (!store.listActiveClubIds) return [...clubs];
+  const active = new Set(await store.listActiveClubIds());
+  return clubs.filter((c) => active.has(c.clubId));
 }
 
 export interface MembershipStore {
@@ -103,11 +118,14 @@ export async function listMyClubs(
     .sort((a, b) => a.name.localeCompare(b.name, "sk"));
 }
 
-/** Public list of clubs in the app (name and union only), e.g. for the trial Kompas (ADR 0011). */
+/**
+ * Public list of clubs in the app (name and union only), e.g. for the trial Kompas (ADR 0011).
+ * Only clubs with app data: a select of every Sportnet club would be unusable (ADR 0028).
+ */
 export async function listPublicClubs(
   deps: Pick<ClubDeps, "clubs">,
 ): Promise<{ clubId: string; name: string; union: string; region: string }[]> {
-  return (await deps.clubs.listClubs("all"))
+  return (await onlyActiveClubs(deps.clubs, await deps.clubs.listClubs("all")))
     .map((c) => ({ clubId: c.clubId, name: c.name, union: c.union, region: c.region }))
     .sort((a, b) => a.name.localeCompare(b.name, "sk"));
 }

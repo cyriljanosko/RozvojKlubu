@@ -12,6 +12,7 @@ import {
 import { placeOf } from "@/lib/slovakia-map";
 import type { ClubRole } from "@/server/db/types";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
+import { onlyActiveClubs } from "@/server/services/clubs.service";
 import type { PlanStore } from "@/server/services/club-plan.service";
 import type { ClubSettingsStore } from "@/server/services/club-settings.service";
 import type { ClubSize } from "@/server/services/analytics.service";
@@ -139,36 +140,39 @@ export async function listVizitky(
     viewerOf(deps, actor),
   ]);
   const consenting = new Set(consents);
+  const active = new Set((await onlyActiveClubs(deps.clubs, clubs)).map((c) => c.clubId));
+  const neutral = (): Omit<
+    VizitkaCard,
+    "clubId" | "name" | "union" | "place" | "size" | "players"
+  > => ({
+    ranked: false,
+    kompas: null,
+    kompasStars: null,
+    licensing: null,
+    confirmed: false,
+    progress: null,
+    milestones: [],
+  });
   const cards = await Promise.all(
     clubs.map(async (c): Promise<VizitkaCard> => {
-      const v = await getPublicVizitka(deps, c.clubId);
       const base = {
         clubId: c.clubId,
         name: c.name,
         union: c.union,
         place: placeOf(c.clubId),
-        size: v.profile?.size ?? null,
-        players: v.profile?.players ?? null,
       };
-      if (!consenting.has(c.clubId)) {
-        return {
-          ...base,
-          ranked: false,
-          kompas: null,
-          kompasStars: null,
-          licensing: null,
-          confirmed: false,
-          progress: null,
-          milestones: [],
-        };
-      }
+      // A Sportnet club without any app data has nothing to read (S3, ADR 0028).
+      if (!active.has(c.clubId)) return { ...base, size: null, players: null, ...neutral() };
+      const v = await getPublicVizitka(deps, c.clubId);
+      const sized = { ...base, size: v.profile?.size ?? null, players: v.profile?.players ?? null };
+      if (!consenting.has(c.clubId)) return { ...sized, ...neutral() };
       const [{ latest, confirmed, milestones }, previous] = await Promise.all([
         seasonMilestones(deps, c.clubId, v.season, v.licensing !== null),
         latestKompas(deps, c.clubId, previousSeason(v.season)),
       ]);
       const kompas = latest ? totalOf(latest) : null;
       return {
-        ...base,
+        ...sized,
         ranked: true,
         kompas,
         kompasStars: kompasStars(kompas),

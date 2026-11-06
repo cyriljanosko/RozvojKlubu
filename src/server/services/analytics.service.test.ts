@@ -260,6 +260,14 @@ describe("analytics – scope by role", () => {
     ]);
   });
 
+  // S3 (ADR 0028): hundreds of Sportnet clubs without app data are not analysed one by one.
+  it("admin analyses only clubs with app data when the store can tell", async () => {
+    deps.clubs.listActiveClubIds = async () => [A];
+    const view = await getAnalytics(deps, admin);
+    expect(view.clubs.map((c) => c.clubId)).toEqual([A]);
+    expect(view.options.map((c) => c.clubId)).toEqual([A]);
+  });
+
   it("the mentor sees the cohort with the submitted Kompas only", async () => {
     let view = await getAnalytics(deps, mona);
     expect(view.scope).toBe("mentor");

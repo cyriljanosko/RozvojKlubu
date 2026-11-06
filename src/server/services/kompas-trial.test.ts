@@ -13,6 +13,9 @@ describe("public trial Kompas (ADR 0011)", () => {
     await seedContent(content, admin);
     const deps = { ...memoryDeps(), content, assessments: memoryAssessmentStore() };
     expect((await listPublicClubs(deps)).map((c) => c.clubId)).toContain(A);
+    // S3 (ADR 0028): only clubs with app data in the select, not every Sportnet club
+    deps.clubs.listActiveClubIds = async () => [A];
+    expect((await listPublicClubs(deps)).map((c) => c.clubId)).toEqual([A]);
 
     await addClubMember(deps, admin, A, { email: "alice@klub.sk", role: "club_manager" });
     await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });

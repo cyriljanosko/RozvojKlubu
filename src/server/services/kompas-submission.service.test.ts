@@ -89,6 +89,11 @@ describe("kompas submissions", () => {
     expect((await listMentorClubs(deps, admin)).map((r) => r.clubId).sort()).toEqual([B, A].sort());
   });
 
+  it("admin's overview skips clubs without app data (S3, ADR 0028)", async () => {
+    deps.clubs.listActiveClubIds = async () => [A];
+    expect((await listMentorClubs(deps, admin)).map((r) => r.clubId)).toEqual([A]);
+  });
+
   it("lets only admin_sfz withdraw a submission, keeps it in the history and falls back", async () => {
     await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
     const first = await submitKompas(deps, alice, A, { expectedVersion: 1 });

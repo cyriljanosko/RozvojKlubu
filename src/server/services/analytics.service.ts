@@ -2,7 +2,7 @@ import { ApiError } from "@/server/api/errors";
 import type { ClubSeasonDoc } from "@/server/db/types";
 import { isAdmin } from "@/server/services/club-access";
 import type { PlanStore } from "@/server/services/club-plan.service";
-import type { ClubDeps } from "@/server/services/clubs.service";
+import { onlyActiveClubs, type ClubDeps } from "@/server/services/clubs.service";
 import { profileFromSeason, sizeLabel } from "@/server/services/kompas-export";
 import type { KompasResult } from "@/server/services/kompas-scoring";
 import {
@@ -216,9 +216,10 @@ export async function getAnalytics(
   if (scope === "club" && ownIds.size === 0) {
     throw new ApiError("FORBIDDEN", "No club to analyse");
   }
+  // admin_sfz: clubs with app data only – a Sportnet club without them has nothing to analyse.
   const allowed =
     scope === "all"
-      ? await deps.clubs.listClubs("all")
+      ? await onlyActiveClubs(deps.clubs, await deps.clubs.listClubs("all"))
       : await deps.clubs.listClubs([...new Set([...mentorIds, ...ownIds])]);
   const unions = [...new Set(allowed.map((c) => c.union))].sort((a, b) => a.localeCompare(b, "sk"));
   const options = allowed
@@ -242,7 +243,9 @@ export async function getAnalytics(
   if (scope === "club" && clubs[0]?.size) {
     // anonymous: other clubs of the same size, submitted Kompas only, never their names
     const size = clubs[0].size;
-    const others = (await deps.clubs.listClubs("all")).filter((c) => !ownIds.has(c.clubId));
+    const others = (await onlyActiveClubs(deps.clubs, await deps.clubs.listClubs("all"))).filter(
+      (c) => !ownIds.has(c.clubId),
+    );
     const rows = (
       await Promise.all(
         others.map(async (c) => {

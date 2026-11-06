@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ApiError } from "@/server/api/errors";
 import type { KompasSubmissionDoc } from "@/server/db/types";
 import { clubRolesFor, isAdmin, memberClubIds } from "@/server/services/club-access";
+import { onlyActiveClubs } from "@/server/services/clubs.service";
 import { kompasLine, profileFromSeason } from "@/server/services/kompas-export";
 import type { KompasResult } from "@/server/services/kompas-scoring";
 import { getKompas, type KompasDeps } from "@/server/services/kompas.service";
@@ -176,7 +177,9 @@ export async function listMentorClubs(
     season,
   );
   if (!isAdmin(user) && mentorIds.length === 0) throw new ApiError("FORBIDDEN", "Not a mentor");
-  const clubs = await deps.clubs.listClubs(isAdmin(user) ? "all" : mentorIds);
+  const clubs = isAdmin(user)
+    ? await onlyActiveClubs(deps.clubs, await deps.clubs.listClubs("all"))
+    : await deps.clubs.listClubs(mentorIds);
   const rows = await Promise.all(
     clubs.map(async (c) => {
       const subs = (await deps.submissions.listSubmissions(c.clubId, season))

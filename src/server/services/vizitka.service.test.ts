@@ -179,6 +179,22 @@ describe("Vizitky – public list and motivational rankings (VK-a, VK-b, MR-b)",
   const cardOf = async (deps: RankingsDeps, clubId: string, actor: CurrentUser | null = null) =>
     (await listVizitky(deps, actor)).cards.find((c) => c.clubId === clubId)!;
 
+  // S3 (ADR 0028): a Sportnet club without app data is listed without reading its data.
+  it("lists a club without app data neutrally and without reading its season", async () => {
+    const deps = await rankingSetup();
+    deps.clubs.listActiveClubIds = async () => [A];
+    const findSeason = deps.clubs.findSeason;
+    const read: string[] = [];
+    deps.clubs.findSeason = async (id, season) => {
+      read.push(id);
+      return findSeason(id, season);
+    };
+    const card = await cardOf(deps, B);
+    expect(card).toMatchObject({ name: "FK Other", size: null, players: null, ranked: false });
+    expect(read).not.toContain(B);
+    expect((await cardOf(deps, A)).size).toBe("small");
+  });
+
   it("lists every club; without consent neutrally – no stars, points or milestones", async () => {
     const deps = await rankingSetup();
     await saveKompasAnswers(deps, alice, A, { answers: ["3.i.1"], expectedVersion: 0 });
