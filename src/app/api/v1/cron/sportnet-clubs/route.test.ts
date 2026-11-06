@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-const syncSportnetClubs = vi.fn(async () => ({ sportnetClubs: 1, created: 0 }));
+const runRecordedClubSync = vi.fn(async () => ({ sportnetClubs: 1, created: 0 }));
 
 vi.mock("next/server", () => ({ connection: async () => {} }));
-vi.mock("@/server/clubs/deps", () => ({ clubImportDeps: {} }));
-vi.mock("@/server/services/club-import.service", () => ({ syncSportnetClubs }));
+vi.mock("@/server/clubs/deps", () => ({ syncRunDeps: {} }));
+vi.mock("@/server/services/sync-runs.service", () => ({ runRecordedClubSync }));
 
 const { GET } = await import("./route");
 
@@ -17,7 +17,7 @@ const ctx = { params: Promise.resolve({}) } as never;
 describe("GET /api/v1/cron/sportnet-clubs", () => {
   afterEach(() => {
     vi.unstubAllEnvs();
-    syncSportnetClubs.mockClear();
+    runRecordedClubSync.mockClear();
   });
 
   it("runs the sync with the Vercel cron secret", async () => {
@@ -26,7 +26,7 @@ describe("GET /api/v1/cron/sportnet-clubs", () => {
     const res = await GET(req("Bearer s3cret"), ctx);
     expect(res.status).toBe(200);
     expect((await res.json()).data).toMatchObject({ sportnetClubs: 1 });
-    expect(syncSportnetClubs).toHaveBeenCalledOnce();
+    expect(runRecordedClubSync).toHaveBeenCalledWith({}, "cron");
   });
 
   it("refuses a wrong or missing secret, and every call when none is configured", async () => {
@@ -35,6 +35,6 @@ describe("GET /api/v1/cron/sportnet-clubs", () => {
     expect((await GET(req(), ctx)).status).toBe(401);
     vi.stubEnv("CRON_SECRET", "");
     expect((await GET(req("Bearer "), ctx)).status).toBe(401);
-    expect(syncSportnetClubs).not.toHaveBeenCalled();
+    expect(runRecordedClubSync).not.toHaveBeenCalled();
   });
 });

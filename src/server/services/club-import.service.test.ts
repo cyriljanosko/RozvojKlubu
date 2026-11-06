@@ -283,4 +283,12 @@ describe("syncSportnetClubs (nightly cron)", () => {
     expect(d.fetchProfile).not.toHaveBeenCalled();
     expect(d.store.listClubsForRefresh).toHaveBeenCalledWith(10);
   });
+
+  it("reads the same batch without writing on a dry-run (ADR 0030)", async () => {
+    const d = deps();
+    const r = await syncSportnetClubs(d, { apply: false });
+    expect(r).toMatchObject({ created: 1, checked: 1, failed: 1 });
+    expect(d.store.applyClubImport).not.toHaveBeenCalled();
+    expect(d.store.setClubDetails).not.toHaveBeenCalled();
+  });
 });
