@@ -1,5 +1,6 @@
 import type { ClubDoc, ClubSeasonDoc } from "@/server/db/types";
 
+import { memoryAudit } from "./audit.fixture";
 import { sampleSnapshot } from "./club-snapshot.fixture";
 import { parseSnapshot } from "./club-snapshot.service";
 import type { ClubDeps, StoredMembership } from "./clubs.service";
@@ -23,7 +24,10 @@ export const bob: CurrentUser = { id: "bob", email: "bob@klub.sk", name: "Bob", 
 export const A = "tj-test.futbalnet.sk";
 export const B = "fk-other.futbalnet.sk";
 
-export function memoryDeps(): ClubDeps & { memberDocs: StoredMembership[] } {
+export function memoryDeps(): ClubDeps & {
+  memberDocs: StoredMembership[];
+  audit: ReturnType<typeof memoryAudit>;
+} {
   const parsed = parseSnapshot(sampleSnapshot, new Date("2026-10-16T00:00:00Z"));
   const clubs: ClubDoc[] = [...parsed.clubs, { ...parsed.clubs[0], clubId: B, name: "FK Other" }];
   const seasons: ClubSeasonDoc[] = [...parsed.seasons];
@@ -32,6 +36,7 @@ export function memoryDeps(): ClubDeps & { memberDocs: StoredMembership[] } {
   let seq = 0;
   return {
     memberDocs,
+    audit: memoryAudit(),
     now: () => new Date("2026-10-16T12:00:00Z"),
     clubs: {
       listClubs: async (ids) => clubs.filter((c) => ids === "all" || ids.includes(c.clubId)),
@@ -50,9 +55,8 @@ export function memoryDeps(): ClubDeps & { memberDocs: StoredMembership[] } {
       },
       delete: async (clubId, id) => {
         const i = memberDocs.findIndex((m) => m.id === id && m.clubId === clubId);
-        if (i < 0) return false;
-        memberDocs.splice(i, 1);
-        return true;
+        if (i < 0) return null;
+        return memberDocs.splice(i, 1)[0];
       },
     },
     users: {

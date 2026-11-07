@@ -24,6 +24,7 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
   - [ ] Cyril: skontrolovať úplnosť zoznamu číselníkov v administrácii (G5, `docs/dizajn/g5-poznamky.md` – Číselníky): roly v klube, typy osôb, funkcie v klube, typy organizácií PO/PPO, zväzy, vekové kategórie, oblasti a línie, pásma Kompasu a licencií. Chýba niečo, alebo je niečo navyše? (Ján 7. 11.)
   - [ ] Osoby a členstvá (G5): admin SFZ smie pridať aj klubového manažéra ručne (ADR 0032).
   - [ ] S3-c – Kluby v administrácii podľa G5: API `GET /api/v1/admin/clubs` zlúčené 7. 11. (PR #158); obrazovka so stránkovaním na serveri a detail klubu po schválení artboardov Kluby.
+  - [ ] Audit log (ADR 0034): zápis v službách a `GET /api/v1/admin/audit` hotové (PR #160); zostáva obrazovka v administrácii podľa návrhu Cyrila a udalosti AI s nákladmi po používateľoch (session „Hlavička, menu-plachta a AI pýtanie sa na obsah“).
   - [x] OAuth klient Sportnetu – klient `rozvojklubu` založený (verejný, PKCE, bez secretu), odpovede na A1–A10 a B1–B9 zo 4. 11. v `docs/sportnet/odpovede-sportnet-online.md`.
   - [ ] Sportnet: pevná Preview doména; zoznam endpointov Súťaží, ak ich budeme volať (Ján; časť 6, D2–D3). `klub.futbalsfz.sk` v `allowed_hosts` je od 6. 11.
   - [x] Klubový manažér aj s CRM rolou `matrikar` (B3) – ADR 0024 (5. 11., Ján); S2-b berie `admin`, `matrikar`, `manager`.

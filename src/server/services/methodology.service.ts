@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ApiError } from "@/server/api/errors";
 import type { AreaSectionDoc, SectionKind } from "@/server/db/types";
 import { requireAdmin } from "@/server/services/club-access";
+import { recordAudit, type AuditAction, type AuditDeps } from "@/server/services/audit.service";
 import type { ContentStore, StoredRevision } from "@/server/services/content.service";
 import type { MethodologyFile } from "@/server/services/methodology-file";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
@@ -112,12 +113,13 @@ const snapshotOf = (s: AreaSectionDoc) => ({
 });
 
 export async function updateSection(
-  store: SectionStore & RevisionStore,
+  store: SectionStore & RevisionStore & AuditDeps,
   actor: CurrentUser | null,
   area: number,
   key: string,
   input: unknown,
   at: Date = new Date(),
+  auditAction: AuditAction = "content.section.update",
 ): Promise<SectionDto> {
   const user = requireUser(actor);
   requireAdmin(user);
@@ -152,6 +154,13 @@ export async function updateSection(
     changedBy: user.id,
     changedAt: at,
   });
+  await recordAudit(store, user, {
+    action: auditAction,
+    clubId: null,
+    target: { type: "area_section", id: sectionId(area, "methodology", key) },
+    changes: { version: { from: updated.version - 1, to: updated.version } },
+    at,
+  });
   return toDto(updated);
 }
 
@@ -169,7 +178,7 @@ export async function listSectionRevisions(
 
 /** Restores the state before the given revision as a new revision. */
 export async function revertSection(
-  store: SectionStore & RevisionStore,
+  store: SectionStore & RevisionStore & AuditDeps,
   actor: CurrentUser | null,
   revisionId: string,
   at: Date = new Date(),
@@ -192,5 +201,6 @@ export async function revertSection(
     key,
     { ...revision.before, expectedVersion: current.version },
     at,
+    "content.section.revert",
   );
 }

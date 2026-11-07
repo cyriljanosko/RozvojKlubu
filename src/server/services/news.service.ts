@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
+import { recordAudit } from "@/server/services/audit.service";
 import {
   NEWS_KINDS,
   NEWS_STATUSES,
@@ -668,21 +669,27 @@ export async function returnNewsToClub(
   input: unknown,
 ): Promise<AdminNewsItem> {
   const { user, scope, post, now } = await adminFind(deps, actor, id);
+  const before = { status: post.status, pinned: post.pinned }; // stores may return live objects
   const { expectedVersion, note } = newsReturnSchema.parse(input);
   if (post.clubId === null || post.status !== "submitted") {
     throw new ApiError("CONFLICT", "Only a submitted club post can be returned");
   }
-  return adminView(
-    deps,
-    savedOrConflict(
-      await deps.news.updatePost(scope, id, expectedVersion, {
-        status: "returned",
-        reviewNote: note,
-        updatedAt: now,
-        updatedBy: user.id,
-      }),
-    ),
+  const saved = savedOrConflict(
+    await deps.news.updatePost(scope, id, expectedVersion, {
+      status: "returned",
+      reviewNote: note,
+      updatedAt: now,
+      updatedBy: user.id,
+    }),
   );
+  await recordAudit(deps, user, {
+    action: "news.return",
+    clubId: post.clubId,
+    target: { type: "news", id },
+    changes: { status: { from: before.status, to: "returned" } },
+    at: now,
+  });
+  return adminView(deps, saved);
 }
 
 async function uniqueSlug(deps: NewsDeps, title: string): Promise<string> {
@@ -701,6 +708,7 @@ export async function publishNews(
   input: unknown,
 ): Promise<AdminNewsItem> {
   const { user, scope, post, now } = await adminFind(deps, actor, id);
+  const before = { status: post.status, pinned: post.pinned }; // stores may return live objects
   const { expectedVersion } = versionSchema.parse(input);
   const allowed: NewsStatus[] =
     post.clubId === null ? ["draft", "hidden"] : ["submitted", "hidden"];
@@ -718,20 +726,25 @@ export async function publishNews(
   const missing = missingParts(post);
   if (missing.length > 0)
     throw new ApiError("BAD_REQUEST", "The post is not complete", { missing });
-  return adminView(
-    deps,
-    savedOrConflict(
-      await deps.news.updatePost(scope, id, expectedVersion, {
-        status: "published",
-        reviewNote: null,
-        slug: post.slug ?? (await uniqueSlug(deps, post.title)),
-        publishedAt: post.publishedAt ?? now,
-        publishedBy: post.publishedBy ?? user.id,
-        updatedAt: now,
-        updatedBy: user.id,
-      }),
-    ),
+  const saved = savedOrConflict(
+    await deps.news.updatePost(scope, id, expectedVersion, {
+      status: "published",
+      reviewNote: null,
+      slug: post.slug ?? (await uniqueSlug(deps, post.title)),
+      publishedAt: post.publishedAt ?? now,
+      publishedBy: post.publishedBy ?? user.id,
+      updatedAt: now,
+      updatedBy: user.id,
+    }),
   );
+  await recordAudit(deps, user, {
+    action: "news.publish",
+    clubId: post.clubId,
+    target: { type: "news", id },
+    changes: { status: { from: before.status, to: "published" } },
+    at: now,
+  });
+  return adminView(deps, saved);
 }
 
 /** Takes a published post down (e.g. the club withdrew its consent); it can be published again. */
@@ -742,20 +755,26 @@ export async function hideNews(
   input: unknown,
 ): Promise<AdminNewsItem> {
   const { user, scope, post, now } = await adminFind(deps, actor, id);
+  const before = { status: post.status, pinned: post.pinned }; // stores may return live objects
   const { expectedVersion } = versionSchema.parse(input);
   if (post.status !== "published")
     throw new ApiError("CONFLICT", "Only a published post can be hidden");
-  return adminView(
-    deps,
-    savedOrConflict(
-      await deps.news.updatePost(scope, id, expectedVersion, {
-        status: "hidden",
-        pinned: false,
-        updatedAt: now,
-        updatedBy: user.id,
-      }),
-    ),
+  const saved = savedOrConflict(
+    await deps.news.updatePost(scope, id, expectedVersion, {
+      status: "hidden",
+      pinned: false,
+      updatedAt: now,
+      updatedBy: user.id,
+    }),
   );
+  await recordAudit(deps, user, {
+    action: "news.hide",
+    clubId: post.clubId,
+    target: { type: "news", id },
+    changes: { status: { from: before.status, to: "hidden" } },
+    at: now,
+  });
+  return adminView(deps, saved);
 }
 
 /** Pins a published post to the top of Novinky and the Academy home (one at a time). */
@@ -766,21 +785,27 @@ export async function setNewsPinned(
   input: unknown,
 ): Promise<AdminNewsItem> {
   const { user, scope, post, now } = await adminFind(deps, actor, id);
+  const before = { status: post.status, pinned: post.pinned }; // stores may return live objects
   const { expectedVersion, pinned } = newsPinSchema.parse(input);
   if (pinned && post.status !== "published") {
     throw new ApiError("CONFLICT", "Only a published post can be pinned");
   }
   if (pinned) await deps.news.clearPinned();
-  return adminView(
-    deps,
-    savedOrConflict(
-      await deps.news.updatePost(scope, id, expectedVersion, {
-        pinned,
-        updatedAt: now,
-        updatedBy: user.id,
-      }),
-    ),
+  const saved = savedOrConflict(
+    await deps.news.updatePost(scope, id, expectedVersion, {
+      pinned,
+      updatedAt: now,
+      updatedBy: user.id,
+    }),
   );
+  await recordAudit(deps, user, {
+    action: "news.pin",
+    clubId: post.clubId,
+    target: { type: "news", id },
+    changes: { pinned: { from: before.pinned, to: pinned } },
+    at: now,
+  });
+  return adminView(deps, saved);
 }
 
 /** Records that the package went to SFZ communication – a club post only with the club's consent. */

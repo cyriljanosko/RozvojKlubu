@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { memoryAudit } from "./audit.fixture";
 import { admin, alice } from "./clubs.fixture";
 import type { ClubImportDeps } from "./club-import.service";
 import {
@@ -31,7 +32,8 @@ function deps(overrides: Partial<ClubImportDeps> = {}) {
     now: () => new Date(t0.getTime() + 1000 * tick++),
     ...overrides,
   };
-  const d: SyncRunDeps & { saved: SyncRun[] } = {
+  const d: SyncRunDeps & { saved: SyncRun[]; audit: ReturnType<typeof memoryAudit> } = {
+    audit: memoryAudit(),
     clubs,
     saved: runs,
     runs: {
@@ -83,6 +85,7 @@ describe("startManualClubSync", () => {
     expect(d.clubs.fetchDirectory).toHaveBeenCalledOnce();
     expect(d.clubs.store.applyClubImport).not.toHaveBeenCalled();
     expect(d.runs.insertRun).not.toHaveBeenCalled();
+    expect(d.audit.entries).toEqual([]);
   });
 
   it("apply: writes and records the run with the admin", async () => {
@@ -90,6 +93,9 @@ describe("startManualClubSync", () => {
     expect(await startManualClubSync(d, admin, { apply: true })).toMatchObject({ applied: true });
     expect(d.clubs.store.applyClubImport).toHaveBeenCalledOnce();
     expect(d.saved[0]).toMatchObject({ trigger: "manual", actorId: "admin", ok: true });
+    expect(d.audit.entries).toEqual([
+      expect.objectContaining({ action: "sportnet.sync.apply", actorId: "admin", clubId: null }),
+    ]);
   });
 
   it("only admin_sfz, and only a signed-in user", async () => {

@@ -114,20 +114,20 @@ export const mongoMembershipStore: MembershipStore = {
     return { ...doc, id: String(insertedId) };
   },
   async delete(clubId, membershipId) {
-    if (!ObjectId.isValid(membershipId)) return false;
+    if (!ObjectId.isValid(membershipId)) return null;
     const db = await getDb();
-    const { deletedCount } = await memberships(db).deleteOne({
+    const deleted = await memberships(db).findOneAndDelete({
       _id: new ObjectId(membershipId),
       clubId,
     });
-    return deletedCount === 1;
+    return deleted ? toStored(deleted) : null;
   },
 };
 
 /** Writes of the Sportnet club-role sync at sign-in (club-roles-sync.service, ADR 0026). */
 export const mongoClubRolesSyncStore: Omit<
   ClubRolesSyncDeps,
-  "fetchAppspaces" | "fetchAffiliations" | "now"
+  "fetchAppspaces" | "fetchAffiliations" | "now" | "audit"
 > = {
   async listKnownClubIds(clubIds) {
     const db = await getDb();

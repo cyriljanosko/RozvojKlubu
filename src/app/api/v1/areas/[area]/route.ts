@@ -2,8 +2,8 @@ import { connection } from "next/server";
 
 import { apiHandler, ok } from "@/server/api/http";
 import { getCurrentUser } from "@/server/auth/session";
-import { mongoContentStore } from "@/server/db/content.store";
 import { updateArea } from "@/server/services/content.service";
+import { contentEditStore } from "@/server/content/deps";
 
 type Ctx = RouteContext<"/api/v1/areas/[area]">;
 
@@ -12,7 +12,7 @@ export const PUT = apiHandler<Ctx>(async (request, context) => {
   await connection();
   const { area } = await context.params;
   const updated = await updateArea(
-    mongoContentStore,
+    contentEditStore,
     await getCurrentUser(request.headers),
     Number(area),
     await request.json(),

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ApiError } from "@/server/api/errors";
 import type { AreaPracticeDoc } from "@/server/db/types";
 import { requireAdmin } from "@/server/services/club-access";
+import { recordAudit, type AuditAction, type AuditDeps } from "@/server/services/audit.service";
 import type { StoredRevision } from "@/server/services/content.service";
 import type { RevisionStore } from "@/server/services/methodology.service";
 import {
@@ -122,11 +123,12 @@ const snapshotOf = (d: Pick<AreaPracticeDoc, "content" | "validAsOf" | "reviewed
 });
 
 export async function updatePractice(
-  store: PracticeStore & RevisionStore,
+  store: PracticeStore & RevisionStore & AuditDeps,
   actor: CurrentUser | null,
   area: number,
   input: unknown,
   at: Date = new Date(),
+  auditAction: AuditAction = "content.practice.update",
 ): Promise<PracticeDto> {
   const user = requireUser(actor);
   requireAdmin(user);
@@ -156,6 +158,13 @@ export async function updatePractice(
     changedBy: user.id,
     changedAt: at,
   });
+  await recordAudit(store, user, {
+    action: auditAction,
+    clubId: null,
+    target: { type: "area_practice", id: String(area) },
+    changes: { version: { from: updated.version - 1, to: updated.version } },
+    at,
+  });
   return toDto(updated);
 }
 
@@ -179,7 +188,7 @@ export async function listPracticeRevisions(
 }
 
 export async function revertPractice(
-  store: PracticeStore & RevisionStore,
+  store: PracticeStore & RevisionStore & AuditDeps,
   actor: CurrentUser | null,
   revisionId: string,
   at: Date = new Date(),
@@ -199,5 +208,6 @@ export async function revertPractice(
     area,
     { ...revision.before, expectedVersion: current.version },
     at,
+    "content.practice.revert",
   );
 }

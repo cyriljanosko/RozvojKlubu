@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Audit log zmien prístupov a administrácie (ADR 0034): kolekcia `audit_log` zaznamenáva, kto a kedy zmenil rolu používateľa, členstvo v klube (aj zo Sportnetu), súhlas s rebríčkom, licenčné hodnotenie, Kompas, novinky, obsah a ručnú synchronizáciu – bez mien a e-mailov, uchovanie 3 roky. Admin SFZ ho číta cez `GET /api/v1/admin/audit`; obrazovka príde podľa návrhu Cyrila.
 - História synchronizácie so sportnet.online ukazuje, kto spustil ručný beh (ADR 0031); ručný zápis sa zapíše aj do logu.
 - API zoznamu klubov pre administráciu (S3, G5 Kluby): `GET /api/v1/admin/clubs` – hľadanie podľa názvu (bez ohľadu na diakritiku) alebo IČO, filtre región (aj bez regiónu), zväz, stav a „V aplikácii“, 25 klubov na stranu podľa slovenskej abecedy. Len admin SFZ.
 - Stránka Sportnet v administrácii (S3, návrh G5, ADR 0030): stav klubov, ručná synchronizácia v troch krokoch (skúšobný beh, kontrola, zápis po potvrdení) a posledných 20 behov – na mobile ako karty. Menu administrácie má poradie podľa G5 (Kluby · Obsah · Novinky · Sportnet) a na mobile sa vysúva zľava; Katalóg rolí sa otvára z Obsahu.

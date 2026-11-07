@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
+import { recordAudit } from "@/server/services/audit.service";
 import type { KompasSubmissionDoc } from "@/server/db/types";
 import { clubRolesFor, isAdmin, memberClubIds } from "@/server/services/club-access";
 import { onlyActiveClubs } from "@/server/services/clubs.service";
@@ -216,6 +217,12 @@ export async function withdrawKompasSubmission(
     deps.now?.() ?? new Date(),
   );
   if (!withdrawn) throw new ApiError("CONFLICT", "Already withdrawn");
+  await recordAudit(deps, user, {
+    action: "kompas.submission.withdraw",
+    clubId,
+    target: { type: "kompas_submission", id: submissionId },
+    changes: { status: { to: "withdrawn" } },
+  });
   return summary(withdrawn);
 }
 
@@ -246,5 +253,11 @@ export async function confirmKompasSubmission(
     confirmed ? { by: user.id, at: deps.now?.() ?? new Date() } : null,
   );
   if (!saved) throw new ApiError("CONFLICT", "A withdrawn Kompas cannot be confirmed");
+  await recordAudit(deps, user, {
+    action: "kompas.submission.confirm",
+    clubId,
+    target: { type: "kompas_submission", id: submissionId },
+    changes: { confirmed: { from: Boolean(existing.confirmedAt), to: confirmed } },
+  });
   return summary(saved);
 }

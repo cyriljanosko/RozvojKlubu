@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
+import { recordAudit } from "@/server/services/audit.service";
 import type { ClubSettingsDoc } from "@/server/db/types";
 import { clubRolesFor, isAdmin } from "@/server/services/club-access";
 import type { ClubDeps } from "@/server/services/clubs.service";
@@ -94,5 +95,12 @@ export async function setRankingConsent(
     updatedBy: user.id,
   });
   if (!saved) throw new ApiError("CONFLICT", "The settings were changed by someone else");
+  await recordAudit(deps, user, {
+    action: "club.rankingConsent.set",
+    clubId,
+    target: { type: "club_settings", id: clubId },
+    changes: { rankingConsent: { to: given } },
+    at: now,
+  });
   return view(clubId, saved, true);
 }

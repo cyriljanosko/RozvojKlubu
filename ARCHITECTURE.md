@@ -192,6 +192,19 @@ MCP server (F5, plánovaný)        ─┘        │
 7. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
    zväzom namiesto ObFZ (dry-run 6. 11.).
 
+### Audit log (ADR 0034)
+
+1. Služba po úspešnej zmene zavolá `recordAudit(deps, actor, { action, clubId, target, changes })`
+   (`audit.service.ts`) – UI aj API idú cez tú istú službu. Zápis do `audit_log` (`src/server/db/audit.store.ts`)
+   len pripisuje; keď zlyhá, zmena ostane a server zaloguje `[audit] write failed`.
+2. Zaznamenáva sa: rola používateľa, členstvá v klube (ručne aj zo Sportnetu pri prihlásení – len skutočná zmena),
+   súhlas s rebríčkom, uzavretie a znovuotvorenie licenčného hodnotenia, potvrdenie a stiahnutie Kompasu,
+   rozhodnutia o novinkách (vrátenie, zverejnenie, skrytie, pripnutie), úpravy a návraty obsahu a Katalógu rolí,
+   ručný zápis synchronizácie. Kódy akcií sú v `AUDIT_ACTIONS`.
+3. Bez osobných údajov – len ID, roly a stavy; mená doplní `GET /api/v1/admin/audit` (admin SFZ, filtre
+   `clubId`, `actorId`, `action`, `from`, `to`, 50 na stranu) pri čítaní z Better Auth.
+4. Úpravy obsahu idú cez `src/server/content/deps.ts` (store obsahu + `audit`), služby klubov cez `clubDeps`.
+
 ## Hranice systému
 
 - **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Kluby (názov, zväz, región, IČO) z verejného CoreApi (ADR 0028), dáta sezóny pilotných klubov zatiaľ z jednorazového snapshotu (ADR 0005, ADR 0033).
@@ -226,6 +239,7 @@ MCP server (F5, plánovaný)        ─┘        │
 | `club_settings`         | aplikácia (tenant) | nastavenia klubu – súhlas s verejným rebríčkom (MR, ADR 0015)                     |
 | `news_posts`            | aplikácia (tenant) | Novinky – príspevky klubov (tenant do zverejnenia) a SFZ, stav, verzia (ADR 0023) |
 | `sync_runs`             | aplikácia          | behy synchronizácie so Sportnetom – len počty a chyba, bez osôb (ADR 0030)        |
+| `audit_log`             | aplikácia          | audit log zmien prístupov a administrácie – ID, roly, stavy, bez mien (ADR 0034)  |
 
 Aktívny klub (ADR 0028) = má dáta v niektorej klubovej kolekcii (`ClubStore.listActiveClubIds`, `distinct("clubId")` po kolekciách). Zoznamy a analýza čítajú dáta po jednom len pre aktívne kluby – po importe všetkých klubov zo Sportnetu.
 
@@ -256,4 +270,5 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `user_preferences`: `{ userId: 1 }` unikátny (zakladá `src/server/db/preferences.store.ts` pri prvom uložení, súhlas 22. 10. 2026; osobné dáta mimo tenanta – ADR 0012)
 - `club_settings`: `{ clubId: 1 }` unikátny (zakladá `src/server/db/club-settings.store.ts` pri prvom uložení, súhlas 26. 10. 2026; ADR 0015); zoznam súhlasov `{ "rankingConsent.given": true }` bez vlastného indexu – jeden dokument na klub Akadémie
 - `news_posts`: `{ status: 1, publishedAt: -1 }`; `{ clubId: 1, status: 1 }`; `{ areas: 1, status: 1, publishedAt: -1 }`; `{ slug: 1 }` unikátny len pre príspevky so slugom (`partialFilterExpression: { slug: { $type: "string" } }`) (zakladá `src/server/db/news.store.ts` pri prvom zápise, súhlas 31. 10. 2026; ADR 0023). Kolekcia je zatiaľ malá – `explain` overiť, keď bude mať stovky príspevkov
+- `audit_log`: `{ at: 1 }` TTL 3 roky (`expireAfterSeconds` 94 608 000); `{ clubId: 1, at: -1 }`; `{ actorId: 1, at: -1 }` (zakladá `src/server/db/audit.store.ts` pri prvom zápise, ADR 0034; súhlas Jána 7. 11. 2026). Odhad desiatky záznamov denne – `explain` overiť, keď bude mať tisíce záznamov
 - `sync_runs`: `{ kind: 1, startedAt: -1 }` (zakladá `src/server/db/sync-runs.store.ts` pri prvom zápise, ADR 0030; súhlas – PR S3-b). Stav klubov pre administráciu je jedna agregácia nad `clubs` bez indexu na `status` – 3 084 dokumentov, overené 6. 11.: 2 ms. Zoznam klubov v administrácii (`admin-clubs.store.ts`) tiež bez indexu: `explain` 7. 11. – COLLSCAN 1 558 dokumentov, triedenie s kolaciou `sk` v pamäti, 6 ms
