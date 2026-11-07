@@ -41,6 +41,9 @@ function deps(overrides: Partial<ClubImportDeps> = {}) {
       listRuns: vi.fn(async (_kind: SyncRun["kind"], limit: number) => runs.slice(0, limit)),
     },
     stats: async () => ({ activeClubs: 1558, withoutDetails: 0, oldestDetailsAt: t0 }),
+    users: {
+      findById: vi.fn(async (id: string) => (id === admin.id ? admin : null)),
+    },
   };
   return d;
 }
@@ -100,7 +103,7 @@ describe("startManualClubSync", () => {
 });
 
 describe("getSportnetSyncStatus", () => {
-  it("returns club counts and the last runs without who started them", async () => {
+  it("returns club counts and the last runs with who started a manual one (ADR 0031)", async () => {
     const d = deps();
     await startManualClubSync(d, admin, { apply: true });
     const status = await getSportnetSyncStatus(d, admin);
@@ -112,8 +115,18 @@ describe("getSportnetSyncStatus", () => {
     expect(status.runs).toHaveLength(1);
     expect(status.runs[0]).toMatchObject({ trigger: "manual", ok: true });
     expect(status.runs[0].durationMs).toBeGreaterThan(0);
+    expect(status.runs[0].actorName).toBe(admin.name);
     expect(status.runs[0]).not.toHaveProperty("actorId");
     expect(d.runs.listRuns).toHaveBeenCalledWith("sportnet-clubs", 20);
+  });
+
+  it("shows no name for the nightly run and a placeholder for a deleted account", async () => {
+    const d = deps();
+    await runRecordedClubSync(d, "cron");
+    await runRecordedClubSync(d, "manual", "gone");
+    const { runs } = await getSportnetSyncStatus(d, admin);
+    expect(runs.map((r) => r.actorName)).toEqual(["", null]);
+    expect(d.users.findById).toHaveBeenCalledTimes(1);
   });
 
   it("only admin_sfz", async () => {

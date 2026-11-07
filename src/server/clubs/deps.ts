@@ -172,4 +172,5 @@ export const syncRunDeps: SyncRunDeps = {
   clubs: clubImportDeps,
   runs: mongoSyncRunStore,
   stats: clubSyncStats,
+  users: betterAuthUserDirectory,
 };

@@ -2252,6 +2252,7 @@
       "error": "Chyba",
       "cron": "Noc (cron)",
       "manual": "Ručne",
+      "manualBy": "Ručne · {name}",
       "ok": "OK",
       "failedRun": "Chyba",
       "noError": "–",

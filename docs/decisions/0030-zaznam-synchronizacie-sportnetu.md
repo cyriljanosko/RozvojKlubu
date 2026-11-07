@@ -4,6 +4,7 @@
 - Dátum: 2026-11-06
 - Pripravil: Ján Letko (Claude) · Rozhodol: Ján Letko · Potvrdí: Cyril Janoško
 - Nadväzuje na: 0028 (kluby zo Sportnetu), 0029 (nočná synchronizácia klubov)
+- Nahradené: 0031 (len bod 3 – meno pri ručnom behu)
 
 ## Kontext
 
