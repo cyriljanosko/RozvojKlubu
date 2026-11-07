@@ -12,6 +12,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 - Nočná synchronizácia klubov zo sportnet.online (ADR 0029): Vercel Cron denne o 2:00 UTC obnoví zoznam klubov a podrobnosti (zväz, región, IČO) najviac 600 klubov – nové najprv, potom najstaršie. Potrebuje `CRON_SECRET`.
 - Import klubov zo sportnet.online pre admina SFZ (S3, ADR 0028): `POST /api/v1/admin/sportnet/clubs` založí alebo obnoví všetky aktívne futbalové kluby (názov, logo, stav), predvolene ako dry-run; `POST /api/v1/admin/sportnet/clubs/details` doplní po dávkach matričný a regionálny zväz z profilu klubu, IČO a právnickú osobu. Snapshot už neprepíše názov a zväz klubu obnoveného zo Sportnetu.
 
+### Odstránené
+
+- Import snapshotu klubov v administrácii (formulár na Kluby a `POST /api/v1/admin/club-snapshot`, ADR 0033) – kluby sú zo sportnet.online, dáta sezóny pilotných klubov v databáze ostávajú.
+
 ### Zmenené
 
 - Synchronizácia klubov hlási ako „zmenené“ len kluby, ktorým sa v sportnet.online zmenil názov, stav alebo logo – doteraz každý uložený klub.

@@ -153,14 +153,12 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Bez indexu a bez novej kolekcie – obsah (stovky textov) sa prehľadá v pamäti servera: normalizácia bez diakritiky, hrubý kmeň slova pre skloňovanie, všetky slová musia sedieť (inak aspoň jedno), názov váži viac, oblasť najviac; Atlas Search až pri väčšom obsahu
 3. Mentorská Prax len pre mentora sezóny a admina SFZ (`seesMentor`); odkazy `?open=` otvoria sekciu alebo vzor, `ScrollToHash` sa po načítaní posunie na kotvu
 
-### Dáta klubov (snapshot, ADR 0005)
+### Dáta sezóny klubov (snapshot, ADR 0005, ADR 0033)
 
-1. Admin SFZ nahrá snapshot (JSON z návrhu Vizitky) na `/admin/kluby` alebo `POST /api/v1/admin/club-snapshot`
-2. `parseSnapshot` ho overí (Zod) a premapuje → upsert do `clubs` a `club_seasons`
-3. Karta klubu `/klub/[clubId]` a `GET /api/v1/clubs/:clubId` čítajú len počty a družstvá (mená trénerov nie)
-4. Snapshot s menami leží len lokálne v `data/private/` (gitignore), nikdy v gite
-5. Klub obnovený zo Sportnetu (`sportnetSyncedAt`) si pri snapshote ponechá názov, zväz a región; snapshot
-   mu doplní len `slug` a dáta sezóny (ADR 0028)
+1. Dáta sezóny 10 pilotných klubov (`club_seasons`, `slug`, `dataAsOf`) sa raz nahrali zo snapshotu Vizitky;
+   import sa odstránil (ADR 0033), dáta ostávajú, kým ich nenahradia Súťaže zo Sportnetu
+2. Karta klubu `/klub/[clubId]` a `GET /api/v1/clubs/:clubId` čítajú len počty a družstvá (mená trénerov nie)
+3. `parseSnapshot` a vymyslený `club-snapshot.fixture` plnia len testovacie dáta
 
 ### Kluby zo sportnet.online (S3, ADR 0028)
 
@@ -191,7 +189,7 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ## Hranice systému
 
-- **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Kluby (názov, zväz, región, IČO) z verejného CoreApi (ADR 0028), dáta sezóny zatiaľ zo snapshotu (ADR 0005).
+- **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Kluby (názov, zväz, región, IČO) z verejného CoreApi (ADR 0028), dáta sezóny pilotných klubov zatiaľ z jednorazového snapshotu (ADR 0005, ADR 0033).
 - **MongoDB** drží len dáta aplikácie.
 - **Ecomail** len odosiela transakčné e-maily, nič neukladáme.
 

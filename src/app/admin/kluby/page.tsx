@@ -5,14 +5,12 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { clubDeps } from "@/server/clubs/deps";
 import { isAdmin } from "@/server/services/club-access";
 import { listMyClubs } from "@/server/services/clubs.service";
-
-import { SnapshotForm } from "./snapshot-form";
 
 export const metadata: Metadata = { title: defaultMessages.admin.title };
 
@@ -52,15 +50,6 @@ async function AdminClubs() {
           ) : (
             <p className="text-muted-foreground text-sm">{t("noClubs")}</p>
           )}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("snapshot.title")}</CardTitle>
-          <CardDescription>{t("snapshot.description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <SnapshotForm />
         </CardContent>
       </Card>
     </div>

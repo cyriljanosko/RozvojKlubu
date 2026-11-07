@@ -6,49 +6,20 @@ import { headers } from "next/headers";
 import { ApiError, type ApiErrorCode } from "@/server/api/errors";
 import { getCurrentUser } from "@/server/auth/session";
 import { clubDeps } from "@/server/clubs/deps";
-import { mongoSnapshotStore } from "@/server/db/clubs.store";
-import {
-  addClubMember,
-  importClubSnapshot,
-  removeClubMember,
-} from "@/server/services/clubs.service";
+import { addClubMember, removeClubMember } from "@/server/services/clubs.service";
 
 /** Thin Server Action layer over the club services (validation and permissions live there). */
 export type ActionState =
-  | { status: "idle" }
-  | { status: "ok"; clubs?: number; seasons?: number; dataAsOf?: string }
-  | { status: "error"; code: ApiErrorCode };
+  { status: "idle" } | { status: "ok" } | { status: "error"; code: ApiErrorCode };
 
 const failure = (error: unknown): ActionState => {
   if (error instanceof ApiError) return { status: "error", code: error.code };
-  if (error instanceof SyntaxError || (error as { name?: string })?.name === "ZodError") {
+  if ((error as { name?: string })?.name === "ZodError") {
     return { status: "error", code: "BAD_REQUEST" };
   }
   console.error("[admin] action failed", error);
   return { status: "error", code: "INTERNAL" };
 };
-
-export async function importSnapshotAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  try {
-    const file = formData.get("file");
-    if (!(file instanceof File) || file.size === 0) {
-      return { status: "error", code: "BAD_REQUEST" };
-    }
-    const actor = await getCurrentUser(await headers());
-    const result = await importClubSnapshot(
-      mongoSnapshotStore,
-      actor,
-      JSON.parse(await file.text()),
-    );
-    refresh();
-    return { status: "ok", ...result };
-  } catch (error) {
-    return failure(error);
-  }
-}
 
 export async function addMemberAction(
   clubId: string,
