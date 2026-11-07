@@ -95,6 +95,8 @@ export type SportnetClubFields = Pick<ClubDoc, "name" | "status" | "sportnetSync
 export interface ClubImportPlan {
   create: ClubDoc[];
   update: { clubId: string; set: SportnetClubFields }[];
+  /** stored clubs whose name, status or logo differ from Sportnet (all stored ones are written) */
+  changed: number;
   /** Sportnet clubs skipped: not active (and not stored) or not football */
   skipped: number;
 }
@@ -106,17 +108,22 @@ const fieldsOf = (ppo: SportnetClubPpo, now: Date): SportnetClubFields => ({
   sportnetSyncedAt: now,
 });
 
+/** What the directory step compares; older callers may know only the ID. */
+export type StoredClub = Pick<ClubDoc, "clubId"> &
+  Partial<Pick<ClubDoc, "name" | "status" | "logoUrl">>;
+
 /**
  * Active football clubs are created or refreshed. Stored clubs that are no longer active in
  * Sportnet keep their record (memberships, Kompas) and get the new status.
  */
 export function planClubImport(input: {
   clubs: readonly SportnetClubPpo[];
-  existing: readonly Pick<ClubDoc, "clubId">[];
+  existing: readonly StoredClub[];
   now: Date;
 }): ClubImportPlan {
-  const stored = new Set(input.existing.map((c) => c.clubId));
-  const plan: ClubImportPlan = { create: [], update: [], skipped: 0 };
+  const byId = new Map(input.existing.map((c) => [c.clubId, c]));
+  const stored = new Set(byId.keys());
+  const plan: ClubImportPlan = { create: [], update: [], changed: 0, skipped: 0 };
   const seen = new Set<string>();
   for (const ppo of input.clubs) {
     if (!ppo._id || seen.has(ppo._id)) continue;
@@ -127,8 +134,16 @@ export function planClubImport(input: {
       continue;
     }
     const set = fieldsOf(ppo, input.now);
-    if (stored.has(ppo._id)) {
+    const current = byId.get(ppo._id);
+    if (current) {
       plan.update.push({ clubId: ppo._id, set });
+      if (
+        current.name !== set.name ||
+        current.status !== set.status ||
+        (current.logoUrl ?? undefined) !== set.logoUrl
+      ) {
+        plan.changed += 1;
+      }
     } else {
       plan.create.push({
         clubId: ppo._id,
@@ -151,7 +166,7 @@ export type ClubDetails = Pick<ClubDoc, "union" | "region" | "unionId" | "region
   SportnetLegalEntity & { sportnetDetailsAt: Date };
 
 export interface ClubImportStore {
-  listClubsForImport: () => Promise<Pick<ClubDoc, "clubId">[]>;
+  listClubsForImport: () => Promise<StoredClub[]>;
   applyClubImport: (plan: Pick<ClubImportPlan, "create" | "update">) => Promise<void>;
   /** active Sportnet clubs without details yet (clubs used in the app first), at most `limit` */
   listClubsWithoutDetails: (
@@ -208,7 +223,7 @@ export async function importSportnetClubs(
     applied: apply,
     sportnetClubs: clubs.length,
     created: plan.create.length,
-    updated: plan.update.length,
+    updated: plan.changed,
     skipped: plan.skipped,
   };
 }
@@ -293,6 +308,9 @@ export async function fillClubDetails(
 
 // ---- 3. nightly sync (Vercel Cron, ADR 0029) ----
 
+/** Clubs whose Sportnet details one nightly run refreshes (ADR 0029). */
+export const CLUB_DETAILS_PER_RUN = 600;
+
 export interface ClubSyncResult extends Omit<ClubImportResult, "applied"> {
   checked: number;
   failed: number;
@@ -319,12 +337,12 @@ export async function syncSportnetClubs(
     now: deps.now?.() ?? new Date(),
   });
   if (apply) await deps.store.applyClubImport(plan);
-  const batch = await deps.store.listClubsForRefresh(options.limit ?? 600);
+  const batch = await deps.store.listClubsForRefresh(options.limit ?? CLUB_DETAILS_PER_RUN);
   const read = await readClubDetails(deps, unionIndex(directory.tree), batch, apply, until);
   return {
     sportnetClubs: directory.clubs.length,
     created: plan.create.length,
-    updated: plan.update.length,
+    updated: plan.changed,
     skipped: plan.skipped,
     checked: read.checked,
     failed: read.failed,

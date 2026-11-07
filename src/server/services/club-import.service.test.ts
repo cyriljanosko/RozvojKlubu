@@ -140,6 +140,24 @@ describe("planClubImport", () => {
     expect(plan.update[0].set).not.toHaveProperty("union");
     expect(plan.skipped).toBe(2); // excluded and not stored, futsal; the duplicate is ignored
   });
+
+  // bug 7. 11. 2026: the dry-run reported every stored club as changed ("Zmenené 1 558")
+  it("counts as changed only stored clubs whose name, status or logo differ", () => {
+    const logo = (id: string) => `https://api.sportnet.online/data/ppo/${id}/logo.png`;
+    const plan = planClubImport({
+      clubs: [ppo("same"), ppo("renamed"), ppo("gone", "excluded"), ppo("new-logo")],
+      now,
+      existing: [
+        { clubId: "same", name: "Klub same", status: "active", logoUrl: logo("same") },
+        { clubId: "renamed", name: "Old name", status: "active", logoUrl: logo("renamed") },
+        { clubId: "gone", name: "Klub gone", status: "active", logoUrl: logo("gone") },
+        { clubId: "new-logo", name: "Klub new-logo", status: "active" },
+      ],
+    });
+    expect(plan.changed).toBe(3);
+    // every stored club is still written, so its sync time moves on
+    expect(plan.update).toHaveLength(4);
+  });
 });
 
 function deps(): ClubImportDeps {
