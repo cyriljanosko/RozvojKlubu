@@ -15,7 +15,16 @@
     "about": "O Akadémii",
     "analytics": "Analýza",
     "vizitky": "Vizitky klubov",
-    "logoAlt": "Slovenský futbalový zväz"
+    "logoAlt": "Slovenský futbalový zväz",
+    "wordmark": "Akadémia",
+    "searchOpen": "Hľadať v Akadémii",
+    "searchShortcut": "⌘K",
+    "searchClose": "Zavrieť hľadanie",
+    "searchTyping": "Píšte aspoň dve písmená.",
+    "searchNone": "Nič sme nenašli. Skúste iné slovo.",
+    "searchAll": "Všetky výsledky pre „{query}“",
+    "searchError": "Hľadanie teraz nefunguje. Skúste to o chvíľu.",
+    "searchResults": "Výsledky hľadania"
   },
   "home": {
     "eyebrow": "Slovenský futbalový zväz",
@@ -1949,8 +1958,27 @@
     "adminContent": "Obsah",
     "adminNews": "Novinky",
     "adminSportnet": "Sportnet",
-    "moreTitle": "Viac",
-    "switchClub": "Zmeniť klub"
+    "moreTitle": "Celé menu",
+    "switchClub": "Zmeniť klub",
+    "menu": "Menu",
+    "allSections": "Celé menu",
+    "closeMenu": "Zavrieť menu",
+    "escCloses": "zavrie",
+    "sectionMain": "Hlavné",
+    "sectionMore": "Ďalšie",
+    "sectionAdmin": "Správa",
+    "breadcrumbLabel": "Cesta",
+    "crumbVizitka": "Vizitka klubu",
+    "crumbClub": "Klub",
+    "crumbArea": "Oblasť {number}",
+    "crumbRoles": "Roly",
+    "crumbMethodology": "Metodika",
+    "crumbPractice": "Prax",
+    "crumbVisits": "Návštevy",
+    "crumbNewVisit": "Nová návšteva",
+    "crumbVisit": "Návšteva",
+    "crumbSubmission": "Odoslaný Kompas",
+    "crumbNewsItem": "Novinka"
   },
   "showcase": {
     "title": "Ukážky SFZ Design System",
@@ -1983,7 +2011,11 @@
     "submenu": "Podmenu klubu",
     "inputValue": "Získať trénera pre prípravku",
     "optionLeadership": "1 · Vedenie klubu",
-    "optionCoaches": "3 · Tréneri"
+    "optionCoaches": "3 · Tréneri",
+    "breadcrumbs": "Cesta",
+    "menuSheet": "Plachta menu",
+    "bottomSheet": "Otvoriť menu ako na telefóne",
+    "clubName": "MŠK Ukážka"
   },
   "news": {
     "title": "Novinky",

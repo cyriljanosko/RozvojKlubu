@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { adminMenu, buildNavigation, clubMenu, type NavContext } from "./navigation";
+import {
+  adminMenu,
+  breadcrumbs,
+  buildNavigation,
+  clubMenu,
+  menuSections,
+  type NavContext,
+} from "./navigation";
 
 const ids = (items: { id: string }[]) => items.map((entry) => entry.id);
 const hrefOf = (items: { id: string; href: string }[], id: string) =>
@@ -133,5 +140,127 @@ describe("adminMenu", () => {
 
   it("keeps Obsah active on its sub-pages (role catalog)", () => {
     expect(adminMenu().find((entry) => entry.id === "adminContent")?.match).toBeUndefined();
+  });
+});
+
+describe("buildNavigation – Menu tab (ADR 0035)", () => {
+  it("labels the last tab Menu; it still leads to /viac without JavaScript", () => {
+    const tab = buildNavigation(signedIn({})).tabs.at(-1);
+    expect(tab).toMatchObject({ id: "more", labelKey: "menu", href: "/viac", icon: "menu" });
+  });
+});
+
+describe("menuSections", () => {
+  const sectionIds = (ctx: NavContext) => menuSections(ctx).map((section) => section.id);
+  const itemsOf = (ctx: NavContext, id: string) =>
+    ids(menuSections(ctx).find((section) => section.id === id)?.items ?? []);
+
+  it("visitor: public sections and sign-in, no account or administration", () => {
+    const ctx = { signedIn: false, isAdmin: false, clubs: [] };
+    expect(sectionIds(ctx)).toEqual(["main", "more"]);
+    expect(itemsOf(ctx, "main")).toEqual(["academy", "areas", "kompas", "clubs", "news"]);
+    expect(itemsOf(ctx, "more")).toEqual(["about", "signIn"]);
+  });
+
+  it("club management: the club section holds the club sub-menu, no trial Kompas", () => {
+    const ctx = signedIn({ clubs: [{ clubId: "c1", roles: ["club_manager"] }] });
+    expect(sectionIds(ctx)).toEqual(["main", "club", "more"]);
+    expect(itemsOf(ctx, "club")).toEqual(ids(clubMenu("c1", ["club_manager"], false)));
+    expect(itemsOf(ctx, "main")).not.toContain("kompas");
+    expect(itemsOf(ctx, "more")).toEqual(["analytics", "account", "about"]);
+  });
+
+  it("mentor only: no club section, their clubs in Ďalšie", () => {
+    const ctx = signedIn({ clubs: [{ clubId: "c1", roles: ["mentor"] }] });
+    expect(sectionIds(ctx)).toEqual(["main", "more"]);
+    expect(itemsOf(ctx, "main")).toContain("kompas");
+    expect(itemsOf(ctx, "more")).toEqual(["mentorClubs", "analytics", "account", "about"]);
+  });
+
+  it("admin: Správa with the admin screens; nobody else gets it", () => {
+    const admin = signedIn({ isAdmin: true });
+    expect(sectionIds(admin)).toEqual(["main", "more", "admin"]);
+    expect(itemsOf(admin, "admin")).toEqual(ids(adminMenu()));
+    const coach = signedIn({ clubs: [{ clubId: "c1", roles: ["coach"] }] });
+    expect(sectionIds(coach)).not.toContain("admin");
+  });
+});
+
+describe("breadcrumbs", () => {
+  const trail = (path: string, signedInUser = true, names = {}) =>
+    breadcrumbs(path, signedInUser, names).map((c) => [c.labelKey ?? c.label, c.href]);
+
+  it("is empty on the home pages, dev pages and unknown top-level paths", () => {
+    expect(breadcrumbs("/", false)).toEqual([]);
+    expect(breadcrumbs("/moja-akademia", true)).toEqual([]);
+    expect(breadcrumbs("/dev/ukazky", true)).toEqual([]);
+    expect(breadcrumbs("/neznama", true)).toEqual([]);
+  });
+
+  it("starts at Akadémia for visitors and Domov for signed-in people; the last step is no link", () => {
+    expect(trail("/oblasti", false)).toEqual([
+      ["academy", "/"],
+      ["areas", null],
+    ]);
+    expect(trail("/oblasti")).toEqual([
+      ["home", "/moja-akademia"],
+      ["areas", null],
+    ]);
+  });
+
+  it("names areas and clubs when the names are known, otherwise a generic label", () => {
+    const names = { clubs: { "c 1": "MŠK Žilina" }, areas: { 4: "Mládež" } };
+    expect(trail("/oblasti/4", true, names)).toEqual([
+      ["home", "/moja-akademia"],
+      ["areas", "/oblasti"],
+      ["Mládež", null],
+    ]);
+    expect(breadcrumbs("/oblasti/7", true).at(-1)).toMatchObject({
+      labelKey: "crumbArea",
+      params: { number: "7" },
+    });
+    expect(trail("/klub/c%201/kompas", true, names)).toEqual([
+      ["home", "/moja-akademia"],
+      ["MŠK Žilina", "/klub/c%201"],
+      ["kompas", null],
+    ]);
+    expect(trail("/klub/c2")).toEqual([
+      ["home", "/moja-akademia"],
+      ["crumbClub", null],
+    ]);
+  });
+
+  it("labels detail pages by their parent and skips segments without a page", () => {
+    expect(trail("/klub/c1/kompas/odoslane/s1").map(([key]) => key)).toEqual([
+      "home",
+      "crumbClub",
+      "kompas",
+      "crumbSubmission",
+    ]);
+    expect(trail("/klub/c1/navstevy/nova").map(([key]) => key)).toEqual([
+      "home",
+      "crumbClub",
+      "crumbVisits",
+      "crumbNewVisit",
+    ]);
+    expect(trail("/novinky/clanok-1").map(([key]) => key)).toEqual([
+      "home",
+      "news",
+      "crumbNewsItem",
+    ]);
+  });
+
+  it("keeps Administrácia as plain text – there is no /admin page", () => {
+    expect(trail("/admin/obsah/3/prax")).toEqual([
+      ["home", "/moja-akademia"],
+      ["admin", null],
+      ["adminContent", "/admin/obsah"],
+      ["crumbArea", "/admin/obsah/3"],
+      ["crumbPractice", null],
+    ]);
+  });
+
+  it("does not break on a malformed escape in the path", () => {
+    expect(trail("/klub/%E0").at(-1)).toEqual(["crumbClub", null]);
   });
 });
