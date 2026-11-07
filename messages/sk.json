@@ -2174,7 +2174,6 @@
     "title": "Sportnet",
     "lead": "Kluby sa preberajú zo sportnet.online každú noc o 3:00. Tu vidíte stav a môžete synchronizáciu spustiť ručne.",
     "leadShort": "Kluby sa preberajú každú noc o 3:00.",
-    "forbidden": "Synchronizáciu so sportnet.online spravuje admin SFZ.",
     "stats": {
       "label": "Stav klubov",
       "activeClubs": "Aktívne kluby v aplikácii",
@@ -2263,5 +2262,10 @@
       "note": "Ukazuje sa 20 posledných behov, ktoré zapisovali (nočný aj ručný). Skúšobný beh sa do histórie neukladá."
     },
     "duration": "{minutes, plural, =0 {} other {# min }}{seconds} s"
+  },
+  "forbidden": {
+    "title": "Sem nemáte prístup",
+    "text": "Táto stránka je len pre používateľov s oprávnením. Ak ho potrebujete, napíšte správcovi Akadémie.",
+    "home": "Na úvod"
   }
 }

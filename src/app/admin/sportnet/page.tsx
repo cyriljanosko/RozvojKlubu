@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { forbidden, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 
-import { Badge, Card, EmptyState, Skeleton } from "@/components/sfz";
+import { Badge, Card, Skeleton } from "@/components/sfz";
 import { defaultMessages } from "@/i18n/config";
 import { getCurrentUser } from "@/server/auth/session";
 import { syncRunDeps } from "@/server/clubs/deps";
@@ -22,7 +22,7 @@ async function SportnetSync() {
   const user = await getCurrentUser(await headers());
   if (!user) redirect("/prihlasenie");
   const [t, format] = await Promise.all([getTranslations("adminSportnet"), getFormatter()]);
-  if (!isAdmin(user)) return <EmptyState icon="alert-triangle" title={t("forbidden")} />;
+  if (!isAdmin(user)) forbidden();
 
   const { clubs, runs } = await getSportnetSyncStatus(syncRunDeps, user);
   const sportnetClubs = runs.find((run) => run.ok)?.result?.sportnetClubs;

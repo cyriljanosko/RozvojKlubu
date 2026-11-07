@@ -10,6 +10,7 @@ export const REDESIGNED_FILES = [
   "src/components/sfz/**",
   "src/components/app-frame/**",
   "src/app/layout.tsx",
+  "src/app/forbidden.tsx",
   "src/app/viac/**",
   "src/app/dev/**",
   "src/app/admin/layout.tsx",
