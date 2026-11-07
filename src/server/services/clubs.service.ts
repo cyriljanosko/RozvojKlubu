@@ -16,7 +16,6 @@ import {
   requireAdmin,
   requireClubView,
 } from "@/server/services/club-access";
-import { parseSnapshot, type SnapshotStore } from "@/server/services/club-snapshot.service";
 import { currentSeason, isSeason } from "@/server/services/season";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
@@ -281,19 +280,4 @@ export async function removeClubMember(
   requireAdmin(user);
   const deleted = await deps.memberships.delete(clubId, membershipId);
   if (!deleted) throw new ApiError("NOT_FOUND", "Membership not found");
-}
-
-// ---- Snapshot import (admin_sfz) ----
-
-export async function importClubSnapshot(
-  store: SnapshotStore,
-  actor: CurrentUser | null,
-  raw: unknown,
-  now: Date = new Date(),
-): Promise<{ dataAsOf: string; clubs: number; seasons: number }> {
-  const user = requireUser(actor);
-  requireAdmin(user);
-  const snapshot = parseSnapshot(raw, now);
-  const counts = await store.saveSnapshot(snapshot);
-  return { dataAsOf: snapshot.dataAsOf, ...counts };
 }
