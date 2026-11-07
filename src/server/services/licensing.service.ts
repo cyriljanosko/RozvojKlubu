@@ -2,6 +2,7 @@ import { isCoachLevel } from "@/lib/club-roles";
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
+import { recordAudit } from "@/server/services/audit.service";
 import type {
   ClubSeasonDoc,
   LicensingEvaluationDoc,
@@ -299,6 +300,13 @@ export async function closeLicensing(
     status: "closed",
   });
   if (!stored) throw new ApiError("CONFLICT", "This season is closed");
+  await recordAudit(deps, user, {
+    action: "licensing.close",
+    clubId,
+    target: { type: "licensing_season", id: season },
+    changes: { status: { to: "closed" }, evaluationVersion: { to: view.version } },
+    at: stored.closedAt,
+  });
   return summary(stored);
 }
 
@@ -335,5 +343,11 @@ export async function reopenLicensing(
     deps.now?.() ?? new Date(),
   );
   if (!reopened) throw new ApiError("CONFLICT", "This season is not closed");
+  await recordAudit(deps, user, {
+    action: "licensing.reopen",
+    clubId,
+    target: { type: "licensing_season", id: season },
+    changes: { status: { from: "closed", to: "reopened" } },
+  });
   return summary(reopened);
 }

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { changeUserRole, requireRole, type CurrentUser, type UserStore } from "./users.service";
+import { memoryAudit } from "./audit.fixture";
+import { changeUserRole, requireRole, type CurrentUser } from "./users.service";
 
 const user = (over: Partial<CurrentUser> = {}): CurrentUser => ({
   id: "u1",
@@ -10,7 +11,8 @@ const user = (over: Partial<CurrentUser> = {}): CurrentUser => ({
   ...over,
 });
 
-const store = (existing: CurrentUser | null = user({ id: "u2" })): UserStore => ({
+const store = (existing: CurrentUser | null = user({ id: "u2" })) => ({
+  audit: memoryAudit(),
   findById: vi.fn(async () => existing),
   updateRole: vi.fn(async (id, role) => user({ id, role })),
 });
@@ -33,6 +35,17 @@ describe("changeUserRole", () => {
     const s = store();
     const result = await changeUserRole(s, admin, "u2", "admin_sfz");
     expect(result.role).toBe("admin_sfz");
+    expect(s.audit.entries).toEqual([
+      expect.objectContaining({
+        actorId: "admin",
+        actorRole: "admin_sfz",
+        source: "user",
+        action: "user.role.change",
+        clubId: null,
+        target: { type: "user", id: "u2" },
+        changes: { role: { from: "public", to: "admin_sfz" } },
+      }),
+    ]);
     expect(s.updateRole).toHaveBeenCalledWith("u2", "admin_sfz");
   });
 

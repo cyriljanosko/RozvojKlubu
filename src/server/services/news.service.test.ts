@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { memoryAudit } from "./audit.fixture";
 import { A, B, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import { addClubMember } from "./clubs.service";
 import { memoryNewsStore, memoryRevisions } from "./news.fixture";
@@ -219,6 +220,15 @@ describe("news – club proposals and SFZ review (ADR 0023)", () => {
       slug: "pat-novych-trenerov-z-radov-rodicov",
       publishedAt: "2026-10-18T12:00:00.000Z",
     });
+    expect(
+      (deps.audit as ReturnType<typeof memoryAudit>).entries
+        .filter((e) => e.action.startsWith("news."))
+        .map((e) => [e.action, e.clubId, e.changes]),
+    ).toEqual([
+      ["news.return", A, { status: { from: "submitted", to: "returned" } }],
+      ["news.return", A, { status: { from: "submitted", to: "returned" } }],
+      ["news.publish", A, { status: { from: "submitted", to: "published" } }],
+    ]);
   });
 
   it("academy news, the public list and detail, pinning, sharing and hiding", async () => {

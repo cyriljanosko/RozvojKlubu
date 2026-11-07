@@ -3,8 +3,9 @@ import { connection } from "next/server";
 import { ApiError } from "@/server/api/errors";
 import { apiHandler, ok } from "@/server/api/http";
 import { getCurrentUser } from "@/server/auth/session";
-import { mongoContentStore, mongoPracticeStore } from "@/server/db/content.store";
+import { mongoPracticeStore } from "@/server/db/content.store";
 import { getPractice, updatePractice } from "@/server/services/practice.service";
+import { practiceEditStore } from "@/server/content/deps";
 
 type Ctx = RouteContext<"/api/v1/areas/[area]/practice">;
 
@@ -26,7 +27,7 @@ export const PUT = apiHandler<Ctx>(async (request, context) => {
   await connection();
   const { area } = await context.params;
   const updated = await updatePractice(
-    { ...mongoPracticeStore, ...mongoContentStore },
+    practiceEditStore,
     await getCurrentUser(request.headers),
     Number(area),
     await request.json(),

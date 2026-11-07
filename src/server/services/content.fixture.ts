@@ -7,6 +7,7 @@ import type {
   RoleCatalogDoc,
 } from "@/server/db/types";
 
+import { memoryAudit } from "./audit.fixture";
 import type { ContentStore, StoredRevision } from "./content.service";
 import type { SectionStore } from "./methodology.service";
 import type { PracticeStore } from "./practice.service";
@@ -14,6 +15,7 @@ import type { RoleCatalogStore } from "./role-catalog.service";
 
 /** In-memory ContentStore for tests (same semantics as the Mongo store). */
 export function memoryContentStore(): ContentStore & {
+  audit: ReturnType<typeof memoryAudit>;
   areaDocs: AreaDoc[];
   questionDocs: KompasQuestionDoc[];
   revisionDocs: StoredRevision[];
@@ -23,6 +25,7 @@ export function memoryContentStore(): ContentStore & {
   const revisionDocs: StoredRevision[] = [];
   let seq = 0;
   return {
+    audit: memoryAudit(),
     areaDocs,
     questionDocs,
     revisionDocs,

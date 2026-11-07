@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type { SyncRunDoc } from "@/server/db/types";
+import { recordAudit, type AuditDeps } from "@/server/services/audit.service";
 import { requireAdmin } from "@/server/services/club-access";
 import {
   syncSportnetClubs,
@@ -29,7 +30,7 @@ export interface ClubSyncStats {
   oldestDetailsAt: Date | null;
 }
 
-export interface SyncRunDeps {
+export interface SyncRunDeps extends AuditDeps {
   clubs: ClubImportDeps;
   runs: SyncRunStore;
   stats: () => Promise<ClubSyncStats>;
@@ -79,10 +80,15 @@ export async function startManualClubSync(
   const user = requireUser(actor);
   requireAdmin(user);
   const { apply } = manualSyncInputSchema.parse(input ?? {});
-  const result = apply
-    ? await runRecordedClubSync(deps, "manual", user.id)
-    : await syncSportnetClubs(deps.clubs, { apply: false });
-  return { applied: apply, ...result };
+  if (!apply) return { applied: false, ...(await syncSportnetClubs(deps.clubs, { apply: false })) };
+  const result = await runRecordedClubSync(deps, "manual", user.id);
+  await recordAudit(deps, user, {
+    action: "sportnet.sync.apply",
+    clubId: null,
+    target: { type: "sync_run", id: "sportnet-clubs" },
+    changes: { created: { to: result.created }, updated: { to: result.updated } },
+  });
+  return { applied: true, ...result };
 }
 
 export interface SyncRunView {

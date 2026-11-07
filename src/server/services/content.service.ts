@@ -10,6 +10,7 @@ import {
   type QuestionColumn,
 } from "@/server/db/types";
 import { requireAdmin } from "@/server/services/club-access";
+import { recordAudit, type AuditAction, type AuditDeps } from "@/server/services/audit.service";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
 /**
@@ -168,11 +169,12 @@ export const updateQuestionSchema = z.object({
 const snapshotOf = (q: KompasQuestionDoc) => ({ text: q.text, tags: q.tags });
 
 export async function updateQuestion(
-  store: ContentStore,
+  store: ContentStore & AuditDeps,
   actor: CurrentUser | null,
   id: string,
   input: unknown,
   at: Date = new Date(),
+  auditAction: AuditAction = "content.question.update",
 ): Promise<QuestionDto> {
   const user = requireUser(actor);
   requireAdmin(user);
@@ -204,6 +206,13 @@ export async function updateQuestion(
     changedBy: user.id,
     changedAt: at,
   });
+  await recordAudit(store, user, {
+    action: auditAction,
+    clubId: null,
+    target: { type: "kompas_question", id: id },
+    changes: { version: { from: updated.version - 1, to: updated.version } },
+    at,
+  });
   return questionDto(updated);
 }
 
@@ -222,11 +231,12 @@ const areaSnapshot = (a: Pick<AreaDoc, "name" | "shortName" | "description">) =>
 
 /** Edits an area's name, short name and description (admin_sfz), with history (e.g. area 4 → Dobrovoľníci). */
 export async function updateArea(
-  store: ContentStore,
+  store: ContentStore & AuditDeps,
   actor: CurrentUser | null,
   number: number,
   input: unknown,
   at: Date = new Date(),
+  auditAction: AuditAction = "content.area.update",
 ): Promise<AreaDto> {
   const user = requireUser(actor);
   requireAdmin(user);
@@ -255,6 +265,13 @@ export async function updateArea(
     changedBy: user.id,
     changedAt: at,
   });
+  await recordAudit(store, user, {
+    action: auditAction,
+    clubId: null,
+    target: { type: "area", id: String(number) },
+    changes: { version: { from: updated.version - 1, to: updated.version } },
+    at,
+  });
   return areaDto(updated);
 }
 
@@ -269,7 +286,7 @@ export async function listQuestionRevisions(
 
 /** Restores the state before the given revision – as a new revision, history is never rewritten. */
 export async function revertQuestion(
-  store: ContentStore,
+  store: ContentStore & AuditDeps,
   actor: CurrentUser | null,
   revisionId: string,
   at: Date = new Date(),
@@ -291,5 +308,6 @@ export async function revertQuestion(
       expectedVersion: current.version,
     },
     at,
+    "content.question.revert",
   );
 }

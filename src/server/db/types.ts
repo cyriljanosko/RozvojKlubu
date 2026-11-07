@@ -642,3 +642,26 @@ export interface SyncRunDoc {
   /** user who started a manual run */
   actorId: string | null;
 }
+
+/**
+ * Collection `audit_log` – append-only record of admin and access changes (ADR 0034). No copies of
+ * personal data: people are referenced by ID only, names are resolved when reading.
+ */
+export interface AuditLogDoc {
+  _id?: ObjectId;
+  at: Date;
+  /** user who made the change; null for an automatic run */
+  actorId: string | null;
+  /** global role of the actor at that time */
+  actorRole: string | null;
+  source: "user" | "cron" | "sportnet";
+  /** `area.object.verb`, one of `AUDIT_ACTIONS` */
+  action: string;
+  /** club the change concerns, null for shared content and accounts (ADR 0003) */
+  clubId: string | null;
+  target: { type: string; id: string };
+  /** changed fields with values that are not personal data (roles, states, IDs) */
+  changes?: Record<string, { from?: AuditValue; to?: AuditValue }>;
+}
+
+export type AuditValue = string | number | boolean | null | string[];

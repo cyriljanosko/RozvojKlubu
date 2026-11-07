@@ -3,8 +3,9 @@ import { connection } from "next/server";
 import { ApiError } from "@/server/api/errors";
 import { apiHandler, ok } from "@/server/api/http";
 import { getCurrentUser } from "@/server/auth/session";
-import { mongoContentStore, mongoRoleCatalogStore } from "@/server/db/content.store";
+import { mongoRoleCatalogStore } from "@/server/db/content.store";
 import { getRoleCatalog, updateRoleCatalog } from "@/server/services/role-catalog.service";
+import { roleCatalogEditStore } from "@/server/content/deps";
 
 /** GET /api/v1/roles – role catalog: base roles and roles in the 11 areas (signed-in users, ADR 0010). */
 export const GET = apiHandler(async (request) => {
@@ -21,7 +22,7 @@ export const GET = apiHandler(async (request) => {
 export const PUT = apiHandler(async (request) => {
   await connection();
   const updated = await updateRoleCatalog(
-    { ...mongoRoleCatalogStore, ...mongoContentStore },
+    roleCatalogEditStore,
     await getCurrentUser(request.headers),
     await request.json(),
   );

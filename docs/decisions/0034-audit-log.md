@@ -1,8 +1,8 @@
 # 0034 – Audit log administrátorských a oprávňovacích zmien
 
-- Stav: **navrhnuté** – 7. 11. 2026; nová kolekcia `audit_log` čaká na súhlas Jána (CLAUDE.md, časť 8)
+- Stav: **prijaté** – 7. 11. 2026 (Ján Letko, SFZ) vrátane súhlasu s kolekciou `audit_log` (CLAUDE.md, časť 8)
 - Dátum: 2026-11-07
-- Pripravil: Ján Letko (Claude) · Rozhodne: Ján Letko
+- Pripravil: Ján Letko (Claude) · Rozhodol: Ján Letko
 - Nadväzuje na: 0003 (tenant = klub), 0030 a 0031 (záznam behov synchronizácie)
 
 ## Kontext
@@ -26,7 +26,8 @@ preukázať, kto menil prístupy a dáta klubov.
 2. **Tvar záznamu** (`AuditLogDoc` v `src/server/db/types.ts`):
    - `at` – čas zmeny;
    - `actorId` – ID používateľa (Better Auth), `null` pri automatickom behu; `actorRole` – jeho rola v tej chvíli;
-   - `source` – `ui` | `api` | `cron` | `sportnet` (prihlásenie cez Sportnet, ADR 0021);
+   - `source` – `user` (zmena prihláseného používateľa – UI aj API idú cez tú istú službu a nerozlišujú sa),
+     `cron` (beh bez používateľa) alebo `sportnet` (roly zo Sportnetu pri prihlásení, ADR 0021);
    - `action` – kód akcie v tvare `oblasť.objekt.sloveso`, napr. `user.role.change`, `club.member.add`,
      `news.hide`; zoznam kódov je v kóde ako `AUDIT_ACTIONS`;
    - `clubId` – klub, ktorého sa zmena týka, `null` pri spoločnom obsahu a účtoch (ADR 0003);
@@ -48,6 +49,9 @@ preukázať, kto menil prístupy a dáta klubov.
 
    Bežná práca klubu (odpovede v Kompase, plán, postup v Praxi, osobné nastavenia) sa nezaznamenáva – má
    vlastný stav a jej objem by log zahltil.
+
+   Ďalšia etapa: udalosti AI (otázky na obsah a údaje) pribudnú ako nové kódy v `AUDIT_ACTIONS` spolu
+   s funkciou AI; náklady na AI po používateľoch rieši vlastné ADR (Ján, 7. 11. 2026).
 
 5. **Zápis v service vrstve** cez `recordAudit(deps.audit, entry)` po úspešnej zmene, rovnako pre UI aj API
    (API-first). Keď zápis do logu zlyhá, zmena ostane platná a chyba sa zapíše do logu servera

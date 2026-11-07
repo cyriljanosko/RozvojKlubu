@@ -19,6 +19,7 @@ import { getEnv } from "@/server/env";
 import { sendTransactional } from "@/server/integrations/ecomail/client";
 import { fetchMyAffiliations, fetchMyAppspaces } from "@/server/integrations/sportnet/me";
 import { syncSportnetClubRoles } from "@/server/services/club-roles-sync.service";
+import { mongoAuditLog } from "@/server/db/audit.store";
 import { sendMagicLinkEmail } from "@/server/services/email.service";
 
 function createAuth() {
@@ -138,6 +139,7 @@ async function syncClubRolesSafely(userId: string, accessToken: string) {
     const result = await syncSportnetClubRoles(
       {
         ...mongoClubRolesSyncStore,
+        audit: mongoAuditLog,
         fetchAppspaces: (token) => fetchMyAppspaces(token),
         fetchAffiliations: (token) => fetchMyAffiliations(token),
       },

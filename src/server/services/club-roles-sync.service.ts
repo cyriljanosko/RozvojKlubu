@@ -1,5 +1,6 @@
 import type { ClubDoc, ClubMembershipDoc, ClubRole } from "@/server/db/types";
 import type { SportnetAffiliation, SportnetMeAppspaces } from "@/server/integrations/sportnet/me";
+import { recordAudit, type AuditDeps } from "@/server/services/audit.service";
 import { currentSeason } from "@/server/services/season";
 
 /**
@@ -181,7 +182,7 @@ export function clubFromSportnet(club: SportnetManagedClub, now: Date): ClubDoc 
   };
 }
 
-export interface ClubRolesSyncDeps {
+export interface ClubRolesSyncDeps extends AuditDeps {
   fetchAppspaces: (accessToken: string) => Promise<SportnetMeAppspaces>;
   fetchAffiliations: (accessToken: string) => Promise<{
     sportOrgs: SportnetAffiliation[];
@@ -206,6 +207,19 @@ export interface ClubRolesSyncResult {
 }
 
 /** Refreshes the user's Sportnet club roles. Throws on Sportnet errors; callers decide. */
+/** Pure: per club, the user's Sportnet roles before and after the sync – only clubs that changed. */
+export function sportnetRoleChanges(
+  before: Pick<Membership, "clubId" | "role">[],
+  after: Pick<Membership, "clubId" | "role">[],
+): { clubId: string; from: string[]; to: string[] }[] {
+  const rolesIn = (links: Pick<Membership, "clubId" | "role">[], clubId: string) =>
+    [...new Set(links.filter((l) => l.clubId === clubId).map((l) => l.role))].sort();
+  const clubIds = [...new Set([...before, ...after].map((l) => l.clubId))].sort();
+  return clubIds
+    .map((clubId) => ({ clubId, from: rolesIn(before, clubId), to: rolesIn(after, clubId) }))
+    .filter((c) => c.from.join() !== c.to.join());
+}
+
 export async function syncSportnetClubRoles(
   deps: ClubRolesSyncDeps,
   userId: string,
@@ -238,13 +252,23 @@ export async function syncSportnetClubRoles(
     })),
     ...deriveAffiliationRoles(affiliations, now, known),
   ]);
-  const links = planSportnetLinks({
-    userId,
-    season,
-    now,
-    roles,
-    appLinks: await deps.listUserLinks(userId),
-  });
+  const appLinks = await deps.listUserLinks(userId);
+  const links = planSportnetLinks({ userId, season, now, roles, appLinks });
   await deps.replaceSportnetLinks(userId, season, links);
+  const before = appLinks.filter((l) => l.source === "sportnet" && l.season === season);
+  for (const change of sportnetRoleChanges(before, links)) {
+    await recordAudit(
+      deps,
+      { id: userId },
+      {
+        action: "club.member.sportnet",
+        source: "sportnet",
+        clubId: change.clubId,
+        target: { type: "user", id: userId },
+        changes: { roles: { from: change.from, to: change.to } },
+        at: now,
+      },
+    );
+  }
   return { clubs: clubs.length, createdClubs, links: links.length };
 }
