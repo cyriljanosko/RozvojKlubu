@@ -6,6 +6,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Pridané
 
+- Nová hlavička podľa contineo.app (ADR 0035): tlačidlo plachty menu pred logom, pole hľadania s okamžitými výsledkami (⌘K / Ctrl+K, na mobile celoobrazovkové) a cesta (breadcrumb) pod hlavičkou. Menu je plachta so stĺpcami Hlavné · klub · Ďalšie · Správa; na mobile ju otvára položka Menu v spodnej lište ako spodnú plachtu. Bez JavaScriptu vedie na `/viac`.
 - Stránka Sportnet v administrácii (S3, návrh G5, ADR 0030): stav klubov, ručná synchronizácia v troch krokoch (skúšobný beh, kontrola, zápis po potvrdení) a posledných 20 behov – na mobile ako karty. Menu administrácie má poradie podľa G5 (Kluby · Obsah · Novinky · Sportnet) a na mobile sa vysúva zľava; Katalóg rolí sa otvára z Obsahu.
 - Záznam behov synchronizácie so sportnet.online (S3-b, ADR 0030): nočný aj ručný beh uloží počty do kolekcie `sync_runs`, aj keď zlyhá. Admin SFZ vidí stav (aktívne kluby, kluby bez podrobností, posledných 20 behov) cez `GET /api/v1/admin/sportnet/sync` a spustí synchronizáciu ručne cez `POST /api/v1/admin/sportnet/sync` (predvolene dry-run). Obrazovka príde podľa návrhu G5.
 - Nočná synchronizácia klubov zo sportnet.online (ADR 0029): Vercel Cron denne o 2:00 UTC obnoví zoznam klubov a podrobnosti (zväz, región, IČO) najviac 600 klubov – nové najprv, potom najstaršie. Potrebuje `CRON_SECRET`.
@@ -13,6 +14,7 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Hlavička nemá druhý riadok s navigáciou; položka „Viac“ v spodnej lište sa volá „Menu“. Administrácia na mobile už nemá vlastnú lištu a Drawer – Správa je stĺpec plachty menu (ADR 0035).
 - Synchronizácia klubov hlási ako „zmenené“ len kluby, ktorým sa v sportnet.online zmenil názov, stav alebo logo – doteraz každý uložený klub.
 - Bez prístupu ukazuje administrácia (zatiaľ Sportnet) stránku 403 (`forbidden()`, `authInterrupts`).
 - V spodnej lište na mobile je aktívna položka Viac aj na stránkach otvorených z jej menu (administrácia, účet).
