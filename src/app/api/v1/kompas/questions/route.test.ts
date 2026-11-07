@@ -30,6 +30,20 @@ vi.mock("@/server/db/content.store", () => ({
     return roleCatalogs.store;
   },
 }));
+vi.mock("@/server/content/deps", () => ({
+  get contentEditStore() {
+    return holder.store;
+  },
+  get sectionEditStore() {
+    return sections.store;
+  },
+  get practiceEditStore() {
+    return practices.store;
+  },
+  get roleCatalogEditStore() {
+    return roleCatalogs.store;
+  },
+}));
 vi.mock("@/server/content/methodology-loader", () => ({
   loadMethodologyFiles: async () => [
     {

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ApiError } from "@/server/api/errors";
 import type { RoleCatalogDoc } from "@/server/db/types";
 import { requireAdmin } from "@/server/services/club-access";
+import { recordAudit, type AuditAction, type AuditDeps } from "@/server/services/audit.service";
 import type { StoredRevision } from "@/server/services/content.service";
 import type { RevisionStore } from "@/server/services/methodology.service";
 import { roleCatalogSchema, type RoleCatalog } from "@/server/services/role-catalog.schema";
@@ -67,10 +68,11 @@ export const updateRoleCatalogSchema = z.object({
 });
 
 export async function updateRoleCatalog(
-  store: RoleCatalogStore & RevisionStore,
+  store: RoleCatalogStore & RevisionStore & AuditDeps,
   actor: CurrentUser | null,
   input: unknown,
   at: Date = new Date(),
+  auditAction: AuditAction = "content.roleCatalog.update",
 ): Promise<RoleCatalogDto> {
   const user = requireUser(actor);
   requireAdmin(user);
@@ -100,6 +102,13 @@ export async function updateRoleCatalog(
     changedBy: user.id,
     changedAt: at,
   });
+  await recordAudit(store, user, {
+    action: auditAction,
+    clubId: null,
+    target: { type: "role_catalog", id: "roles" },
+    changes: { version: { from: updated.version - 1, to: updated.version } },
+    at,
+  });
   return toDto(updated);
 }
 
@@ -121,7 +130,7 @@ export async function listRoleCatalogRevisions(
 }
 
 export async function revertRoleCatalog(
-  store: RoleCatalogStore & RevisionStore,
+  store: RoleCatalogStore & RevisionStore & AuditDeps,
   actor: CurrentUser | null,
   revisionId: string,
   at: Date = new Date(),
@@ -142,5 +151,6 @@ export async function revertRoleCatalog(
       expectedVersion: current.version,
     },
     at,
+    "content.roleCatalog.revert",
   );
 }

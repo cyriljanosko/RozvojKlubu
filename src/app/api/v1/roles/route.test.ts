@@ -20,6 +20,11 @@ vi.mock("@/server/db/content.store", () => ({
     return holder.store;
   },
 }));
+vi.mock("@/server/content/deps", () => ({
+  get roleCatalogEditStore() {
+    return holder.store;
+  },
+}));
 
 const roles = await import("./route");
 const file = JSON.parse(readFileSync(join(process.cwd(), "content/roly.json"), "utf8"));

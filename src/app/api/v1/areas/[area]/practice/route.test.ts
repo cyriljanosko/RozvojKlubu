@@ -21,6 +21,11 @@ vi.mock("@/server/db/content.store", () => ({
     return holder.store;
   },
 }));
+vi.mock("@/server/content/deps", () => ({
+  get practiceEditStore() {
+    return holder.store;
+  },
+}));
 
 const route = await import("./route");
 const revisions = await import("./revisions/route");

@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { apiHandler, ok } from "@/server/api/http";
 import { betterAuthUserStore, getCurrentUser } from "@/server/auth/session";
+import { mongoAuditLog } from "@/server/db/audit.store";
 import { changeUserRole } from "@/server/services/users.service";
 
 const bodySchema = z.object({ role: z.string() });
@@ -14,7 +15,12 @@ export const PATCH = apiHandler<RouteContext<"/api/v1/users/[id]/role">>(
     const { id } = await context.params;
     const actor = await getCurrentUser(request.headers);
     const { role } = bodySchema.parse(await request.json());
-    const updated = await changeUserRole(betterAuthUserStore, actor, id, role);
+    const updated = await changeUserRole(
+      { ...betterAuthUserStore, audit: mongoAuditLog },
+      actor,
+      id,
+      role,
+    );
     return ok(updated);
   },
 );

@@ -22,6 +22,7 @@ vi.mock("@/server/clubs/deps", () => ({
       fetchProfile: async () => ({ relations: [] }),
       fetchLegalEntity: async () => ({}),
     },
+    audit: { record: async () => {} },
     runs: { insertRun, listRuns: async () => [] },
     stats: async () => ({ activeClubs: 3, withoutDetails: 1, oldestDetailsAt: null }),
   },

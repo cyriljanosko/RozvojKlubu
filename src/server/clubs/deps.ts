@@ -1,6 +1,7 @@
 import "server-only";
 
 import { betterAuthUserDirectory } from "@/server/auth/session";
+import { mongoAuditLog } from "@/server/db/audit.store";
 import {
   clubSyncStats,
   mongoClubImportStore,
@@ -13,8 +14,11 @@ import {
   fetchSportnetLegalEntity,
 } from "@/server/integrations/sportnet/ppo";
 import type { ClubImportDeps } from "@/server/services/club-import.service";
+import type { AuditReadDeps } from "@/server/services/audit.service";
 import type { SyncRunDeps } from "@/server/services/sync-runs.service";
 import { mongoSyncRunStore } from "@/server/db/sync-runs.store";
+import { mongoAdminClubStore } from "@/server/db/admin-clubs.store";
+import type { AdminClubStore } from "@/server/services/admin-clubs.service";
 import { mongoAreaRoleChoiceStore } from "@/server/db/academy.store";
 import {
   mongoContentStore,
@@ -52,6 +56,7 @@ import type { KompasDeps } from "@/server/services/kompas.service";
 
 /** Production wiring of the club services (route handlers, pages, server actions). */
 export const clubDeps: ClubDeps = {
+  audit: mongoAuditLog,
   clubs: mongoClubStore,
   memberships: mongoMembershipStore,
   users: betterAuthUserDirectory,
@@ -169,7 +174,17 @@ export const clubImportDeps: ClubImportDeps = {
 };
 
 export const syncRunDeps: SyncRunDeps = {
+  audit: mongoAuditLog,
   clubs: clubImportDeps,
   runs: mongoSyncRunStore,
   stats: clubSyncStats,
+  users: betterAuthUserDirectory,
+};
+
+/** Club list of the administration (G5 Kluby). */
+export const adminClubStore: AdminClubStore = mongoAdminClubStore;
+
+export const auditReadDeps: AuditReadDeps = {
+  audit: mongoAuditLog,
+  users: betterAuthUserDirectory,
 };

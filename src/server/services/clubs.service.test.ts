@@ -1,12 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { sampleSnapshot } from "./club-snapshot.fixture";
-import type { ParsedSnapshot } from "./club-snapshot.service";
 import { A, B, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import {
   addClubMember,
   getClubOverview,
-  importClubSnapshot,
   listClubMembers,
   listMyClubs,
   removeClubMember,
@@ -122,24 +119,26 @@ describe("clubs service", () => {
     });
     await removeClubMember(deps, admin, A, created.id);
     expect(deps.memberDocs).toEqual([]);
-  });
-
-  it("imports a snapshot (admin only)", async () => {
-    const saved: ParsedSnapshot[] = [];
-    const store = {
-      saveSnapshot: async (s: ParsedSnapshot) => {
-        saved.push(s);
-        return { clubs: s.clubs.length, seasons: s.seasons.length };
-      },
-    };
-    await expect(importClubSnapshot(store, alice, sampleSnapshot)).rejects.toMatchObject({
-      code: "FORBIDDEN",
-    });
-    await expect(importClubSnapshot(store, admin, sampleSnapshot)).resolves.toEqual({
-      dataAsOf: "2026-10-11",
-      clubs: 1,
-      seasons: 1,
-    });
-    expect(saved).toHaveLength(1);
+    // audit log (ADR 0034): IDs and roles only, no e-mail or name
+    expect(deps.audit.entries).toEqual([
+      expect.objectContaining({
+        action: "club.member.add",
+        actorId: "admin",
+        clubId: A,
+        target: { type: "membership", id: created.id },
+        changes: { userId: { to: "bob" }, role: { to: "mentor" }, season: { to: "2026/2027" } },
+      }),
+      expect.objectContaining({
+        action: "club.member.remove",
+        clubId: A,
+        target: { type: "membership", id: created.id },
+        changes: {
+          userId: { from: "bob" },
+          role: { from: "mentor" },
+          season: { from: "2026/2027" },
+        },
+      }),
+    ]);
+    expect(JSON.stringify(deps.audit.entries)).not.toContain("bob@klub.sk");
   });
 });

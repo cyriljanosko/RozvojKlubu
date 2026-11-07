@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { memoryAudit } from "./audit.fixture";
 import { admin, alice } from "./clubs.fixture";
 import type { ClubImportDeps } from "./club-import.service";
 import {
@@ -31,7 +32,8 @@ function deps(overrides: Partial<ClubImportDeps> = {}) {
     now: () => new Date(t0.getTime() + 1000 * tick++),
     ...overrides,
   };
-  const d: SyncRunDeps & { saved: SyncRun[] } = {
+  const d: SyncRunDeps & { saved: SyncRun[]; audit: ReturnType<typeof memoryAudit> } = {
+    audit: memoryAudit(),
     clubs,
     saved: runs,
     runs: {
@@ -41,6 +43,9 @@ function deps(overrides: Partial<ClubImportDeps> = {}) {
       listRuns: vi.fn(async (_kind: SyncRun["kind"], limit: number) => runs.slice(0, limit)),
     },
     stats: async () => ({ activeClubs: 1558, withoutDetails: 0, oldestDetailsAt: t0 }),
+    users: {
+      findById: vi.fn(async (id: string) => (id === admin.id ? admin : null)),
+    },
   };
   return d;
 }
@@ -80,6 +85,7 @@ describe("startManualClubSync", () => {
     expect(d.clubs.fetchDirectory).toHaveBeenCalledOnce();
     expect(d.clubs.store.applyClubImport).not.toHaveBeenCalled();
     expect(d.runs.insertRun).not.toHaveBeenCalled();
+    expect(d.audit.entries).toEqual([]);
   });
 
   it("apply: writes and records the run with the admin", async () => {
@@ -87,6 +93,9 @@ describe("startManualClubSync", () => {
     expect(await startManualClubSync(d, admin, { apply: true })).toMatchObject({ applied: true });
     expect(d.clubs.store.applyClubImport).toHaveBeenCalledOnce();
     expect(d.saved[0]).toMatchObject({ trigger: "manual", actorId: "admin", ok: true });
+    expect(d.audit.entries).toEqual([
+      expect.objectContaining({ action: "sportnet.sync.apply", actorId: "admin", clubId: null }),
+    ]);
   });
 
   it("only admin_sfz, and only a signed-in user", async () => {
@@ -100,7 +109,7 @@ describe("startManualClubSync", () => {
 });
 
 describe("getSportnetSyncStatus", () => {
-  it("returns club counts and the last runs without who started them", async () => {
+  it("returns club counts and the last runs with who started a manual one (ADR 0031)", async () => {
     const d = deps();
     await startManualClubSync(d, admin, { apply: true });
     const status = await getSportnetSyncStatus(d, admin);
@@ -112,8 +121,18 @@ describe("getSportnetSyncStatus", () => {
     expect(status.runs).toHaveLength(1);
     expect(status.runs[0]).toMatchObject({ trigger: "manual", ok: true });
     expect(status.runs[0].durationMs).toBeGreaterThan(0);
+    expect(status.runs[0].actorName).toBe(admin.name);
     expect(status.runs[0]).not.toHaveProperty("actorId");
     expect(d.runs.listRuns).toHaveBeenCalledWith("sportnet-clubs", 20);
+  });
+
+  it("shows no name for the nightly run and a placeholder for a deleted account", async () => {
+    const d = deps();
+    await runRecordedClubSync(d, "cron");
+    await runRecordedClubSync(d, "manual", "gone");
+    const { runs } = await getSportnetSyncStatus(d, admin);
+    expect(runs.map((r) => r.actorName)).toEqual(["", null]);
+    expect(d.users.findById).toHaveBeenCalledTimes(1);
   });
 
   it("only admin_sfz", async () => {

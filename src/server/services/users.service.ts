@@ -1,5 +1,6 @@
 import { ApiError } from "@/server/api/errors";
 import { hasAnyRole, isRole, toRole, type Role } from "@/server/auth/roles";
+import { recordAudit, type AuditDeps } from "@/server/services/audit.service";
 
 export interface CurrentUser {
   id: string;
@@ -49,7 +50,7 @@ export interface UserStore {
 
 /** Only admin_sfz may change roles; an admin cannot demote themselves (lock-out guard). */
 export async function changeUserRole(
-  store: UserStore,
+  store: UserStore & AuditDeps,
   actor: CurrentUser | null,
   targetId: string,
   newRole: unknown,
@@ -63,5 +64,12 @@ export async function changeUserRole(
   }
   const target = await store.findById(targetId);
   if (!target) throw new ApiError("NOT_FOUND", "User not found");
-  return store.updateRole(targetId, newRole);
+  const updated = await store.updateRole(targetId, newRole);
+  await recordAudit(store, admin, {
+    action: "user.role.change",
+    clubId: null,
+    target: { type: "user", id: targetId },
+    changes: { role: { from: target.role, to: newRole } },
+  });
+  return updated;
 }

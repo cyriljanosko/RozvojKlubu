@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
+import { memoryAudit } from "./audit.fixture";
+
 import type {
   SportnetAffiliation,
   SportnetAppspace,
@@ -12,6 +14,7 @@ import {
   isAffiliationActive,
   normalizeCompetence,
   planSportnetLinks,
+  sportnetRoleChanges,
   strongestPerClub,
   syncSportnetClubRoles,
   type ClubRolesSyncDeps,
@@ -237,6 +240,30 @@ describe("planSportnetLinks", () => {
   });
 });
 
+describe("sportnetRoleChanges", () => {
+  it("lists only clubs whose roles changed", () => {
+    expect(
+      sportnetRoleChanges(
+        [
+          { clubId: "a", role: "coach" },
+          { clubId: "b", role: "member" },
+        ],
+        [
+          { clubId: "a", role: "coach" },
+          { clubId: "b", role: "team_manager" },
+          { clubId: "c", role: "player" },
+        ],
+      ),
+    ).toEqual([
+      { clubId: "b", from: ["member"], to: ["team_manager"] },
+      { clubId: "c", from: [], to: ["player"] },
+    ]);
+    expect(sportnetRoleChanges([{ clubId: "a", role: "coach" }], [])).toEqual([
+      { clubId: "a", from: ["coach"], to: [] },
+    ]);
+  });
+});
+
 describe("syncSportnetClubRoles", () => {
   const deps = (
     appspaces: SportnetMeAppspaces,
@@ -252,6 +279,7 @@ describe("syncSportnetClubRoles", () => {
     insertMissingClubs: vi.fn(async (c) => c.length),
     listUserLinks: vi.fn(async () => []),
     replaceSportnetLinks: vi.fn(async () => {}),
+    audit: memoryAudit(),
     now: () => today,
   });
 
@@ -266,6 +294,16 @@ describe("syncSportnetClubRoles", () => {
       expect.objectContaining({ clubId: "mfk-nova-bana.futbalnet.sk", role: "club_manager" }),
     ]);
     expect(result).toEqual({ clubs: 1, createdClubs: 1, links: 1 });
+    expect((d.audit as ReturnType<typeof memoryAudit>).entries).toEqual([
+      expect.objectContaining({
+        action: "club.member.sportnet",
+        source: "sportnet",
+        actorId: "u1",
+        clubId: "mfk-nova-bana.futbalnet.sk",
+        target: { type: "user", id: "u1" },
+        changes: { roles: { from: [], to: ["club_manager"] } },
+      }),
+    ]);
   });
 
   it("removes old sportnet links when the role is gone", async () => {

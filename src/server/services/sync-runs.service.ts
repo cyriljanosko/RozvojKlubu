@@ -1,12 +1,14 @@
 import { z } from "zod";
 
 import type { SyncRunDoc } from "@/server/db/types";
+import { recordAudit, type AuditDeps } from "@/server/services/audit.service";
 import { requireAdmin } from "@/server/services/club-access";
 import {
   syncSportnetClubs,
   type ClubImportDeps,
   type ClubSyncResult,
 } from "@/server/services/club-import.service";
+import type { UserDirectory } from "@/server/services/clubs.service";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
 /**
@@ -29,10 +31,12 @@ export interface ClubSyncStats {
   oldestDetailsAt: Date | null;
 }
 
-export interface SyncRunDeps {
+export interface SyncRunDeps extends AuditDeps {
   clubs: ClubImportDeps;
   runs: SyncRunStore;
   stats: () => Promise<ClubSyncStats>;
+  /** who started a manual run (ADR 0031) */
+  users: Pick<UserDirectory, "findById">;
 }
 
 const ERROR_MAX = 200;
@@ -79,10 +83,17 @@ export async function startManualClubSync(
   const user = requireUser(actor);
   requireAdmin(user);
   const { apply } = manualSyncInputSchema.parse(input ?? {});
-  const result = apply
-    ? await runRecordedClubSync(deps, "manual", user.id)
-    : await syncSportnetClubs(deps.clubs, { apply: false });
-  return { applied: apply, ...result };
+  if (!apply) return { applied: false, ...(await syncSportnetClubs(deps.clubs, { apply: false })) };
+  // who wrote stays in sync_runs.actorId, the function log (ADR 0031) and the audit log (ADR 0034)
+  console.info(`[sportnet-sync] manual run started by user ${user.id}`);
+  const result = await runRecordedClubSync(deps, "manual", user.id);
+  await recordAudit(deps, user, {
+    action: "sportnet.sync.apply",
+    clubId: null,
+    target: { type: "sync_run", id: "sportnet-clubs" },
+    changes: { created: { to: result.created }, updated: { to: result.updated } },
+  });
+  return { applied: true, ...result };
 }
 
 export interface SyncRunView {
@@ -93,6 +104,11 @@ export interface SyncRunView {
   ok: boolean;
   result: Record<string, number> | null;
   error: string | null;
+  /**
+   * Who started a manual run (ADR 0031): name, else e-mail; "" when the account no longer exists;
+   * null for the nightly run.
+   */
+  actorName: string | null;
 }
 
 export interface SportnetSyncStatus {
@@ -112,9 +128,17 @@ export async function getSportnetSyncStatus(
     deps.stats(),
     deps.runs.listRuns("sportnet-clubs", RUNS_SHOWN),
   ]);
+  const actorIds = [...new Set(runs.map((r) => r.actorId).filter((id): id is string => !!id))];
+  const actors = new Map(
+    await Promise.all(
+      actorIds.map(async (id) => {
+        const user = await deps.users.findById(id);
+        return [id, user ? user.name.trim() || user.email : ""] as const;
+      }),
+    ),
+  );
   return {
     clubs: { ...stats, oldestDetailsAt: stats.oldestDetailsAt?.toISOString() ?? null },
-    // who started a manual run stays in the database only
     runs: runs.map((r) => ({
       trigger: r.trigger,
       startedAt: r.startedAt.toISOString(),
@@ -123,6 +147,7 @@ export async function getSportnetSyncStatus(
       ok: r.ok,
       result: r.result,
       error: r.error,
+      actorName: r.actorId ? (actors.get(r.actorId) ?? "") : null,
     })),
   };
 }

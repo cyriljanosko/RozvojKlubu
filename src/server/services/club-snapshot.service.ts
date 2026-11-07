@@ -112,8 +112,3 @@ export function parseSnapshot(raw: unknown, importedAt: Date = new Date()): Pars
     ),
   };
 }
-
-export interface SnapshotStore {
-  /** Upserts by clubId / { clubId, season }; returns counts. */
-  saveSnapshot: (snapshot: ParsedSnapshot) => Promise<{ clubs: number; seasons: number }>;
-}

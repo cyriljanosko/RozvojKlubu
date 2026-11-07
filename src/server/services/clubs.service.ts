@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { ApiError } from "@/server/api/errors";
+import { recordAudit, type AuditDeps } from "@/server/services/audit.service";
 import {
   CLUB_ROLES,
   type ClubDoc,
@@ -16,7 +17,6 @@ import {
   requireAdmin,
   requireClubView,
 } from "@/server/services/club-access";
-import { parseSnapshot, type SnapshotStore } from "@/server/services/club-snapshot.service";
 import { currentSeason, isSeason } from "@/server/services/season";
 import { requireUser, type CurrentUser } from "@/server/services/users.service";
 
@@ -48,8 +48,8 @@ export interface MembershipStore {
   listByUser: (userId: string) => Promise<StoredMembership[]>;
   listByClub: (clubId: string, season: string) => Promise<StoredMembership[]>;
   create: (doc: Omit<ClubMembershipDoc, "_id">) => Promise<StoredMembership>;
-  /** Deletes only within the given club (tenant filter); returns false when not found. */
-  delete: (clubId: string, membershipId: string) => Promise<boolean>;
+  /** Deletes only within the given club (tenant filter); returns the deleted membership or null. */
+  delete: (clubId: string, membershipId: string) => Promise<StoredMembership | null>;
 }
 
 export type StoredMembership = Omit<ClubMembershipDoc, "_id"> & { id: string };
@@ -59,7 +59,7 @@ export interface UserDirectory {
   findByEmail: (email: string) => Promise<CurrentUser | null>;
 }
 
-export interface ClubDeps {
+export interface ClubDeps extends AuditDeps {
   clubs: ClubStore;
   memberships: MembershipStore;
   users: UserDirectory;
@@ -260,6 +260,18 @@ export async function addClubMember(
     createdBy: user.id,
     createdAt: deps.now?.() ?? new Date(),
   });
+  await recordAudit(deps, user, {
+    action: "club.member.add",
+    clubId,
+    target: { type: "membership", id: created.id },
+    changes: {
+      userId: { to: person.id },
+      role: { to: created.role },
+      season: { to: created.season },
+      ...(created.ageGroups.length ? { ageGroups: { to: created.ageGroups } } : {}),
+    },
+    at: created.createdAt,
+  });
   return {
     id: created.id,
     userId: person.id,
@@ -281,19 +293,15 @@ export async function removeClubMember(
   requireAdmin(user);
   const deleted = await deps.memberships.delete(clubId, membershipId);
   if (!deleted) throw new ApiError("NOT_FOUND", "Membership not found");
-}
-
-// ---- Snapshot import (admin_sfz) ----
-
-export async function importClubSnapshot(
-  store: SnapshotStore,
-  actor: CurrentUser | null,
-  raw: unknown,
-  now: Date = new Date(),
-): Promise<{ dataAsOf: string; clubs: number; seasons: number }> {
-  const user = requireUser(actor);
-  requireAdmin(user);
-  const snapshot = parseSnapshot(raw, now);
-  const counts = await store.saveSnapshot(snapshot);
-  return { dataAsOf: snapshot.dataAsOf, ...counts };
+  await recordAudit(deps, user, {
+    action: "club.member.remove",
+    clubId,
+    target: { type: "membership", id: membershipId },
+    changes: {
+      userId: { from: deleted.userId },
+      role: { from: deleted.role },
+      season: { from: deleted.season },
+    },
+    at: deps.now?.() ?? new Date(),
+  });
 }

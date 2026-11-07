@@ -121,6 +121,10 @@ describe("content service", () => {
     const [rev] = await listQuestionRevisions(store, admin, "5.i.1");
     const reverted = await revertQuestion(store, admin, rev.id, at);
     expect(reverted).toMatchObject({ text: original, version: 3 });
+    expect(store.audit.entries.map((e) => [e.action, e.target.id, e.changes])).toEqual([
+      ["content.question.update", "5.i.1", { version: { from: 1, to: 2 } }],
+      ["content.question.revert", "5.i.1", { version: { from: 2, to: 3 } }],
+    ]);
     expect(await listQuestionRevisions(store, admin, "5.i.1")).toHaveLength(2);
     await expect(revertQuestion(store, alice, rev.id)).rejects.toMatchObject({
       code: "FORBIDDEN",

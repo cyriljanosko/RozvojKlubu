@@ -25,7 +25,12 @@ export async function SyncRuns({ runs }: { runs: SyncRunView[] }) {
 
   const started = (run: SyncRunView) =>
     format.dateTime(new Date(run.startedAt), { dateStyle: "medium", timeStyle: "short" });
-  const trigger = (run: SyncRunView) => t(run.trigger === "cron" ? "runs.cron" : "runs.manual");
+  const trigger = (run: SyncRunView) =>
+    run.trigger === "cron"
+      ? t("runs.cron")
+      : run.actorName
+        ? t("runs.manualBy", { name: run.actorName })
+        : t("runs.manual");
   const duration = (run: SyncRunView) => t("duration", durationParts(run.durationMs));
   const count = (run: SyncRunView, key: (typeof COUNTS)[number]) =>
     run.result?.[key] !== undefined ? format.number(run.result[key]) : "–";

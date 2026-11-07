@@ -24,6 +24,12 @@ import {
 } from "@/server/services/methodology.service";
 import { revertPractice, seedPractice, updatePractice } from "@/server/services/practice.service";
 import {
+  contentEditStore,
+  practiceEditStore,
+  roleCatalogEditStore,
+  sectionEditStore,
+} from "@/server/content/deps";
+import {
   revertRoleCatalog,
   seedRoleCatalog,
   updateRoleCatalog,
@@ -73,7 +79,7 @@ export async function updateQuestionAction(
 ): Promise<ContentActionState> {
   try {
     const updated = await updateQuestion(
-      mongoContentStore,
+      contentEditStore,
       await getCurrentUser(await headers()),
       questionId,
       {
@@ -90,11 +96,9 @@ export async function updateQuestionAction(
 }
 
 export async function revertQuestionAction(revisionId: string): Promise<void> {
-  await revertQuestion(mongoContentStore, await getCurrentUser(await headers()), revisionId);
+  await revertQuestion(contentEditStore, await getCurrentUser(await headers()), revisionId);
   refresh();
 }
-
-const sectionStore = { ...mongoSectionStore, ...mongoContentStore };
 
 export async function updateSectionAction(
   area: number,
@@ -104,7 +108,7 @@ export async function updateSectionAction(
 ): Promise<ContentActionState> {
   try {
     const updated = await updateSection(
-      sectionStore,
+      sectionEditStore,
       await getCurrentUser(await headers()),
       area,
       key,
@@ -124,11 +128,9 @@ export async function updateSectionAction(
 }
 
 export async function revertSectionAction(revisionId: string): Promise<void> {
-  await revertSection(sectionStore, await getCurrentUser(await headers()), revisionId);
+  await revertSection(sectionEditStore, await getCurrentUser(await headers()), revisionId);
   refresh();
 }
-
-const practiceStore = { ...mongoPracticeStore, ...mongoContentStore };
 
 export async function updatePracticeAction(
   area: number,
@@ -143,7 +145,7 @@ export async function updatePracticeAction(
       return { status: "error", code: "BAD_REQUEST" };
     }
     const updated = await updatePractice(
-      practiceStore,
+      practiceEditStore,
       await getCurrentUser(await headers()),
       area,
       {
@@ -161,11 +163,9 @@ export async function updatePracticeAction(
 }
 
 export async function revertPracticeAction(revisionId: string): Promise<void> {
-  await revertPractice(practiceStore, await getCurrentUser(await headers()), revisionId);
+  await revertPractice(practiceEditStore, await getCurrentUser(await headers()), revisionId);
   refresh();
 }
-
-const roleStore = { ...mongoRoleCatalogStore, ...mongoContentStore };
 
 export async function updateRoleCatalogAction(
   _prev: ContentActionState,
@@ -178,10 +178,14 @@ export async function updateRoleCatalogAction(
     } catch {
       return { status: "error", code: "BAD_REQUEST" };
     }
-    const updated = await updateRoleCatalog(roleStore, await getCurrentUser(await headers()), {
-      content,
-      expectedVersion: Number(formData.get("expectedVersion")),
-    });
+    const updated = await updateRoleCatalog(
+      roleCatalogEditStore,
+      await getCurrentUser(await headers()),
+      {
+        content,
+        expectedVersion: Number(formData.get("expectedVersion")),
+      },
+    );
     refresh();
     return { status: "ok", version: updated.version };
   } catch (error) {
@@ -190,6 +194,6 @@ export async function updateRoleCatalogAction(
 }
 
 export async function revertRoleCatalogAction(revisionId: string): Promise<void> {
-  await revertRoleCatalog(roleStore, await getCurrentUser(await headers()), revisionId);
+  await revertRoleCatalog(roleCatalogEditStore, await getCurrentUser(await headers()), revisionId);
   refresh();
 }
