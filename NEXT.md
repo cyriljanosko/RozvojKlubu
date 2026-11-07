@@ -6,6 +6,7 @@ Aktualizované: 5. 11. 2026 (katalóg knižnice; knižnica oblasti 3; doména kl
 
 ### Redesign a Sportnet (plán `docs/dizajn/plan-redesignu.md`, ADR 0018)
 
+- [ ] Hlavička, plachta menu a AI (návrh `docs/dizajn/hlavicka-ai-navrh.md`, PR #161): fáza 1 – hlavička, plachta, cesta, okamžité hľadanie (ADR 0035, vetva `feat/hlavicka-plachta-menu`); PR do sfz-design-system s komponentmi. Pred fázou 2 (AI odpovede so zdrojmi, ADR 0036–0037) odpovede Jána na Q3–Q9 (SDK a účet, model, limity, kto smie, DPA, ukladanie otázok, MCP). Cesta zatiaľ ukazuje „Oblasť N“ – doplniť názvy oblastí zo servera.
 - [ ] Odstrániť shadcn (`src/components/ui`) – so súhlasom; dnes ho používa už len administrácia (`/admin/kluby`, `/admin/obsah`), ktorú prepíše S3.
 - [ ] Po vydaní verzie sfz-design-system s ikonami `map`, `map-pin`, `compass`, `book-open`, `star`, `Accordion` a `ProgressBar` (Slovensky-futbalovy-zvaz/sfz-design-system#1): nahradiť vlastný akordeón a ukazovateľ postupu v `src/components/sfz` a hviezdu z lucide v `pin-button.tsx`; ikony míľnikov.
 - [ ] Overiť na preview ako klubový manažér: Prax s uloženým postupom (G1b), prenos odpovedí a nový formulár v Kompase klubu (G1c), klubová vizitka (G1d). Obrazovky po prihlásení (G2–G4, Novinky N3) overiť, keď bude hotové S1.

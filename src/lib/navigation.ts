@@ -129,7 +129,8 @@ export function buildNavigation(ctx: NavContext): Navigation {
   const analytics =
     ctx.isAdmin || has(roles, ANALYTICS_ROLES) ? item("analytics", "/analyza", "file-text") : null;
   const admin = ctx.isAdmin ? item("admin", "/admin/kluby", "settings") : null;
-  const moreLink = item("more", "/viac", "more-horizontal");
+  // "Menu" opens the menu sheet; without JavaScript it is a link to /viac (ADR 0035)
+  const moreLink: NavItem = { id: "more", labelKey: "menu", href: "/viac", icon: "menu" };
 
   const more = [
     item("account", "/ucet", "user"),
@@ -196,4 +197,176 @@ export function adminMenu(): NavItem[] {
     item("adminNews", "/admin/novinky", "bell"),
     item("adminSportnet", "/admin/sportnet", "arrow-up-down"),
   ];
+}
+
+/** A titled group of the menu sheet (ADR 0035): Hlavné · Môj klub · Ďalšie · Správa. */
+export interface MenuSection {
+  id: "main" | "club" | "more" | "admin";
+  /** Key in the `nav` namespace; the club section is titled with the club's name instead. */
+  titleKey: string;
+  items: NavItem[];
+}
+
+/**
+ * The menu sheet in the header (desktop) and behind the "Menu" tab (phone), ADR 0035. It replaces
+ * the NavBar row: every place of the app the person may open, grouped, filtered by their roles.
+ */
+export function menuSections(ctx: NavContext): MenuSection[] {
+  const nav = buildNavigation(ctx);
+  const news = item("news", "/novinky", "bell");
+  const about = item("about", "/o-akademii", "info");
+
+  if (!ctx.signedIn) {
+    return [
+      {
+        id: "main",
+        titleKey: "sectionMain",
+        items: [...nav.main.filter((e) => e.id !== "about"), news],
+      },
+      {
+        id: "more",
+        titleKey: "sectionMore",
+        items: [about, item("signIn", "/prihlasenie", "user")],
+      },
+    ];
+  }
+
+  const club = pickActiveClub(ctx);
+  const roles = allRoles(ctx.clubs);
+  const mentor = isMentor(ctx.clubs);
+  const main = [
+    item("home", "/moja-akademia", "home"),
+    AREAS,
+    club && has(club.roles, KOMPAS_ROLES) ? null : TRIAL_KOMPAS,
+    CLUBS,
+    news,
+  ];
+  const more = [
+    mentor ? item("mentorClubs", "/mentor", "users") : null,
+    ctx.isAdmin || has(roles, ANALYTICS_ROLES) ? item("analytics", "/analyza", "file-text") : null,
+    ctx.isAdmin ? item("mentorWorkspace", "/mentor", "calendar") : null,
+    item("account", "/ucet", "user"),
+    about,
+  ];
+  const sections: MenuSection[] = [
+    { id: "main", titleKey: "sectionMain", items: main.filter((e): e is NavItem => e !== null) },
+  ];
+  if (club) {
+    const items = clubMenu(club.clubId, club.roles, ctx.isAdmin);
+    if (items.length > 0) sections.push({ id: "club", titleKey: "myClub", items });
+  }
+  sections.push({
+    id: "more",
+    titleKey: "sectionMore",
+    items: more.filter((e): e is NavItem => e !== null),
+  });
+  if (ctx.isAdmin) sections.push({ id: "admin", titleKey: "sectionAdmin", items: adminMenu() });
+  return sections;
+}
+
+/** One step of the breadcrumb; the last one is the current page and has no link. */
+export interface Crumb {
+  /** Key in the `nav` namespace, or null when `label` carries a name (club, area). */
+  labelKey: string | null;
+  label?: string;
+  /** Values for the `labelKey` message, e.g. the area number. */
+  params?: Record<string, string>;
+  href: string | null;
+}
+
+/** Names the path cannot carry: clubs the person sees (by Sportnet id) and areas (by number). */
+export interface CrumbNames {
+  clubs?: Readonly<Record<string, string>>;
+  areas?: Readonly<Record<number, string>>;
+}
+
+/** Static path segments and their labels; dynamic segments are handled in `breadcrumbs`. */
+const SEGMENT_KEYS: Record<string, string> = {
+  oblasti: "areas",
+  kompas: "kompas",
+  vizitka: "crumbVizitka",
+  novinky: "news",
+  mentor: "mentorWorkspace",
+  analyza: "analytics",
+  ucet: "account",
+  hladat: "search",
+  "o-akademii": "about",
+  viac: "moreTitle",
+  prihlasenie: "signIn",
+  admin: "admin",
+  kluby: "adminClubs",
+  obsah: "adminContent",
+  roly: "crumbRoles",
+  metodika: "crumbMethodology",
+  prax: "crumbPractice",
+  sportnet: "adminSportnet",
+  plan: "clubPlan",
+  "licencne-hodnotenie": "clubLicensing",
+  mentoring: "clubMentoring",
+  navstevy: "crumbVisits",
+  nova: "crumbNewVisit",
+};
+
+/** Labels of an id segment by the segment before it (detail pages without a name in the path). */
+const DETAIL_KEYS: Record<string, string> = {
+  novinky: "crumbNewsItem",
+  navstevy: "crumbVisit",
+  odoslane: "crumbSubmission",
+};
+
+const decode = (segment: string) => {
+  try {
+    return decodeURIComponent(segment);
+  } catch {
+    return segment;
+  }
+};
+
+/**
+ * Breadcrumb of a page, built from its address and not from the browser history, so it is the same
+ * after opening a link from an e-mail (ADR 0035). Empty on the home pages and unknown paths.
+ * Admin pages have no /admin overview, so "Administrácia" leads to its first screen.
+ */
+export function breadcrumbs(pathname: string, signedIn: boolean, names: CrumbNames = {}): Crumb[] {
+  const segments = pathname.split(/[?#]/)[0].split("/").filter(Boolean);
+  if (segments.length === 0 || segments[0] === "moja-akademia" || segments[0] === "dev") return [];
+  const home: Crumb = signedIn
+    ? { labelKey: "home", href: "/moja-akademia" }
+    : { labelKey: "academy", href: "/" };
+
+  const crumbs: Crumb[] = [home];
+  let href = "";
+  segments.forEach((segment, index) => {
+    href += `/${segment}`;
+    const prev = segments[index - 1];
+    const value = decode(segment);
+    let crumb: Crumb | null = null;
+
+    if (index === 0 && segment === "klub") return; // /klub has no page; the club name follows
+    if (index === 0 && segment === "vizitka") crumb = { labelKey: "clubs", href };
+    else if (prev === "klub" || (prev === "kluby" && segments[0] === "admin")) {
+      const name = names.clubs?.[value];
+      crumb = name ? { labelKey: null, label: name, href } : { labelKey: "crumbClub", href };
+    } else if (prev === "vizitka" && index === 1) {
+      const name = names.clubs?.[value];
+      crumb = name ? { labelKey: null, label: name, href } : { labelKey: "crumbVizitka", href };
+    } else if (prev === "oblasti" || (prev === "obsah" && segment !== "roly")) {
+      const number = Number(value);
+      const name = names.areas?.[number];
+      crumb = name
+        ? { labelKey: null, label: name, href }
+        : { labelKey: "crumbArea", params: { number: value }, href };
+    } else if (index === 0 && segment === "admin") {
+      // no /admin overview page: the section name is plain text
+      crumb = { labelKey: "admin", href: null };
+    } else if (SEGMENT_KEYS[segment] && !(prev && DETAIL_KEYS[prev] && segment !== "nova")) {
+      crumb = { labelKey: SEGMENT_KEYS[segment], href };
+    } else if (prev && DETAIL_KEYS[prev]) {
+      crumb = { labelKey: DETAIL_KEYS[prev], href };
+    }
+    if (crumb) crumbs.push(crumb);
+  });
+
+  if (crumbs.length < 2) return [];
+  return crumbs.map((crumb, i) => (i === crumbs.length - 1 ? { ...crumb, href: null } : crumb));
 }

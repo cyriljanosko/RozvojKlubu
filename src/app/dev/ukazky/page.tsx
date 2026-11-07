@@ -11,6 +11,7 @@ import {
   AccordionItem,
   Alert,
   AreaNumber,
+  Breadcrumbs,
   Button,
   Card,
   Checkbox,
@@ -19,14 +20,17 @@ import {
   LicensingBandPill,
   LinkButton,
   LinkTabs,
+  MenuPanel,
   ProgressBar,
   Select,
   Toggle,
 } from "@/components/sfz";
-import { clubMenu } from "@/lib/navigation";
+import { clubMenu, menuSections } from "@/lib/navigation";
 import { getEnv } from "@/server/env";
 import { BANDS } from "@/server/services/kompas-scoring";
 import { LICENSING_BANDS } from "@/server/services/licensing-rules";
+
+import { MenuSheetDemo } from "./menu-sheet-demo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("showcase");
@@ -67,13 +71,27 @@ async function Showcase() {
   await connection();
   if (getEnv().ENABLE_DEV_PAGES !== "1") notFound();
 
-  const [t, tKompas, tLicensing, tAbout, submenu] = await Promise.all([
+  const [t, tNav, tKompas, tLicensing, tAbout, submenu] = await Promise.all([
     getTranslations("showcase"),
+    getTranslations("nav"),
     getTranslations("kompas.bands"),
     getTranslations("licensing.bands"),
     getTranslations("aboutPage.eleven.lines"),
     toLinks(clubMenu("ukazka", ["club_manager"], false)),
   ]);
+
+  // the menu of a club manager who is also an admin: every column of the sheet (ADR 0035)
+  const sections = await Promise.all(
+    menuSections({
+      signedIn: true,
+      isAdmin: true,
+      clubs: [{ clubId: "ukazka", roles: ["club_manager"] }],
+    }).map(async (section) => ({
+      id: section.id,
+      title: section.id === "club" ? t("clubName") : tNav(section.titleKey),
+      items: await toLinks(section.items),
+    })),
+  );
 
   return (
     <>
@@ -84,6 +102,29 @@ async function Showcase() {
 
       <Section title={t("submenu")}>
         <LinkTabs items={submenu} navLabel={t("submenu")} />
+      </Section>
+
+      <Section title={t("breadcrumbs")}>
+        <Breadcrumbs
+          label={tNav("breadcrumbLabel")}
+          items={[
+            { label: tNav("home"), href: "/moja-akademia" },
+            { label: t("clubName"), href: "/klub/ukazka" },
+            { label: tNav("kompas"), href: null },
+          ]}
+        />
+      </Section>
+
+      <Section title={t("menuSheet")}>
+        <div className="rounded-(--radius-md) bg-(--surface) p-4 shadow-(--shadow-float)">
+          <MenuPanel sections={sections} />
+        </div>
+        <MenuSheetDemo
+          sections={sections}
+          open={t("bottomSheet")}
+          title={tNav("allSections")}
+          close={tNav("closeMenu")}
+        />
       </Section>
 
       <Section title={t("buttons")}>

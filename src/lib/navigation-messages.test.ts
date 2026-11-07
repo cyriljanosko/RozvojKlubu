@@ -2,7 +2,14 @@ import { describe, expect, it } from "vitest";
 
 import sk from "../../messages/sk.json";
 
-import { adminMenu, buildNavigation, clubMenu, type NavContext } from "./navigation";
+import {
+  adminMenu,
+  breadcrumbs,
+  buildNavigation,
+  clubMenu,
+  menuSections,
+  type NavContext,
+} from "./navigation";
 
 const contexts: NavContext[] = [
   { signedIn: false, isAdmin: false, clubs: [] },
@@ -21,6 +28,42 @@ describe("navigation texts", () => {
     }
     for (const entry of [...clubMenu("c1", ["club_manager"], true), ...adminMenu()]) {
       keys.add(entry.labelKey);
+    }
+    for (const ctx of contexts) {
+      for (const section of menuSections(ctx)) {
+        keys.add(section.titleKey);
+        for (const entry of section.items) keys.add(entry.labelKey);
+      }
+    }
+    const paths = [
+      "/oblasti/1",
+      "/klub/c1/kompas/odoslane/s1",
+      "/klub/c1/navstevy/nova",
+      "/klub/c1/navstevy/v1",
+      "/klub/c1/vizitka",
+      "/klub/c1/licencne-hodnotenie",
+      "/klub/c1/mentoring",
+      "/klub/c1/plan",
+      "/klub/c1/novinky/n1",
+      "/vizitka/c1",
+      "/admin/kluby/c1",
+      "/admin/obsah/roly",
+      "/admin/obsah/1/metodika",
+      "/admin/obsah/1/prax",
+      "/admin/novinky/n1",
+      "/admin/sportnet",
+      "/novinky/a",
+      "/mentor",
+      "/analyza",
+      "/ucet",
+      "/hladat",
+      "/o-akademii",
+      "/viac",
+      "/prihlasenie",
+      "/kompas",
+    ];
+    for (const path of paths) {
+      for (const crumb of breadcrumbs(path, true)) if (crumb.labelKey) keys.add(crumb.labelKey);
     }
     for (const key of keys) expect(nav[key], key).toBeTruthy();
   });

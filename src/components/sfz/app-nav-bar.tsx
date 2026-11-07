@@ -1,58 +1,42 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { Icon } from "./ds";
-import { activeLinkId, type NavLink } from "./nav-active";
-
 interface AppNavBarProps {
-  /** Logo (next/image) shown on the left; links to `brandHref`. */
+  /** Logo (next/image) shown after `start`; links to `brandHref`. */
   brand: ReactNode;
   brandHref?: string;
   brandLabel: string;
-  /** Main menu; the design system hides it below 768 px, where AppTabBar takes over. */
-  items: readonly NavLink[];
-  /** Right side: search, account, sign-in. */
+  /** Before the logo: the menu sheet button (ADR 0035). */
+  start?: ReactNode;
+  /** Middle of the bar: the search field. */
+  center?: ReactNode;
+  /** Right side: account, sign-in. */
   actions?: ReactNode;
-  navLabel: string;
 }
 
 /**
- * The design system's NavBar markup with next/link instead of <a href> (ADR 0018),
- * so moving between pages stays a client-side navigation.
+ * The design system's NavBar markup (ADR 0018) in the layout of ADR 0035: menu button · logo ·
+ * search in the middle · account. The row of links is gone – the menu sheet carries all of them.
  */
 export function AppNavBar({
   brand,
   brandHref = "/",
   brandLabel,
-  items,
+  start,
+  center,
   actions,
-  navLabel,
 }: AppNavBarProps) {
-  const pathname = usePathname();
-  const active = activeLinkId(pathname, items);
   return (
     <header className="sfz-navbar sfz-navbar--light print:hidden">
-      <div className="sfz-navbar__inner">
+      <div className="sfz-navbar__inner gap-2 md:gap-3">
+        {start}
         <Link className="sfz-navbar__brand" href={brandHref} aria-label={brandLabel}>
           {brand}
         </Link>
-        <nav className="sfz-navbar__nav" aria-label={navLabel}>
-          {items.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              className={item.id === active ? "sfz-navbar__link is-active" : "sfz-navbar__link"}
-              aria-current={item.id === active ? "page" : undefined}
-            >
-              {item.icon && <Icon name={item.icon} size={18} />}
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        {actions && <div className="sfz-navbar__actions">{actions}</div>}
+        <span aria-hidden className="flex-1" />
+        {center}
+        <span aria-hidden className="hidden flex-1 md:block" />
+        {actions && <div className="flex items-center gap-1 md:gap-2">{actions}</div>}
       </div>
     </header>
   );
