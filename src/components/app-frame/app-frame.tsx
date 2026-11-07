@@ -49,7 +49,11 @@ export async function AppFrame() {
     headers().then(loadFrameUser),
   ]);
   const nav = buildNavigation(frame.context);
-  const [main, tabs] = await Promise.all([toLinks(nav.main), toLinks(nav.tabs)]);
+  const [main, tabs, more] = await Promise.all([
+    toLinks(nav.main),
+    toLinks(nav.tabs),
+    toLinks(nav.more),
+  ]);
 
   // Accounts from the e-mail link may have no name yet; the avatar then uses the e-mail
   const displayName = frame.user ? frame.user.name.trim() || frame.user.email : "";
@@ -87,6 +91,7 @@ export async function AppFrame() {
       <AppTabBar
         items={tabs.map((tab) => ({ ...tab, icon: tab.icon ?? "home" }))}
         navLabel={t("tabsLabel")}
+        more={more}
       />
     </>
   );

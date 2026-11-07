@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   poweredByHeader: false,
+  // forbidden() renders app/forbidden.tsx (403) for signed-in people without access (G5 states)
+  experimental: { authInterrupts: true },
   // The SFZ Design System ships its React components as TypeScript sources (ADR 0018)
   transpilePackages: ["@slovensky-futbalovy-zvaz/design-system"],
   // content/metodika/*.md is read at runtime by the admin content seed

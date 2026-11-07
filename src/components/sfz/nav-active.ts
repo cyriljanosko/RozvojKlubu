@@ -30,3 +30,20 @@ export function activeLinkId(pathname: string, links: readonly NavLink[]): strin
   }
   return best?.id ?? null;
 }
+
+/**
+ * The active TabBar item: a direct match first; otherwise `moreId` ("Viac") when the page belongs to
+ * a section opened from the "Viac" menu (its first path segment, e.g. the whole /admin for
+ * Administrácia → /admin/kluby). G5: the administration keeps Viac active.
+ */
+export function activeTabId(
+  pathname: string,
+  tabs: readonly NavLink[],
+  more: readonly NavLink[],
+  moreId = "more",
+): string | null {
+  const direct = activeLinkId(pathname, tabs);
+  if (direct || !tabs.some((tab) => tab.id === moreId)) return direct;
+  const section = (href: string) => `/${stripQuery(href).split("/")[1] ?? ""}`;
+  return more.some((link) => isActiveLink(pathname, { href: section(link.href) })) ? moreId : null;
+}

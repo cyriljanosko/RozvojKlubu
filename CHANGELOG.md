@@ -7,11 +7,16 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 ### Pridané
 
 - API zoznamu klubov pre administráciu (S3, G5 Kluby): `GET /api/v1/admin/clubs` – hľadanie podľa názvu (bez ohľadu na diakritiku) alebo IČO, filtre región (aj bez regiónu), zväz, stav a „V aplikácii“, 25 klubov na stranu podľa slovenskej abecedy. Len admin SFZ.
+- Stránka Sportnet v administrácii (S3, návrh G5, ADR 0030): stav klubov, ručná synchronizácia v troch krokoch (skúšobný beh, kontrola, zápis po potvrdení) a posledných 20 behov – na mobile ako karty. Menu administrácie má poradie podľa G5 (Kluby · Obsah · Novinky · Sportnet) a na mobile sa vysúva zľava; Katalóg rolí sa otvára z Obsahu.
 - Záznam behov synchronizácie so sportnet.online (S3-b, ADR 0030): nočný aj ručný beh uloží počty do kolekcie `sync_runs`, aj keď zlyhá. Admin SFZ vidí stav (aktívne kluby, kluby bez podrobností, posledných 20 behov) cez `GET /api/v1/admin/sportnet/sync` a spustí synchronizáciu ručne cez `POST /api/v1/admin/sportnet/sync` (predvolene dry-run). Obrazovka príde podľa návrhu G5.
 - Nočná synchronizácia klubov zo sportnet.online (ADR 0029): Vercel Cron denne o 2:00 UTC obnoví zoznam klubov a podrobnosti (zväz, región, IČO) najviac 600 klubov – nové najprv, potom najstaršie. Potrebuje `CRON_SECRET`.
 - Import klubov zo sportnet.online pre admina SFZ (S3, ADR 0028): `POST /api/v1/admin/sportnet/clubs` založí alebo obnoví všetky aktívne futbalové kluby (názov, logo, stav), predvolene ako dry-run; `POST /api/v1/admin/sportnet/clubs/details` doplní po dávkach matričný a regionálny zväz z profilu klubu, IČO a právnickú osobu. Snapshot už neprepíše názov a zväz klubu obnoveného zo Sportnetu.
 
 ### Zmenené
+
+- Synchronizácia klubov hlási ako „zmenené“ len kluby, ktorým sa v sportnet.online zmenil názov, stav alebo logo – doteraz každý uložený klub.
+- Bez prístupu ukazuje administrácia (zatiaľ Sportnet) stránku 403 (`forbidden()`, `authInterrupts`).
+- V spodnej lište na mobile je aktívna položka Viac aj na stránkach otvorených z jej menu (administrácia, účet).
 
 - Mapa Klubov kreslí skutočné územia 4 RFZ a 38 ObFZ z projektu statistika.futbalsfz.sk (`content/mapa-zvazov.json`) namiesto ObFZ poskladaných z okresov – hranice zväzov nekopírujú okresy.
 - Mapa a zoznam verejných Klubov zaradia každý klub zo sportnet.online podľa matričného zväzu (S3, ADR 0028): ObFZ dá ObFZ aj RFZ, regionálny zväz len RFZ; pilotné kluby ostávajú podľa okresu. Klub mimo rebríčka už nemá štítok „Zapojený do Akadémie“ – kategória akadémia / ÚTM zatiaľ v Sportnete nie je.

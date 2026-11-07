@@ -10,9 +10,12 @@ export const REDESIGNED_FILES = [
   "src/components/sfz/**",
   "src/components/app-frame/**",
   "src/app/layout.tsx",
+  "src/app/forbidden.tsx",
   "src/app/viac/**",
   "src/app/dev/**",
   "src/app/admin/layout.tsx",
+  // S3 G5 – administrácia: Sportnet
+  "src/app/admin/sportnet/**",
   "src/app/klub/[[]clubId]/layout.tsx",
   // R4 G1a – Akadémia (Hub), Oblasti, Prihlásenie
   "src/app/page.tsx",

@@ -11,5 +11,5 @@ export { AREA_LINE_CLASS, KOMPAS_BAND_TONE, LICENSING_BAND_CLASS } from "./bands
 export { LinkButton, LinkIconButton } from "./link-button";
 export { LinkChip } from "./link-chip";
 export { LinkTabs } from "./link-tabs";
-export { activeLinkId, isActiveLink, type NavLink } from "./nav-active";
+export { activeLinkId, activeTabId, isActiveLink, type NavLink } from "./nav-active";
 export { ProgressBar } from "./progress-bar";

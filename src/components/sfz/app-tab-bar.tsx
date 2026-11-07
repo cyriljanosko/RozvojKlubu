@@ -4,22 +4,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Icon } from "./ds";
-import { activeLinkId, type NavLink } from "./nav-active";
+import { activeTabId, type NavLink } from "./nav-active";
 
 interface AppTabBarProps {
   /** At most five items, each with an icon (design system TabBar rule). */
   items: readonly (NavLink & { icon: string; badge?: number })[];
   navLabel: string;
+  /** Items of the "Viac" menu: their sections keep the "more" tab active. */
+  more?: readonly NavLink[];
 }
 
 /**
  * The design system's TabBar markup with next/link (ADR 0018). Visible below 768 px only;
  * the page needs bottom padding of `--tabbar-height` + safe area, which the app frame adds.
  */
-export function AppTabBar({ items, navLabel }: AppTabBarProps) {
+export function AppTabBar({ items, navLabel, more = [] }: AppTabBarProps) {
   const pathname = usePathname();
   const shown = items.slice(0, 5);
-  const active = activeLinkId(pathname, shown);
+  const active = activeTabId(pathname, shown, more);
   return (
     <nav className="sfz-tabbar print:hidden" aria-label={navLabel}>
       {shown.map((item) => (
