@@ -169,15 +169,7 @@
   "admin": {
     "title": "Administrácia",
     "clubs": "Kluby",
-    "noClubs": "Zatiaľ nie sú nahraté žiadne kluby. Nahrajte snapshot zo Sportnetu.",
-    "snapshot": {
-      "title": "Snapshot zo Sportnetu",
-      "description": "JSON súbor s dátami klubov (formát z návrhu Vizitky). Súbor obsahuje osobné údaje – nikdy ho nedávajte do gitu.",
-      "file": "Súbor JSON",
-      "submit": "Nahrať snapshot",
-      "done": "Nahraté: {clubs} klubov, {seasons} sezón (dáta k {date}).",
-      "error": "Snapshot sa nepodarilo nahrať. Skontrolujte formát súboru."
-    },
+    "noClubs": "Zatiaľ tu nie sú žiadne kluby. Pribudnú nočnou synchronizáciou zo Sportnetu.",
     "members": {
       "title": "Ľudia v klube",
       "season": "Sezóna {season}",
@@ -2252,6 +2244,7 @@
       "error": "Chyba",
       "cron": "Noc (cron)",
       "manual": "Ručne",
+      "manualBy": "Ručne · {name}",
       "ok": "OK",
       "failedRun": "Chyba",
       "noError": "–",

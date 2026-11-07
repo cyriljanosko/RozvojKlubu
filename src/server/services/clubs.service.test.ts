@@ -1,12 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { sampleSnapshot } from "./club-snapshot.fixture";
-import type { ParsedSnapshot } from "./club-snapshot.service";
 import { A, B, admin, alice, bob, memoryDeps } from "./clubs.fixture";
 import {
   addClubMember,
   getClubOverview,
-  importClubSnapshot,
   listClubMembers,
   listMyClubs,
   removeClubMember,
@@ -143,24 +140,5 @@ describe("clubs service", () => {
       }),
     ]);
     expect(JSON.stringify(deps.audit.entries)).not.toContain("bob@klub.sk");
-  });
-
-  it("imports a snapshot (admin only)", async () => {
-    const saved: ParsedSnapshot[] = [];
-    const store = {
-      saveSnapshot: async (s: ParsedSnapshot) => {
-        saved.push(s);
-        return { clubs: s.clubs.length, seasons: s.seasons.length };
-      },
-    };
-    await expect(importClubSnapshot(store, alice, sampleSnapshot)).rejects.toMatchObject({
-      code: "FORBIDDEN",
-    });
-    await expect(importClubSnapshot(store, admin, sampleSnapshot)).resolves.toEqual({
-      dataAsOf: "2026-10-11",
-      clubs: 1,
-      seasons: 1,
-    });
-    expect(saved).toHaveLength(1);
   });
 });

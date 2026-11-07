@@ -6,7 +6,6 @@ import { getDb } from "@/server/db/mongo";
 import type { ClubDoc, ClubMembershipDoc, ClubSeasonDoc } from "@/server/db/types";
 import type { ClubImportStore } from "@/server/services/club-import.service";
 import type { ClubRolesSyncDeps } from "@/server/services/club-roles-sync.service";
-import type { SnapshotStore } from "@/server/services/club-snapshot.service";
 import type { ClubSyncStats } from "@/server/services/sync-runs.service";
 import type { ClubStore, MembershipStore, StoredMembership } from "@/server/services/clubs.service";
 
@@ -122,50 +121,6 @@ export const mongoMembershipStore: MembershipStore = {
       clubId,
     });
     return deleted ? toStored(deleted) : null;
-  },
-};
-
-export const mongoSnapshotStore: SnapshotStore = {
-  async saveSnapshot(snapshot) {
-    const db = await getDb();
-    await ensureIndexes(db);
-    // A club refreshed from Sportnet keeps its name, union and region (ADR 0028); the snapshot
-    // still brings the slug and the season data.
-    const synced = new Set(
-      (
-        await clubs(db)
-          .find(
-            {
-              clubId: { $in: snapshot.clubs.map((c) => c.clubId) },
-              sportnetSyncedAt: { $exists: true },
-            },
-            { projection: { _id: 0, clubId: 1 } },
-          )
-          .toArray()
-      ).map((c) => c.clubId),
-    );
-    await clubs(db).bulkWrite(
-      snapshot.clubs.map((c) =>
-        synced.has(c.clubId)
-          ? {
-              updateOne: {
-                filter: { clubId: c.clubId },
-                update: { $set: { slug: c.slug, dataAsOf: c.dataAsOf, importedAt: c.importedAt } },
-              },
-            }
-          : { replaceOne: { filter: { clubId: c.clubId }, replacement: c, upsert: true } },
-      ),
-    );
-    await seasons(db).bulkWrite(
-      snapshot.seasons.map((s) => ({
-        replaceOne: {
-          filter: { clubId: s.clubId, season: s.season },
-          replacement: s,
-          upsert: true,
-        },
-      })),
-    );
-    return { clubs: snapshot.clubs.length, seasons: snapshot.seasons.length };
   },
 };
 

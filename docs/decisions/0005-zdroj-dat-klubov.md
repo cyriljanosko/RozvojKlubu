@@ -3,6 +3,7 @@
 - Stav: prijaté
 - Dátum: 2026-10-16
 - Rozhodol: Cyril Janoško
+- Nahradené: 0033 (len import snapshotu v administrácii)
 
 ## Kontext
 

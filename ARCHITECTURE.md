@@ -153,14 +153,12 @@ MCP server (F5, plánovaný)        ─┘        │
 2. Bez indexu a bez novej kolekcie – obsah (stovky textov) sa prehľadá v pamäti servera: normalizácia bez diakritiky, hrubý kmeň slova pre skloňovanie, všetky slová musia sedieť (inak aspoň jedno), názov váži viac, oblasť najviac; Atlas Search až pri väčšom obsahu
 3. Mentorská Prax len pre mentora sezóny a admina SFZ (`seesMentor`); odkazy `?open=` otvoria sekciu alebo vzor, `ScrollToHash` sa po načítaní posunie na kotvu
 
-### Dáta klubov (snapshot, ADR 0005)
+### Dáta sezóny klubov (snapshot, ADR 0005, ADR 0033)
 
-1. Admin SFZ nahrá snapshot (JSON z návrhu Vizitky) na `/admin/kluby` alebo `POST /api/v1/admin/club-snapshot`
-2. `parseSnapshot` ho overí (Zod) a premapuje → upsert do `clubs` a `club_seasons`
-3. Karta klubu `/klub/[clubId]` a `GET /api/v1/clubs/:clubId` čítajú len počty a družstvá (mená trénerov nie)
-4. Snapshot s menami leží len lokálne v `data/private/` (gitignore), nikdy v gite
-5. Klub obnovený zo Sportnetu (`sportnetSyncedAt`) si pri snapshote ponechá názov, zväz a región; snapshot
-   mu doplní len `slug` a dáta sezóny (ADR 0028)
+1. Dáta sezóny 10 pilotných klubov (`club_seasons`, `slug`, `dataAsOf`) sa raz nahrali zo snapshotu Vizitky;
+   import sa odstránil (ADR 0033), dáta ostávajú, kým ich nenahradia Súťaže zo Sportnetu
+2. Karta klubu `/klub/[clubId]` a `GET /api/v1/clubs/:clubId` čítajú len počty a družstvá (mená trénerov nie)
+3. `parseSnapshot` a vymyslený `club-snapshot.fixture` plnia len testovacie dáta
 
 ### Kluby zo sportnet.online (S3, ADR 0028)
 
@@ -186,7 +184,12 @@ MCP server (F5, plánovaný)        ─┘        │
 5. Záznam behov (ADR 0030): nočný aj ručný zapisujúci beh uloží počty do `sync_runs` (aj pri chybe); admin SFZ
    vidí stav cez `GET /api/v1/admin/sportnet/sync` (aktívne kluby, bez podrobností, najstaršie podrobnosti,
    posledných 20 behov) a spustí beh cez `POST /api/v1/admin/sportnet/sync` (dry-run predvolene, nezaznamenáva sa).
-6. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
+6. Zoznam klubov v administrácii (G5 Kluby): `GET /api/v1/admin/clubs?q=&region=&union=&status=&inApp=&page=`
+   (`admin-clubs.service.ts`) – hľadanie v názve bez ohľadu na diakritiku alebo podľa začiatku IČO, filtre
+   región (aj `none` – bez regionálneho zväzu), zväz (`unionId`), stav (predvolene aktívne) a „V aplikácii“
+   (`listActiveClubIds`, ADR 0028); 25 na stranu podľa slovenskej abecedy, v `meta` strana a počet, v `data`
+   aj zväzy pre filter.
+7. Strom `relations-structure` sa na zaradenie klubu nepoužíva – niektoré kluby v ňom visia pod regionálnym
    zväzom namiesto ObFZ (dry-run 6. 11.).
 
 ### Audit log (ADR 0034)
@@ -204,7 +207,7 @@ MCP server (F5, plánovaný)        ─┘        │
 
 ## Hranice systému
 
-- **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Kluby (názov, zväz, región, IČO) z verejného CoreApi (ADR 0028), dáta sezóny zatiaľ zo snapshotu (ADR 0005).
+- **Sportnet** je zdroj pravdy pre kluby a osoby a hlavný poskytovateľ identity. Kluby (názov, zväz, región, IČO) z verejného CoreApi (ADR 0028), dáta sezóny pilotných klubov zatiaľ z jednorazového snapshotu (ADR 0005, ADR 0033).
 - **MongoDB** drží len dáta aplikácie.
 - **Ecomail** len odosiela transakčné e-maily, nič neukladáme.
 
@@ -268,4 +271,4 @@ Indexy obsahu (zakladá `src/server/db/content.store.ts`, súhlas 16. 10. 2026):
 - `club_settings`: `{ clubId: 1 }` unikátny (zakladá `src/server/db/club-settings.store.ts` pri prvom uložení, súhlas 26. 10. 2026; ADR 0015); zoznam súhlasov `{ "rankingConsent.given": true }` bez vlastného indexu – jeden dokument na klub Akadémie
 - `news_posts`: `{ status: 1, publishedAt: -1 }`; `{ clubId: 1, status: 1 }`; `{ areas: 1, status: 1, publishedAt: -1 }`; `{ slug: 1 }` unikátny len pre príspevky so slugom (`partialFilterExpression: { slug: { $type: "string" } }`) (zakladá `src/server/db/news.store.ts` pri prvom zápise, súhlas 31. 10. 2026; ADR 0023). Kolekcia je zatiaľ malá – `explain` overiť, keď bude mať stovky príspevkov
 - `audit_log`: `{ at: 1 }` TTL 3 roky (`expireAfterSeconds` 94 608 000); `{ clubId: 1, at: -1 }`; `{ actorId: 1, at: -1 }` (zakladá `src/server/db/audit.store.ts` pri prvom zápise, ADR 0034; súhlas Jána 7. 11. 2026). Odhad desiatky záznamov denne – `explain` overiť, keď bude mať tisíce záznamov
-- `sync_runs`: `{ kind: 1, startedAt: -1 }` (zakladá `src/server/db/sync-runs.store.ts` pri prvom zápise, ADR 0030; súhlas – PR S3-b). Stav klubov pre administráciu je jedna agregácia nad `clubs` bez indexu na `status` – 3 084 dokumentov, overené 6. 11.: 2 ms
+- `sync_runs`: `{ kind: 1, startedAt: -1 }` (zakladá `src/server/db/sync-runs.store.ts` pri prvom zápise, ADR 0030; súhlas – PR S3-b). Stav klubov pre administráciu je jedna agregácia nad `clubs` bez indexu na `status` – 3 084 dokumentov, overené 6. 11.: 2 ms. Zoznam klubov v administrácii (`admin-clubs.store.ts`) tiež bez indexu: `explain` 7. 11. – COLLSCAN 1 558 dokumentov, triedenie s kolaciou `sk` v pamäti, 6 ms
