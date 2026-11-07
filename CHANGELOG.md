@@ -13,6 +13,10 @@ Formát podľa [Keep a Changelog](https://keepachangelog.com/sk/1.1.0/).
 
 ### Zmenené
 
+- Synchronizácia klubov hlási ako „zmenené“ len kluby, ktorým sa v sportnet.online zmenil názov, stav alebo logo – doteraz každý uložený klub.
+- Bez prístupu ukazuje administrácia (zatiaľ Sportnet) stránku 403 (`forbidden()`, `authInterrupts`).
+- V spodnej lište na mobile je aktívna položka Viac aj na stránkach otvorených z jej menu (administrácia, účet).
+
 - Mapa Klubov kreslí skutočné územia 4 RFZ a 38 ObFZ z projektu statistika.futbalsfz.sk (`content/mapa-zvazov.json`) namiesto ObFZ poskladaných z okresov – hranice zväzov nekopírujú okresy.
 - Mapa a zoznam verejných Klubov zaradia každý klub zo sportnet.online podľa matričného zväzu (S3, ADR 0028): ObFZ dá ObFZ aj RFZ, regionálny zväz len RFZ; pilotné kluby ostávajú podľa okresu. Klub mimo rebríčka už nemá štítok „Zapojený do Akadémie“ – kategória akadémia / ÚTM zatiaľ v Sportnete nie je.
 - Verejné Kluby, Kompas na vyskúšanie, prehľad mentora a analýza admina čítajú dáta po jednom len pre kluby, ktoré aplikáciu používajú – príprava na import všetkých klubov zo sportnet.online (S3, ADR 0028). Výber klubu v Kompase na vyskúšanie a analýza admina ukazujú len tieto kluby.

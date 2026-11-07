@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { activeLinkId, isActiveLink, type NavLink } from "./nav-active";
+import { activeLinkId, activeTabId, isActiveLink, type NavLink } from "./nav-active";
 
 describe("isActiveLink", () => {
   it("matches the home link only on /", () => {
@@ -35,5 +35,24 @@ describe("activeLinkId", () => {
 
   it("returns null when nothing matches", () => {
     expect(activeLinkId("/ucet", links)).toBeNull();
+  });
+});
+
+describe("activeTabId", () => {
+  const tabs: NavLink[] = [
+    { id: "home", label: "Domov", href: "/" },
+    { id: "areas", label: "Oblasti", href: "/oblasti" },
+    { id: "more", label: "Viac", href: "/viac" },
+  ];
+  const more: NavLink[] = [{ id: "admin", label: "Administrácia", href: "/admin/kluby" }];
+
+  it("marks Viac on a page reached from its menu (G5: administration)", () => {
+    expect(activeTabId("/admin/sportnet", tabs, more)).toBe("more");
+    expect(activeTabId("/admin/kluby/x", tabs, more)).toBe("more");
+  });
+
+  it("keeps a direct tab match and marks nothing elsewhere", () => {
+    expect(activeTabId("/oblasti/3", tabs, more)).toBe("areas");
+    expect(activeTabId("/ucet", tabs, more)).toBeNull();
   });
 });
