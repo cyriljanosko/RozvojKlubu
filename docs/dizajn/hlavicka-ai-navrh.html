@@ -1,0 +1,2034 @@
+<title>Hlavička, menu a AI odpovede</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<style>
+  /* Layout: návrhový list – zľava text rozhodnutí, vpravo/pod ním makety v rámčekoch; makety používajú tokeny SFZ DS 1.5.1 */
+  :root {
+    /* SFZ tokens (tokens.css, light) */
+    --brand-blue: #1450df;
+    --brand-blue-deep: #0f3ea8;
+    --brand-blue-tint: #e8eefc;
+    --brand-blue-ink: #1450df;
+    --brand-red: #ec1c24;
+    --surface: #ffffff;
+    --surface-raised: #f4f6fa;
+    --ink: #0c0f16;
+    --ink-muted: #5c6270;
+    --on-brand: #ffffff;
+    --hairline: #d9dde6;
+    --border: #d9dde6;
+    --border-strong: #7f8799;
+    --input-bg: #ffffff;
+    --overlay: rgba(12, 15, 22, 0.45);
+    --success: #1f8a3b;
+    --success-tint: #e6f5ea;
+    --warning-tint: #fff4e0;
+    --warning-ink: #6b3f00;
+    --info-tint: #e8eefc;
+    --info-ink: #0f3ea8;
+    --shadow-float: 0 8px 24px rgba(12, 15, 22, 0.1);
+    --shadow-modal: 0 24px 64px rgba(12, 15, 22, 0.22);
+    --radius-xs: 6px;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 24px;
+    --radius-pill: 999px;
+    --font-sans:
+      -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui,
+      "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    /* page (návrhový list) */
+    --page: #eef1f6;
+    --page-ink: #0c0f16;
+    --page-muted: #5c6270;
+    --note: #fff4e0;
+    --note-ink: #6b3f00;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page: #080a10;
+      --page-ink: #f5f7fb;
+      --page-muted: #a8afbd;
+      --note: #3d2c08;
+      --note-ink: #ffd98a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #080a10;
+    --page-ink: #f5f7fb;
+    --page-muted: #a8afbd;
+    --note: #3d2c08;
+    --note-ink: #ffd98a;
+    color-scheme: dark;
+  }
+
+  /* dark SFZ tokens applied per mock frame or by page theme */
+  .dark,
+  .mocks-dark .mock {
+    --brand-blue-deep: #0b2f80;
+    --brand-blue-tint: #15264d;
+    --brand-blue-ink: #7a9cf5;
+    --surface: #0c0f16;
+    --surface-raised: #161b26;
+    --ink: #f5f7fb;
+    --ink-muted: #a8afbd;
+    --hairline: #2a3242;
+    --border: #2a3242;
+    --border-strong: #66728a;
+    --input-bg: #0f1420;
+    --overlay: rgba(0, 0, 0, 0.6);
+    --success: #4cc26a;
+    --success-tint: #133a1f;
+    --info-tint: #15264d;
+    --info-ink: #c9d6f8;
+    --warning-tint: #3d2c08;
+    --warning-ink: #ffd98a;
+    --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.45);
+    --shadow-modal: 0 24px 64px rgba(0, 0, 0, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    background: var(--page);
+    color: var(--page-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 64px;
+  }
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+  h1 {
+    font-size: 34px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h2 {
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+  h3 {
+    font-size: 17px;
+    margin: 0 0 6px;
+  }
+  p {
+    margin: 0 0 10px;
+    max-width: 70ch;
+  }
+  .lead {
+    color: var(--page-muted);
+    font-size: 17px;
+    max-width: 72ch;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--page-muted);
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .seg {
+    display: inline-flex;
+    border: 1px solid color-mix(in srgb, var(--page-ink) 20%, transparent);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .seg button {
+    font: inherit;
+    font-size: 14px;
+    border: 0;
+    background: transparent;
+    color: var(--page-ink);
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] {
+    background: var(--page-ink);
+    color: var(--page);
+  }
+  .seg button:focus-visible {
+    outline: 2px solid #1450df;
+    outline-offset: 2px;
+  }
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 375px;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 980px) {
+    .pair {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .cap {
+    font-size: 13px;
+    color: var(--page-muted);
+    margin-top: 8px;
+  }
+  .note {
+    background: var(--note);
+    color: var(--note-ink);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    max-width: 80ch;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .box {
+    background: color-mix(in srgb, var(--page-ink) 4%, var(--page));
+    border: 1px solid color-mix(in srgb, var(--page-ink) 12%, transparent);
+    border-radius: 14px;
+    padding: 16px 18px;
+    min-width: 0;
+  }
+  .box ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .box li {
+    margin: 4px 0;
+  }
+  table.t {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .t th,
+  .t td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid color-mix(in srgb, var(--page-ink) 12%, transparent);
+    vertical-align: top;
+  }
+  .t th {
+    font-weight: 600;
+    color: var(--page-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .scroll {
+    overflow-x: auto;
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+  .q {
+    counter-increment: q;
+  }
+  .qs {
+    counter-reset: q;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .qs li {
+    background: color-mix(in srgb, var(--page-ink) 4%, var(--page));
+    border-radius: 12px;
+    padding: 12px 16px;
+  }
+  .qs li b::before {
+    content: "Q" counter(q) " · ";
+    color: var(--page-muted);
+  }
+
+  /* ===== Mock (SFZ app) ===== */
+  .mock {
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+      0 1px 0 color-mix(in srgb, var(--page-ink) 10%, transparent),
+      0 12px 40px rgba(12, 15, 22, 0.12);
+    border: 1px solid var(--hairline);
+    position: relative;
+    font-size: 15px;
+    min-width: 0;
+  }
+  .mock.desk {
+    width: 100%;
+  }
+  .mock.phone {
+    width: 375px;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 28px;
+  }
+  .mock .scrollbox {
+    overflow-x: auto;
+  }
+  .ico {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hdr {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 64px;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--surface);
+  }
+  .phone .hdr {
+    height: 56px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .ibtn {
+    width: 40px;
+    height: 40px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: var(--radius-sm);
+    color: var(--ink);
+    background: transparent;
+    border: 0;
+    flex: none;
+  }
+  .ibtn.on {
+    background: var(--brand-blue-tint);
+    color: var(--brand-blue-ink);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .logo {
+    width: 44px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--brand-blue);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+  .dark .logo,
+  .mocks-dark .logo {
+    background: #fff;
+    color: #1450df;
+  }
+  .brand small {
+    font-weight: 500;
+    color: var(--ink-muted);
+    font-size: 14px;
+  }
+  .spacer {
+    flex: 1;
+  }
+  .ask {
+    flex: 0 1 560px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 8px 0 12px;
+    border-radius: var(--radius-pill);
+    background: var(--surface-raised);
+    border: 1px solid var(--hairline);
+    color: var(--ink-muted);
+    font-size: 14px;
+    min-width: 0;
+  }
+  .ask span.t {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ask.focus {
+    background: var(--input-bg);
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-blue) 25%, transparent);
+    color: var(--ink);
+  }
+  .kbd {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1px 5px;
+    color: var(--ink-muted);
+  }
+  .spark {
+    color: var(--brand-blue-ink);
+  }
+  .av {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--brand-blue-tint);
+    color: var(--brand-blue-ink);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex: none;
+  }
+  .path {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    font-size: 13px;
+    color: var(--ink-muted);
+    border-bottom: 1px solid var(--hairline);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .phone .path {
+    padding: 8px 12px;
+  }
+  .path a {
+    color: var(--brand-blue-ink);
+    text-decoration: none;
+  }
+  .path b {
+    color: var(--ink);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .path .sep {
+    color: var(--border-strong);
+  }
+  .body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 260px;
+  }
+  .phone .body {
+    padding: 16px 12px;
+    min-height: 300px;
+  }
+  .title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .phone .title {
+    font-size: 22px;
+  }
+  .muted {
+    color: var(--ink-muted);
+  }
+  .card {
+    background: var(--surface-raised);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+  }
+  .row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .ph {
+    height: 10px;
+    border-radius: 5px;
+    background: var(--hairline);
+  }
+  .tabbar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--hairline);
+    background: var(--surface);
+    height: 56px;
+  }
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 10.5px;
+    color: var(--ink-muted);
+  }
+  .tab.on {
+    color: var(--brand-blue-ink);
+    font-weight: 600;
+  }
+  .scrim {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay);
+  }
+  .sheet-top {
+    position: absolute;
+    left: 12px;
+    top: 56px;
+    width: min(760px, calc(100% - 24px));
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-modal);
+    padding: 18px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .sheet-top h4,
+  .bsheet h4 {
+    margin: 0 0 6px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+  .mi {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .mi.on {
+    background: var(--brand-blue-tint);
+    color: var(--brand-blue-ink);
+    font-weight: 600;
+  }
+  .mi .ico {
+    width: 18px;
+    height: 18px;
+  }
+  .cnt {
+    margin-left: auto;
+    background: var(--brand-red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 0 6px;
+    line-height: 18px;
+  }
+  .sheet-foot {
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--hairline);
+    padding-top: 10px;
+  }
+  .bsheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 56px;
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    box-shadow: var(--shadow-modal);
+    padding: 8px 12px 12px;
+    max-height: 78%;
+    overflow: hidden;
+  }
+  .grip {
+    width: 36px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border-strong);
+    opacity: 0.5;
+    margin: 4px auto 6px;
+  }
+  .bhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px 6px;
+    font-weight: 700;
+  }
+  .bcols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 10px;
+  }
+  .club {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-raised);
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .club .crest {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--brand-blue);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  /* ask sheet */
+  .asksheet {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+    width: min(640px, calc(100% - 24px));
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-modal);
+    overflow: hidden;
+  }
+  .askin {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 16px;
+  }
+  .askin .caret {
+    border-right: 2px solid var(--brand-blue);
+    padding-right: 1px;
+  }
+  .scope {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 13px;
+    align-items: center;
+  }
+  .chip {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--surface);
+  }
+  .chip.on {
+    background: var(--brand-blue-tint);
+    border-color: transparent;
+    color: var(--brand-blue-ink);
+    font-weight: 600;
+  }
+  .hits {
+    padding: 6px 8px;
+  }
+  .hit {
+    display: flex;
+    gap: 10px;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+  }
+  .hit.on {
+    background: var(--surface-raised);
+  }
+  .hit .k {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+  }
+  .hit .s {
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .askcta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--hairline);
+    background: var(--surface-raised);
+    font-size: 14px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 600;
+    border: 0;
+    white-space: nowrap;
+  }
+  .btn.p {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+  .btn.s {
+    background: transparent;
+    color: var(--brand-blue-ink);
+    border: 1px solid var(--border);
+  }
+  /* answer */
+  .ans {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 20px;
+  }
+  .phone .ans {
+    grid-template-columns: 1fr;
+  }
+  .qline {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .who .dot {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--brand-blue);
+    color: #fff;
+    display: grid;
+    place-items: center;
+  }
+  .who .dot .ico {
+    width: 14px;
+    height: 14px;
+  }
+  .answer p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .answer ul {
+    margin: 0 0 10px;
+    padding-left: 20px;
+  }
+  .answer li {
+    margin: 4px 0;
+  }
+  .cite {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 5px;
+    background: var(--brand-blue-tint);
+    color: var(--brand-blue-ink);
+    font-size: 11px;
+    font-weight: 700;
+    vertical-align: 2px;
+    margin-left: 2px;
+  }
+  .cite.on {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+  .src {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .srcc {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 13px;
+    background: var(--surface);
+  }
+  .srcc.on {
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand-blue) 20%, transparent);
+  }
+  .srcc .n {
+    font-weight: 700;
+    color: var(--brand-blue-ink);
+    margin-right: 4px;
+  }
+  .srcc .k {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+  }
+  .srcc q {
+    display: block;
+    color: var(--ink-muted);
+    margin-top: 4px;
+    quotes: "„" "“";
+  }
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px;
+    color: var(--ink-muted);
+    border-top: 1px solid var(--hairline);
+    padding-top: 10px;
+  }
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    margin: 4px 0 10px;
+  }
+  .tbl th,
+  .tbl td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .tbl th {
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+  .badge {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 1px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge.w {
+    background: var(--warning-tint);
+    color: var(--warning-ink);
+  }
+  .badge.ok {
+    background: var(--success-tint);
+    color: var(--success);
+  }
+  .csheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    box-shadow: var(--shadow-modal);
+    padding: 8px 16px 18px;
+    font-size: 14px;
+  }
+  .csheet q {
+    display: block;
+    margin: 8px 0;
+    padding-left: 10px;
+    border-left: 3px solid var(--brand-blue);
+    quotes: "„" "“";
+  }
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .typing {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: var(--brand-blue);
+    vertical-align: -2px;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .typing {
+      animation: none;
+    }
+  }
+  pre.mermaid {
+    background: color-mix(in srgb, var(--page-ink) 4%, var(--page));
+    border-radius: 14px;
+    padding: 16px;
+    overflow-x: auto;
+  }
+</style>
+
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 20 20">
+    <circle cx="4" cy="4" r="1.3" />
+    <circle cx="10" cy="4" r="1.3" />
+    <circle cx="16" cy="4" r="1.3" />
+    <circle cx="4" cy="10" r="1.3" />
+    <circle cx="10" cy="10" r="1.3" />
+    <circle cx="16" cy="10" r="1.3" />
+    <circle cx="4" cy="16" r="1.3" />
+    <circle cx="10" cy="16" r="1.3" />
+    <circle cx="16" cy="16" r="1.3" />
+  </symbol>
+  <symbol id="i-search" viewBox="0 0 20 20">
+    <circle cx="8.5" cy="8.5" r="5.5" />
+    <path d="M13 13l4.5 4.5" />
+  </symbol>
+  <symbol id="i-spark" viewBox="0 0 20 20">
+    <path d="M10 2.5l1.6 4.4 4.4 1.6-4.4 1.6L10 14.5l-1.6-4.4L4 8.5l4.4-1.6z" />
+    <path d="M15.5 13.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z" />
+  </symbol>
+  <symbol id="i-home" viewBox="0 0 20 20">
+    <path d="M3 9l7-6 7 6v8H3z" />
+    <path d="M8 17v-5h4v5" />
+  </symbol>
+  <symbol id="i-users" viewBox="0 0 20 20">
+    <circle cx="7.5" cy="7" r="3" />
+    <path d="M2 17c0-3 2.5-5 5.5-5s5.5 2 5.5 5" />
+    <circle cx="14.5" cy="6.5" r="2.3" />
+    <path d="M14.5 11.5c2 0 3.5 1.5 3.5 4" />
+  </symbol>
+  <symbol id="i-file" viewBox="0 0 20 20">
+    <path d="M5 2.5h7l3 3v12H5z" />
+    <path d="M8 9h5M8 12h5M8 15h3" />
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 20 20">
+    <circle cx="10" cy="10" r="7.5" />
+    <path d="M6.8 10.2l2.2 2.2 4.3-4.6" />
+  </symbol>
+  <symbol id="i-trophy" viewBox="0 0 20 20">
+    <path d="M6 3h8v4a4 4 0 0 1-8 0z" />
+    <path d="M6 5H3v1a3 3 0 0 0 3 3M14 5h3v1a3 3 0 0 1-3 3M10 11v3M7 17h6M8 14h4v3H8z" />
+  </symbol>
+  <symbol id="i-bell" viewBox="0 0 20 20">
+    <path d="M5 14V9a5 5 0 0 1 10 0v5l1.5 2h-13z" />
+    <path d="M8.5 18h3" />
+  </symbol>
+  <symbol id="i-gear" viewBox="0 0 20 20">
+    <path d="M3 6h14M3 14h14" />
+    <circle cx="7" cy="6" r="2" />
+    <circle cx="13" cy="14" r="2" />
+  </symbol>
+  <symbol id="i-chart" viewBox="0 0 20 20"><path d="M3 17h14M6 14V9M10 14V5M14 14v-3" /></symbol>
+  <symbol id="i-cal" viewBox="0 0 20 20">
+    <rect x="3" y="4" width="14" height="13" rx="2" />
+    <path d="M3 8h14M7 2.5v3M13 2.5v3" />
+  </symbol>
+  <symbol id="i-info" viewBox="0 0 20 20">
+    <circle cx="10" cy="10" r="7.5" />
+    <path d="M10 9v5M10 6.2v.1" />
+  </symbol>
+  <symbol id="i-x" viewBox="0 0 20 20"><path d="M5 5l10 10M15 5L5 15" /></symbol>
+  <symbol id="i-sync" viewBox="0 0 20 20"><path d="M4 7h11l-3-3M16 13H5l3 3" /></symbol>
+  <symbol id="i-edit" viewBox="0 0 20 20"><path d="M4 16l1-4 8-8 3 3-8 8z" /></symbol>
+  <symbol id="i-up" viewBox="0 0 20 20"><path d="M6 11l4-4 4 4" /></symbol>
+  <symbol id="i-copy" viewBox="0 0 20 20">
+    <rect x="7" y="7" width="10" height="10" rx="2" />
+    <path d="M13 7V4.5A1.5 1.5 0 0 0 11.5 3h-7A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13H7" />
+  </symbol>
+  <symbol id="i-thumb" viewBox="0 0 20 20">
+    <path
+      d="M7 9l3-6c1.3 0 2 .8 2 2v3h3.5a1.5 1.5 0 0 1 1.5 1.8l-1 5A1.5 1.5 0 0 1 14.5 16H7zM3 9h4v7H3z"
+    />
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header class="section">
+    <span class="eyebrow">Rozvoj klubu · návrh na schválenie · 7. 11. 2026</span>
+    <h1>Hlavička s plachtou menu, cestou a otázkou na AI</h1>
+    <p class="lead">
+      Návrh pre Jána Letka. Hlavička a menu podľa vzoru Contineo, prenesené do SFZ Design System.
+      Pole v hlavičke hľadá v obsahu hneď pri písaní a na Enter odpovie AI z obsahu a údajov, ktoré
+      by používateľ videl aj sám, vždy s odkazmi na zdroj. Kód začne až po schválení.
+    </p>
+    <div class="toolbar" role="group" aria-label="Téma makiet">
+      <span class="eyebrow" style="margin-right: 4px">Makety</span>
+      <span class="seg"
+        ><button type="button" id="mk-light" aria-pressed="true">Svetlá</button
+        ><button type="button" id="mk-dark" aria-pressed="false">Tmavá</button></span
+      >
+    </div>
+    <div class="note">
+      Makety sú poskladané z tokenov SFZ DS (farby, zaoblenia, medzery, písmo SF Pro). Logo je tu
+      len zástupný štítok, v aplikácii ostáva logo D z balíka. Ikony sú približné; v aplikácii sa
+      použijú ikony DS.
+    </div>
+  </header>
+
+  <!-- ============ 1. HLAVIČKA + CESTA ============ -->
+  <section class="section" id="hlavicka">
+    <span class="eyebrow">1 · Hlavička a cesta</span>
+    <h2>Jeden riadok hlavičky, pod ním cesta</h2>
+    <p>
+      Zľava: tlačidlo plachty menu (9 bodiek), logo s názvom Akadémia, v strede pole „Opýtajte sa
+      alebo hľadajte“, vpravo avatar (účet, téma, odhlásenie). Riadok s položkami NavBaru odchádza
+      do plachty, ako v Contineu. Pod hlavičkou je pás cesty na každej stránke okrem Domova. Cesta
+      sa skladá z adresy, nie z histórie, takže je rovnaká aj po otvorení odkazu z e-mailu.
+    </p>
+    <div class="pair">
+      <div>
+        <div class="mock desk">
+          <div class="scrollbox">
+            <div class="hdr">
+              <button class="ibtn" aria-label="Celé menu">
+                <svg class="ico"><use href="#i-grid" /></svg>
+              </button>
+              <div class="brand">
+                <span class="logo">SFZ</span>Akadémia <small>vzdelávania</small>
+              </div>
+              <span class="spacer"></span>
+              <div class="ask">
+                <svg class="ico spark"><use href="#i-spark" /></svg
+                ><span class="t">Opýtajte sa alebo hľadajte v Akadémii</span
+                ><span class="kbd">⌘K</span>
+              </div>
+              <span class="spacer"></span>
+              <span class="av">JL</span>
+            </div>
+            <nav class="path">
+              <a href="#hlavicka">Domov</a><span class="sep">›</span
+              ><a href="#hlavicka">Môj klub · MŠK Žilina</a><span class="sep">›</span><b>Kompas</b>
+            </nav>
+            <div class="body">
+              <p class="title">Kompas klubu</p>
+              <div class="row">
+                <div class="card" style="flex: 1 1 200px">
+                  <div class="ph" style="width: 60%"></div>
+                  <div class="ph" style="width: 85%; margin-top: 8px"></div>
+                </div>
+                <div class="card" style="flex: 1 1 200px">
+                  <div class="ph" style="width: 40%"></div>
+                  <div class="ph" style="width: 75%; margin-top: 8px"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="ph" style="width: 30%"></div>
+                <div class="ph" style="width: 92%; margin-top: 8px"></div>
+                <div class="ph" style="width: 70%; margin-top: 8px"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cap">
+          Desktop od 768 px. Hlavička 64 px, sticky. Klubové podmenu (Prehľad · Kompas · Plán …)
+          zostáva na stránke klubu ako dnes.
+        </p>
+      </div>
+      <div>
+        <div class="mock phone">
+          <div class="hdr">
+            <div class="brand"><span class="logo">SFZ</span>Akadémia</div>
+            <span class="spacer"></span>
+            <button class="ibtn" aria-label="Opýtať sa">
+              <svg class="ico spark"><use href="#i-spark" /></svg>
+            </button>
+            <span class="av">JL</span>
+          </div>
+          <nav class="path">
+            <a href="#hlavicka">‹ Môj klub</a><span class="sep">›</span><b>Kompas</b>
+          </nav>
+          <div class="body">
+            <p class="title">Kompas klubu</p>
+            <div class="card">
+              <div class="ph" style="width: 60%"></div>
+              <div class="ph" style="width: 85%; margin-top: 8px"></div>
+            </div>
+            <div class="card">
+              <div class="ph" style="width: 40%"></div>
+              <div class="ph" style="width: 75%; margin-top: 8px"></div>
+            </div>
+          </div>
+          <div class="tabbar">
+            <div class="tab">
+              <svg class="ico"><use href="#i-home" /></svg>Domov
+            </div>
+            <div class="tab on">
+              <svg class="ico"><use href="#i-users" /></svg>Môj klub
+            </div>
+            <div class="tab">
+              <svg class="ico"><use href="#i-file" /></svg>Oblasti
+            </div>
+            <div class="tab">
+              <svg class="ico"><use href="#i-check" /></svg>Kompas
+            </div>
+            <div class="tab">
+              <svg class="ico"><use href="#i-grid" /></svg>Menu
+            </div>
+          </div>
+        </div>
+        <p class="cap">
+          375 px. Hlavička 56 px: logo, ikona otázky, avatar. Cesta skrátená na rodiča a aktuálnu
+          stránku. V TabBare sa „Viac“ mení na „Menu“ a otvára spodnú plachtu.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. PLACHTA MENU ============ -->
+  <section class="section" id="menu">
+    <span class="eyebrow">2 · Menu ako plachta</span>
+    <h2>Celé menu na jedno ťuknutie</h2>
+    <p>
+      Na desktope sa plachta rozbalí pod tlačidlom 9 bodiek, na telefóne vyjde zospodu nad TabBar.
+      Obsah je ten istý, skladá ho <code>buildNavigation()</code> podľa rolí: Hlavné · Môj klub (s
+      prepínačom klubu) · Ďalšie · Správa (len admin). Aktuálna sekcia je zvýraznená, počty
+      čakajúcich vecí ako odznak. Zavrie ju Esc, závoj, výber, zmena stránky a na telefóne
+      potiahnutie nadol. Bez JavaScriptu je to <code>&lt;details&gt;</code> na desktope a odkaz na
+      <code>/viac</code> na telefóne.
+    </p>
+    <div class="pair">
+      <div>
+        <div class="mock desk" style="min-height: 440px">
+          <div class="scrollbox">
+            <div class="hdr">
+              <button class="ibtn on" aria-label="Celé menu" aria-expanded="true">
+                <svg class="ico"><use href="#i-grid" /></svg>
+              </button>
+              <div class="brand">
+                <span class="logo">SFZ</span>Akadémia <small>vzdelávania</small>
+              </div>
+              <span class="spacer"></span>
+              <div class="ask">
+                <svg class="ico spark"><use href="#i-spark" /></svg
+                ><span class="t">Opýtajte sa alebo hľadajte v Akadémii</span
+                ><span class="kbd">⌘K</span>
+              </div>
+              <span class="spacer"></span><span class="av">JL</span>
+            </div>
+            <div class="scrim" style="top: 64px"></div>
+            <div class="sheet-top" style="top: 72px">
+              <div>
+                <h4>Hlavné</h4>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-home" /></svg>Domov
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-file" /></svg>Oblasti
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-trophy" /></svg>Kluby
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-bell" /></svg>Novinky
+                </div>
+              </div>
+              <div>
+                <h4>Môj klub</h4>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-users" /></svg>Prehľad
+                </div>
+                <div class="mi on">
+                  <svg class="ico"><use href="#i-check" /></svg>Kompas
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-cal" /></svg>Plán
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-file" /></svg>Licenčné hodnotenie<span class="cnt"
+                    >2</span
+                  >
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-users" /></svg>Mentoring
+                </div>
+              </div>
+              <div>
+                <h4>Ďalšie</h4>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-chart" /></svg>Analýza
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-cal" /></svg>Pracovisko mentora
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-info" /></svg>O Akadémii
+                </div>
+              </div>
+              <div>
+                <h4>Správa</h4>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-trophy" /></svg>Kluby
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-edit" /></svg>Obsah
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-bell" /></svg>Novinky
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-sync" /></svg>Sportnet
+                </div>
+                <div class="mi">
+                  <svg class="ico"><use href="#i-spark" /></svg>AI a náklady
+                </div>
+              </div>
+              <div class="sheet-foot">
+                <span><span class="kbd">Esc</span> zavrie</span
+                ><span>MŠK Žilina · Zmeniť klub</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cap">
+          Desktop, administrátor s klubom. Bočné menu administrácie (G5) na desktope ostáva; plachta
+          k nemu pridáva rýchly skok odkiaľkoľvek.
+        </p>
+      </div>
+      <div>
+        <div class="mock phone" style="height: 640px">
+          <div class="hdr">
+            <div class="brand"><span class="logo">SFZ</span>Akadémia</div>
+            <span class="spacer"></span
+            ><button class="ibtn">
+              <svg class="ico spark"><use href="#i-spark" /></svg></button
+            ><span class="av">JL</span>
+          </div>
+          <nav class="path">
+            <a href="#menu">‹ Môj klub</a><span class="sep">›</span><b>Kompas</b>
+          </nav>
+          <div class="body"><p class="title">Kompas klubu</p></div>
+          <div class="scrim" style="bottom: 56px"></div>
+          <div class="bsheet">
+            <div class="grip"></div>
+            <div class="bhead">
+              <span>Celé menu</span
+              ><button class="ibtn" aria-label="Zavrieť">
+                <svg class="ico"><use href="#i-x" /></svg>
+              </button>
+            </div>
+            <div class="club">
+              <span class="crest">MŠK</span><span style="flex: 1">MŠK Žilina</span
+              ><span class="muted" style="font-size: 13px">Zmeniť</span>
+            </div>
+            <div class="bcols">
+              <div>
+                <h4>Môj klub</h4>
+                <div class="mi">Prehľad</div>
+                <div class="mi on">Kompas</div>
+                <div class="mi">Plán</div>
+                <div class="mi">Licenčné hodn.<span class="cnt">2</span></div>
+                <div class="mi">Mentoring</div>
+              </div>
+              <div>
+                <h4>Ďalšie</h4>
+                <div class="mi">Kluby</div>
+                <div class="mi">Novinky</div>
+                <div class="mi">Analýza</div>
+                <div class="mi">Môj účet</div>
+                <div class="mi">O Akadémii</div>
+              </div>
+            </div>
+          </div>
+          <div class="tabbar" style="position: absolute; left: 0; right: 0; bottom: 0">
+            <div class="tab">
+              <svg class="ico"><use href="#i-home" /></svg>Domov
+            </div>
+            <div class="tab">
+              <svg class="ico"><use href="#i-users" /></svg>Môj klub
+            </div>
+            <div class="tab">
+              <svg class="ico"><use href="#i-file" /></svg>Oblasti
+            </div>
+            <div class="tab">
+              <svg class="ico"><use href="#i-check" /></svg>Kompas
+            </div>
+            <div class="tab on">
+              <svg class="ico"><use href="#i-grid" /></svg>Menu
+            </div>
+          </div>
+        </div>
+        <p class="cap">
+          375 px. Spodná plachta s úchytom, TabBar ostáva viditeľný. Admin tu dostane aj stĺpec
+          Správa; mobilný pruh s hamburgerom a Drawerom v administrácii odpadne.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. OTÁZKA ============ -->
+  <section class="section" id="otazka">
+    <span class="eyebrow">3 · Pole otázky</span>
+    <h2>Hľadanie hneď pri písaní, AI odpoveď na Enter</h2>
+    <p>
+      Klik, fokus alebo <span class="kbd">⌘K</span> rozbalí pole do plachty. Počas písania sa
+      ukazujú výsledky dnešného vyhľadávania (<code>search.service</code>, bez AI, bez nákladov):
+      stačí šípkami vybrať stránku. Enter alebo „Opýtať sa“ otvorí stránku odpovede. Rozsah je čip
+      pod poľom: Obsah (každý), Môj klub (vedenie, tréneri, mentor svojho klubu), Všetky kluby
+      (admin). Rozsah nikdy nerozširuje oprávnenia, len zužuje, kde sa hľadá.
+    </p>
+    <div class="pair">
+      <div>
+        <div class="mock desk" style="min-height: 470px">
+          <div class="scrollbox">
+            <div class="hdr">
+              <button class="ibtn">
+                <svg class="ico"><use href="#i-grid" /></svg>
+              </button>
+              <div class="brand"><span class="logo">SFZ</span>Akadémia</div>
+              <span class="spacer"></span><span class="spacer"></span><span class="av">JL</span>
+            </div>
+            <div class="scrim" style="top: 64px"></div>
+            <div class="asksheet">
+              <div class="askin">
+                <svg class="ico spark"><use href="#i-spark" /></svg
+                ><span style="flex: 1"
+                  >ako nastaviť tréningový proces mládeže<span class="caret"></span></span
+                ><span class="kbd">Esc</span>
+              </div>
+              <div class="scope">
+                <span class="muted">Hľadať v:</span><span class="chip on">Obsah Akadémie</span
+                ><span class="chip">Môj klub · MŠK Žilina</span>
+              </div>
+              <div class="hits">
+                <div class="hit on">
+                  <svg class="ico"><use href="#i-file" /></svg>
+                  <div>
+                    <div class="k">Metodika · Oblasť 4 Mládež</div>
+                    <div>Tréningový proces v kategóriách U9 – U15</div>
+                    <div class="s">
+                      … plán mikrocyklu, počet jednotiek a <b>tréningový</b> obsah podľa veku …
+                    </div>
+                  </div>
+                </div>
+                <div class="hit">
+                  <svg class="ico"><use href="#i-check" /></svg>
+                  <div>
+                    <div class="k">Prax · Šéftréner mládeže</div>
+                    <div>Prvý krok: zjednotiť ročný plán</div>
+                  </div>
+                </div>
+                <div class="hit">
+                  <svg class="ico"><use href="#i-file" /></svg>
+                  <div>
+                    <div class="k">Šablóna</div>
+                    <div>Ročný plán tréningového procesu</div>
+                  </div>
+                </div>
+              </div>
+              <div class="askcta">
+                <svg class="ico spark"><use href="#i-spark" /></svg
+                ><span style="flex: 1"
+                  >Nenašli ste? AI odpovie z obsahu Akadémie a uvedie zdroje.</span
+                ><span class="btn p"
+                  >Opýtať sa
+                  <span class="kbd" style="color: #fff; border-color: rgba(255, 255, 255, 0.5)"
+                    >↵</span
+                  ></span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cap">
+          Desktop. Plachta otázky na mieste poľa, 640 px. Výsledky sú obyčajné odkazy.
+        </p>
+      </div>
+      <div>
+        <div class="mock phone" style="height: 640px">
+          <div class="hdr">
+            <button class="ibtn" aria-label="Zavrieť">
+              <svg class="ico"><use href="#i-x" /></svg></button
+            ><span style="font-weight: 700">Opýtať sa</span><span class="spacer"></span>
+          </div>
+          <div class="askin" style="min-height: 96px">
+            <span>ako nastaviť tréningový proces mládeže<span class="caret"></span></span>
+          </div>
+          <div class="scope">
+            <span class="chip on">Obsah</span><span class="chip">Môj klub</span>
+          </div>
+          <div class="hits">
+            <div class="hit">
+              <svg class="ico"><use href="#i-file" /></svg>
+              <div>
+                <div class="k">Metodika · Oblasť 4</div>
+                <div>Tréningový proces v kategóriách U9 – U15</div>
+              </div>
+            </div>
+            <div class="hit">
+              <svg class="ico"><use href="#i-check" /></svg>
+              <div>
+                <div class="k">Prax</div>
+                <div>Prvý krok: zjednotiť ročný plán</div>
+              </div>
+            </div>
+            <div class="hit">
+              <svg class="ico"><use href="#i-file" /></svg>
+              <div>
+                <div class="k">Šablóna</div>
+                <div>Ročný plán tréningového procesu</div>
+              </div>
+            </div>
+          </div>
+          <div
+            style="
+              position: absolute;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              padding: 12px;
+              border-top: 1px solid var(--hairline);
+              background: var(--surface);
+            "
+          >
+            <span class="btn p" style="width: 100%; justify-content: center; height: 44px"
+              >Opýtať sa AI</span
+            >
+          </div>
+        </div>
+        <p class="cap">
+          375 px. Ikona otázky otvorí plachtu cez celú obrazovku, tlačidlo 44 px v päte nad
+          klávesnicou.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. ODPOVEĎ ============ -->
+  <section class="section" id="odpoved">
+    <span class="eyebrow">4 · Odpoveď</span>
+    <h2>Odpoveď ako od kolegu z Akadémie, so zdrojmi</h2>
+    <p>
+      Odpoveď sa píše postupne (streaming). Každé tvrdenie nesie značku <span class="cite">1</span>,
+      ktorá vedie na úryvok zo zdroja; zdroje vpravo sú odkazy na stránky Akadémie. Keď obsah
+      odpoveď nemá, AI to povie a ponúkne výsledky vyhľadávania. Pod odpoveďou: kopírovať,
+      hodnotenie palcom, a riadok „Odpovedá AI z obsahu, ktorý vidíte. Over si to v zdroji.“
+    </p>
+    <div class="pair">
+      <div>
+        <div class="mock desk">
+          <div class="scrollbox">
+            <div class="hdr">
+              <button class="ibtn">
+                <svg class="ico"><use href="#i-grid" /></svg>
+              </button>
+              <div class="brand"><span class="logo">SFZ</span>Akadémia</div>
+              <span class="spacer"></span>
+              <div class="ask">
+                <svg class="ico spark"><use href="#i-spark" /></svg
+                ><span class="t" style="color: var(--ink)"
+                  >ako nastaviť tréningový proces mládeže</span
+                >
+              </div>
+              <span class="spacer"></span><span class="av">JL</span>
+            </div>
+            <nav class="path">
+              <a href="#odpoved">Domov</a><span class="sep">›</span><b>Odpoveď</b>
+            </nav>
+            <div class="body">
+              <div class="ans">
+                <div class="answer">
+                  <div class="qline">Ako nastaviť tréningový proces mládeže?</div>
+                  <div class="who" style="margin: 8px 0 12px">
+                    <span class="dot"
+                      ><svg class="ico"><use href="#i-spark" /></svg></span
+                    >Asistent Akadémie · z obsahu Akadémie
+                  </div>
+                  <p>
+                    Začnite jedným ročným plánom pre všetky mládežnícke kategórie, ktorý zostaví
+                    šéftréner mládeže a odsúhlasí vedenie klubu.<span class="cite">2</span> Plán
+                    rozdeľte na mezocykly a v každej kategórii určte počet tréningových jednotiek
+                    týždenne podľa veku.<span class="cite on">1</span>
+                  </p>
+                  <ul>
+                    <li>
+                      U9 – U11: dôraz na techniku a hru, 2 – 3 jednotky týždenne.<span class="cite"
+                        >1</span
+                      >
+                    </li>
+                    <li>
+                      U12 – U15: postupne taktika a kondícia, 3 – 4 jednotky.<span class="cite"
+                        >1</span
+                      >
+                    </li>
+                    <li>
+                      Na začiatok použite šablónu ročného plánu z Praxe.<span class="cite">3</span>
+                    </li>
+                  </ul>
+                  <p>
+                    Ak chcete, pozrite si, ako vám v Kompase vyšla oblasť Mládež. Tú otázku vám
+                    zodpoviem v rozsahu „Môj klub“.
+                  </p>
+                  <div class="foot">
+                    <span class="btn s"
+                      ><svg class="ico"><use href="#i-copy" /></svg>Kopírovať</span
+                    ><span class="btn s"
+                      ><svg class="ico"><use href="#i-thumb" /></svg>Pomohlo</span
+                    ><span style="flex: 1"></span>Odpovedá AI z obsahu, ktorý vidíte. Over si to v
+                    zdroji.
+                  </div>
+                </div>
+                <div class="src">
+                  <span class="eyebrow">Zdroje</span>
+                  <div class="srcc on">
+                    <span class="n">1</span><span class="k">Metodika · Oblasť 4</span>
+                    <div>Tréningový proces v kategóriách U9 – U15</div>
+                    <q>Počet tréningových jednotiek sa odvíja od veku…</q>
+                  </div>
+                  <div class="srcc">
+                    <span class="n">2</span><span class="k">Prax · Šéftréner mládeže</span>
+                    <div>Prvý krok: zjednotiť ročný plán</div>
+                  </div>
+                  <div class="srcc">
+                    <span class="n">3</span><span class="k">Šablóna</span>
+                    <div>Ročný plán tréningového procesu</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cap">
+          Desktop. Odpoveď vľavo (max. ~65 znakov na riadok), zdroje vpravo. Prejdenie myšou po
+          značke zvýrazní zdroj.
+        </p>
+      </div>
+      <div>
+        <div class="mock phone" style="height: 640px">
+          <div class="hdr">
+            <div class="brand"><span class="logo">SFZ</span>Akadémia</div>
+            <span class="spacer"></span
+            ><button class="ibtn">
+              <svg class="ico spark"><use href="#i-spark" /></svg></button
+            ><span class="av">JL</span>
+          </div>
+          <nav class="path">
+            <a href="#odpoved">‹ Domov</a><span class="sep">›</span><b>Odpoveď</b>
+          </nav>
+          <div class="body">
+            <div class="answer">
+              <div class="qline" style="font-size: 18px">
+                Ako nastaviť tréningový proces mládeže?
+              </div>
+              <div class="who" style="margin: 6px 0 10px">
+                <span class="dot"
+                  ><svg class="ico"><use href="#i-spark" /></svg></span
+                >z obsahu Akadémie
+              </div>
+              <p>
+                Začnite jedným ročným plánom pre všetky kategórie.<span class="cite">2</span> V
+                každej kategórii určte počet jednotiek podľa veku.<span class="cite on">1</span
+                ><span class="typing"></span>
+              </p>
+            </div>
+          </div>
+          <div class="scrim"></div>
+          <div class="csheet">
+            <div class="grip"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center">
+              <b>Zdroj 1 z 3</b
+              ><button class="ibtn" aria-label="Zavrieť">
+                <svg class="ico"><use href="#i-x" /></svg>
+              </button>
+            </div>
+            <div
+              class="muted"
+              style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em"
+            >
+              Metodika · Oblasť 4 Mládež
+            </div>
+            <div style="font-weight: 600">Tréningový proces v kategóriách U9 – U15</div>
+            <q>Počet tréningových jednotiek sa odvíja od veku a výkonnostnej úrovne družstva…</q>
+            <div class="row" style="margin-top: 6px">
+              <span class="btn s" style="height: 44px">‹ Predošlý</span
+              ><span class="btn s" style="height: 44px">Ďalší ›</span
+              ><span class="btn p" style="height: 44px; flex: 1; justify-content: center"
+                >Otvoriť</span
+              >
+            </div>
+          </div>
+        </div>
+        <p class="cap">
+          375 px. Ťuknutie na značku otvorí plachtu citácie zospodu; zoznam zdrojov je aj pod
+          odpoveďou.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. ÚDAJE ============ -->
+  <section class="section" id="udaje">
+    <span class="eyebrow">5 · Otázky na údaje</span>
+    <h2>Admin sa pýta na kluby, vedenie na svoj klub</h2>
+    <p>
+      V rozsahu „Môj klub“ alebo „Všetky kluby“ AI nečíta databázu. Volá tie isté funkcie service
+      vrstvy ako obrazovky, s identitou prihláseného človeka, takže vidí presne to, čo by videl on
+      (tenant filter <code>clubId</code>, ADR 0003). Zdrojom je potom obrazovka, odkiaľ údaj
+      pochádza. Prístup k údajom klubu cez AI sa zapíše do audit logu.
+    </p>
+    <div class="mock desk">
+      <div class="scrollbox">
+        <div class="hdr">
+          <button class="ibtn">
+            <svg class="ico"><use href="#i-grid" /></svg>
+          </button>
+          <div class="brand"><span class="logo">SFZ</span>Akadémia</div>
+          <span class="spacer"></span>
+          <div class="ask">
+            <svg class="ico spark"><use href="#i-spark" /></svg
+            ><span class="t" style="color: var(--ink)"
+              >ktoré kluby v ObFZ Žilina ešte neodoslali Kompas</span
+            >
+          </div>
+          <span class="spacer"></span><span class="av">JL</span>
+        </div>
+        <nav class="path"><a href="#udaje">Domov</a><span class="sep">›</span><b>Odpoveď</b></nav>
+        <div class="body">
+          <div class="ans">
+            <div class="answer">
+              <div class="qline">Ktoré kluby v ObFZ Žilina ešte neodoslali Kompas?</div>
+              <div class="who" style="margin: 8px 0 12px">
+                <span class="dot"
+                  ><svg class="ico"><use href="#i-spark" /></svg></span
+                >Asistent Akadémie · rozsah Všetky kluby · údaje k 7. 11. 2026 14:20
+              </div>
+              <p>
+                V ObFZ Žilina je v Akadémii 14 klubov. Kompas za sezónu 2026/27 zatiaľ neodoslali
+                tri:<span class="cite">1</span>
+              </p>
+              <table class="tbl">
+                <thead>
+                  <tr>
+                    <th>Klub</th>
+                    <th>Stav Kompasu</th>
+                    <th>Mentor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>TJ Príklad A</td>
+                    <td><span class="badge w">Rozpracovaný</span></td>
+                    <td>áno</td>
+                  </tr>
+                  <tr>
+                    <td>FK Príklad B</td>
+                    <td><span class="badge w">Nezačatý</span></td>
+                    <td>nie</td>
+                  </tr>
+                  <tr>
+                    <td>OŠK Príklad C</td>
+                    <td><span class="badge w">Rozpracovaný</span></td>
+                    <td>áno</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>
+                Dva z nich majú mentora, ktorý im môže pripomenúť termín.<span class="cite">2</span>
+              </p>
+              <div class="foot">
+                <span class="btn s"
+                  ><svg class="ico"><use href="#i-copy" /></svg>Kopírovať</span
+                ><span style="flex: 1"></span>Údaje zo Správy klubov, v rozsahu vašich oprávnení.
+              </div>
+            </div>
+            <div class="src">
+              <span class="eyebrow">Zdroje</span>
+              <div class="srcc">
+                <span class="n">1</span><span class="k">Správa · Kluby</span>
+                <div>Kluby ObFZ Žilina, filter Kompas</div>
+              </div>
+              <div class="srcc">
+                <span class="n">2</span><span class="k">Pracovisko mentora</span>
+                <div>Priradenie mentorov</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="cap">
+      Ukážkové názvy klubov. Tabuľka v odpovedi je Table z DS; čísla vždy s časom, ku ktorému
+      platia.
+    </p>
+  </section>
+
+  <!-- ============ 6. TOK ============ -->
+  <section class="section" id="tok">
+    <span class="eyebrow">6 · Tok otázky</span>
+    <h2>Čo sa deje medzi Enterom a odpoveďou</h2>
+    <pre class="mermaid">
+sequenceDiagram
+  participant U as Používateľ
+  participant P as /opytat-sa (stránka)
+  participant A as POST /api/v1/ask
+  participant S as ask.service
+  participant T as nástroje (services)
+  participant C as Claude API
+  U->>P: otázka + rozsah
+  P->>A: fetch, stream
+  A->>S: user, scope, question
+  S->>S: limit používateľa a rozpočtu
+  S->>T: search_content(query) pod identitou usera
+  T-->>S: dokumenty, ktoré user vidí
+  S->>C: system (cache) + dokumenty s citáciami + otázka
+  C-->>S: tool_use (napr. list_clubs)
+  S->>T: list_clubs(filter) s tenant filtrom
+  T-->>S: riadky + odkaz na obrazovku
+  S->>C: tool_result
+  C-->>A: text s citáciami (stream)
+  A-->>P: SSE: text, zdroje, koniec
+  S->>S: ai_usage (tokeny, cena) + audit (len údaje klubov)
+</pre>
+    <div class="cols">
+      <div class="box">
+        <h3>Vyhľadanie (retrieval)</h3>
+        <p>
+          Obsahu sú stovky textov, takže netreba vektorovú databázu. Prvý krok je dnešný
+          <code>rank()</code> zo <code>search.service</code> nad dokumentmi, ktoré používateľ smie
+          vidieť (vrátane skrývania mentorských častí Praxe). Top 8 dokumentov ide do modelu ako
+          <code>document</code> bloky so zapnutými citáciami. Keď to nestačí, model si zavolá
+          <code>search_content</code> s iným dopytom. Atlas Search alebo vektory až vtedy, keď obsah
+          narastie.
+        </p>
+      </div>
+      <div class="box">
+        <h3>Oprávnenia</h3>
+        <p>
+          Model dostáva len výstupy nástrojov. Každý nástroj volá existujúcu service funkciu s
+          <code>CurrentUser</code>, takže platia rovnaké kontroly (<code>club-access</code>, tenant
+          filter <code>clubId</code>). Rozsah „Všetky kluby“ je len pre <code>admin_sfz</code>.
+          Model nemôže zapisovať: všetky nástroje sú len na čítanie.
+        </p>
+      </div>
+      <div class="box">
+        <h3>Bezpečnosť obsahu</h3>
+        <p>
+          Text dokumentov a údajov je pre model dáta, nie pokyny (system prompt to hovorí výslovne).
+          Odkazy v odpovedi sa berú len z poľa <code>href</code> nástrojov, model si URL nevymýšľa.
+          Neznáme značky citácií server zahodí.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. ARCHITEKTÚRA ============ -->
+  <section class="section" id="architektura">
+    <span class="eyebrow">7 · Architektúra</span>
+    <h2>Poskytovateľ, model, MCP a náklady</h2>
+    <div class="cols">
+      <div class="box">
+        <h3>Poskytovateľ</h3>
+        <p>
+          Claude API cez oficiálne <code>@anthropic-ai/sdk</code> (nová závislosť, treba súhlas).
+          Streaming do <code>route.ts</code> na Node runtime vo fra1. Kľúč
+          <code>ANTHROPIC_API_KEY</code> len do <code>.env.example</code> a Vercelu. Citácie sú
+          natívne (<code>citations: {enabled: true}</code> na dokumentoch), prompt caching na system
+          prompte a definíciách nástrojov.
+        </p>
+      </div>
+      <div class="box">
+        <h3>Vrstvy v kóde</h3>
+        <ul>
+          <li>
+            <code>src/server/ai/tools.ts</code>: nástroje nad services (Zod schémy, len čítanie)
+          </li>
+          <li>
+            <code>src/server/services/ask.service.ts</code>: retrieval, slučka nástrojov, limity,
+            záznam nákladov
+          </li>
+          <li><code>POST /api/v1/ask</code>: stream (SSE), Zod vstup, auth</li>
+          <li>
+            <code>src/components/sfz</code>: AskField, AskSheet, Answer, Citation, SourceCard,
+            MenuSheet, Breadcrumbs
+          </li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>MCP server</h3>
+        <p>
+          AI v aplikácii MCP nepotrebuje, volá nástroje priamo. MCP je druhá brána k tým istým
+          nástrojom pre externých asistentov (Claude, ChatGPT…). Návrh: <code>/api/mcp</code>,
+          Streamable HTTP bez stavu, prihlásenie OAuth 2.1 (PKCE) so Sportnet identitou cez Better
+          Auth, súhlas používateľa a odvolanie v Môj účet › Pripojené aplikácie, len čítanie.
+          Contineo to má hotové (ADR-038) ako vzor. Odporúčam ako samostatnú fázu po AI v hlavičke.
+        </p>
+      </div>
+    </div>
+    <h3 style="margin-top: 8px">Odhad ceny jednej otázky</h3>
+    <p>
+      Predpoklad: ~9 000 vstupných tokenov (system prompt, 8 dokumentov, otázka) a ~700 výstupných
+      vrátane krátkeho uvažovania. Ceny Claude API, cenník k 6. 10. 2026. Otázka na údaje s 1 – 2
+      volaniami nástrojov stojí zhruba 1,5 – 2×.
+    </p>
+    <div class="scroll">
+      <table class="t">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Vstup / výstup za 1 M tokenov</th>
+            <th>Jedna otázka</th>
+            <th>1 000 otázok</th>
+            <th>Poznámka</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Claude Opus 5.5</b> <code>claude-opus-5-5</code></td>
+            <td>$4 / $20</td>
+            <td>≈ $0,05</td>
+            <td>≈ $50</td>
+            <td>Najlepšia kvalita odpovedí a práce s nástrojmi; predvolený model</td>
+          </tr>
+          <tr>
+            <td>Claude Sonnet 5.5 <code>claude-sonnet-5-5</code></td>
+            <td>$2 / $10</td>
+            <td>≈ $0,025</td>
+            <td>≈ $25</td>
+            <td>Polovičná cena; overiť na skúšobnej sade otázok</td>
+          </tr>
+          <tr>
+            <td>Claude Haiku 5.5 <code>claude-haiku-5-5</code></td>
+            <td>$0,10 / $0,50</td>
+            <td>≈ $0,001</td>
+            <td>≈ $1,3</td>
+            <td>Lacný; vhodný skôr na pomocné kroky ako na odpoveď</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      Výber modelu je vaše rozhodnutie (Q4). Model bude v konfigurácii, nie v kóde, takže sa dá
+      zmeniť bez nasadenia nového kódu. Skutočná cena sa bude merať v <code>ai_usage</code> od prvej
+      otázky.
+    </div>
+  </section>
+
+  <!-- ============ 8. NÁKLADY A AUDIT ============ -->
+  <section class="section" id="naklady">
+    <span class="eyebrow">8 · Náklady a audit</span>
+    <h2>Kto koľko minul, bez textov otázok</h2>
+    <div class="cols">
+      <div class="box">
+        <h3>Kolekcia <code>ai_usage</code> (nová)</h3>
+        <p>
+          Jeden záznam na otázku: <code>userId</code>, <code>at</code>, <code>channel</code> (app /
+          mcp), <code>scope</code>, <code>model</code>, tokeny (vstup, výstup, cache read, cache
+          write), <code>costMicroUsd</code> podľa cenníka v kóde s verziou, počet volaní nástrojov,
+          <code>status</code> (ok / refusal / error / limit), <code>latencyMs</code>. Bez textu
+          otázky a odpovede. Indexy <code>{userId:1, at:-1}</code> a TTL index na
+          <code>at</code> (25 mesiacov). Záznam vzniká aj pri chybe. Rovnaký tvar ako
+          <code>ai_usage</code> v Contineu, kde sa osvedčil.
+        </p>
+      </div>
+      <div class="box">
+        <h3>Limity</h3>
+        <ul>
+          <li>na používateľa: napr. 40 otázok za deň</li>
+          <li>
+            mesačný rozpočet celej aplikácie: po prekročení sa AI vypne a pole ponúkne len
+            vyhľadávanie
+          </li>
+          <li>hodnoty v konfigurácii, výška je Q5</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>Obrazovka Správa › AI a náklady</h3>
+        <p>
+          Súčet za obdobie, graf po dňoch, tabuľka po používateľoch (meno, rola, počet otázok,
+          cena), podiel odmietnutí a chýb. API
+          <code>GET /api/v1/admin/ai-usage?from&amp;to&amp;groupBy=user|day</code>, agregačná
+          pipeline.
+        </p>
+      </div>
+      <div class="box">
+        <h3>Audit log (po zlúčení #160)</h3>
+        <p>
+          Nové akcie v <code>AUDIT_ACTIONS</code>: <code>ai.data_read</code> (AI čítala údaje klubu:
+          <code>clubId</code>, nástroj, rozsah) a neskôr <code>mcp.client_authorized</code> /
+          <code>mcp.client_revoked</code>. Otázky len na obsah sa do auditu nezapisujú, stačí
+          <code>ai_usage</code>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 9. ADR ============ -->
+  <section class="section" id="adr">
+    <span class="eyebrow">9 · Rozhodnutia</span>
+    <h2>Zoznam ADR</h2>
+    <div class="scroll">
+      <table class="t">
+        <thead>
+          <tr>
+            <th>Číslo</th>
+            <th>Názov</th>
+            <th>Obsah</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0035</td>
+            <td>Hlavička s plachtou menu a cestou</td>
+            <td>
+              Riadok položiek NavBaru odchádza do plachty, cesta z adresy, „Viac“ → „Menu“, mobilný
+              Drawer administrácie odpadá. Dopĺňa R3.3 a G5.
+            </td>
+          </tr>
+          <tr>
+            <td>0036</td>
+            <td>AI odpovede z obsahu a údajov</td>
+            <td>
+              Claude API, model v konfigurácii, retrieval cez <code>search.service</code>, nástroje
+              len na čítanie nad services s identitou používateľa, natívne citácie, otázky sa
+              neukladajú.
+            </td>
+          </tr>
+          <tr>
+            <td>0037</td>
+            <td>Záznam nákladov na AI</td>
+            <td>
+              Kolekcia <code>ai_usage</code>, cena podľa verzie cenníka, limity, uchovanie, admin
+              prehľad; AI akcie v audit logu nad ADR 0034.
+            </td>
+          </tr>
+          <tr>
+            <td>0038</td>
+            <td>MCP server Akadémie</td>
+            <td>
+              Až vo fáze 3: <code>/api/mcp</code>, OAuth cez Better Auth, tie isté nástroje, len
+              čítanie.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap">
+      Čísla platia, ak medzitým nepribudne iné ADR (0031 až 0034 sú v otvorených PR).
+    </p>
+    <h3>Fázy</h3>
+    <ol>
+      <li>
+        <b>Hlavička, plachta, cesta</b> a pole s okamžitým vyhľadávaním (bez AI, bez novej
+        závislosti). Komponenty do <code>src/components/sfz</code>, potom PR do
+        <code>Slovensky-futbalovy-zvaz/sfz-design-system</code>.
+      </li>
+      <li>
+        <b>AI z obsahu</b>: <code>/api/v1/ask</code>, stránka odpovede, <code>ai_usage</code>,
+        limity, admin prehľad nákladov.
+      </li>
+      <li>
+        <b>AI z údajov</b>: nástroje nad kluby a klubové dáta, audit <code>ai.data_read</code> (po
+        zlúčení #158 a #160).
+      </li>
+      <li><b>MCP server</b>, ak ho schválite.</li>
+    </ol>
+  </section>
+
+  <!-- ============ 10. OTÁZKY ============ -->
+  <section class="section" id="otazky">
+    <span class="eyebrow">10 · Na rozhodnutie</span>
+    <h2>Otázky pre Jána</h2>
+    <ol class="qs">
+      <li class="q">
+        <b>Riadok položiek na desktope.</b> Odporúčam ho úplne zrušiť a nechať len plachtu (ako
+        Contineo). Alternatíva: nechať 4 hlavné položky v NavBare a plachtu len na zvyšok.
+      </li>
+      <li class="q">
+        <b>Administrácia na telefóne.</b> Nahradiť pruh s hamburgerom a Drawerom (G5) stĺpcom Správa
+        v spodnej plachte a cestou? Desktopové bočné menu G5 ostáva.
+      </li>
+      <li class="q">
+        <b>Súhlas so závislosťou a kľúčom.</b> <code>@anthropic-ai/sdk</code>, kľúč
+        <code>ANTHROPIC_API_KEY</code>, a pre MCP neskôr MCP SDK. Kto zakladá účet a platí faktúru
+        Anthropic (SFZ / LTK)?
+      </li>
+      <li class="q">
+        <b>Model.</b> Predvolený Claude Opus 5.5 (≈ $0,05 za otázku), alebo Sonnet 5.5 (≈ polovica)?
+      </li>
+      <li class="q">
+        <b>Limity.</b> Koľko otázok denne na človeka a aký mesačný strop pre celú aplikáciu?
+      </li>
+      <li class="q">
+        <b>Kto smie AI.</b> Len prihlásení (odporúčam), alebo aj návštevníci verejného obsahu s
+        prísnejším limitom?
+      </li>
+      <li class="q">
+        <b>Osobné údaje u poskytovateľa.</b> Údaje klubov (mená ľudí v kluboch) by odchádzali do
+        Claude API. Treba DPA so SFZ a vyjadrenie zodpovednej osoby; dovtedy navrhujem fázu 3 bez
+        mien osôb.
+      </li>
+      <li class="q">
+        <b>Ukladanie otázok.</b> Navrhujem neukladať text otázok ani odpovedí (bez histórie). Chcete
+        históriu „Moje otázky“ (len pre autora, 30 dní) alebo anonymnú vzorku na zlepšovanie?
+      </li>
+      <li class="q">
+        <b>MCP server.</b> Robiť ho teraz ako fázu 4, alebo odložiť, kým nebude konkrétny klient,
+        ktorý ho chce?
+      </li>
+    </ol>
+  </section>
+</div>
+
+<script>
+  (function () {
+    var light = document.getElementById("mk-light");
+    var dark = document.getElementById("mk-dark");
+    var mocks = document.querySelectorAll(".mock");
+    function set(isDark) {
+      for (var i = 0; i < mocks.length; i++) mocks[i].classList.toggle("dark", isDark);
+      light.setAttribute("aria-pressed", String(!isDark));
+      dark.setAttribute("aria-pressed", String(isDark));
+      try {
+        localStorage.setItem("mock-theme", isDark ? "dark" : "light");
+      } catch (e) {}
+    }
+    light.addEventListener("click", function () {
+      set(false);
+    });
+    dark.addEventListener("click", function () {
+      set(true);
+    });
+    var start = false;
+    try {
+      start = localStorage.getItem("mock-theme") === "dark";
+    } catch (e) {}
+    set(start);
+  })();
+</script>
