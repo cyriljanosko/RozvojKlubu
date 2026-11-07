@@ -213,7 +213,7 @@ export const mongoClubImportStore: ClubImportStore = {
   async listClubsForImport() {
     const db = await getDb();
     return clubs(db)
-      .find({}, { projection: { _id: 0, clubId: 1 } })
+      .find({}, { projection: { _id: 0, clubId: 1, name: 1, status: 1, logoUrl: 1 } })
       .toArray();
   },
   async applyClubImport(plan) {
