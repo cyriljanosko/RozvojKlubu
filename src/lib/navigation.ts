@@ -184,12 +184,16 @@ export function clubMenu(clubId: string, roles: readonly ClubRole[], isAdmin: bo
   ].filter((entry): entry is NavItem => entry !== null);
 }
 
-/** Admin side menu (analysis, chapter 4.2) – existing screens; code lists and Sportnet come with S3. */
+/**
+ * Admin side menu (G5, docs/dizajn/g5-poznamky.md). Final order: Prehľad · Kluby · Osoby a členstvá ·
+ * Číselníky · Obsah · Novinky · Používatelia · Sportnet – only screens that exist are listed; the others
+ * join in that order with S3. The role catalog is reached from Obsah, so Obsah stays active on its pages.
+ */
 export function adminMenu(): NavItem[] {
   return [
     item("adminClubs", "/admin/kluby", "trophy"),
-    item("adminContent", "/admin/obsah", "edit", "exact"),
-    item("adminRoles", "/admin/obsah/roly", "users"),
+    item("adminContent", "/admin/obsah", "edit"),
     item("adminNews", "/admin/novinky", "bell"),
+    item("adminSportnet", "/admin/sportnet", "arrow-up-down"),
   ];
 }

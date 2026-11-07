@@ -127,7 +127,11 @@ describe("clubMenu", () => {
 });
 
 describe("adminMenu", () => {
-  it("lists the existing admin screens", () => {
-    expect(ids(adminMenu())).toEqual(["adminClubs", "adminContent", "adminRoles", "adminNews"]);
+  it("lists the existing admin screens in the G5 order", () => {
+    expect(ids(adminMenu())).toEqual(["adminClubs", "adminContent", "adminNews", "adminSportnet"]);
+  });
+
+  it("keeps Obsah active on its sub-pages (role catalog)", () => {
+    expect(adminMenu().find((entry) => entry.id === "adminContent")?.match).toBeUndefined();
   });
 });
