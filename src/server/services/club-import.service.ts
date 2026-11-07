@@ -293,6 +293,9 @@ export async function fillClubDetails(
 
 // ---- 3. nightly sync (Vercel Cron, ADR 0029) ----
 
+/** Clubs whose Sportnet details one nightly run refreshes (ADR 0029). */
+export const CLUB_DETAILS_PER_RUN = 600;
+
 export interface ClubSyncResult extends Omit<ClubImportResult, "applied"> {
   checked: number;
   failed: number;
@@ -319,7 +322,7 @@ export async function syncSportnetClubs(
     now: deps.now?.() ?? new Date(),
   });
   if (apply) await deps.store.applyClubImport(plan);
-  const batch = await deps.store.listClubsForRefresh(options.limit ?? 600);
+  const batch = await deps.store.listClubsForRefresh(options.limit ?? CLUB_DETAILS_PER_RUN);
   const read = await readClubDetails(deps, unionIndex(directory.tree), batch, apply, until);
   return {
     sportnetClubs: directory.clubs.length,
