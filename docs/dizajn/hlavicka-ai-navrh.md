@@ -1,6 +1,6 @@
 # Hlavička s plachtou menu, cestou a AI odpoveďami – návrh
 
-Stav: **návrh na schválenie Jánom Letkom** (7. 11. 2026). Kód začne až po schválení.
+Stav: **schválené Jánom Letkom 7. 11. 2026** s odporúčaniami pre Q1 (len plachta, bez riadku položiek) a Q2 (Správa v spodnej plachte namiesto Drawera); začína fáza 1. Q3–Q9 sú otvorené do fázy 2.
 Makety (desktop + 375 px, svetlá/tmavá): `hlavicka-ai-navrh.html` vedľa tohto súboru,
 zverejnené aj ako https://claude.ai/artifact/XMXgTpDWdBDx8QoLB6oY5z.
 
