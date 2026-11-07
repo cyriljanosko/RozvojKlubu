@@ -27,12 +27,19 @@ for (const colorScheme of ["light", "dark"] as const) {
   });
 }
 
+// ADR 0035 – phones: the TabBar; desktop: the menu sheet opened from the header button
 test("app frame shows the visitor navigation", async ({ page, isMobile }) => {
   await page.goto("/dev/ukazky");
-  const nav = isMobile
-    ? page.getByRole("navigation", { name: "Navigácia", exact: true })
-    : page.getByRole("navigation", { name: "Hlavná navigácia" });
+  let nav = page.getByRole("navigation", { name: "Navigácia", exact: true });
+  if (!isMobile) {
+    await page.getByRole("button", { name: "Celé menu" }).click();
+    nav = page.getByRole("dialog", { name: "Celé menu" });
+  }
   for (const label of ["Akadémia", "Oblasti", "Kompas", "Kluby"]) {
     await expect(nav.getByRole("link", { name: label, exact: true })).toBeVisible();
+  }
+  if (!isMobile) {
+    await page.keyboard.press("Escape");
+    await expect(nav).toBeHidden();
   }
 });
